@@ -1,4 +1,4 @@
-// Copyright © 2017 NAME HERE <EMAIL ADDRESS>
+// Copyright © 2017 Marcel Meyer meyer@synyx.de
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -17,6 +17,8 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
+	"iso6346/model"
+	"iso6346/ui"
 )
 
 // generateCmd represents the generate command
@@ -30,7 +32,7 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("generate called")
+		fmt.Println(ui.CnFormatter(model.Generate()).SecondSep("=").ThirdSep("-"))
 	},
 }
 
