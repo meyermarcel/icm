@@ -6,14 +6,13 @@ import (
 )
 /*
 
- ABC D 123456 7
-    ^ ^      ^
-    | |      |
-    | |       - thirdSep
-    | |
-    |  - secondSep
-    |
-     - firstSep
+  ABC U 123456 0
+     ^ ^      ^
+     │ │      └─ 3rd separator
+     │ │
+     │ └─ 2nd separator
+     │
+     └─ 1st separator
 */
 
 type ContainerNumberFormatted struct {
@@ -31,18 +30,18 @@ func CnFormatter(cn model.ContainerNumber) ContainerNumberFormatted {
 		""}
 }
 
-func (fcn ContainerNumberFormatted) FirstSep(ABC_D1234567 string) ContainerNumberFormatted {
-	fcn.firstSep = ABC_D1234567
+func (fcn ContainerNumberFormatted) FirstSep(ABC_U1234560 string) ContainerNumberFormatted {
+	fcn.firstSep = ABC_U1234560
 	return fcn
 }
 
-func (fcn ContainerNumberFormatted) SecondSep(ABCD_1234567 string) ContainerNumberFormatted {
-	fcn.secondSep = ABCD_1234567
+func (fcn ContainerNumberFormatted) SecondSep(ABCU_1234560 string) ContainerNumberFormatted {
+	fcn.secondSep = ABCU_1234560
 	return fcn
 }
 
-func (fcn ContainerNumberFormatted) ThirdSep(ABCD123456_7 string) ContainerNumberFormatted {
-	fcn.thirdSep = ABCD123456_7
+func (fcn ContainerNumberFormatted) ThirdSep(ABCU123456_0 string) ContainerNumberFormatted {
+	fcn.thirdSep = ABCU123456_0
 	return fcn
 }
 

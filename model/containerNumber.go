@@ -57,7 +57,7 @@ func (cn ContainerNumber) CheckDigit() int {
 	return cn.checkDigit
 }
 
-func (cn ContainerNumber) CalculatedCheckDigit() int {
+func (cn ContainerNumber) ValidCheckDigit() int {
 	return cn.calculatedCheckDigit
 }
 

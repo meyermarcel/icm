@@ -24,28 +24,53 @@ import (
 // generateCmd represents the generate command
 var generateCmd = &cobra.Command{
 	Use:   "generate",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Short: "Generate a random container number.",
+	Long: `
+Generate a random container number.
+Example:
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+  iso6346 generate
+
+generates a random container number with valid check digit:
+
+  ABCU1234560
+
+The ISO 6346 standard specifies that all characters are
+alphanumeric except the equipment ID which is U, J or Z.
+
+You can also format your output:
+
+  iso6346 generate --2nd-separator ' ' -3 '-'
+
+generates a formatted random container number:
+
+  ABCU 123456-0
+
+
+  ABC U 123456 0
+     ^ ^      ^
+     │ │      └─ 3rd separator
+     │ │
+     │ └─ 2nd separator
+     │
+     └─ 1st separator`,
+	Args: cobra.NoArgs,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println(ui.CnFormatter(model.Generate()).SecondSep("=").ThirdSep("-"))
+
+		fmt.Println(
+			ui.CnFormatter(model.Generate()).FirstSep(
+				cmd.Flag("1st-separator").Value.String()).SecondSep(
+				cmd.Flag("2nd-separator").Value.String()).ThirdSep(
+				cmd.Flag("3rd-separator").Value.String()))
 	},
 }
 
 func init() {
+	firstSepUsage := "ABC(*)U1234560  ->  (*) 1st separator"
+	secondSepUsage := "ABCU(*)1234560  ->  (*) 2nd separator"
+	thirdSepUsage := "ABCU123456(*)0  ->  (*) 3rd separator"
+	generateCmd.Flags().StringP("1st-separator", "1", "", firstSepUsage)
+	generateCmd.Flags().StringP("2nd-separator", "2", "", secondSepUsage)
+	generateCmd.Flags().StringP("3rd-separator", "3", "", thirdSepUsage)
 	RootCmd.AddCommand(generateCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// generateCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// generateCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

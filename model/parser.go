@@ -6,7 +6,7 @@ import (
 	"strconv"
 )
 
-type InputValidation struct {
+type ValidatedInput struct {
 	Input                       string
 	InputPossibleValidLength    bool
 	InputLengthIs11             bool
@@ -19,23 +19,23 @@ type InputValidation struct {
 	SerialNumberIsNumber        bool
 	CheckDigit                  string
 	CheckDigitIsNumber          bool
-	CalculatedCheckDigit        int
+	ValidCheckDigit             int
 	CheckDigitIsValid           bool
 }
 
 const MaxInputLength = 15
 const MaxAlphaNumericCharacters = 11
 
-func (iv InputValidation) IsValidAlphanumeric() bool {
+func (iv ValidatedInput) IsValidAlphanumeric() bool {
 	return iv.OwnerCodeIsLetter && iv.EquipmentCategoryIdIsValid && iv.SerialNumberIsNumber
 }
 
 var IsLetter = regexp.MustCompile("^[A-Z]+$").MatchString
 var NoAlphaNumeric = regexp.MustCompile("[^A-Z0-9]+")
 
-func Parse(input string) InputValidation {
+func Parse(input string) ValidatedInput {
 
-	inputValidation := InputValidation{}
+	inputValidation := ValidatedInput{}
 	inputValidation.Input = input
 
 
@@ -82,7 +82,7 @@ func Parse(input string) InputValidation {
 
 	if inputValidation.IsValidAlphanumeric() && isValidEquipmentId {
 		inputValidation.CheckDigitIsValid = cn.hasValidCheckDigit()
-		inputValidation.CalculatedCheckDigit = cn.CalculatedCheckDigit()
+		inputValidation.ValidCheckDigit = cn.ValidCheckDigit()
 	}
 
 	return inputValidation

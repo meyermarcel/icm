@@ -8,14 +8,13 @@ import (
 )
 
 var red = color.New(color.FgRed).SprintFunc()
-var yellow = color.New(color.FgYellow).SprintFunc()
 var green = color.New(color.FgGreen).SprintFunc()
 var bold = color.New(color.Bold).SprintFunc()
 
 var indentation = " "
 var fiveSpaces = "     "
 
-func FormatInputValidation(iv model.InputValidation) {
+func Print(iv model.ValidatedInput) {
 
 	fmt.Printf("\n")
 
@@ -102,7 +101,7 @@ func FormatInputValidation(iv model.InputValidation) {
 		if !iv.CheckDigitIsValid {
 			{
 				if iv.IsValidAlphanumeric() {
-					errors = append(errors, func() { fmt.Printf("incorrect %s (correct: %s)", bold("check digit"), green(iv.CalculatedCheckDigit)) })
+					errors = append(errors, func() { fmt.Printf("incorrect %s (correct: %s)", bold("check digit"), green(iv.ValidCheckDigit)) })
 				} else {
 					errors = append(errors, func() { fmt.Printf("incorrect %s", bold("check digit"), ) })
 				}
