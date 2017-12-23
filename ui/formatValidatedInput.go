@@ -40,7 +40,7 @@ func Print(iv model.ValidatedInput) {
 		fmt.Printf(" %s", red(iv.OwnerCode))
 	}
 
-	if iv.EquipmentCategoryIdIsLetter && iv.EquipmentCategoryIdIsValid {
+	if iv.EquipmentCategoryIdIsValid {
 		fmt.Printf(" %s", green(iv.EquipmentCategoryId))
 	} else {
 		fmt.Printf(" %s", red(iv.EquipmentCategoryId))
@@ -52,62 +52,42 @@ func Print(iv model.ValidatedInput) {
 		fmt.Printf(" %s", red(iv.SerialNumber))
 	}
 
-	if !iv.CheckDigitIsNumber {
+	if iv.CheckDigitIsValid {
+		fmt.Printf(" %s", green(iv.CheckDigit))
+	} else {
 		fmt.Printf(" %s", red(iv.CheckDigit))
-	} else {
-		if iv.CheckDigitIsValid {
-			fmt.Printf(" %s", green(iv.CheckDigit))
-		} else {
-			fmt.Printf(" %s", red(iv.CheckDigit))
-		}
 	}
 
-	var errors []func()
+	var errors []string
 
-	if !iv.OwnerCodeIsLetter {
-		errors = append(errors, func() { fmt.Printf("owner code must be %s", bold("letters")) })
+	if iv.OwnerCodeIsLetter {
+		errors = append(errors, "")
 	} else {
-		errors = append(errors, nil)
+		errors = append(errors, fmt.Sprintf("owner code must be %s", bold("letters")))
 	}
 
-	if !iv.EquipmentCategoryIdIsLetter {
-		errors = append(errors, func() {
-			fmt.Printf("must be a %s (", bold("letter"))
-			printEquipmentIds(model.EquipmentCategoryIds)
-			fmt.Printf(")")
-
-		})
+	if iv.EquipmentCategoryIdIsValid {
+		errors = append(errors, "")
 	} else {
-		if !iv.EquipmentCategoryIdIsValid {
-			errors = append(errors, func() {
-				fmt.Printf("is a letter but incorrect %s (", bold("equipment id"))
-				printEquipmentIds(model.EquipmentCategoryIds)
-				fmt.Printf(")")
-			})
-		} else {
-			errors = append(errors, nil)
-		}
+		errors = append(errors,
+			fmt.Sprintf("must be %s", printEquipmentIds(model.EquipmentCategoryIds)))
 	}
 
-	if !iv.SerialNumberIsNumber {
-		errors = append(errors, func() { fmt.Printf("serial number must be a %s", bold("number")) })
+	if iv.SerialNumberIsNumber {
+		errors = append(errors, "")
 	} else {
-		errors = append(errors, nil)
+		errors = append(errors, fmt.Sprintf("serial number must be a %s", bold("number")))
 	}
 
-	if !iv.CheckDigitIsNumber {
-		errors = append(errors, func() { fmt.Printf("check digit is not a %s", bold("number")) })
+	if iv.CheckDigitIsValid {
+		errors = append(errors, "")
 	} else {
-		if !iv.CheckDigitIsValid {
-			{
-				if iv.IsValidAlphanumeric() {
-					errors = append(errors, func() { fmt.Printf("incorrect %s (correct: %s)", bold("check digit"), green(iv.ValidCheckDigit)) })
-				} else {
-					errors = append(errors, func() { fmt.Printf("incorrect %s", bold("check digit"), ) })
-				}
+		{
+			if iv.IsValidAlphanumeric() {
+				errors = append(errors, fmt.Sprintf("incorrect %s (correct: %s)", bold("check digit"), green(iv.ValidCheckDigit)))
+			} else {
+				errors = append(errors, fmt.Sprintf("cannot calculate %s", bold("check digit")))
 			}
-		} else {
-			errors = append(errors, nil)
 		}
 	}
 
@@ -117,16 +97,16 @@ func Print(iv model.ValidatedInput) {
 
 }
 
-func printErrors(errorMessages []func()) {
+func printErrors(errorMessages []string) {
 
-	errorMessages = filterNilFromEnd(errorMessages)
+	errorMessages = filterEmptyErrorsFromEnd(errorMessages)
 	if len(errorMessages) == 0 {
 		return
 	}
 
 	fmt.Printf(indentation + " ")
 	for pos, errorMessage := range errorMessages {
-		if errorMessage != nil {
+		if errorMessage != "" {
 			fmt.Printf("^")
 			fmt.Printf(fiveSpaces[:pos+2])
 		} else {
@@ -137,7 +117,7 @@ func printErrors(errorMessages []func()) {
 
 	for len(errorMessages) != 0 {
 
-		errorMessages = filterNilFromEnd(errorMessages)
+		errorMessages = filterEmptyErrorsFromEnd(errorMessages)
 		if len(errorMessages) != 0 {
 			printArrows(errorMessages)
 			errorMessages = errorMessages[:len(errorMessages)-1]
@@ -146,12 +126,12 @@ func printErrors(errorMessages []func()) {
 	fmt.Printf("\n")
 }
 
-func filterNilFromEnd(errorMessages []func()) []func() {
+func filterEmptyErrorsFromEnd(errorMessages []string) []string {
 
 	index := len(errorMessages)
 
 	for i := index - 1; i >= 0; i-- {
-		if errorMessages[i] != nil {
+		if errorMessages[i] != "" {
 			break
 		}
 		index = i
@@ -160,13 +140,13 @@ func filterNilFromEnd(errorMessages []func()) []func() {
 	return errorMessages[:index]
 }
 
-func printArrows(errorMessages []func()) {
+func printArrows(errorMessages []string) {
 
 	fmt.Printf("\n")
 
 	fmt.Printf(indentation + " ")
 	for pos, errorMessage := range errorMessages {
-		if errorMessage != nil {
+		if errorMessage != "" {
 			fmt.Printf("│")
 			fmt.Printf(fiveSpaces[:pos+2])
 		} else {
@@ -181,8 +161,8 @@ func printArrows(errorMessages []func()) {
 
 		if i == len(errorMessages)-1 {
 			fmt.Printf("└─ ")
-			errorMessages[i]()
-		} else if errorMessages[i] != nil {
+			fmt.Printf(errorMessages[i])
+		} else if errorMessages[i] != "" {
 			fmt.Printf("│")
 			fmt.Printf(fiveSpaces[:i+2])
 		} else {
@@ -193,15 +173,17 @@ func printArrows(errorMessages []func()) {
 
 }
 
-func printEquipmentIds(s string) {
+func printEquipmentIds(s string) string {
+	formattedList := ""
 	for pos, char := range s {
-		fmt.Printf("%s", green(string(char)))
+		formattedList += fmt.Sprintf("%s", green(string(char)))
 		if pos < len(s)-2 {
-			fmt.Printf(", ")
+			formattedList += fmt.Sprintf(", ")
 		}
 
 		if pos == len(s)-2 {
-			fmt.Printf(" or ")
+			formattedList += fmt.Sprintf(" or ")
 		}
 	}
+	return formattedList
 }

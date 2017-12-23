@@ -49,6 +49,7 @@ generates a formatted random container number:
 
   ABC U 123456 0
      ^ ^      ^
+     │ │      │
      │ │      └─ 3rd separator
      │ │
      │ └─ 2nd separator

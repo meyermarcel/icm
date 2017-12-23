@@ -13,7 +13,6 @@ type ValidatedInput struct {
 	OwnerCode                   string
 	OwnerCodeIsLetter           bool
 	EquipmentCategoryId         string
-	EquipmentCategoryIdIsLetter bool
 	EquipmentCategoryIdIsValid  bool
 	SerialNumber                string
 	SerialNumberIsNumber        bool
@@ -65,8 +64,6 @@ func Parse(input string) ValidatedInput {
 	inputValidation.CheckDigit = checkDigit
 
 	inputValidation.OwnerCodeIsLetter = IsLetter(ownerCode)
-
-	inputValidation.EquipmentCategoryIdIsLetter = IsLetter(equipmentCategoryId)
 
 	_, err := strconv.Atoi(serialNumber)
 	inputValidation.SerialNumberIsNumber = err == nil

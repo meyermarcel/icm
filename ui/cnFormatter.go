@@ -8,6 +8,7 @@ import (
 
   ABC U 123456 0
      ^ ^      ^
+     │ │      │
      │ │      └─ 3rd separator
      │ │
      │ └─ 2nd separator
