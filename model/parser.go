@@ -2,85 +2,76 @@ package model
 
 import (
 	"regexp"
-	"strings"
-	"strconv"
+	"unicode/utf8"
 )
 
-type ValidatedInput struct {
-	Input                       string
-	InputPossibleValidLength    bool
-	InputLengthIs11             bool
-	OwnerCode                   string
-	OwnerCodeIsLetter           bool
-	EquipmentCategoryId         string
-	EquipmentCategoryIdIsValid  bool
-	SerialNumber                string
-	SerialNumberIsNumber        bool
-	CheckDigit                  string
-	CheckDigitIsNumber          bool
-	ValidCheckDigit             int
-	CheckDigitIsValid           bool
+type ParsedInput struct {
+	Input          string
+	MatchesIndices map[int]bool
+	ValidatedInput ValidatedInput
 }
 
-const MaxInputLength = 15
-const MaxAlphaNumericCharacters = 11
+var Match = regexp.MustCompile(`([A-Za-z])[^A-Za-z\d]*([A-Za-z])?[^A-Za-z\d]*([A-Za-z])?[^JUZjuz\d]*([JUZjuz])?[^\d]*(\d)?[^\d]*(\d)?[^\d]*(\d)?[^\d]*(\d)?[^\d]*(\d)?[^\d]*(\d)?[^\d]*(\d)?`)
 
-func (iv ValidatedInput) IsValidAlphanumeric() bool {
-	return iv.OwnerCodeIsLetter && iv.EquipmentCategoryIdIsValid && iv.SerialNumberIsNumber
+func Parse(input string) ParsedInput {
+	subMatch := Match.FindAllStringSubmatch(input, -1)
+
+	parsedInput := ParsedInput{Input: input}
+
+	if len(subMatch) == 0 {
+		return parsedInput
+	}
+
+	matches := subMatch[0][1:]
+
+	ownerCode := OwnerCode{}
+	copy(ownerCode.values[:], matches[0:3])
+
+	serialNumber := SerialNumber{}
+	copy(serialNumber.values[:], matches[4:10])
+
+	parsedInput.ValidatedInput = NewValidatedInput(ownerCode,
+		EquipmentCategoryId{matches[3]},
+		serialNumber,
+		CheckDigit{matches[10]})
+
+	matchRanges := [22]int{}
+
+	copy(matchRanges[:], Match.FindAllStringSubmatchIndex(input, -1)[0][2:])
+
+	parsedInput.MatchesIndices = byteToRuneIndex(input, matchRanges)
+	return parsedInput
 }
 
-var IsLetter = regexp.MustCompile("^[A-Z]+$").MatchString
-var NoAlphaNumeric = regexp.MustCompile("[^A-Z0-9]+")
+func byteToRuneIndex(input string, matchRanges [22]int) map[int]bool {
+	matchesIndices := [11]int{}
 
-func Parse(input string) ValidatedInput {
-
-	inputValidation := ValidatedInput{}
-	inputValidation.Input = input
-
-
-	if len(input) > MaxInputLength {
-		return inputValidation
-	}
-	inputValidation.InputPossibleValidLength = true
-
-	inputUpper := strings.ToUpper(input)
-
-	filteredInput := NoAlphaNumeric.ReplaceAllString(inputUpper, "")
-	inputValidation.Input = filteredInput
-
-	if len(filteredInput) != MaxAlphaNumericCharacters {
-		return inputValidation
-	}
-	inputValidation.InputLengthIs11 = true
-
-	equipmentCategoryId := string(filteredInput[3])
-	ownerCode := filteredInput[0:3]
-	serialNumber := filteredInput[4:10]
-	checkDigit := string(filteredInput[10])
-
-	inputValidation.OwnerCode = ownerCode
-	inputValidation.EquipmentCategoryId = equipmentCategoryId
-	inputValidation.SerialNumber = serialNumber
-	inputValidation.CheckDigit = checkDigit
-
-	inputValidation.OwnerCodeIsLetter = IsLetter(ownerCode)
-
-	_, err := strconv.Atoi(serialNumber)
-	inputValidation.SerialNumberIsNumber = err == nil
-
-	checkDigitAsNumber, err := strconv.Atoi(checkDigit)
-
-	inputValidation.CheckDigitIsNumber = err == nil
-
-	cn := NewContainerNumber(ownerCode, equipmentCategoryId, serialNumber, checkDigitAsNumber)
-
-	isValidEquipmentId := cn.hasValidEquipmentCategoryIdentifier()
-	inputValidation.EquipmentCategoryIdIsValid = isValidEquipmentId
-
-	if inputValidation.IsValidAlphanumeric() && isValidEquipmentId {
-		inputValidation.CheckDigitIsValid = cn.hasValidCheckDigit()
-		inputValidation.ValidCheckDigit = cn.ValidCheckDigit()
+	for i := 0; i < len(matchRanges)/2; i++ {
+		matchesIndices[i] = matchRanges[i*2]
 	}
 
-	return inputValidation
+	byteShiftsForIndices := [11]int{}
+
+	for i := 0; i < len(input); i++ {
+		if !utf8.RuneStart(input[i]) {
+			for pos, element := range matchesIndices {
+				if element > i {
+					byteShiftsForIndices[pos]--
+				}
+			}
+		}
+	}
+
+	// apply byte shift indices
+	for pos, element := range matchesIndices {
+		matchesIndices[pos] = element + byteShiftsForIndices[pos]
+	}
+	var matchesIndicesMap = map[int]bool{}
+
+	for _, element := range matchesIndices {
+		if element >= 0 {
+			matchesIndicesMap[element] = true
+		}
+	}
+	return matchesIndicesMap
 }

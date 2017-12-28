@@ -19,10 +19,9 @@ import (
 	"iso6346/ui"
 )
 
-// checkCmd represents the check command
-var checkCmd = &cobra.Command{
-	Use:   "check",
-	Short: "Check a container number",
+var parseCmd = &cobra.Command{
+	Use:   "parse",
+	Short: "Parse a container number",
 	Long: `A longer description that spans multiple lines and likely contains examples
 and usage of using your command. For example:
 
@@ -31,11 +30,11 @@ This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Args: cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		ui.Print(model.Parse(args[0]))
+		ui.PrintParsedInput(model.Parse(args[0]))
 	},
 }
 
 func init() {
 
-	RootCmd.AddCommand(checkCmd)
+	RootCmd.AddCommand(parseCmd)
 }

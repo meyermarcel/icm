@@ -76,10 +76,6 @@ func (cn ContainerNumber) hasValidCheckDigit() bool {
 	return cn.checkDigit == cn.calculatedCheckDigit
 }
 
-func (cn ContainerNumber) hasValidEquipmentCategoryIdentifier() bool {
-	return strings.Contains(EquipmentCategoryIds, cn.equipmentCategoryId)
-}
-
 func (cn ContainerNumber) String() string {
 	return fmt.Sprintf("%s%s%s%d", cn.ownerCode, cn.equipmentCategoryId, cn.serialNumber, cn.checkDigit)
 }
