@@ -1,5 +1,12 @@
-= Feedback
+= ToDo
 
-- [ ] Why backticks?
-- [ ] Show unmanipulated input (sanitized)?
 - [ ] Add wikipedia reference to check digit implementation
+- [ ] Bash completions https://github.com/spf13/cobra/blob/master/bash_completions.md
+- [ ] Tests
+- [ ] Integration tests
+- [ ] Tests on Linux, OSX, BSDs, Windows
+- [ ] Fix Golint warnings
+- [ ] Goreportcard.com link in readme
+- [ ] Travis CI integration
+- [ ] Create readme
+- [ ] Update license with name
