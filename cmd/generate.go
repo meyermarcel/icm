@@ -70,7 +70,7 @@ func init() {
 	secondSepUsage := "ABCU(*)1234560  ->  (*) 2nd separator"
 	thirdSepUsage := "ABCU123456(*)0  ->  (*) 3rd separator"
 	generateCmd.Flags().StringP("1st-separator", "1", "", firstSepUsage)
-	generateCmd.Flags().StringP("2nd-separator", "2", "", secondSepUsage)
-	generateCmd.Flags().StringP("3rd-separator", "3", "", thirdSepUsage)
+	generateCmd.Flags().StringP("2nd-separator", "2", " ", secondSepUsage)
+	generateCmd.Flags().StringP("3rd-separator", "3", " ", thirdSepUsage)
 	RootCmd.AddCommand(generateCmd)
 }

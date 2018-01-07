@@ -27,8 +27,8 @@ func CnFormatter(cn model.ContainerNumber) ContainerNumberFormatted {
 
 	return ContainerNumberFormatted{cn,
 		"",
-		"",
-		""}
+		" ",
+		" "}
 }
 
 func (fcn ContainerNumberFormatted) FirstSep(ABC_U1234560 string) ContainerNumberFormatted {
