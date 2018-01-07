@@ -1,6 +1,6 @@
 = ToDo
 
-- [ ] Add wikipedia reference to check digit implementation
+- [x] Add wikipedia reference to check digit implementation
 - [ ] Bash completions https://github.com/spf13/cobra/blob/master/bash_completions.md
 - [ ] Tests
 - [ ] Integration tests
