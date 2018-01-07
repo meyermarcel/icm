@@ -2,12 +2,11 @@
 
 - [x] Add wikipedia reference to check digit implementation
 - [x] Add dependency management
-- [ ] Bash completions https://github.com/spf13/cobra/blob/master/bash_completions.md
-- [ ] Tests
-- [ ] Integration tests
-- [ ] Tests on Linux, OSX, BSDs, Windows
 - [ ] Fix Golint warnings
+- [ ] Tests
+- [ ] Create readme
+- [ ] Integration tests
+- [ ] Bash completions https://github.com/spf13/cobra/blob/master/bash_completions.md
+- [ ] Tests on Linux, OSX, BSDs, Windows
 - [ ] Goreportcard.com link in readme
 - [ ] Travis CI integration
-- [ ] Create readme
-- [ ] Update license with name
