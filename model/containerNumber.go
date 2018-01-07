@@ -1,8 +1,8 @@
 package model
 
 import (
-	"strings"
 	"fmt"
+	"strings"
 )
 
 const EquipmentCategoryIds = "UJZ"
@@ -64,7 +64,7 @@ func (cn ContainerNumber) ValidCheckDigit() int {
 /*
 This method is a modified version of an Go code sample from
 https://en.wikipedia.org/wiki/ISO_6346#Code_Sample_(Go)
- */
+*/
 func calculateCheckDigit(cn string) int {
 
 	n := 0.0

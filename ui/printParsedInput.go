@@ -1,9 +1,9 @@
 package ui
 
 import (
-	"iso6346/model"
 	"fmt"
 	"github.com/fatih/color"
+	"iso6346/model"
 	"strings"
 )
 
@@ -183,7 +183,7 @@ func printVerticalLine(ems []string) {
 │1 space
 │
 indentation
- */
+*/
 
 const indentation = " "
 const fourSpaces = "    "

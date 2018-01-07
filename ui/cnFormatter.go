@@ -1,9 +1,10 @@
 package ui
 
 import (
-	"iso6346/model"
 	"fmt"
+	"iso6346/model"
 )
+
 /*
 
   ABC U 123456 0
