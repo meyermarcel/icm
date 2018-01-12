@@ -3,6 +3,7 @@ package model
 import (
 	"math/rand"
 	"time"
+	"log"
 )
 
 var letterRunes = []rune("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
@@ -10,14 +11,25 @@ var numberRunes = []rune("0123456789")
 
 func Generate() ContainerNumber {
 
-	ownerCode := randStringRunes(3, letterRunes)
+	ownerCode, err := NewOwnerCode(randStringRunes(3, letterRunes))
 
-	serialNumber := randStringRunes(6, numberRunes)
+	if err == nil {
+		log.Fatal(err)
+	}
 
-	equipmentCategoryIdentifier := randStringRunes(1, []rune(EquipmentCategoryIds))
+	serialNumber, err := NewSerialNumber(randStringRunes(3, numberRunes))
+
+	if err == nil {
+		log.Fatal(err)
+	}
+	equipmentCategoryId, err := NewEquipmentCategoryId(randStringRunes(3, letterRunes))
+
+	if err == nil {
+		log.Fatal(err)
+	}
 
 	return NewUncheckedContainerNumber(ownerCode,
-		equipmentCategoryIdentifier,
+		equipmentCategoryId,
 		serialNumber)
 
 }

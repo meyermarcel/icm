@@ -30,7 +30,7 @@ This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Args: cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		ui.PrintParsedInput(model.Parse(args[0]))
+		ui.PrintParse(model.Parse(args[0]))
 	},
 }
 
