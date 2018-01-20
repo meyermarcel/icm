@@ -22,12 +22,12 @@ func FormatValidatedInput(vi model.ValidatedInput) string {
 
 	if vi.IsValidCheckDigit {
 		out += fmt.Sprintf("%s", green("✔"))
-		out += "\n"
+		out += fmt.Sprintln()
 		return out
 	}
 
 	out += fmt.Sprintf("%s", red("✘"))
-	out += "\n"
+	out += fmt.Sprintln()
 
 	var errorMessages []PositionedMessage
 

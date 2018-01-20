@@ -1,5 +1,7 @@
 package ui
 
+import "fmt"
+
 type PositionedMessage struct {
 	pos   int
 	value string
@@ -19,14 +21,14 @@ func formatMessagesWithArrows(messages []PositionedMessage) string {
 		out += spaces[pos]
 		out += "↑"
 	}
-	out += "\n"
+	out += fmt.Sprintln()
 
 	for len(messages) != 0 {
 		for pos := range messages {
 			out += spaces[pos]
 			out += "│"
 		}
-		out += "\n"
+		out += fmt.Sprintln()
 
 		for pos, message := range messages {
 			out += spaces[pos]
@@ -36,7 +38,7 @@ func formatMessagesWithArrows(messages []PositionedMessage) string {
 				out += "│"
 			}
 		}
-		out += "\n"
+		out += fmt.Sprintln()
 
 		messages = messages[:len(messages)-1]
 	}

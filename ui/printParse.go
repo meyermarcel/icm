@@ -9,9 +9,9 @@ func PrintParse(pi model.ParsedInput) {
 
 	out := ""
 	out += FormatParsedInput(pi)
-	out += "\n"
-	out += "\n"
+	out += fmt.Sprintln()
+	out += fmt.Sprintln()
 	out += FormatValidatedInput(pi.ToValidatedInput())
-	out += "\n"
+	out += fmt.Sprintln()
 	fmt.Printf(out)
 }
