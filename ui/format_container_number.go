@@ -2,7 +2,7 @@ package ui
 
 import (
 	"fmt"
-	"iso6346/model"
+	"iso6346/iso6346"
 	"unicode/utf8"
 	"github.com/fatih/color"
 )
@@ -11,7 +11,7 @@ var yellow = color.New(color.FgYellow).SprintFunc()
 
 const missingCharacter = "_"
 
-func FormatContainerNumber(vi model.ValidatedInput) string {
+func FormatContainerNumber(vi iso6346.ValidatedInput) string {
 
 	out := " "
 

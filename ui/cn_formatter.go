@@ -2,7 +2,7 @@ package ui
 
 import (
 	"fmt"
-	"iso6346/model"
+	"iso6346/iso6346"
 )
 
 /*
@@ -17,13 +17,13 @@ import (
 */
 
 type ContainerNumberFormatted struct {
-	cn        model.ContainerNumber
+	cn        iso6346.ContainerNumber
 	firstSep  string
 	secondSep string
 	thirdSep  string
 }
 
-func CnFormatter(cn model.ContainerNumber) ContainerNumberFormatted {
+func CnFormatter(cn iso6346.ContainerNumber) ContainerNumberFormatted {
 
 	return ContainerNumberFormatted{cn,
 		"",

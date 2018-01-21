@@ -2,10 +2,10 @@ package ui
 
 import (
 	"fmt"
-	"iso6346/model"
+	"iso6346/iso6346"
 )
 
-func PrintParse(pi model.ParsedInput) {
+func PrintParse(pi iso6346.ParsedInput) {
 
 	out := ""
 	out += FormatParsedInput(pi)

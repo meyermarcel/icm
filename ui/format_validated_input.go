@@ -3,7 +3,7 @@ package ui
 import (
 	"fmt"
 
-	"iso6346/model"
+	"iso6346/iso6346"
 	"github.com/fatih/color"
 )
 
@@ -12,7 +12,7 @@ var green = color.New(color.FgGreen).SprintFunc()
 var red = color.New(color.FgRed).SprintFunc()
 var underline = color.New(color.Underline).SprintFunc()
 
-func FormatValidatedInput(vi model.ValidatedInput) string {
+func FormatValidatedInput(vi iso6346.ValidatedInput) string {
 
 	out := ""
 
@@ -60,6 +60,6 @@ func FormatValidatedInput(vi model.ValidatedInput) string {
 }
 
 func equipmentIdsAsList() string {
-	ujz := model.EquipmentCategoryIds
+	ujz := iso6346.EquipmentCategoryIds
 	return fmt.Sprintf("%s, %s or %s", green(string(ujz[0])), green(string(ujz[1])), green(string(ujz[2])))
 }

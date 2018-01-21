@@ -1,4 +1,4 @@
-package model
+package iso6346
 
 type ValidatedInput struct {
 	OwnerCode            Input

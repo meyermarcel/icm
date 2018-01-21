@@ -15,7 +15,7 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-	"iso6346/model"
+	"iso6346/iso6346"
 	"iso6346/ui"
 )
 
@@ -30,7 +30,7 @@ This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Args: cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		ui.PrintParse(model.Parse(args[0]))
+		ui.PrintParse(iso6346.Parse(args[0]))
 	},
 }
 
