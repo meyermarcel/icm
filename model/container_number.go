@@ -92,7 +92,7 @@ func NewCheckDigit(value string) (CheckDigit, error) {
 }
 
 /*
-This method is a modified version of an Go code sample from
+This method is a modified version of a Go code sample from
 https://en.wikipedia.org/wiki/ISO_6346#Code_Sample_(Go)
 */
 func CalculateCheckDigit(ownerCode OwnerCode, equipmentCategoryId EquipmentCategoryId, serialNumber SerialNumber) int {
