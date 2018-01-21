@@ -48,11 +48,11 @@ func (fcn ContainerNumberFormatted) ThirdSep(ABCU123456_0 string) ContainerNumbe
 
 func (fcn ContainerNumberFormatted) String() string {
 	return fmt.Sprintf("%s%s%s%s%s%s%d",
-		fcn.cn.OwnerCode(),
+		fcn.cn.OwnerCode.Value,
 		fcn.firstSep,
-		fcn.cn.EquipmentCategoryId(),
+		fcn.cn.EquipmentCategoryId.Value,
 		fcn.secondSep,
-		fcn.cn.SerialNumber(),
+		fcn.cn.SerialNumber.Value,
 		fcn.thirdSep,
-		fcn.cn.CheckDigit())
+		fcn.cn.CheckDigit)
 }

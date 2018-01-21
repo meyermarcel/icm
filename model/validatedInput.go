@@ -52,20 +52,16 @@ func NewValidatedInput(ownerCodeInput string,
 		return vi
 	}
 
+	vi.CalculatedCheckDigit = CalculateCheckDigit(ownerCode,
+		equipmentCategoryId,
+		serialNumber)
+
 	if err != nil {
-		cn := NewUncheckedContainerNumber(ownerCode,
-			equipmentCategoryId,
-			serialNumber)
-		vi.CalculatedCheckDigit = cn.calculatedCheckDigit
 		return vi
 	}
 
-	vi.CheckDigit.IsComplete = true
-	cn := NewContainerNumber(ownerCode,
-		equipmentCategoryId,
-		serialNumber, checkDigit)
-	vi.IsValidCheckDigit = cn.hasValidCheckDigit()
-	vi.CalculatedCheckDigit = cn.calculatedCheckDigit
+	vi.IsValidCheckDigit = vi.CalculatedCheckDigit == checkDigit.value
+
 	return vi
 }
 

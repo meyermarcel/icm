@@ -11,16 +11,8 @@ import (
 
 var EquipmentCategoryIds = []rune("UJZ")
 
-type ContainerNumber struct {
-	ownerCode            OwnerCode
-	equipmentCategoryId  EquipmentCategoryId
-	serialNumber         SerialNumber
-	checkDigit           int
-	calculatedCheckDigit int
-}
-
 type OwnerCode struct {
-	value string
+	Value string
 }
 
 func NewOwnerCode(value string) (OwnerCode, error) {
@@ -40,7 +32,7 @@ func NewOwnerCode(value string) (OwnerCode, error) {
 }
 
 type EquipmentCategoryId struct {
-	value string
+	Value string
 }
 
 func NewEquipmentCategoryId(value string) (EquipmentCategoryId, error) {
@@ -58,7 +50,7 @@ func NewEquipmentCategoryId(value string) (EquipmentCategoryId, error) {
 }
 
 type SerialNumber struct {
-	value string
+	Value string
 }
 
 func NewSerialNumber(value string) (SerialNumber, error) {
@@ -99,60 +91,13 @@ func NewCheckDigit(value string) (CheckDigit, error) {
 	return CheckDigit{cd}, err
 }
 
-func NewUncheckedContainerNumber(ownerCode OwnerCode,
-	equipmentCategoryId EquipmentCategoryId,
-	serialNumber SerialNumber) ContainerNumber {
-
-	calculatedCheckDigit := calculateCheckDigit(ownerCode, equipmentCategoryId, serialNumber)
-
-	return ContainerNumber{ownerCode,
-		equipmentCategoryId,
-		serialNumber,
-		calculatedCheckDigit,
-		calculatedCheckDigit}
-
-}
-
-func NewContainerNumber(ownerCode OwnerCode,
-	equipmentCategoryId EquipmentCategoryId,
-	serialNumber SerialNumber, checkDigit CheckDigit) ContainerNumber {
-
-	calculatedCheckDigit := calculateCheckDigit(ownerCode, equipmentCategoryId, serialNumber)
-
-	return ContainerNumber{ownerCode,
-		equipmentCategoryId,
-		serialNumber,
-		checkDigit.value,
-		calculatedCheckDigit}
-}
-
-func (cn ContainerNumber) OwnerCode() OwnerCode {
-	return cn.ownerCode
-}
-
-func (cn ContainerNumber) EquipmentCategoryId() EquipmentCategoryId {
-	return cn.equipmentCategoryId
-}
-
-func (cn ContainerNumber) SerialNumber() SerialNumber {
-	return cn.serialNumber
-}
-
-func (cn ContainerNumber) CheckDigit() int {
-	return cn.checkDigit
-}
-
-func (cn ContainerNumber) ValidCheckDigit() int {
-	return cn.calculatedCheckDigit
-}
-
 /*
 This method is a modified version of an Go code sample from
 https://en.wikipedia.org/wiki/ISO_6346#Code_Sample_(Go)
 */
-func calculateCheckDigit(ownerCode OwnerCode, equipmentCategoryId EquipmentCategoryId, serialNumber SerialNumber) int {
+func CalculateCheckDigit(ownerCode OwnerCode, equipmentCategoryId EquipmentCategoryId, serialNumber SerialNumber) int {
 
-	concatenated := ownerCode.value + equipmentCategoryId.value + serialNumber.value
+	concatenated := ownerCode.Value + equipmentCategoryId.Value + serialNumber.Value
 
 	n := 0.0
 	d := 0.5
@@ -161,12 +106,4 @@ func calculateCheckDigit(ownerCode OwnerCode, equipmentCategoryId EquipmentCateg
 		n += d * float64(strings.IndexRune("0123456789A?BCDEFGHIJK?LMNOPQRSTU?VWXYZ", character))
 	}
 	return (int(n) - int(n/11)*11) % 10
-}
-
-func (cn ContainerNumber) hasValidCheckDigit() bool {
-	return cn.checkDigit == cn.calculatedCheckDigit
-}
-
-func (cn ContainerNumber) String() string {
-	return fmt.Sprintf("%s%s%s%d", cn.ownerCode, cn.equipmentCategoryId, cn.serialNumber, cn.checkDigit)
 }
