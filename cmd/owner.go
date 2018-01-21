@@ -15,26 +15,13 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-	"iso6346/ui"
-	"iso6346/parser"
 )
 
-var parseCmd = &cobra.Command{
-	Use:   "parse",
-	Short: "Parse a container number",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	Args: cobra.ExactArgs(1),
-	Run: func(cmd *cobra.Command, args []string) {
-		ui.PrintParse(parser.Parse(args[0], *parser.MatchContainerNumber))
-	},
+var ownerCodeCmd = &cobra.Command{
+	Use:   "owner",
 }
 
 func init() {
 
-	RootCmd.AddCommand(parseCmd)
+	RootCmd.AddCommand(ownerCodeCmd)
 }

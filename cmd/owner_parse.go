@@ -19,7 +19,7 @@ import (
 	"iso6346/parser"
 )
 
-var parseCmd = &cobra.Command{
+var ownerParseCmd = &cobra.Command{
 	Use:   "parse",
 	Short: "Parse a container number",
 	Long: `A longer description that spans multiple lines and likely contains examples
@@ -30,11 +30,11 @@ This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Args: cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		ui.PrintParse(parser.Parse(args[0], *parser.MatchContainerNumber))
+		ui.PrintOwnerCodeParse(parser.Parse(args[0], *parser.MatchOwnerCodeOptEquipCatId))
 	},
 }
 
 func init() {
 
-	RootCmd.AddCommand(parseCmd)
+	ownerCodeCmd.AddCommand(ownerParseCmd)
 }
