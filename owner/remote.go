@@ -53,6 +53,7 @@ func getRecentlyDate(url string) time.Time {
 
 func getOwnersRemote(c chan []Owner) {
 
+	 //url := "https://www.bic-code.org/bic-letter-search/?resultsperpage=17576&searchterm="
 	url := "https://www.bic-code.org/bic-letter-search/?searchterm=A"
 
 	doc, err := goquery.NewDocument(url)
