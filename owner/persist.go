@@ -56,7 +56,6 @@ func deleteOwners(db *sql.DB) {
 }
 
 func getUpdatedTime(db *sql.DB) time.Time {
-
 	rows, err := db.Query("SELECT last_updated FROM updated")
 	checkErr(err)
 	defer rows.Close()
