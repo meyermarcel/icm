@@ -7,7 +7,7 @@ import (
 	"github.com/PuerkitoBio/goquery"
 )
 
-func getUpdatedTimeRemote(c chan time.Time){
+func getUpdatedTimeRemote(c chan time.Time) {
 	recentlyCreated := getRecentlyDate("https://www.bic-code.org/bic-codes/recently-created")
 	recentlyCancelled := getRecentlyDate("https://www.bic-code.org/bic-codes/recently-cancelled")
 
@@ -51,9 +51,9 @@ func getRecentlyDate(url string) time.Time {
 	return parsedDates[0]
 }
 
-func getOwnersRemote(c chan []Owner) {
+func getOwnersRemote() []Owner {
 
-	 //url := "https://www.bic-code.org/bic-letter-search/?resultsperpage=17576&searchterm="
+	//url := "https://www.bic-code.org/bic-letter-search/?resultsperpage=17576&searchterm="
 	url := "https://www.bic-code.org/bic-letter-search/?searchterm=A"
 
 	doc, err := goquery.NewDocument(url)
@@ -77,5 +77,5 @@ func getOwnersRemote(c chan []Owner) {
 		log.Fatalf("Could not find owners in document from url '%s' with query '%s'", url, query)
 	}
 
-	c <-owners
+	return owners
 }

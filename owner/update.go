@@ -17,14 +17,9 @@ func Update() {
 	updatedTimeRemote := <-c
 
 	if updatedTimeRemote.After(updatedTimeDB) {
-
-		c := make(chan []Owner)
-		go getOwnersRemote(c)
-
-		saveUpdatedTimeNow(db)
+		owners := getOwnersRemote()
 		deleteOwners(db)
-
-		owners := <- c
 		saveOwners(db, owners)
+		saveUpdatedTimeNow(db)
 	}
 }
