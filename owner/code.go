@@ -2,8 +2,8 @@ package owner
 
 import (
 	"unicode/utf8"
-	"fmt"
 	"regexp"
+	"log"
 )
 
 type Code struct {
@@ -14,14 +14,20 @@ func (c Code) Value() string {
 	return c.value
 }
 
-func NewCode(value string) (Code, error) {
+func NewCode(value string) Code {
 
 	if utf8.RuneCountInString(value) != 3 {
-		return Code{}, fmt.Errorf("'%s' is not three characters", value)
+		log.Fatalf("'%s' is not three characters", value)
 	}
 
 	if !regexp.MustCompile(`[A-Z]{3}`).MatchString(value) {
-		return Code{}, fmt.Errorf("'%s' must be 3 letters", value)
+		log.Fatalf("'%s' must be 3 letters", value)
 	}
-	return Code{value}, nil
+	return Code{value}
+}
+
+func Resolver() func(code Code) (Owner, bool) {
+	return func(code Code) (Owner, bool) {
+		return getOwner(InitDB(), code)
+	}
 }

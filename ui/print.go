@@ -3,34 +3,32 @@ package ui
 import (
 	"fmt"
 	"iso6346/parser"
-	"iso6346/owner"
-	"iso6346/container"
+	"iso6346/cont"
 )
 
-func PrintParse(pi parser.Input) {
+func PrintContNum(cn parser.ContNum) {
 
 	out := ""
-	out += formatParsedInput(pi)
+	out += fmtRegexIn(cn.RegexIn)
 	out += fmt.Sprintln()
 	out += fmt.Sprintln()
-	out += formatValidatedInput(container.Validate(pi))
+	out += fmtParsedContNum(cn)
 	out += fmt.Sprintln()
 	fmt.Print(out)
 }
 
-func PrintOwnerCodeParse(pi parser.Input) {
+func PrintOwnerCode(oce parser.OwnerCodeOptEquipCat) {
 
 	out := ""
-	out += formatParsedInput(pi)
+	out += fmtRegexIn(oce.RegexIn)
 	out += fmt.Sprintln()
 	out += fmt.Sprintln()
-	ownerCode := owner.Validate(pi)
-	out += formatOwnerCode(ownerCode)
+	out += fmtOwnerCodeOptEquipCat(oce)
 	out += fmt.Sprintln()
 	fmt.Print(out)
 }
 
-func PrintGenerate(cn container.Number, firstSep, secondSep, thirdSep string) {
+func PrintGenerate(cn cont.Number, firstSep, secondSep, thirdSep string) {
 	fmt.Printf("%s%s%s%s%s%s%d",
 		cn.OwnerCode().Value(),
 		firstSep,

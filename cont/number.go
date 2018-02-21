@@ -1,4 +1,4 @@
-package container
+package cont
 
 import (
 	"iso6346/owner"
@@ -8,7 +8,7 @@ import (
 type Number struct {
 	ownerCode    owner.Code
 	equipCatId   equip_cat.Id
-	serialNumber SerialNumber
+	serialNumber SerialNum
 	checkDigit   int
 }
 
@@ -20,7 +20,7 @@ func (cn Number) EquipCatId() equip_cat.Id {
 	return cn.equipCatId
 }
 
-func (cn Number) SerialNumber() SerialNumber {
+func (cn Number) SerialNumber() SerialNum {
 	return cn.serialNumber
 }
 
@@ -30,7 +30,7 @@ func (cn Number) CheckDigit() int {
 
 func NewContainerNumber(ownerCode owner.Code,
 	equipCatId equip_cat.Id,
-	serialNumber SerialNumber,
+	serialNumber SerialNum,
 	checkDigit int) Number {
 
 	return Number{ownerCode: ownerCode,

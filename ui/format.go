@@ -3,9 +3,6 @@ package ui
 import (
 	"fmt"
 	"github.com/fatih/color"
-	"iso6346/container"
-	"iso6346/validator"
-	"iso6346/owner"
 	"iso6346/equip_cat"
 	"iso6346/parser"
 )
@@ -20,12 +17,12 @@ var underline = color.New(color.Underline).SprintFunc()
 
 const missingCharacter = "_"
 
-func formatParsedInput(pi parser.Input) string {
+func fmtRegexIn(pi parser.RegexIn) string {
 
 	out := "'"
 
-	inputAsRunes := []rune(pi.Input())
-	for pos, char := range inputAsRunes {
+	inAsRunes := []rune(pi.Value())
+	for pos, char := range inAsRunes {
 		if pi.Match(pos) {
 			out += fmt.Sprintf("%s", string(char))
 		} else {
@@ -36,105 +33,128 @@ func formatParsedInput(pi parser.Input) string {
 	return out
 }
 
-func formatOwnerCode(oc owner.CodeOptEquipCatId) string {
+func fmtOwnerCodeOptEquipCat(oce parser.OwnerCodeOptEquipCat) string {
 
 	out := " "
 
-	out += formatInput(oc.OwnerCode())
+	out += fmtIn(oce.OwnerCodeIn.In)
 
-	if oc.EquipCatId().IsComplete() {
+	if oce.EquipCatIn.IsValidFmt() {
 		out += " "
-		out += formatInput(oc.EquipCatId())
+		out += fmtIn(oce.EquipCatIn.In)
 	}
 
-	out += formatCheckMark(oc.OwnerCode().IsComplete())
+	out += formatCheckMark(oce.OwnerCodeIn.IsValidFmt())
 
 	out += fmt.Sprintln()
+
+	var messages []PosMsg
+
+	if !oce.OwnerCodeIn.IsValidFmt() {
+		messages = append(messages, NewPosHint(2, fmt.Sprintf("%s must be %s", underline("owner code"), bold("3 letters"))))
+	} else {
+		if oce.OwnerCodeIn.OwnerFound {
+			messages = append(messages, NewPosInfo(2, oce.OwnerCodeIn.FoundOwner.Company(), oce.OwnerCodeIn.FoundOwner.City(), oce.OwnerCodeIn.FoundOwner.Country()))
+		} else {
+			messages = append(messages, NewPosHint(2, fmt.Sprintf("%s not found", underline("owner"))))
+		}
+	}
+
+	out += formatMessagesWithArrows(messages)
 
 	return out
 }
 
-func formatValidatedInput(vi container.NumberValidated) string {
+func fmtParsedContNum(cn parser.ContNum) string {
 
 	out := ""
 
-	out += formatContainerNumber(vi)
+	out += fmtContNum(cn)
 
-	validCheckDigit := vi.IsValidCheckDigit
-
-	out += formatCheckMark(validCheckDigit)
+	out += formatCheckMark(cn.CheckDigitIn.IsValidCheckDigit)
 
 	out += fmt.Sprintln()
 
-	if validCheckDigit {
-		return out
-	}
+	var messages []PosMsg
 
-	var errorMessages []PositionedMessage
-
-	if !vi.OwnerCode.IsComplete() {
-		errorMessages = append(errorMessages, PositionedMessage{2, fmt.Sprintf("%s must be %s", underline("owner code"), bold("3 letters"))})
-	}
-	if !vi.EquipCatId.IsComplete() {
-		errorMessages = append(errorMessages, PositionedMessage{5, fmt.Sprintf("%s must be %s", underline("equipment category id"), equipCatIdsAsList())})
-	}
-	if !vi.SerialNumber.IsComplete() {
-		errorMessages = append(errorMessages, PositionedMessage{9, fmt.Sprintf("%s must be %s", underline("serial number"), bold("6 numbers"))})
-	}
-
-	if !validCheckDigit {
-		if vi.IsCheckDigitCalculable() {
-			if vi.CheckDigit.IsComplete() {
-				errorMessages = append(errorMessages, PositionedMessage{14, fmt.Sprintf("%s is incorrect (correct: %s)", underline("check digit"),
-					green(vi.CalculatedCheckDigit))})
-			} else {
-				errorMessages = append(errorMessages, PositionedMessage{14, fmt.Sprintf("%s must be a %s (correct: %s)", underline("check digit"), bold("number"),
-					green(vi.CalculatedCheckDigit))})
-			}
+	if !cn.OwnerCodeIn.IsValidFmt() {
+		messages = append(messages, NewPosHint(2, fmt.Sprintf("%s must be %s", underline("owner code"), bold("3 letters"))))
+	} else {
+		if cn.OwnerCodeIn.OwnerFound {
+			messages = append(messages, NewPosInfo(2, cn.OwnerCodeIn.FoundOwner.Company(), cn.OwnerCodeIn.FoundOwner.City(), cn.OwnerCodeIn.FoundOwner.Country()))
 		} else {
-			errorMessages = append(errorMessages, PositionedMessage{14, fmt.Sprintf("%s is not calculable", underline("check digit"))})
+			messages = append(messages, NewPosHint(2, fmt.Sprintf("%s not found", underline("owner"))))
 		}
 	}
-	out += formatMessagesWithArrows(errorMessages)
+	if !cn.EquipCatIdIn.IsValidFmt() {
+		messages = append(messages, NewPosHint(5, fmt.Sprintf("%s must be %s", underline("equipment category id"), equipCatIdsAsList())))
+	}
+	if !cn.SerialNumIn.IsValidFmt() {
+		messages = append(messages, NewPosHint(9, fmt.Sprintf("%s must be %s", underline("serial number"), bold("6 numbers"))))
+	}
+
+	if !cn.CheckDigitIn.IsValidCheckDigit {
+		if cn.IsCheckDigitCalculable() {
+			if cn.CheckDigitIn.IsValidFmt() {
+				messages = append(messages, NewPosHint(14, fmt.Sprintf("%s is incorrect (correct: %s)", underline("check digit"),
+					green(cn.CheckDigitIn.CalcCheckDigit))))
+			} else {
+				messages = append(messages, NewPosHint(14, fmt.Sprintf("%s must be a %s (correct: %s)", underline("check digit"), bold("number"),
+					green(cn.CheckDigitIn.CalcCheckDigit))))
+			}
+		} else {
+			messages = append(messages, NewPosHint(14, fmt.Sprintf("%s is not calculable", underline("check digit"))))
+		}
+	}
+	out += formatMessagesWithArrows(messages)
 
 	return out
 }
 
-func formatContainerNumber(vi container.NumberValidated) string {
+func fmtContNum(cni parser.ContNum) string {
 
 	out := " "
 
-	out += formatInput(vi.OwnerCode)
-	out += " "
-	out += formatInput(vi.EquipCatId)
-	out += " "
-	out += formatInput(vi.SerialNumber)
-	out += " "
-
-	if !vi.IsValidCheckDigit && vi.CheckDigit.IsComplete() {
-		out += fmt.Sprintf("%s", yellow(string(vi.CheckDigit.Value())))
-		return out
+	if cni.OwnerCodeIn.IsValidFmt() {
+		if cni.OwnerCodeIn.OwnerFound {
+			out += fmt.Sprintf("%s", green(cni.OwnerCodeIn.Value()))
+		} else {
+			out += fmt.Sprintf("%s", yellow(cni.OwnerCodeIn.Value()))
+		}
+	} else {
+		out += fmtIn(cni.OwnerCodeIn.In)
 	}
 
-	out += formatInput(vi.CheckDigit)
+	out += " "
+	out += fmtIn(cni.EquipCatIdIn.In)
+	out += " "
+	out += fmtIn(cni.SerialNumIn.In)
+	out += " "
+
+	if !cni.CheckDigitIn.IsValidCheckDigit && cni.CheckDigitIn.IsValidFmt() {
+		out += fmt.Sprintf("%s", yellow(string(cni.CheckDigitIn.Value())))
+	} else {
+		out += fmtIn(cni.CheckDigitIn.In)
+	}
+
 	return out
 }
 
-func formatInput(input validator.Input) string {
+func fmtIn(in parser.In) string {
 
-	if input.IsComplete() {
-		return fmt.Sprintf("%s", green(input.Value()))
+	if in.IsValidFmt() {
+		return fmt.Sprintf("%s", green(in.Value()))
 	}
 
 	out := ""
 
 	startIndexMissingCharacters := 0
-	for pos, element := range input.Value() {
+	for pos, element := range in.Value() {
 		out += fmt.Sprintf("%s", yellow(string(element)))
 		startIndexMissingCharacters = pos + 1
 	}
 
-	for i := startIndexMissingCharacters; i < input.ValidLength(); i++ {
+	for i := startIndexMissingCharacters; i < in.ValidLen(); i++ {
 		out += fmt.Sprintf("%s", red(missingCharacter))
 	}
 

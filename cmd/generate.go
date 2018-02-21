@@ -15,7 +15,7 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-	"iso6346/container"
+	"iso6346/cont"
 	"iso6346/ui"
 )
 
@@ -55,7 +55,7 @@ generates a formatted random container number:
 	Args: cobra.NoArgs,
 	Run: func(cmd *cobra.Command, args []string) {
 
-		ui.PrintGenerate(container.Generate(),
+		ui.PrintGenerate(cont.Generate(),
 			cmd.Flag("1st-separator").Value.String(),
 			cmd.Flag("2nd-separator").Value.String(),
 			cmd.Flag("3rd-separator").Value.String())

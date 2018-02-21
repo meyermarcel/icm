@@ -107,8 +107,7 @@ func saveOwners(db *sql.DB, owners []Owner) {
 	tx.Commit()
 }
 
-func GetOwner(db *sql.DB, code Code) Owner {
-
+func getOwner(db *sql.DB, code Code) (owner Owner, found bool) {
 	stmt, err := db.Prepare("SELECT company, city, country FROM owner WHERE code = ?")
 	checkErr(err)
 	defer stmt.Close()
@@ -117,13 +116,14 @@ func GetOwner(db *sql.DB, code Code) Owner {
 	var city string
 	var country string
 	err = stmt.QueryRow(code.Value()).Scan(&company, &city, &country)
-	checkErr(err)
-	return NewOwner(code.Value(), company, city, country)
+	if err != nil {
+		return NewOwner(code.Value(), "", "", ""), false
+	}
+	return NewOwner(code.Value(), company, city, country), true
 }
 
 func getPathToAppDir() string {
 	homeDir, err := homedir.Dir()
-
 	checkErr(err)
 	return filepath.Join(homeDir, appDir)
 }
@@ -140,29 +140,24 @@ func InitDB() *sql.DB {
 	db, err := sql.Open("sqlite3", filepath.Join(initDir(getPathToAppDir()), dbName))
 	checkErr(err)
 
-	sqlStmtOwner := `
-		CREATE TABLE IF NOT EXISTS owner (
-		  code    TEXT,
-		  company TEXT,
-		  city    TEXT,
-		  country TEXT
-		);
-	`
-	_, err = db.Exec(sqlStmtOwner)
+	sqlStmtOwnerExists := `SELECT name FROM sqlite_master WHERE type='table' AND name='owner';`
+	rows, err := db.Query(sqlStmtOwnerExists)
 	if err != nil {
-		log.Printf("%q: %s\n", err, sqlStmtOwner)
+		log.Printf("%q: %s\n", err, sqlStmtOwnerExists)
 	}
 
-	sqlStmtTime := `
-		CREATE TABLE IF NOT EXISTS updated (
-		  last_updated TIMESTAMP
-		);
-	`
-	_, err = db.Exec(sqlStmtTime)
-	if err != nil {
-		log.Printf("%q: %s\n", err, sqlStmtOwner)
+	isInitialized := false
+	for rows.Next() {
+		isInitialized = true
 	}
 
+	if !isInitialized {
+		sqlStmtInit := sqlDump()
+		_, err = db.Exec(sqlStmtInit)
+		if err != nil {
+			log.Printf("%q: %s\n", err, sqlStmtInit)
+		}
+	}
 	return db
 }
 

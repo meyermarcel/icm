@@ -2,12 +2,28 @@ package ui
 
 import "fmt"
 
-type PositionedMessage struct {
-	pos   int
-	value string
+type MsgType int
+
+const (
+	HINT MsgType = iota
+	INFO 
+)
+
+type PosMsg struct {
+	pos     int
+	msgType MsgType
+	values  []string
 }
 
-func formatMessagesWithArrows(messages []PositionedMessage) string {
+func NewPosHint(pos int, lines ...string) PosMsg {
+	return PosMsg{pos, HINT, lines}
+}
+
+func NewPosInfo(pos int, lines ...string) PosMsg {
+	return PosMsg{pos, INFO, lines}
+}
+
+func formatMessagesWithArrows(messages []PosMsg) string {
 
 	out := ""
 
@@ -17,9 +33,14 @@ func formatMessagesWithArrows(messages []PositionedMessage) string {
 
 	spaces := calculateSpaces(messages)
 
-	for pos := range messages {
+	for pos, message := range messages {
 		out += spaces[pos]
-		out += "↑"
+		switch message.msgType {
+		case HINT:
+			out += "↑"
+		case INFO:
+			out += "│"
+		}
 	}
 	out += fmt.Sprintln()
 
@@ -33,7 +54,15 @@ func formatMessagesWithArrows(messages []PositionedMessage) string {
 		for pos, message := range messages {
 			out += spaces[pos]
 			if pos == len(messages)-1 {
-				out += "└─ " + message.value
+				for lineIx, line := range message.values {
+					if lineIx == 0 {
+						out += "└─ " + line
+					}
+					if lineIx > 0 {
+						out += "\n"
+						out += spaces[pos] + "   " + line
+					}
+				}
 			} else {
 				out += "│"
 			}
@@ -45,7 +74,7 @@ func formatMessagesWithArrows(messages []PositionedMessage) string {
 	return out
 }
 
-func calculateSpaces(messages []PositionedMessage) []string {
+func calculateSpaces(messages []PosMsg) []string {
 
 	var spaces []string
 	lastPos := 0
