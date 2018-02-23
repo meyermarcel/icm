@@ -55,18 +55,16 @@ func deleteOwners(db *sql.DB) {
 	tx.Commit()
 }
 
-func getUpdatedTime(db *sql.DB) time.Time {
+func getUpdatedTime(db *sql.DB) (lastUpdated time.Time) {
 	rows, err := db.Query("SELECT last_updated FROM updated")
 	checkErr(err)
 	defer rows.Close()
-	var lastUpdated time.Time
 	for rows.Next() {
 		err = rows.Scan(&lastUpdated)
 	}
 	err = rows.Err()
 	checkErr(err)
-
-	return lastUpdated
+	return
 }
 
 func saveUpdatedTimeNow(db *sql.DB) {
@@ -117,7 +115,7 @@ func getOwner(db *sql.DB, code Code) (owner Owner, found bool) {
 	var country string
 	err = stmt.QueryRow(code.Value()).Scan(&company, &city, &country)
 	if err != nil {
-		return NewOwner(code.Value(), "", "", ""), false
+		return
 	}
 	return NewOwner(code.Value(), company, city, country), true
 }

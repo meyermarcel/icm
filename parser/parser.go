@@ -24,12 +24,11 @@ type RegexIn struct {
 	matchesIndices map[int]bool
 }
 
-func (pi RegexIn) getMatches(start, end int) string {
+func (pi RegexIn) getMatches(start, end int) (value string) {
 
 	if len(pi.matches) == 0 {
-		return ""
+		return
 	}
-	value := ""
 	for _, element := range pi.matches[start:end] {
 		value += element
 	}
@@ -130,7 +129,7 @@ func ParseOwnerCodeOptEquipCat(in string) OwnerCodeOptEquipCat {
 	ownerOptCat := OwnerCodeOptEquipCat{}
 	parse := parse(in, *OwnerCodeOptEquipCatIdMatcher)
 	ownerOptCat.RegexIn = parse
-	ownerOptCat.OwnerCodeIn = OwnerCodeIn{In:NewIn(parse.getMatches(0, 3), 3)}.resolve(owner.Resolver())
+	ownerOptCat.OwnerCodeIn = OwnerCodeIn{In: NewIn(parse.getMatches(0, 3), 3)}.resolve(owner.Resolver())
 	ownerOptCat.EquipCatIn = EquipCatIdIn{NewIn(parse.getMatch(3), 1)}
 	return ownerOptCat
 }

@@ -51,7 +51,7 @@ func getRecentlyDate(url string) time.Time {
 	return parsedDates[0]
 }
 
-func getOwnersRemote() []Owner {
+func getOwnersRemote() (owners []Owner) {
 
 	url := "https://www.bic-code.org/bic-letter-search/?resultsperpage=17576&searchterm="
 
@@ -59,8 +59,6 @@ func getOwnersRemote() []Owner {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	var owners []Owner
 
 	const query = "tr td[data-label=Code]"
 	doc.Find(query).Each(func(i int, s *goquery.Selection) {
@@ -75,6 +73,5 @@ func getOwnersRemote() []Owner {
 	if len(owners) == 0 {
 		log.Fatalf("Could not find owners in document from url '%s' with query '%s'", url, query)
 	}
-
-	return owners
+	return
 }
