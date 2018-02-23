@@ -16,7 +16,7 @@ func Generate() Number {
 		equipCatId,
 		serialNumber)
 
-	return NewContainerNumber(ownerCode,
+	return NewContNum(ownerCode,
 		equipCatId,
 		serialNumber, checkDigit)
 }

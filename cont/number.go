@@ -28,7 +28,7 @@ func (cn Number) CheckDigit() int {
 	return cn.checkDigit
 }
 
-func NewContainerNumber(ownerCode owner.Code,
+func NewContNum(ownerCode owner.Code,
 	equipCatId equip_cat.Id,
 	serialNumber SerialNum,
 	checkDigit int) Number {

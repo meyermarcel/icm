@@ -12,9 +12,9 @@ import (
 
 const ownerCodeOptEquipCatIdRegex = `([A-Za-z])[^A-Za-z\d]*([A-Za-z])?[^A-Za-z\d]*([A-Za-z])?[^JUZjuz\d]*([JUZjuz])?`
 
-var ContainerNumberMatcher = regexp.MustCompile(containerNumberRegex)
+var ContNumMatcher = regexp.MustCompile(contNumRegex)
 
-const containerNumberRegex = ownerCodeOptEquipCatIdRegex + `[^\d]*(\d)?[^\d]*(\d)?[^\d]*(\d)?[^\d]*(\d)?[^\d]*(\d)?[^\d]*(\d)?[^\d]*(\d)?`
+const contNumRegex = ownerCodeOptEquipCatIdRegex + `[^\d]*(\d)?[^\d]*(\d)?[^\d]*(\d)?[^\d]*(\d)?[^\d]*(\d)?[^\d]*(\d)?[^\d]*(\d)?`
 
 var OwnerCodeOptEquipCatIdMatcher = regexp.MustCompile(ownerCodeOptEquipCatIdRegex)
 
@@ -137,7 +137,7 @@ func ParseOwnerCodeOptEquipCat(in string) OwnerCodeOptEquipCat {
 
 func ParseContNum(in string) ContNum {
 	cni := ContNum{}
-	parse := parse(in, *ContainerNumberMatcher)
+	parse := parse(in, *ContNumMatcher)
 	cni.RegexIn = parse
 	cni.OwnerCodeIn = OwnerCodeIn{In: NewIn(parse.getMatches(0, 3), 3)}.resolve(owner.Resolver())
 	cni.EquipCatIdIn = EquipCatIdIn{NewIn(parse.getMatch(3), 1)}
@@ -163,7 +163,7 @@ func parse(in string, matcher regexp.Regexp) RegexIn {
 
 	matchRanges := [22]int{}
 
-	copy(matchRanges[:], ContainerNumberMatcher.FindAllStringSubmatchIndex(in, -1)[0][2:])
+	copy(matchRanges[:], ContNumMatcher.FindAllStringSubmatchIndex(in, -1)[0][2:])
 
 	regexIn.matchesIndices = byteToRuneIndex(in, matchRanges)
 
