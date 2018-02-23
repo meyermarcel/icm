@@ -31,3 +31,7 @@ func Resolver() func(code Code) (Owner, bool) {
 		return getOwner(InitDB(), code)
 	}
 }
+
+func GetRandomCode() Code {
+	return getRandomCode(InitDB())
+}

@@ -30,12 +30,15 @@ func PrintOwnerCode(oce parser.OwnerCodeOptEquipCat) {
 }
 
 func PrintGen(cn cont.Number, firstSep, secondSep, thirdSep string) {
-	fmt.Printf("%s%s%s%s%s%s%d",
+	b := strings.Builder{}
+	b.WriteString(fmt.Sprintf("%s%s%s%s%s%s%d",
 		cn.OwnerCode().Value(),
 		firstSep,
 		cn.EquipCatId().Value(),
 		secondSep,
 		cn.SerialNumber().Value(),
 		thirdSep,
-		cn.CheckDigit())
+		cn.CheckDigit()))
+	b.WriteString(fmt.Sprintln())
+	fmt.Print(b.String())
 }

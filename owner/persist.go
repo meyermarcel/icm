@@ -120,6 +120,17 @@ func getOwner(db *sql.DB, code Code) (owner Owner, found bool) {
 	return NewOwner(code.Value(), company, city, country), true
 }
 
+func getRandomCode(db *sql.DB) Code {
+	stmt, err := db.Prepare("SELECT code FROM owner WHERE rowid IN (SELECT rowid FROM owner ORDER BY RANDOM() LIMIT 1)")
+	checkErr(err)
+	defer stmt.Close()
+
+	var code string
+	err = stmt.QueryRow().Scan(&code)
+	checkErr(err)
+	return NewCode(code)
+}
+
 func getPathToAppDir() string {
 	homeDir, err := homedir.Dir()
 	checkErr(err)

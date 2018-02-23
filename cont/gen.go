@@ -7,14 +7,13 @@ import (
 	"math/rand"
 )
 
-var letterRunes = []rune("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
-var numberRunes = []rune("0123456789")
+var numRunes = []rune("0123456789")
 
 func Gen() Number {
 
-	ownerCode := owner.NewCode(random(6, letterRunes))
+	ownerCode := owner.GetRandomCode()
 	equipCatId := equip_cat.NewId(random(1, equip_cat.Ids))
-	serialNumber := NewSerialNum(random(6, numberRunes))
+	serialNumber := NewSerialNum(random(6, numRunes))
 
 	checkDigit := CalcCheckDigit(ownerCode,
 		equipCatId,
