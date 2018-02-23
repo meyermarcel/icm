@@ -4,28 +4,29 @@ import (
 	"fmt"
 	"iso6346/parser"
 	"iso6346/cont"
+	"strings"
 )
 
 func PrintContNum(cn parser.ContNum) {
 
-	out := ""
-	out += fmtRegexIn(cn.RegexIn)
-	out += fmt.Sprintln()
-	out += fmt.Sprintln()
-	out += fmtParsedContNum(cn)
-	out += fmt.Sprintln()
-	fmt.Print(out)
+	b := strings.Builder{}
+	b.WriteString(fmtRegexIn(cn.RegexIn))
+	b.WriteString(fmt.Sprintln())
+	b.WriteString(fmt.Sprintln())
+	b.WriteString(fmtParsedContNum(cn))
+	b.WriteString(fmt.Sprintln())
+	fmt.Print(b.String())
 }
 
 func PrintOwnerCode(oce parser.OwnerCodeOptEquipCat) {
 
-	out := ""
-	out += fmtRegexIn(oce.RegexIn)
-	out += fmt.Sprintln()
-	out += fmt.Sprintln()
-	out += fmtOwnerCodeOptEquipCat(oce)
-	out += fmt.Sprintln()
-	fmt.Print(out)
+	b := strings.Builder{}
+	b.WriteString(fmtRegexIn(oce.RegexIn))
+	b.WriteString(fmt.Sprintln())
+	b.WriteString(fmt.Sprintln())
+	b.WriteString(fmtOwnerCodeOptEquipCat(oce))
+	b.WriteString(fmt.Sprintln())
+	fmt.Print(b.String())
 }
 
 func PrintGenerate(cn cont.Number, firstSep, secondSep, thirdSep string) {

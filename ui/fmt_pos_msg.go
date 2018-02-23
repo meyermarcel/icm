@@ -1,6 +1,9 @@
 package ui
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 type MsgType int
 
@@ -23,55 +26,58 @@ func NewPosInfo(pos int, lines ...string) PosMsg {
 	return PosMsg{pos, INFO, lines}
 }
 
-func formatMessagesWithArrows(messages []PosMsg) string {
+func fmtMessagesWithArrows(messages []PosMsg) string {
 
-	out := ""
+	b := strings.Builder{}
 
 	if len(messages) == 0 {
-		return out
+		return b.String()
 	}
 
 	spaces := calculateSpaces(messages)
 
 	for pos, message := range messages {
-		out += spaces[pos]
+		b.WriteString(spaces[pos])
 		switch message.msgType {
 		case HINT:
-			out += "↑"
+			b.WriteString("↑")
 		case INFO:
-			out += "│"
+			b.WriteString("│")
 		}
 	}
-	out += fmt.Sprintln()
+	b.WriteString(fmt.Sprintln())
 
 	for len(messages) != 0 {
 		for pos := range messages {
-			out += spaces[pos]
-			out += "│"
+			b.WriteString(spaces[pos])
+			b.WriteString("│")
 		}
-		out += fmt.Sprintln()
+		b.WriteString(fmt.Sprintln())
 
 		for pos, message := range messages {
-			out += spaces[pos]
+			b.WriteString(spaces[pos])
 			if pos == len(messages)-1 {
 				for lineIx, line := range message.values {
 					if lineIx == 0 {
-						out += "└─ " + line
+						b.WriteString("└─ ")
+						b.WriteString(line)
 					}
 					if lineIx > 0 {
-						out += "\n"
-						out += spaces[pos] + "   " + line
+						b.WriteString(fmt.Sprintln())
+						b.WriteString(spaces[pos])
+						b.WriteString("   ")
+						b.WriteString(line)
 					}
 				}
 			} else {
-				out += "│"
+				b.WriteString("│")
 			}
 		}
-		out += fmt.Sprintln()
+		b.WriteString(fmt.Sprintln())
 
 		messages = messages[:len(messages)-1]
 	}
-	return out
+	return b.String()
 }
 
 func calculateSpaces(messages []PosMsg) []string {

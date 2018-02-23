@@ -5,6 +5,7 @@ import (
 	"github.com/fatih/color"
 	"iso6346/equip_cat"
 	"iso6346/parser"
+	"strings"
 )
 
 var green = color.New(color.FgGreen).SprintFunc()
@@ -19,34 +20,35 @@ const missingCharacter = "_"
 
 func fmtRegexIn(pi parser.RegexIn) string {
 
-	out := "'"
-
+	b := strings.Builder{}
+	b.WriteString("'")
 	inAsRunes := []rune(pi.Value())
 	for pos, char := range inAsRunes {
 		if pi.Match(pos) {
-			out += fmt.Sprintf("%s", string(char))
+			b.WriteString(fmt.Sprintf("%s", string(char)))
 		} else {
-			out += fmt.Sprintf("%s", grey(string(char)))
+			b.WriteString(fmt.Sprintf("%s", grey(string(char))))
 		}
 	}
-	out += "'"
-	return out
+	b.WriteString("'")
+	return b.String()
 }
 
 func fmtOwnerCodeOptEquipCat(oce parser.OwnerCodeOptEquipCat) string {
 
-	out := " "
+	b := strings.Builder{}
+	b.WriteString(" ")
 
-	out += fmtIn(oce.OwnerCodeIn.In)
+	b.WriteString(fmtIn(oce.OwnerCodeIn.In))
 
 	if oce.EquipCatIn.IsValidFmt() {
-		out += " "
-		out += fmtIn(oce.EquipCatIn.In)
+		b.WriteString(" ")
+		b.WriteString(fmtIn(oce.EquipCatIn.In))
 	}
 
-	out += formatCheckMark(oce.OwnerCodeIn.IsValidFmt())
+	b.WriteString(fmtCheckMark(oce.OwnerCodeIn.IsValidFmt()))
 
-	out += fmt.Sprintln()
+	b.WriteString(fmt.Sprintln())
 
 	var messages []PosMsg
 
@@ -60,20 +62,20 @@ func fmtOwnerCodeOptEquipCat(oce parser.OwnerCodeOptEquipCat) string {
 		}
 	}
 
-	out += formatMessagesWithArrows(messages)
+	b.WriteString(fmtMessagesWithArrows(messages))
 
-	return out
+	return b.String()
 }
 
 func fmtParsedContNum(cn parser.ContNum) string {
 
-	out := ""
+	b := strings.Builder{}
 
-	out += fmtContNum(cn)
+	b.WriteString(fmtContNum(cn))
 
-	out += formatCheckMark(cn.CheckDigitIn.IsValidCheckDigit)
+	b.WriteString(fmtCheckMark(cn.CheckDigitIn.IsValidCheckDigit))
 
-	out += fmt.Sprintln()
+	b.WriteString(fmt.Sprintln())
 
 	var messages []PosMsg
 
@@ -106,38 +108,39 @@ func fmtParsedContNum(cn parser.ContNum) string {
 			messages = append(messages, NewPosHint(14, fmt.Sprintf("%s is not calculable", underline("check digit"))))
 		}
 	}
-	out += formatMessagesWithArrows(messages)
+	b.WriteString(fmtMessagesWithArrows(messages))
 
-	return out
+	return b.String()
 }
 
 func fmtContNum(cni parser.ContNum) string {
 
-	out := " "
+	b := strings.Builder{}
+	b.WriteString(" ")
 
 	if cni.OwnerCodeIn.IsValidFmt() {
 		if cni.OwnerCodeIn.OwnerFound {
-			out += fmt.Sprintf("%s", green(cni.OwnerCodeIn.Value()))
+			b.WriteString(fmt.Sprintf("%s", green(cni.OwnerCodeIn.Value())))
 		} else {
-			out += fmt.Sprintf("%s", yellow(cni.OwnerCodeIn.Value()))
+			b.WriteString(fmt.Sprintf("%s", yellow(cni.OwnerCodeIn.Value())))
 		}
 	} else {
-		out += fmtIn(cni.OwnerCodeIn.In)
+		b.WriteString(fmtIn(cni.OwnerCodeIn.In))
 	}
 
-	out += " "
-	out += fmtIn(cni.EquipCatIdIn.In)
-	out += " "
-	out += fmtIn(cni.SerialNumIn.In)
-	out += " "
+	b.WriteString(" ")
+	b.WriteString(fmtIn(cni.EquipCatIdIn.In))
+	b.WriteString(" ")
+	b.WriteString(fmtIn(cni.SerialNumIn.In))
+	b.WriteString(" ")
 
 	if !cni.CheckDigitIn.IsValidCheckDigit && cni.CheckDigitIn.IsValidFmt() {
-		out += fmt.Sprintf("%s", yellow(string(cni.CheckDigitIn.Value())))
+		b.WriteString(fmt.Sprintf("%s", yellow(string(cni.CheckDigitIn.Value()))))
 	} else {
-		out += fmtIn(cni.CheckDigitIn.In)
+		b.WriteString(fmtIn(cni.CheckDigitIn.In))
 	}
 
-	return out
+	return b.String()
 }
 
 func fmtIn(in parser.In) string {
@@ -146,30 +149,32 @@ func fmtIn(in parser.In) string {
 		return fmt.Sprintf("%s", green(in.Value()))
 	}
 
-	out := ""
+	b := strings.Builder{}
 
 	startIndexMissingCharacters := 0
 	for pos, element := range in.Value() {
-		out += fmt.Sprintf("%s", yellow(string(element)))
+		b.WriteString(fmt.Sprintf("%s", yellow(string(element))))
 		startIndexMissingCharacters = pos + 1
 	}
 
 	for i := startIndexMissingCharacters; i < in.ValidLen(); i++ {
-		out += fmt.Sprintf("%s", red(missingCharacter))
+		b.WriteString(fmt.Sprintf("%s", red(missingCharacter)))
 	}
 
-	return out
+	return b.String()
 }
 
-func formatCheckMark(valid bool) string {
+func fmtCheckMark(valid bool) string {
 
-	out := "  "
+	b := strings.Builder{}
+	b.WriteString("  ")
 
 	if valid {
-		return out + fmt.Sprintf("%s", green("✔"))
+		b.WriteString(fmt.Sprintf("%s", green("✔")))
+		return b.String()
 	}
-	return out + fmt.Sprintf("%s", red("✘"))
-
+	b.WriteString(fmt.Sprintf("%s", red("✘")))
+	return b.String()
 }
 
 func equipCatIdsAsList() string {
