@@ -29,7 +29,7 @@ func PrintOwnerCode(oce parser.OwnerCodeOptEquipCat) {
 	fmt.Print(b.String())
 }
 
-func PrintGenerate(cn cont.Number, firstSep, secondSep, thirdSep string) {
+func PrintGen(cn cont.Number, firstSep, secondSep, thirdSep string) {
 	fmt.Printf("%s%s%s%s%s%s%d",
 		cn.OwnerCode().Value(),
 		firstSep,

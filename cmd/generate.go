@@ -55,7 +55,7 @@ generates a formatted random container number:
 	Args: cobra.NoArgs,
 	Run: func(cmd *cobra.Command, args []string) {
 
-		ui.PrintGenerate(cont.Generate(),
+		ui.PrintGen(cont.Gen(),
 			cmd.Flag("1st-separator").Value.String(),
 			cmd.Flag("2nd-separator").Value.String(),
 			cmd.Flag("3rd-separator").Value.String())

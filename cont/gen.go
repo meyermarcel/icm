@@ -10,7 +10,7 @@ import (
 var letterRunes = []rune("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
 var numberRunes = []rune("0123456789")
 
-func Generate() Number {
+func Gen() Number {
 
 	ownerCode := owner.NewCode(random(6, letterRunes))
 	equipCatId := equip_cat.NewId(random(1, equip_cat.Ids))
