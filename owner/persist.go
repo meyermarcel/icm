@@ -120,15 +120,27 @@ func getOwner(db *sql.DB, code Code) (owner Owner, found bool) {
 	return NewOwner(code.Value(), company, city, country), true
 }
 
-func getRandomCode(db *sql.DB) Code {
-	stmt, err := db.Prepare("SELECT code FROM owner WHERE rowid IN (SELECT rowid FROM owner ORDER BY RANDOM() LIMIT 1)")
+func getRandomCodes(db *sql.DB, count int) []Code {
+	stmt, err := db.Prepare(`
+		SELECT code
+		FROM owner
+		ORDER BY RANDOM()
+		LIMIT MIN(?, (SELECT COUNT(_rowid_) FROM owner)) 
+                              `)
 	checkErr(err)
 	defer stmt.Close()
 
-	var code string
-	err = stmt.QueryRow().Scan(&code)
+	rows, err := stmt.Query(count)
 	checkErr(err)
-	return NewCode(code)
+
+	var codes []Code
+	for rows.Next() {
+		var code string
+		err = rows.Scan(&code)
+		checkErr(err)
+		codes = append(codes, NewCode(code))
+	}
+	return codes
 }
 
 func getPathToAppDir() string {
@@ -161,10 +173,9 @@ func InitDB() *sql.DB {
 	}
 
 	if !isInitialized {
-		sqlStmtInit := sqlDump()
-		_, err = db.Exec(sqlStmtInit)
+		_, err = db.Exec(sqlDump())
 		if err != nil {
-			log.Printf("%q: %s\n", err, sqlStmtInit)
+			log.Printf("data initialization error\n")
 		}
 	}
 	return db

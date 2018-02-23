@@ -100,7 +100,7 @@ type CheckDigitIn struct {
 
 func (cdi *CheckDigitIn) calcCheckDigit(ocIn OwnerCodeIn, eciIn EquipCatIdIn, snIn SerialNumIn) {
 
-	cdi.CalcCheckDigit = cont.CalcCheckDigit(owner.NewCode(ocIn.In.Value()), equip_cat.NewId(eciIn.Value()), cont.NewSerialNum(snIn.Value()))
+	cdi.CalcCheckDigit = cont.CalcCheckDigit(owner.NewCode(ocIn.In.Value()), equip_cat.NewIdFrom(eciIn.Value()), cont.SerialNumFrom(snIn.Value()))
 	if cdi.IsValidFmt() {
 		cd, _ := strconv.Atoi(cdi.Value())
 		cdi.IsValidCheckDigit = cd == cdi.CalcCheckDigit

@@ -16,7 +16,11 @@ func (id Id) Value() string {
 	return id.value
 }
 
-func NewId(value string) Id {
+func NewIdU() Id {
+	return Id{"U"}
+}
+
+func NewIdFrom(value string) Id {
 
 	if utf8.RuneCountInString(value) != 1 {
 		log.Fatalf("'%s' is not one character", value)

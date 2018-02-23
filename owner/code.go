@@ -32,6 +32,6 @@ func Resolver() func(code Code) (Owner, bool) {
 	}
 }
 
-func GetRandomCode() Code {
-	return getRandomCode(InitDB())
+func GetRandomCodes(count int) []Code {
+	return getRandomCodes(InitDB(), count)
 }

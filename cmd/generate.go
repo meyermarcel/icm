@@ -31,14 +31,14 @@ Example:
 
 generates a random container number with valid check digit:
 
-  ABCU1234560
+  ABC U 123456 0
 
 The ISO 6346 standard specifies that all characters are
 alphanumeric except the equipment ID which is U, J or Z.
 
 You can also format your output:
 
-  iso6346 generate --2nd-separator ' ' -3 '-'
+  iso6346 generate --1st-separator '' -3 '-'
 
 generates a formatted random container number:
 
@@ -54,18 +54,24 @@ generates a formatted random container number:
      └─ 1st separator`,
 	Args: cobra.NoArgs,
 	Run: func(cmd *cobra.Command, args []string) {
+		c := make(chan cont.Number)
+		go cont.Gen(count, c)
 
-		ui.PrintGen(cont.Gen(),
-			cmd.Flag("1st-separator").Value.String(),
-			cmd.Flag("2nd-separator").Value.String(),
-			cmd.Flag("3rd-separator").Value.String())
-
+		for contNum := range c {
+			ui.PrintGen(contNum, firstSep, secondSep, thirdSep)
+		}
 	},
 }
 
+var count int
+var firstSep string
+var secondSep string
+var thirdSep string
+
 func init() {
-	generateCmd.Flags().StringP("1st-separator", "1", "", "ABC(*)U1234560  ->  (*) 1st separator")
-	generateCmd.Flags().StringP("2nd-separator", "2", " ", "ABCU(*)1234560  ->  (*) 2nd separator")
-	generateCmd.Flags().StringP("3rd-separator", "3", " ", "ABCU123456(*)0  ->  (*) 3rd separator")
+	generateCmd.Flags().StringVarP(&firstSep, "1st-separator", "1", " ", "ABC(*)U1234560  ->  (*) 1st separator")
+	generateCmd.Flags().StringVarP(&secondSep, "2nd-separator", "2", " ", "ABCU(*)1234560  ->  (*) 2nd separator")
+	generateCmd.Flags().StringVarP(&thirdSep, "3rd-separator", "3", " ", "ABCU123456(*)0  ->  (*) 3rd separator")
+	generateCmd.Flags().IntVarP(&count, "count", "c", 1, "generate container numbers")
 	RootCmd.AddCommand(generateCmd)
 }
