@@ -39,7 +39,7 @@ func fmtOwnerCodeOptEquipCat(oce parser.OwnerCodeOptEquipCat) string {
 	b := strings.Builder{}
 	b.WriteString(" ")
 
-	b.WriteString(fmtIn(oce.OwnerCodeIn.In))
+	b.WriteString(fmtOwnerCode(oce.OwnerCodeIn))
 
 	if oce.EquipCatIn.IsValidFmt() {
 		b.WriteString(" ")
@@ -50,19 +50,7 @@ func fmtOwnerCodeOptEquipCat(oce parser.OwnerCodeOptEquipCat) string {
 
 	b.WriteString(fmt.Sprintln())
 
-	var messages []PosMsg
-
-	if !oce.OwnerCodeIn.IsValidFmt() {
-		messages = append(messages, NewPosHint(2, fmt.Sprintf("%s must be %s", underline("owner code"), bold("3 letters"))))
-	} else {
-		if oce.OwnerCodeIn.OwnerFound {
-			messages = append(messages, NewPosInfo(2, oce.OwnerCodeIn.FoundOwner.Company(), oce.OwnerCodeIn.FoundOwner.City(), oce.OwnerCodeIn.FoundOwner.Country()))
-		} else {
-			messages = append(messages, NewPosHint(2, fmt.Sprintf("%s not found", underline("owner"))))
-		}
-	}
-
-	b.WriteString(fmtMessagesWithArrows(messages))
+	b.WriteString(fmtTextsWithArrows(ownerCodeTxt(oce.OwnerCodeIn)))
 
 	return b.String()
 }
@@ -77,57 +65,51 @@ func fmtParsedContNum(cn parser.ContNum) string {
 
 	b.WriteString(fmt.Sprintln())
 
-	var messages []PosMsg
+	var texts []PosTxt
 
-	if !cn.OwnerCodeIn.IsValidFmt() {
-		messages = append(messages, NewPosHint(2, fmt.Sprintf("%s must be %s", underline("owner code"), bold("3 letters"))))
-	} else {
-		if cn.OwnerCodeIn.OwnerFound {
-			messages = append(messages, NewPosInfo(2, cn.OwnerCodeIn.FoundOwner.Company(), cn.OwnerCodeIn.FoundOwner.City(), cn.OwnerCodeIn.FoundOwner.Country()))
-		} else {
-			messages = append(messages, NewPosHint(2, fmt.Sprintf("%s not found", underline("owner"))))
-		}
-	}
+	texts = append(texts, ownerCodeTxt(cn.OwnerCodeIn))
+
 	if !cn.EquipCatIdIn.IsValidFmt() {
-		messages = append(messages, NewPosHint(5, fmt.Sprintf("%s must be %s", underline("equipment category id"), equipCatIdsAsList())))
+		texts = append(texts, NewPosHint(5, fmt.Sprintf("%s must be %s", underline("equipment category id"), equipCatIdsAsList())))
 	}
 	if !cn.SerialNumIn.IsValidFmt() {
-		messages = append(messages, NewPosHint(9, fmt.Sprintf("%s must be %s", underline("serial number"), bold("6 numbers"))))
+		texts = append(texts, NewPosHint(9, fmt.Sprintf("%s must be %s", underline("serial number"), bold("6 numbers"))))
 	}
 
 	if !cn.CheckDigitIn.IsValidCheckDigit {
 		if cn.IsCheckDigitCalculable() {
 			if cn.CheckDigitIn.IsValidFmt() {
-				messages = append(messages, NewPosHint(14, fmt.Sprintf("%s is incorrect (correct: %s)", underline("check digit"),
+				texts = append(texts, NewPosHint(14, fmt.Sprintf("%s is incorrect (correct: %s)", underline("check digit"),
 					green(cn.CheckDigitIn.CalcCheckDigit))))
 			} else {
-				messages = append(messages, NewPosHint(14, fmt.Sprintf("%s must be a %s (correct: %s)", underline("check digit"), bold("number"),
+				texts = append(texts, NewPosHint(14, fmt.Sprintf("%s must be a %s (correct: %s)", underline("check digit"), bold("number"),
 					green(cn.CheckDigitIn.CalcCheckDigit))))
 			}
 		} else {
-			messages = append(messages, NewPosHint(14, fmt.Sprintf("%s is not calculable", underline("check digit"))))
+			texts = append(texts, NewPosHint(14, fmt.Sprintf("%s is not calculable", underline("check digit"))))
 		}
 	}
-	b.WriteString(fmtMessagesWithArrows(messages))
+	b.WriteString(fmtTextsWithArrows(texts...))
 
 	return b.String()
+}
+
+func ownerCodeTxt(ownerCodeIn parser.OwnerCodeIn) PosTxt {
+	if !ownerCodeIn.IsValidFmt() {
+		return NewPosHint(2, fmt.Sprintf("%s must be %s", underline("owner code"), bold("3 letters")))
+	}
+	if ownerCodeIn.OwnerFound {
+		return NewPosInfo(2, ownerCodeIn.FoundOwner.Company(), ownerCodeIn.FoundOwner.City(), ownerCodeIn.FoundOwner.Country())
+	}
+	return NewPosInfo(2, fmt.Sprintf("%s not found", underline("owner")))
+
 }
 
 func fmtContNum(cni parser.ContNum) string {
 
 	b := strings.Builder{}
 	b.WriteString(" ")
-
-	if cni.OwnerCodeIn.IsValidFmt() {
-		if cni.OwnerCodeIn.OwnerFound {
-			b.WriteString(fmt.Sprintf("%s", green(cni.OwnerCodeIn.Value())))
-		} else {
-			b.WriteString(fmt.Sprintf("%s", yellow(cni.OwnerCodeIn.Value())))
-		}
-	} else {
-		b.WriteString(fmtIn(cni.OwnerCodeIn.In))
-	}
-
+	b.WriteString(fmtOwnerCode(cni.OwnerCodeIn))
 	b.WriteString(" ")
 	b.WriteString(fmtIn(cni.EquipCatIdIn.In))
 	b.WriteString(" ")
@@ -141,6 +123,16 @@ func fmtContNum(cni parser.ContNum) string {
 	}
 
 	return b.String()
+}
+
+func fmtOwnerCode(ownerCodeIn parser.OwnerCodeIn) string {
+	if ownerCodeIn.IsValidFmt() {
+		if ownerCodeIn.OwnerFound {
+			return fmt.Sprintf("%s", green(ownerCodeIn.Value()))
+		}
+		return fmt.Sprintf("%s", yellow(ownerCodeIn.Value()))
+	}
+	return fmtIn(ownerCodeIn.In)
 }
 
 func fmtIn(in parser.In) string {

@@ -5,40 +5,40 @@ import (
 	"strings"
 )
 
-type MsgType int
+type Type int
 
 const (
-	HINT MsgType = iota
+	HINT Type = iota
 	INFO 
 )
 
-type PosMsg struct {
+type PosTxt struct {
 	pos     int
-	msgType MsgType
+	txtType Type
 	values  []string
 }
 
-func NewPosHint(pos int, lines ...string) PosMsg {
-	return PosMsg{pos, HINT, lines}
+func NewPosHint(pos int, lines ...string) PosTxt {
+	return PosTxt{pos, HINT, lines}
 }
 
-func NewPosInfo(pos int, lines ...string) PosMsg {
-	return PosMsg{pos, INFO, lines}
+func NewPosInfo(pos int, lines ...string) PosTxt {
+	return PosTxt{pos, INFO, lines}
 }
 
-func fmtMessagesWithArrows(messages []PosMsg) string {
+func fmtTextsWithArrows(texts ...PosTxt) string {
 
 	b := strings.Builder{}
 
-	if len(messages) == 0 {
+	if len(texts) == 0 {
 		return b.String()
 	}
 
-	spaces := calculateSpaces(messages)
+	spaces := calculateSpaces(texts)
 
-	for pos, message := range messages {
+	for pos, message := range texts {
 		b.WriteString(spaces[pos])
-		switch message.msgType {
+		switch message.txtType {
 		case HINT:
 			b.WriteString("↑")
 		case INFO:
@@ -46,13 +46,13 @@ func fmtMessagesWithArrows(messages []PosMsg) string {
 		}
 	}
 
-	for len(messages) != 0 {
-		b.WriteString(fmt.Sprintln())
+	for len(texts) != 0 {
 
-		for pos, message := range messages {
+		b.WriteString(fmt.Sprintln())
+		for pos, txt := range texts {
 			b.WriteString(spaces[pos])
-			if pos == len(messages)-1 {
-				for lineIx, line := range message.values {
+			if pos == len(texts)-1 {
+				for lineIx, line := range txt.values {
 					if lineIx == 0 {
 						b.WriteString("└─ ")
 						b.WriteString(line)
@@ -68,11 +68,13 @@ func fmtMessagesWithArrows(messages []PosMsg) string {
 				b.WriteString("│")
 			}
 		}
-		b.WriteString(fmt.Sprintln())
 
-		messages = messages[:len(messages)-1]
+		texts = texts[:len(texts)-1]
 
-		for pos := range messages {
+		if len(texts) != 0 {
+			b.WriteString(fmt.Sprintln())
+		}
+		for pos := range texts {
 			b.WriteString(spaces[pos])
 			b.WriteString("│")
 		}
@@ -80,11 +82,11 @@ func fmtMessagesWithArrows(messages []PosMsg) string {
 	return b.String()
 }
 
-func calculateSpaces(messages []PosMsg) []string {
+func calculateSpaces(texts []PosTxt) []string {
 
 	var spaces []string
 	lastPos := 0
-	for pos, element := range messages {
+	for pos, element := range texts {
 		spacesCount := element.pos - lastPos - 1
 		spaces = append(spaces, "")
 		for i := 0; i <= spacesCount; i++ {
