@@ -45,13 +45,8 @@ func fmtMessagesWithArrows(messages []PosMsg) string {
 			b.WriteString("│")
 		}
 	}
-	b.WriteString(fmt.Sprintln())
 
 	for len(messages) != 0 {
-		for pos := range messages {
-			b.WriteString(spaces[pos])
-			b.WriteString("│")
-		}
 		b.WriteString(fmt.Sprintln())
 
 		for pos, message := range messages {
@@ -76,6 +71,11 @@ func fmtMessagesWithArrows(messages []PosMsg) string {
 		b.WriteString(fmt.Sprintln())
 
 		messages = messages[:len(messages)-1]
+
+		for pos := range messages {
+			b.WriteString(spaces[pos])
+			b.WriteString("│")
+		}
 	}
 	return b.String()
 }
