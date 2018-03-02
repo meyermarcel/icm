@@ -20,11 +20,11 @@ func CalcCheckDigit(ownerCode owner.Code, equipCatId equip_cat.Id, serialNum Ser
 		d *= 2
 		n += d * float64(strings.IndexRune("??????????A?BCDEFGHIJK?LMNOPQRSTU?VWXYZ", character))
 	}
-	div := 1.0
-	for i := 0; i < 7; i++ {
+	div := 100000.0
+	for i := 0; i < 6; i++ {
 		d *= 2
 		n += d * float64(int(float64(serialNum.Value())/div)%10)
-		div *= 10
+		div /= 10
 	}
 	return (int(n) - int(n/11)*11) % 10
 }
