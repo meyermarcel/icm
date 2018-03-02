@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/meyermarcel/iso6346/cont"
 	"github.com/meyermarcel/iso6346/parser"
+	"github.com/meyermarcel/iso6346/sizetype"
 )
 
 type Separators struct {
@@ -38,4 +39,8 @@ func PrintGen(cn cont.Number, seps Separators) {
 		seps.SerialCheck,
 		cn.CheckDigit())
 	fmt.Println()
+}
+
+func PrintSizeTypeDefs(typeSizDef sizetype.Def) {
+	fmt.Println(fmtSizeTypeDef(typeSizDef))
 }
