@@ -22,9 +22,8 @@ import (
 // generateCmd represents the generate command
 var generateCmd = &cobra.Command{
 	Use:   "generate",
-	Short: "Generate a random container number.",
-	Long: `Generate a random container number.
-Example:
+	Short: "Generate a random container number",
+	Long: `Example:
 
   iso6346 generate
 

@@ -20,8 +20,8 @@ import (
 
 var ownerUpdateCmd = &cobra.Command{
 	Use:   "update",
-	Short: "Update owner definitions.",
-	Long: "Update owner definitions.",
+	Short: "Update owner definitions",
+	Long: "Update owner definitions",
 	Args: cobra.NoArgs,
 	Run: func(cmd *cobra.Command, args []string) {
 		owner.Update()

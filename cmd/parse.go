@@ -21,8 +21,8 @@ import (
 
 var parseCmd = &cobra.Command{
 	Use:   "parse",
-	Short: "Parse a container number.",
-	Long: "Parse a container number.",
+	Short: "Parse a container number",
+	Long: "Parse a container number",
 	Args: cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		ui.PrintContNum(parser.ParseContNum(args[0]))

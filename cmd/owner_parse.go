@@ -21,8 +21,8 @@ import (
 
 var ownerParseCmd = &cobra.Command{
 	Use:   "parse",
-	Short: "Parse an owner.",
-	Long: "Parse an owner.",
+	Short: "Parse an owner",
+	Long: "Parse an owner",
 	Args: cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		ui.PrintOwnerCode(parser.ParseOwnerCodeOptEquipCat(args[0]))

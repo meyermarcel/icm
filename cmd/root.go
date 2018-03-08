@@ -22,8 +22,8 @@ import (
 
 var RootCmd = &cobra.Command{
 	Use:   "iso6346",
-	Short: "Parse or generate all ISO 6346 related data.",
-	Long:  "Parse or generate all ISO 6346 related data.",
+	Short: "Parse or generate all ISO 6346 related data",
+	Long:  "Parse or generate all ISO 6346 related data",
 }
 
 func Execute() {
