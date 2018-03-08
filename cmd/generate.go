@@ -23,8 +23,7 @@ import (
 var generateCmd = &cobra.Command{
 	Use:   "generate",
 	Short: "Generate a random container number.",
-	Long: `
-Generate a random container number.
+	Long: `Generate a random container number.
 Example:
 
   iso6346 generate
@@ -38,7 +37,7 @@ alphanumeric except the equipment ID which is U, J or Z.
 
 You can also format your output:
 
-  iso6346 generate --1st-separator '' -3 '-'
+  iso6346 generate --1st-separator '' --3rd-separator '-'
 
 generates a formatted random container number:
 
