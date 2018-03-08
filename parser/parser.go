@@ -10,13 +10,13 @@ import (
 	"strconv"
 )
 
-const ownerCodeOptEquipCatIdRegex = `([A-Za-z])[^A-Za-z\d]*([A-Za-z])?[^A-Za-z\d]*([A-Za-z])?[^JUZjuz\d]*([JUZjuz])?`
+const ownerCodeOptEquipCatIdRegex = `([A-Za-z])[^A-Za-z]*([A-Za-z])?[^A-Za-z]*([A-Za-z])?[^JUZjuz]*([JUZjuz])?`
 
-var ContNumMatcher = regexp.MustCompile(contNumRegex)
+var ownerCodeOptEquipCatIdMatcher = regexp.MustCompile(ownerCodeOptEquipCatIdRegex)
 
 const contNumRegex = ownerCodeOptEquipCatIdRegex + `[^\d]*(\d)?[^\d]*(\d)?[^\d]*(\d)?[^\d]*(\d)?[^\d]*(\d)?[^\d]*(\d)?[^\d]*(\d)?`
 
-var OwnerCodeOptEquipCatIdMatcher = regexp.MustCompile(ownerCodeOptEquipCatIdRegex)
+var contNumMatcher = regexp.MustCompile(contNumRegex)
 
 type RegexIn struct {
 	matches        []string
@@ -127,7 +127,7 @@ func (cn ContNum) IsCheckDigitCalculable() bool {
 
 func ParseOwnerCodeOptEquipCat(in string) OwnerCodeOptEquipCat {
 	ownerOptCat := OwnerCodeOptEquipCat{}
-	parse := parse(in, *OwnerCodeOptEquipCatIdMatcher)
+	parse := parse(in, *ownerCodeOptEquipCatIdMatcher)
 	ownerOptCat.RegexIn = parse
 	ownerOptCat.OwnerCodeIn = OwnerCodeIn{In: NewIn(parse.getMatches(0, 3), 3)}.resolve(owner.Resolver())
 	ownerOptCat.EquipCatIn = EquipCatIdIn{NewIn(parse.getMatch(3), 1)}
@@ -136,7 +136,7 @@ func ParseOwnerCodeOptEquipCat(in string) OwnerCodeOptEquipCat {
 
 func ParseContNum(in string) ContNum {
 	cni := ContNum{}
-	parse := parse(in, *ContNumMatcher)
+	parse := parse(in, *contNumMatcher)
 	cni.RegexIn = parse
 	cni.OwnerCodeIn = OwnerCodeIn{In: NewIn(parse.getMatches(0, 3), 3)}.resolve(owner.Resolver())
 	cni.EquipCatIdIn = EquipCatIdIn{NewIn(parse.getMatch(3), 1)}
@@ -160,23 +160,21 @@ func parse(in string, matcher regexp.Regexp) RegexIn {
 
 	regexIn.matches = subMatch[0][1:]
 
-	matchRanges := [22]int{}
-
-	copy(matchRanges[:], ContNumMatcher.FindAllStringSubmatchIndex(in, -1)[0][2:])
+	matchRanges := matcher.FindAllStringSubmatchIndex(in, -1)[0][2:]
 
 	regexIn.matchesIndices = byteToRuneIndex(in, matchRanges)
 
 	return regexIn
 }
 
-func byteToRuneIndex(in string, matchRanges [22]int) map[int]bool {
-	matchesIndices := [11]int{}
+func byteToRuneIndex(in string, matchRanges []int) map[int]bool {
+	var matchesIndices []int
 
 	for i := 0; i < len(matchRanges)/2; i++ {
-		matchesIndices[i] = matchRanges[i*2]
+		matchesIndices = append(matchesIndices, matchRanges[i*2])
 	}
 
-	byteShiftsForIndices := [11]int{}
+	byteShiftsForIndices := make([]int, len(matchesIndices))
 
 	for i := 0; i < len(in); i++ {
 		if !utf8.RuneStart(in[i]) {
