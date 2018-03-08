@@ -22,14 +22,14 @@ func PrintOwnerCode(oce parser.OwnerCodeOptEquipCat) {
 	fmt.Println()
 }
 
-func PrintGen(cn cont.Number, firstSep, secondSep, thirdSep string) {
+func PrintGen(cn cont.Number, sepOwnerEquip, sepEquipSerial, sepSerialCheck string) {
 	fmt.Printf("%s%s%s%s%06d%s%d",
 		cn.OwnerCode().Value(),
-		firstSep,
+		sepOwnerEquip,
 		cn.EquipCatId().Value(),
-		secondSep,
+		sepEquipSerial,
 		cn.SerialNumber().Value(),
-		thirdSep,
+		sepSerialCheck,
 		cn.CheckDigit())
 	fmt.Println()
 }

@@ -33,12 +33,15 @@ func Execute() {
 	}
 }
 
-var firstSep string
-var secondSep string
-var thirdSep string
+var sepOwnerEquip string
+var sepEquipSerial string
+var sepSerialCheck string
 
 func init() {
-	RootCmd.PersistentFlags().StringVarP(&firstSep, "1st-separator", "1", " ", "ABC(*)U1234560  ->  (*) 1st separator")
-	RootCmd.PersistentFlags().StringVarP(&secondSep, "2nd-separator", "2", " ", "ABCU(*)1234560  ->  (*) 2nd separator")
-	RootCmd.PersistentFlags().StringVarP(&thirdSep, "3rd-separator", "3", " ", "ABCU123456(*)0  ->  (*) 3rd separator")
+	RootCmd.PersistentFlags().StringVarP(&sepOwnerEquip, "sep-owner-equip", "", " ",
+		"ABC(*)U1234560  (*) separator between owner code and equipment category id")
+	RootCmd.PersistentFlags().StringVarP(&sepEquipSerial, "sep-equip-serial", "", " ",
+		"ABCU(*)1234560  (*) separator between equipment category id and serial number")
+	RootCmd.PersistentFlags().StringVarP(&sepSerialCheck, "sep-serial-check", "", " ",
+		"ABCU123456(*)0  (*) separator between serial number and check digit")
 }

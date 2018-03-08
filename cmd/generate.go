@@ -37,7 +37,7 @@ alphanumeric except the equipment ID which is U, J or Z.
 
 You can also format your output:
 
-  iso6346 generate --1st-separator '' --3rd-separator '-'
+  iso6346 generate --sep-owner-equip '' --sep-serial-check '-'
 
 generates a formatted random container number:
 
@@ -46,18 +46,18 @@ generates a formatted random container number:
 
   ABC U 123456 0
      ↑ ↑      ↑
-     │ │      └─ 3rd separator
+     │ │      └─ separator between serial number and check digit
      │ │
-     │ └─ 2nd separator
+     │ └─ separator between equipment category id and serial number
      │
-     └─ 1st separator`,
+     └─ separator between owner code and equipment category id`,
 	Args: cobra.NoArgs,
 	Run: func(cmd *cobra.Command, args []string) {
 		c := make(chan cont.Number)
 		go cont.Gen(count, c)
 
 		for contNum := range c {
-			ui.PrintGen(contNum, firstSep, secondSep, thirdSep)
+			ui.PrintGen(contNum, sepOwnerEquip, sepEquipSerial, sepSerialCheck)
 		}
 	},
 }
