@@ -19,6 +19,8 @@ import (
 
 var ownerCodeCmd = &cobra.Command{
 	Use:   "owner",
+	Short: "Sub command for owner commands.",
+	Long: "Sub command for owner commands.",
 }
 
 func init() {
