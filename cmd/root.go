@@ -33,5 +33,12 @@ func Execute() {
 	}
 }
 
+var firstSep string
+var secondSep string
+var thirdSep string
+
 func init() {
+	RootCmd.PersistentFlags().StringVarP(&firstSep, "1st-separator", "1", " ", "ABC(*)U1234560  ->  (*) 1st separator")
+	RootCmd.PersistentFlags().StringVarP(&secondSep, "2nd-separator", "2", " ", "ABCU(*)1234560  ->  (*) 2nd separator")
+	RootCmd.PersistentFlags().StringVarP(&thirdSep, "3rd-separator", "3", " ", "ABCU123456(*)0  ->  (*) 3rd separator")
 }

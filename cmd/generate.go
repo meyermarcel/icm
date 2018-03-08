@@ -63,14 +63,8 @@ generates a formatted random container number:
 }
 
 var count int
-var firstSep string
-var secondSep string
-var thirdSep string
 
 func init() {
-	generateCmd.Flags().StringVarP(&firstSep, "1st-separator", "1", " ", "ABC(*)U1234560  ->  (*) 1st separator")
-	generateCmd.Flags().StringVarP(&secondSep, "2nd-separator", "2", " ", "ABCU(*)1234560  ->  (*) 2nd separator")
-	generateCmd.Flags().StringVarP(&thirdSep, "3rd-separator", "3", " ", "ABCU123456(*)0  ->  (*) 3rd separator")
 	generateCmd.Flags().IntVarP(&count, "count", "c", 1, "generate container numbers")
 	RootCmd.AddCommand(generateCmd)
 }
