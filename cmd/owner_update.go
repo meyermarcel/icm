@@ -20,14 +20,9 @@ import (
 
 var ownerUpdateCmd = &cobra.Command{
 	Use:   "update",
-	Short: "Update owners",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	Args: cobra.ExactArgs(0),
+	Short: "Update owner definitions.",
+	Long: "Update owner definitions.",
+	Args: cobra.NoArgs,
 	Run: func(cmd *cobra.Command, args []string) {
 		owner.Update()
 	},
