@@ -10,9 +10,9 @@
       https://gist.github.com/meyermarcel/a76400ac00db4be9585be72855ca5dce
 - [ ] no output if multiple values are parsed
 - [ ] correct use of stdin, stdout, stderr
-- [ ] `parse` to `validate`?
 - [ ] `--no-description` flag?
 - [ ] expand separator flags with separators for size and type
+- [x] `parse` to `validate`
 - [x] global config
 - [x] config for separators
 - [x] correct system exit codes
@@ -20,7 +20,7 @@
 === iso6346
 
 - [ ] generate: start with defined serial number
-- [ ] parse `--fix-check-digit` flag?
+- [ ] validate `--fix-check-digit` flag?
 - [ ] generate with `--with-size-type` flag for size and type
 - [x] parse format options with separators
 

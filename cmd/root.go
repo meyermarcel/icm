@@ -40,7 +40,7 @@ Configuration is generated first time you execute a command
 that requires the configuration.
 
 Flags for output formatting can overridden with a config file.
-Default configuration ("` +  filepath.Join("$HOME", appDir, cfgName+".yml") +`"):
+Default configuration ("` + filepath.Join("$HOME", appDir, cfgName+".yml") + `"):
 
 ` + string(defaultCfg) + `
   ABC U 123456 0

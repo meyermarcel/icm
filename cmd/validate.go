@@ -22,10 +22,10 @@ import (
 	"os"
 )
 
-var parseCmd = &cobra.Command{
-	Use:   "parse",
-	Short: "Parse a container number",
-	Long: `Parse a container number.
+var validateCmd = &cobra.Command{
+	Use:   "validate",
+	Short: "Validate a container number",
+	Long: `Validate a container number.
 
 Output can be formatted:
 
@@ -37,31 +37,31 @@ Output can be formatted:
      │
      └─ separator between owner code and equipment category id`,
 	Example: `
-iso6346 parse 'abcu 1234560'
+iso6346 validate 'abcu 1234560'
 
-iso6346 parse --only-owner 'abcu'
+iso6346 validate --only-owner 'abcu'
 `,
 	Args: cobra.ExactArgs(1),
-	Run:  parse,
+	Run:  validate,
 }
 
-var parseOnlyOwner bool
+var validateOnlyOwner bool
 
 func init() {
-	parseCmd.Flags().BoolVar(&parseOnlyOwner, "only-owner", false, "parse only owner code")
-	RootCmd.AddCommand(parseCmd)
+	validateCmd.Flags().BoolVar(&validateOnlyOwner, "only-owner", false, "validate only owner code")
+	RootCmd.AddCommand(validateCmd)
 }
 
-func parse(cmd *cobra.Command, args []string) {
+func validate(cmd *cobra.Command, args []string) {
 
-	if parseOnlyOwner {
-		parseOwner(args[0])
+	if validateOnlyOwner {
+		validateOwner(args[0])
 	}
-	parseContNum(args[0])
+	validateContNum(args[0])
 
 }
 
-func parseOwner(input string) {
+func validateOwner(input string) {
 	oce := parser.ParseOwnerCodeOptEquipCat(input)
 
 	oce.OwnerCodeIn.Resolve(owner.Resolver(pathToDB))
@@ -74,7 +74,7 @@ func parseOwner(input string) {
 	os.Exit(1)
 }
 
-func parseContNum(input string) {
+func validateContNum(input string) {
 	num := parser.ParseContNum(input)
 
 	num.OwnerCodeIn.Resolve(owner.Resolver(pathToDB))
