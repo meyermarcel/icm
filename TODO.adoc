@@ -13,33 +13,17 @@
 - [ ] `parse` to `validate`?
 - [ ] `--no-description` flag?
 - [ ] expand separator flags with separators for size and type
-- [ ] global config
-- [ ] config for separators
-- [ ] config metric/imperial
+- [x] global config
+- [x] config for separators
 - [x] correct system exit codes
 
 === iso6346
 
-- [ ] start with defined serial number
-- [ ] parse `--fix-check-digit` flag
-- [ ] parse format options with separators
+- [ ] generate: start with defined serial number
+- [ ] parse `--fix-check-digit` flag?
 - [ ] generate with `--with-size-type` flag for size and type
+- [x] parse format options with separators
 
-=== owner
-
-- [ ] generate
-
-=== size
-
-- [ ] parse
-- [ ] parse ISO distinction
-- [ ] generate
-
-=== type
-
-- [ ] parse
-- [ ] parse ISO distinction
-- [ ] generate
 
 == Meta/technical
 
