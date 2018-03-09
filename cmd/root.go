@@ -31,9 +31,10 @@ var defaultCfg = []byte(
 		sepSerialCheck + ": ' '\n")
 
 var RootCmd = &cobra.Command{
-	Use:   "iso6346",
-	Short: "Parse or generate all ISO 6346 related data",
-	Long:  "Parse or generate all ISO 6346 related data",
+	Use:     "iso6346",
+	Version: "0.1.0-beta",
+	Short:   "Parse or generate all ISO 6346 related data",
+	Long:    "Parse or generate all ISO 6346 related data",
 }
 
 func Execute() {
