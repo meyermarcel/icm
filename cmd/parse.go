@@ -25,11 +25,6 @@ import (
 var parseCmd = &cobra.Command{
 	Use:   "parse",
 	Short: "Parse a container number",
-	Example: `
-iso6346 parse 'abcu 1234560'
-
-iso6346 parse --only-owner 'abcu'
-`,
 	Long: `Parse a container number.
 
 Output can be formatted:
@@ -41,6 +36,11 @@ Output can be formatted:
      │ └─ separator between equipment category id and serial number
      │
      └─ separator between owner code and equipment category id`,
+	Example: `
+iso6346 parse 'abcu 1234560'
+
+iso6346 parse --only-owner 'abcu'
+`,
 	Args: cobra.ExactArgs(1),
 	Run:  parse,
 }

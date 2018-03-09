@@ -22,8 +22,6 @@ import (
 var ownerUpdateCmd = &cobra.Command{
 	Use:   "update",
 	Short: "Update information of owners",
-	Example: `
-iso6346 update`,
 	Long: `
 Update information of owners from remote.
 Following information is available:
@@ -33,6 +31,8 @@ Following information is available:
   City
   Country
 `,
+	Example: `
+iso6346 update`,
 	Args: cobra.NoArgs,
 	Run:  updateOwners,
 }

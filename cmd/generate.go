@@ -26,13 +26,6 @@ var generateCmd = &cobra.Command{
 	Use:     "generate",
 	Aliases: []string{"gen"},
 	Short:   "Generate a random container number",
-	Example: `
-  iso6346 generate
-
-  iso6346 generate --count 5000
-
-  iso6346 generate --sep-owner-equip '' --sep-serial-check '-'
-`,
 	Long: `
 Generate a random container number with ISO 6346 specification.
 Only real owners are used. Serial number is pseudo random.
@@ -47,6 +40,13 @@ Output can be formatted:
      │ └─ separator between equipment category id and serial number
      │
      └─ separator between owner code and equipment category id`,
+	Example: `
+  iso6346 generate
+
+  iso6346 generate --count 5000
+
+  iso6346 generate --sep-owner-equip '' --sep-serial-check '-'
+`,
 	Args: cobra.NoArgs,
 	Run:  generate,
 }
