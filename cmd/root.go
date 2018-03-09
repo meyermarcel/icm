@@ -67,11 +67,11 @@ var pathToDB string
 
 func init() {
 	cobra.OnInitialize(initConfig)
-	RootCmd.PersistentFlags().StringP(sepOwnerEquip, "", "",
+	RootCmd.PersistentFlags().String(sepOwnerEquip, "",
 		"ABC(*)U1234560  (*) separator between owner code and equipment category id")
-	RootCmd.PersistentFlags().StringP(sepEquipSerial, "", "",
+	RootCmd.PersistentFlags().String(sepEquipSerial, "",
 		"ABCU(*)1234560  (*) separator between equipment category id and serial number")
-	RootCmd.PersistentFlags().StringP(sepSerialCheck, "", "",
+	RootCmd.PersistentFlags().String(sepSerialCheck, "",
 		"ABCU123456(*)0  (*) separator between serial number and check digit")
 
 	viper.BindPFlags(RootCmd.PersistentFlags())
