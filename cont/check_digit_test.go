@@ -17,9 +17,9 @@ func TestCalcCheckDigit(t *testing.T) {
 		args args
 		want int
 	}{
-	  {"Test ABC U 123456 0",
-		args{owner.NewCode("ABC"), equip_cat.NewIdU(), NewSerialNum(123456)},
-	  0},
+		{"Test ABC U 123456 0",
+			args{owner.NewCode("ABC"), equip_cat.NewIdU(), NewSerialNum(123456)},
+			0},
 		{"Test MSK U 266654 2",
 			args{owner.NewCode("MSK"), equip_cat.NewIdU(), NewSerialNum(266654)},
 			2},

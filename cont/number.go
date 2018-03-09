@@ -1,8 +1,8 @@
 package cont
 
 import (
-	"github.com/meyermarcel/iso6346/owner"
 	"github.com/meyermarcel/iso6346/equip_cat"
+	"github.com/meyermarcel/iso6346/owner"
 )
 
 type Number struct {
@@ -34,7 +34,7 @@ func NewContNum(ownerCode owner.Code,
 	checkDigit int) Number {
 
 	return Number{ownerCode: ownerCode,
-		equipCatId: equipCatId,
+		equipCatId:   equipCatId,
 		serialNumber: serialNumber,
-		checkDigit: checkDigit}
+		checkDigit:   checkDigit}
 }

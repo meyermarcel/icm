@@ -14,9 +14,9 @@
 package cmd
 
 import (
-	"github.com/spf13/cobra"
 	"github.com/meyermarcel/iso6346/cont"
 	"github.com/meyermarcel/iso6346/ui"
+	"github.com/spf13/cobra"
 	"os"
 )
 

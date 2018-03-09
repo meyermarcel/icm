@@ -1,9 +1,9 @@
 package equip_cat
 
 import (
+	"log"
 	"regexp"
 	"unicode/utf8"
-	"log"
 )
 
 var Ids = []rune("UJZ")

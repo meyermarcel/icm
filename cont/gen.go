@@ -1,11 +1,11 @@
 package cont
 
 import (
-	"github.com/meyermarcel/iso6346/owner"
-	"time"
-	"math/rand"
 	"github.com/meyermarcel/iso6346/equip_cat"
+	"github.com/meyermarcel/iso6346/owner"
 	"log"
+	"math/rand"
+	"time"
 )
 
 func Gen(count int, c chan Number) {

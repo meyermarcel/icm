@@ -1,9 +1,9 @@
 package owner
 
 import (
-	"unicode/utf8"
-	"regexp"
 	"log"
+	"regexp"
+	"unicode/utf8"
 )
 
 type Code struct {

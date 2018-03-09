@@ -1,12 +1,12 @@
 package owner
 
 import (
-	"log"
-	_ "github.com/mattn/go-sqlite3"
 	"database/sql"
-	"path/filepath"
-	"os"
+	_ "github.com/mattn/go-sqlite3"
 	"github.com/mitchellh/go-homedir"
+	"log"
+	"os"
+	"path/filepath"
 	"time"
 )
 

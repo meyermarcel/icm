@@ -2,8 +2,8 @@ package ui
 
 import (
 	"fmt"
-	"github.com/meyermarcel/iso6346/parser"
 	"github.com/meyermarcel/iso6346/cont"
+	"github.com/meyermarcel/iso6346/parser"
 )
 
 func PrintContNum(cn parser.ContNum) {

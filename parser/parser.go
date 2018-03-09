@@ -1,13 +1,13 @@
 package parser
 
 import (
-	"regexp"
-	"unicode/utf8"
-	"strings"
-	"github.com/meyermarcel/iso6346/owner"
-	"github.com/meyermarcel/iso6346/equip_cat"
 	"github.com/meyermarcel/iso6346/cont"
+	"github.com/meyermarcel/iso6346/equip_cat"
+	"github.com/meyermarcel/iso6346/owner"
+	"regexp"
 	"strconv"
+	"strings"
+	"unicode/utf8"
 )
 
 const ownerCodeOptEquipCatIdRegex = `([A-Za-z])[^A-Za-z]*([A-Za-z])?[^A-Za-z]*([A-Za-z])?[^JUZjuz]*([JUZjuz])?`

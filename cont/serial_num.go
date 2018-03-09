@@ -1,9 +1,9 @@
 package cont
 
 import (
+	"fmt"
 	"log"
 	"strconv"
-	"fmt"
 )
 
 type SerialNum struct {

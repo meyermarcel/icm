@@ -9,7 +9,7 @@ type Type int
 
 const (
 	HINT Type = iota
-	INFO 
+	INFO
 )
 
 type PosTxt struct {

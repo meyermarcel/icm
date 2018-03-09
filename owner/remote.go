@@ -1,10 +1,10 @@
 package owner
 
 import (
-	"time"
+	"github.com/PuerkitoBio/goquery"
 	"log"
 	"sort"
-	"github.com/PuerkitoBio/goquery"
+	"time"
 )
 
 func getUpdatedTimeRemote(c chan time.Time) {
