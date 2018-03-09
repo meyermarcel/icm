@@ -3,8 +3,8 @@ package ui
 import (
 	"fmt"
 	"github.com/fatih/color"
-	"iso6346/equip_cat"
-	"iso6346/parser"
+	"github.com/meyermarcel/iso6346/equip_cat"
+	"github.com/meyermarcel/iso6346/parser"
 	"strings"
 )
 

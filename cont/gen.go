@@ -1,10 +1,10 @@
 package cont
 
 import (
-	"iso6346/owner"
+	"github.com/meyermarcel/iso6346/owner"
 	"time"
 	"math/rand"
-	"iso6346/equip_cat"
+	"github.com/meyermarcel/iso6346/equip_cat"
 	"log"
 )
 

@@ -4,9 +4,9 @@ import (
 	"regexp"
 	"unicode/utf8"
 	"strings"
-	"iso6346/owner"
-	"iso6346/equip_cat"
-	"iso6346/cont"
+	"github.com/meyermarcel/iso6346/owner"
+	"github.com/meyermarcel/iso6346/equip_cat"
+	"github.com/meyermarcel/iso6346/cont"
 	"strconv"
 )
 

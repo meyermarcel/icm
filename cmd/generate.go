@@ -15,8 +15,8 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-	"iso6346/cont"
-	"iso6346/ui"
+	"github.com/meyermarcel/iso6346/cont"
+	"github.com/meyermarcel/iso6346/ui"
 )
 
 // generateCmd represents the generate command

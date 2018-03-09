@@ -1,58 +1,9 @@
-= ToDo
+= iso6346
 
-== Features
+== Installation
 
-=== Global
+[source,bash]
+----
+go get -u github.com/meyermarcel/iso6346
+----
 
-- [ ] allow file argument
-- [ ] allow pipe as input
-      https://github.com/spf13/cobra/issues/263
-      https://gist.github.com/meyermarcel/a76400ac00db4be9585be72855ca5dce
-- [ ] no output if multiple values are parsed
-- [ ] correct use of stdin, stdout, stderr
-- [ ] correct system exit codes
-- [ ] `parse` to `validate`?
-- [ ] `--no-description` flag?
-- [ ] expand separator flags with separators for size and type
-- [ ] global config
-- [ ] config for separators
-- [ ] config metric/imperial
-- [ ] working `go get -u github.com/meyermarcel/iso6346` 
-
-=== iso6346
-
-- [ ] start with defined serial number
-- [ ] parse `--fix-check-digit` flag
-- [ ] parse format options with separators
-- [ ] generate with `--with-size-type` flag for size and type
-
-=== owner
-
-- [ ] generate
-
-=== size
-
-- [ ] parse
-- [ ] parse ISO distinction
-- [ ] generate
-
-=== type
-
-- [ ] parse
-- [ ] parse ISO distinction
-- [ ] generate
-
-== Meta/technical
-
-- [ ] vgo vs. go dep?
-- [ ] README
-- [ ] constructors with pointer?
-- [ ] Fix Golint warnings
-- [ ] Tests
-- [ ] Integration tests
-- [ ] Bash completions https://github.com/spf13/cobra/blob/master/bash_completions.md
-- [ ] Tests on Linux, OSX, BSDs, Windows
-- [ ] Goreportcard.com link in readme
-- [ ] Travis CI integration
-- [x] Add wikipedia reference to check digit implementation
-- [x] Add dependency management

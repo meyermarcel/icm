@@ -15,7 +15,7 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-	"iso6346/owner"
+	"github.com/meyermarcel/iso6346/owner"
 )
 
 var ownerUpdateCmd = &cobra.Command{

@@ -1,9 +1,9 @@
 package cont
 
 import (
-	"iso6346/equip_cat"
+	"github.com/meyermarcel/iso6346/equip_cat"
 	"strings"
-	"iso6346/owner"
+	"github.com/meyermarcel/iso6346/owner"
 )
 
 /*

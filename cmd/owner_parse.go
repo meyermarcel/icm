@@ -15,8 +15,8 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-	"iso6346/ui"
-	"iso6346/parser"
+	"github.com/meyermarcel/iso6346/ui"
+	"github.com/meyermarcel/iso6346/parser"
 )
 
 var ownerParseCmd = &cobra.Command{
