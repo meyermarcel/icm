@@ -25,7 +25,12 @@ import (
 var parseCmd = &cobra.Command{
 	Use:   "parse",
 	Short: "Parse a container number",
-	Long:  `Parse a container number.
+	Example: `
+iso6346 parse 'abcu 1234560'
+
+iso6346 parse --only-owner 'abcu'
+`,
+	Long: `Parse a container number.
 
 Output can be formatted:
 
@@ -36,12 +41,41 @@ Output can be formatted:
      │ └─ separator between equipment category id and serial number
      │
      └─ separator between owner code and equipment category id`,
-	Args:  cobra.ExactArgs(1),
-	Run: parse,
+	Args: cobra.ExactArgs(1),
+	Run:  parse,
+}
+
+var parseOnlyOwner bool
+
+func init() {
+	parseCmd.Flags().BoolVar(&parseOnlyOwner, "only-owner", false, "parse only owner code")
+	RootCmd.AddCommand(parseCmd)
 }
 
 func parse(cmd *cobra.Command, args []string) {
-	num := parser.ParseContNum(args[0])
+
+	if parseOnlyOwner {
+		parseOwner(args[0])
+	}
+	parseContNum(args[0])
+
+}
+
+func parseOwner(input string) {
+	oce := parser.ParseOwnerCodeOptEquipCat(input)
+
+	oce.OwnerCodeIn.Resolve(owner.Resolver(pathToDB))
+
+	ui.PrintOwnerCode(oce, viper.GetString(sepOwnerEquip))
+
+	if oce.OwnerCodeIn.IsValidFmt() {
+		os.Exit(0)
+	}
+	os.Exit(1)
+}
+
+func parseContNum(input string) {
+	num := parser.ParseContNum(input)
 
 	num.OwnerCodeIn.Resolve(owner.Resolver(pathToDB))
 
@@ -55,9 +89,4 @@ func parse(cmd *cobra.Command, args []string) {
 		os.Exit(0)
 	}
 	os.Exit(1)
-}
-
-func init() {
-
-	RootCmd.AddCommand(parseCmd)
 }

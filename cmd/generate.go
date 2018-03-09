@@ -47,7 +47,7 @@ Output can be formatted:
      │
      └─ separator between owner code and equipment category id`,
 	Args: cobra.NoArgs,
-	Run: generate,
+	Run:  generate,
 }
 
 func generate(cmd *cobra.Command, args []string) {

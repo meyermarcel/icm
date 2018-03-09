@@ -22,7 +22,7 @@ import (
 var ownerUpdateCmd = &cobra.Command{
 	Use:   "update",
 	Short: "Update owner information",
-	Long:  `
+	Long: `
 Update owner information from remote. Following info
 is available:
 
@@ -30,8 +30,8 @@ is available:
   City
   Country
 `,
-	Args:  cobra.NoArgs,
-	Run: update,
+	Args: cobra.NoArgs,
+	Run:  update,
 }
 
 func update(cmd *cobra.Command, args []string) {
