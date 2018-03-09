@@ -33,18 +33,23 @@ var defaultCfg = []byte(
 var RootCmd = &cobra.Command{
 	Use:     "iso6346",
 	Version: "0.1.0-beta",
-	Short:   "Parse or generate all ISO 6346 related data",
-	Long: `Parse or generate all ISO 6346 related data.
+	Short:   "Parse or generate ISO 6346 related data",
+	Long: `Parse or generate ISO 6346 related data.
 
-Output can be formatted:
+Configuration is generated first time you execute a command
+that requires the configuration.
 
+Flags for output formatting can overridden with a config file.
+Default configuration ("` +  filepath.Join("$HOME", appDir, cfgName+".yml") +`"):
+
+` + string(defaultCfg) + `
   ABC U 123456 0
      ↑ ↑      ↑
-     │ │      └─ separator between serial number and check digit
+     │ │      └─ ` + sepOwnerEquip + `
      │ │
-     │ └─ separator between equipment category id and serial number
+     │ └─ ` + sepEquipSerial + `
      │
-     └─ separator between owner code and equipment category id`,
+     └─ ` + sepSerialCheck,
 }
 
 func Execute() {
