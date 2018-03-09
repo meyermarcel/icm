@@ -17,6 +17,7 @@ var bold = color.New(color.Bold).SprintFunc()
 var underline = color.New(color.Underline).SprintFunc()
 
 const missingCharacter = "_"
+const indent = " "
 
 func fmtRegexIn(pi parser.RegexIn) string {
 
@@ -37,7 +38,7 @@ func fmtRegexIn(pi parser.RegexIn) string {
 func fmtOwnerCodeOptEquipCat(oce parser.OwnerCodeOptEquipCat, sepOwnerEquip string) string {
 
 	b := strings.Builder{}
-	b.WriteString(" ")
+	b.WriteString(indent)
 
 	b.WriteString(fmtOwnerCode(oce.OwnerCodeIn))
 
@@ -70,13 +71,13 @@ func fmtParsedContNum(cn parser.ContNum, seps Separators) string {
 	texts = append(texts, ownerCodeTxt(cn.OwnerCodeIn))
 
 	if !cn.EquipCatIdIn.IsValidFmt() {
-		texts = append(texts, NewPosHint(len(seps.OwnerEquip)+4, fmt.Sprintf("%s must be %s", underline("equipment category id"), equipCatIdsAsList())))
+		texts = append(texts, NewPosHint(len(indent)+len(seps.OwnerEquip)+3, fmt.Sprintf("%s must be %s", underline("equipment category id"), equipCatIdsAsList())))
 	}
 	if !cn.SerialNumIn.IsValidFmt() {
-		texts = append(texts, NewPosHint(len(seps.OwnerEquip)+len(seps.EquipSerial)+7, fmt.Sprintf("%s must be %s", underline("serial number"), bold("6 numbers"))))
+		texts = append(texts, NewPosHint(len(indent)+len(seps.OwnerEquip)+len(seps.EquipSerial)+6, fmt.Sprintf("%s must be %s", underline("serial number"), bold("6 numbers"))))
 	}
 
-	cdPos := len(seps.OwnerEquip) + len(seps.EquipSerial) + len(seps.SerialCheck) + 11
+	cdPos := len(indent) + len(seps.OwnerEquip) + len(seps.EquipSerial) + len(seps.SerialCheck) + 10
 	if !cn.CheckDigitIn.IsValidCheckDigit {
 		if cn.IsCheckDigitCalculable() {
 			if cn.CheckDigitIn.IsValidFmt() {
@@ -97,19 +98,20 @@ func fmtParsedContNum(cn parser.ContNum, seps Separators) string {
 
 func ownerCodeTxt(ownerCodeIn parser.OwnerCodeIn) PosTxt {
 	if !ownerCodeIn.IsValidFmt() {
-		return NewPosHint(2, fmt.Sprintf("%s must be %s", underline("owner code"), bold("3 letters")))
+		return NewPosHint(len(indent)+1, fmt.Sprintf("%s must be %s", underline("owner code"), bold("3 letters")))
 	}
 	if ownerCodeIn.OwnerFound {
-		return NewPosInfo(2, ownerCodeIn.FoundOwner.Company(), ownerCodeIn.FoundOwner.City(), ownerCodeIn.FoundOwner.Country())
+		return NewPosInfo(len(indent)+1, ownerCodeIn.FoundOwner.Company(), ownerCodeIn.FoundOwner.City(), ownerCodeIn.FoundOwner.Country())
 	}
-	return NewPosInfo(2, fmt.Sprintf("%s not found", underline("owner")))
+	return NewPosInfo(len(indent)+1, fmt.Sprintf("%s not found", underline("owner")))
 
 }
 
 func fmtContNum(cni parser.ContNum, seps Separators) string {
 
 	b := strings.Builder{}
-	b.WriteString(" ")
+
+	b.WriteString(indent)
 	b.WriteString(fmtOwnerCode(cni.OwnerCodeIn))
 	b.WriteString(seps.OwnerEquip)
 	b.WriteString(fmtIn(cni.EquipCatIdIn.In))
