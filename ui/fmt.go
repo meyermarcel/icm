@@ -34,7 +34,7 @@ func fmtRegexIn(pi parser.RegexIn) string {
 	return b.String()
 }
 
-func fmtOwnerCodeOptEquipCat(oce parser.OwnerCodeOptEquipCat) string {
+func fmtOwnerCodeOptEquipCat(oce parser.OwnerCodeOptEquipCat, sepOwnerEquip string) string {
 
 	b := strings.Builder{}
 	b.WriteString(" ")
@@ -42,7 +42,7 @@ func fmtOwnerCodeOptEquipCat(oce parser.OwnerCodeOptEquipCat) string {
 	b.WriteString(fmtOwnerCode(oce.OwnerCodeIn))
 
 	if oce.EquipCatIn.IsValidFmt() {
-		b.WriteString(" ")
+		b.WriteString(sepOwnerEquip)
 		b.WriteString(fmtIn(oce.EquipCatIn.In))
 	}
 
@@ -55,11 +55,11 @@ func fmtOwnerCodeOptEquipCat(oce parser.OwnerCodeOptEquipCat) string {
 	return b.String()
 }
 
-func fmtParsedContNum(cn parser.ContNum) string {
+func fmtParsedContNum(cn parser.ContNum, seps Separators) string {
 
 	b := strings.Builder{}
 
-	b.WriteString(fmtContNum(cn))
+	b.WriteString(fmtContNum(cn, seps))
 
 	b.WriteString(fmtCheckMark(cn.CheckDigitIn.IsValidCheckDigit))
 
@@ -70,23 +70,24 @@ func fmtParsedContNum(cn parser.ContNum) string {
 	texts = append(texts, ownerCodeTxt(cn.OwnerCodeIn))
 
 	if !cn.EquipCatIdIn.IsValidFmt() {
-		texts = append(texts, NewPosHint(5, fmt.Sprintf("%s must be %s", underline("equipment category id"), equipCatIdsAsList())))
+		texts = append(texts, NewPosHint(len(seps.OwnerEquip)+4, fmt.Sprintf("%s must be %s", underline("equipment category id"), equipCatIdsAsList())))
 	}
 	if !cn.SerialNumIn.IsValidFmt() {
-		texts = append(texts, NewPosHint(9, fmt.Sprintf("%s must be %s", underline("serial number"), bold("6 numbers"))))
+		texts = append(texts, NewPosHint(len(seps.OwnerEquip)+len(seps.EquipSerial)+7, fmt.Sprintf("%s must be %s", underline("serial number"), bold("6 numbers"))))
 	}
 
+	cdPos := len(seps.OwnerEquip) + len(seps.EquipSerial) + len(seps.SerialCheck) + 11
 	if !cn.CheckDigitIn.IsValidCheckDigit {
 		if cn.IsCheckDigitCalculable() {
 			if cn.CheckDigitIn.IsValidFmt() {
-				texts = append(texts, NewPosHint(14, fmt.Sprintf("%s is incorrect (correct: %s)", underline("check digit"),
+				texts = append(texts, NewPosHint(cdPos, fmt.Sprintf("%s is incorrect (correct: %s)", underline("check digit"),
 					green(cn.CheckDigitIn.CalcCheckDigit))))
 			} else {
-				texts = append(texts, NewPosHint(14, fmt.Sprintf("%s must be a %s (correct: %s)", underline("check digit"), bold("number"),
+				texts = append(texts, NewPosHint(cdPos, fmt.Sprintf("%s must be a %s (correct: %s)", underline("check digit"), bold("number"),
 					green(cn.CheckDigitIn.CalcCheckDigit))))
 			}
 		} else {
-			texts = append(texts, NewPosHint(14, fmt.Sprintf("%s is not calculable", underline("check digit"))))
+			texts = append(texts, NewPosHint(cdPos, fmt.Sprintf("%s is not calculable", underline("check digit"))))
 		}
 	}
 	b.WriteString(fmtTextsWithArrows(texts...))
@@ -105,16 +106,16 @@ func ownerCodeTxt(ownerCodeIn parser.OwnerCodeIn) PosTxt {
 
 }
 
-func fmtContNum(cni parser.ContNum) string {
+func fmtContNum(cni parser.ContNum, seps Separators) string {
 
 	b := strings.Builder{}
 	b.WriteString(" ")
 	b.WriteString(fmtOwnerCode(cni.OwnerCodeIn))
-	b.WriteString(" ")
+	b.WriteString(seps.OwnerEquip)
 	b.WriteString(fmtIn(cni.EquipCatIdIn.In))
-	b.WriteString(" ")
+	b.WriteString(seps.EquipSerial)
 	b.WriteString(fmtIn(cni.SerialNumIn.In))
-	b.WriteString(" ")
+	b.WriteString(seps.SerialCheck)
 
 	if !cni.CheckDigitIn.IsValidCheckDigit && cni.CheckDigitIn.IsValidFmt() {
 		b.WriteString(fmt.Sprintf("%s", yellow(string(cni.CheckDigitIn.Value()))))

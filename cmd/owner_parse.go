@@ -27,7 +27,7 @@ var ownerParseCmd = &cobra.Command{
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		oce := parser.ParseOwnerCodeOptEquipCat(args[0])
-		ui.PrintOwnerCode(oce)
+		ui.PrintOwnerCode(oce, sepOwnerEquip)
 		if oce.OwnerCodeIn.IsValidFmt() {
 			os.Exit(0)
 		}

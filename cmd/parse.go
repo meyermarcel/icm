@@ -27,7 +27,7 @@ var parseCmd = &cobra.Command{
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		num := parser.ParseContNum(args[0])
-		ui.PrintContNum(num)
+		ui.PrintContNum(num, ui.Separators{sepOwnerEquip, sepEquipSerial, sepSerialCheck})
 		if num.CheckDigitIn.IsValidCheckDigit {
 			os.Exit(0)
 		}

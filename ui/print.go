@@ -12,30 +12,30 @@ type Separators struct {
 	SerialCheck string
 }
 
-func PrintContNum(cn parser.ContNum) {
+func PrintContNum(cn parser.ContNum, seps Separators) {
 
 	fmt.Println(fmtRegexIn(cn.RegexIn))
 	fmt.Println()
-	fmt.Println(fmtParsedContNum(cn))
+	fmt.Println(fmtParsedContNum(cn, seps))
 	fmt.Println()
 }
 
-func PrintOwnerCode(oce parser.OwnerCodeOptEquipCat) {
+func PrintOwnerCode(oce parser.OwnerCodeOptEquipCat, sepOwnerEquip string) {
 
 	fmt.Println(fmtRegexIn(oce.RegexIn))
 	fmt.Println()
-	fmt.Println(fmtOwnerCodeOptEquipCat(oce))
+	fmt.Println(fmtOwnerCodeOptEquipCat(oce, sepOwnerEquip))
 	fmt.Println()
 }
 
-func PrintGen(cn cont.Number, separators Separators) {
+func PrintGen(cn cont.Number, seps Separators) {
 	fmt.Printf("%s%s%s%s%06d%s%d",
 		cn.OwnerCode().Value(),
-		separators.OwnerEquip,
+		seps.OwnerEquip,
 		cn.EquipCatId().Value(),
-		separators.EquipSerial,
+		seps.EquipSerial,
 		cn.SerialNumber().Value(),
-		separators.SerialCheck,
+		seps.SerialCheck,
 		cn.CheckDigit())
 	fmt.Println()
 }
