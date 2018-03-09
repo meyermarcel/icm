@@ -37,22 +37,24 @@ Output can be formatted:
      │
      └─ separator between owner code and equipment category id`,
 	Args:  cobra.ExactArgs(1),
-	Run: func(cmd *cobra.Command, args []string) {
-		num := parser.ParseContNum(args[0])
+	Run: parse,
+}
 
-		num.OwnerCodeIn.Resolve(owner.Resolver(pathToDB))
+func parse(cmd *cobra.Command, args []string) {
+	num := parser.ParseContNum(args[0])
 
-		ui.PrintContNum(num, ui.Separators{
-			viper.GetString(sepOwnerEquip),
-			viper.GetString(sepEquipSerial),
-			viper.GetString(sepSerialCheck),
-		})
+	num.OwnerCodeIn.Resolve(owner.Resolver(pathToDB))
 
-		if num.CheckDigitIn.IsValidCheckDigit {
-			os.Exit(0)
-		}
-		os.Exit(1)
-	},
+	ui.PrintContNum(num, ui.Separators{
+		viper.GetString(sepOwnerEquip),
+		viper.GetString(sepEquipSerial),
+		viper.GetString(sepSerialCheck),
+	})
+
+	if num.CheckDigitIn.IsValidCheckDigit {
+		os.Exit(0)
+	}
+	os.Exit(1)
 }
 
 func init() {

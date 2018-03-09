@@ -47,19 +47,21 @@ Output can be formatted:
      │
      └─ separator between owner code and equipment category id`,
 	Args: cobra.NoArgs,
-	Run: func(cmd *cobra.Command, args []string) {
-		c := make(chan cont.Number)
-		go cont.Gen(pathToDB, count, c)
+	Run: generate,
+}
 
-		for contNum := range c {
-			ui.PrintGen(contNum, ui.Separators{
-				viper.GetString(sepOwnerEquip),
-				viper.GetString(sepEquipSerial),
-				viper.GetString(sepSerialCheck),
-			})
-		}
-		os.Exit(0)
-	},
+func generate(cmd *cobra.Command, args []string) {
+	c := make(chan cont.Number)
+	go cont.Gen(pathToDB, count, c)
+
+	for contNum := range c {
+		ui.PrintGen(contNum, ui.Separators{
+			viper.GetString(sepOwnerEquip),
+			viper.GetString(sepEquipSerial),
+			viper.GetString(sepSerialCheck),
+		})
+	}
+	os.Exit(0)
 }
 
 var count int

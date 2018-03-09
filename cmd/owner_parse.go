@@ -34,18 +34,20 @@ Output can be formatted:
      ↑
      └─ separator between owner code and equipment category id`,
 	Args:  cobra.ExactArgs(1),
-	Run: func(cmd *cobra.Command, args []string) {
-		oce := parser.ParseOwnerCodeOptEquipCat(args[0])
+	Run: parseOwner,
+}
 
-		oce.OwnerCodeIn.Resolve(owner.Resolver(pathToDB))
+func parseOwner(cmd *cobra.Command, args []string) {
+	oce := parser.ParseOwnerCodeOptEquipCat(args[0])
 
-		ui.PrintOwnerCode(oce, viper.GetString(sepOwnerEquip))
+	oce.OwnerCodeIn.Resolve(owner.Resolver(pathToDB))
 
-		if oce.OwnerCodeIn.IsValidFmt() {
-			os.Exit(0)
-		}
-		os.Exit(1)
-	},
+	ui.PrintOwnerCode(oce, viper.GetString(sepOwnerEquip))
+
+	if oce.OwnerCodeIn.IsValidFmt() {
+		os.Exit(0)
+	}
+	os.Exit(1)
 }
 
 func init() {

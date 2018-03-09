@@ -31,10 +31,12 @@ is available:
   Country
 `,
 	Args:  cobra.NoArgs,
-	Run: func(cmd *cobra.Command, args []string) {
-		owner.Update(pathToDB)
-		os.Exit(0)
-	},
+	Run: update,
+}
+
+func update(cmd *cobra.Command, args []string) {
+	owner.Update(pathToDB)
+	os.Exit(0)
 }
 
 func init() {
