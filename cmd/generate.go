@@ -17,6 +17,7 @@ import (
 	"github.com/meyermarcel/iso6346/cont"
 	"github.com/meyermarcel/iso6346/ui"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 	"os"
 )
 
@@ -54,10 +55,14 @@ generates a formatted random container number:
 	Args: cobra.NoArgs,
 	Run: func(cmd *cobra.Command, args []string) {
 		c := make(chan cont.Number)
-		go cont.Gen(count, c)
+		go cont.Gen(pathToDB, count, c)
 
 		for contNum := range c {
-			ui.PrintGen(contNum, ui.Separators{sepOwnerEquip, sepEquipSerial, sepSerialCheck})
+			ui.PrintGen(contNum, ui.Separators{
+				viper.GetString(sepOwnerEquip),
+				viper.GetString(sepEquipSerial),
+				viper.GetString(sepSerialCheck),
+			})
 		}
 		os.Exit(0)
 	},

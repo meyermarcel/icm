@@ -26,12 +26,12 @@ func NewCode(value string) Code {
 	return Code{value}
 }
 
-func Resolver() func(code Code) (Owner, bool) {
+func Resolver(pathToDB string) func(code Code) (Owner, bool) {
 	return func(code Code) (Owner, bool) {
-		return getOwner(InitDB(), code)
+		return getOwner(openDB(pathToDB), code)
 	}
 }
 
-func GetRandomCodes(count int) []Code {
-	return getRandomCodes(InitDB(), count)
+func GetRandomCodes(pathToDB string, count int) []Code {
+	return getRandomCodes(openDB(pathToDB), count)
 }

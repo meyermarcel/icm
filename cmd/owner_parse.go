@@ -14,9 +14,11 @@
 package cmd
 
 import (
+	"github.com/meyermarcel/iso6346/owner"
 	"github.com/meyermarcel/iso6346/parser"
 	"github.com/meyermarcel/iso6346/ui"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 	"os"
 )
 
@@ -27,7 +29,11 @@ var ownerParseCmd = &cobra.Command{
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		oce := parser.ParseOwnerCodeOptEquipCat(args[0])
-		ui.PrintOwnerCode(oce, sepOwnerEquip)
+
+		oce.OwnerCodeIn.Resolve(owner.Resolver(pathToDB))
+
+		ui.PrintOwnerCode(oce, viper.GetString(sepOwnerEquip))
+
 		if oce.OwnerCodeIn.IsValidFmt() {
 			os.Exit(0)
 		}

@@ -14,9 +14,11 @@
 package cmd
 
 import (
+	"github.com/meyermarcel/iso6346/owner"
 	"github.com/meyermarcel/iso6346/parser"
 	"github.com/meyermarcel/iso6346/ui"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 	"os"
 )
 
@@ -27,7 +29,15 @@ var parseCmd = &cobra.Command{
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		num := parser.ParseContNum(args[0])
-		ui.PrintContNum(num, ui.Separators{sepOwnerEquip, sepEquipSerial, sepSerialCheck})
+
+		num.OwnerCodeIn.Resolve(owner.Resolver(pathToDB))
+
+		ui.PrintContNum(num, ui.Separators{
+			viper.GetString(sepOwnerEquip),
+			viper.GetString(sepEquipSerial),
+			viper.GetString(sepSerialCheck),
+		})
+
 		if num.CheckDigitIn.IsValidCheckDigit {
 			os.Exit(0)
 		}

@@ -3,16 +3,11 @@ package owner
 import (
 	"database/sql"
 	_ "github.com/mattn/go-sqlite3"
-	"github.com/mitchellh/go-homedir"
 	"log"
-	"os"
-	"path/filepath"
 	"time"
 )
 
 const appDir = ".iso6346"
-const dbName = "iso6346.db"
-const dirPerm = 0700
 
 type Owner struct {
 	code    string
@@ -143,23 +138,9 @@ func getRandomCodes(db *sql.DB, count int) []Code {
 	return codes
 }
 
-func getPathToAppDir() string {
-	homeDir, err := homedir.Dir()
-	checkErr(err)
-	return filepath.Join(homeDir, appDir)
-}
+func InitDB(pathToDB string) {
 
-func initDir(path string) string {
-
-	if _, err := os.Stat(path); os.IsNotExist(err) {
-		os.Mkdir(path, os.ModeDir|dirPerm)
-	}
-	return path
-}
-
-func InitDB() *sql.DB {
-	db, err := sql.Open("sqlite3", filepath.Join(initDir(getPathToAppDir()), dbName))
-	checkErr(err)
+	db := openDB(pathToDB)
 
 	sqlStmtOwnerExists := `SELECT name FROM sqlite_master WHERE type='table' AND name='owner';`
 	rows, err := db.Query(sqlStmtOwnerExists)
@@ -178,6 +159,12 @@ func InitDB() *sql.DB {
 			log.Printf("data initialization error\n")
 		}
 	}
+
+}
+
+func openDB(pathToDB string) *sql.DB {
+	db, err := sql.Open("sqlite3", pathToDB)
+	checkErr(err)
 	return db
 }
 

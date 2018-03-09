@@ -4,13 +4,13 @@ import (
 	"time"
 )
 
-func Update() {
+func Update(pathToDB string) {
 
 	c := make(chan time.Time)
 
 	go getUpdatedTimeRemote(c)
 
-	db := InitDB()
+	db := openDB(pathToDB)
 	defer db.Close()
 	updatedTimeDB := getUpdatedTime(db)
 

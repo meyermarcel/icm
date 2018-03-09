@@ -25,7 +25,7 @@ var ownerUpdateCmd = &cobra.Command{
 	Long:  "Update owner definitions",
 	Args:  cobra.NoArgs,
 	Run: func(cmd *cobra.Command, args []string) {
-		owner.Update()
+		owner.Update(pathToDB)
 		os.Exit(0)
 	},
 }

@@ -8,9 +8,9 @@ import (
 	"time"
 )
 
-func Gen(count int, c chan Number) {
+func Gen(pathToDB string, count int, c chan Number) {
 
-	codes := owner.GetRandomCodes(count)
+	codes := owner.GetRandomCodes(pathToDB, count)
 	randOffset := rand.Int()
 	lenCodes := len(codes)
 

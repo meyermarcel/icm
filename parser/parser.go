@@ -75,7 +75,8 @@ type OwnerCodeIn struct {
 	FoundOwner owner.Owner
 }
 
-func (oi OwnerCodeIn) resolve(fn func(code owner.Code) (owner.Owner, bool)) OwnerCodeIn {
+func (oi *OwnerCodeIn) Resolve(fn func(code owner.Code) (owner.Owner, bool)) *OwnerCodeIn {
+
 	if oi.IsValidFmt() {
 		foundOwner, found := fn(owner.NewCode(oi.Value()))
 		oi.OwnerFound = found
@@ -129,7 +130,7 @@ func ParseOwnerCodeOptEquipCat(in string) OwnerCodeOptEquipCat {
 	ownerOptCat := OwnerCodeOptEquipCat{}
 	parse := parse(in, *ownerCodeOptEquipCatIdMatcher)
 	ownerOptCat.RegexIn = parse
-	ownerOptCat.OwnerCodeIn = OwnerCodeIn{In: NewIn(parse.getMatches(0, 3), 3)}.resolve(owner.Resolver())
+	ownerOptCat.OwnerCodeIn = OwnerCodeIn{In: NewIn(parse.getMatches(0, 3), 3)}
 	ownerOptCat.EquipCatIn = EquipCatIdIn{NewIn(parse.getMatch(3), 1)}
 	return ownerOptCat
 }
@@ -138,7 +139,7 @@ func ParseContNum(in string) ContNum {
 	cni := ContNum{}
 	parse := parse(in, *contNumMatcher)
 	cni.RegexIn = parse
-	cni.OwnerCodeIn = OwnerCodeIn{In: NewIn(parse.getMatches(0, 3), 3)}.resolve(owner.Resolver())
+	cni.OwnerCodeIn = OwnerCodeIn{In: NewIn(parse.getMatches(0, 3), 3)}
 	cni.EquipCatIdIn = EquipCatIdIn{NewIn(parse.getMatch(3), 1)}
 	cni.SerialNumIn = SerialNumIn{NewIn(parse.getMatches(4, 10), 6)}
 	cni.CheckDigitIn = CheckDigitIn{In: NewIn(parse.getMatch(10), 1)}
