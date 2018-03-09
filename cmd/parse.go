@@ -25,7 +25,17 @@ import (
 var parseCmd = &cobra.Command{
 	Use:   "parse",
 	Short: "Parse a container number",
-	Long:  "Parse a container number",
+	Long:  `Parse a container number.
+
+Output can be formatted:
+
+  ABC U 123456 0
+     ↑ ↑      ↑
+     │ │      └─ separator between serial number and check digit
+     │ │
+     │ └─ separator between equipment category id and serial number
+     │
+     └─ separator between owner code and equipment category id`,
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		num := parser.ParseContNum(args[0])

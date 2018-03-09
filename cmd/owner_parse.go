@@ -24,8 +24,15 @@ import (
 
 var ownerParseCmd = &cobra.Command{
 	Use:   "parse",
-	Short: "Parse an owner",
-	Long:  "Parse an owner",
+	Short: "Parse an owner code",
+	Long:  `
+Parse an owner code.
+
+Output can be formatted:
+
+  ABC U
+     ↑
+     └─ separator between owner code and equipment category id`,
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		oce := parser.ParseOwnerCodeOptEquipCat(args[0])

@@ -25,25 +25,19 @@ import (
 var generateCmd = &cobra.Command{
 	Use:   "generate",
 	Short: "Generate a random container number",
-	Long: `Example:
-
+	Example: `
   iso6346 generate
 
-generates a random container number with valid check digit:
-
-  ABC U 123456 0
-
-The ISO 6346 standard specifies that all characters are
-alphanumeric except the equipment ID which is U, J or Z.
-
-You can also format your output:
+  iso6346 generate --count 5000
 
   iso6346 generate --sep-owner-equip '' --sep-serial-check '-'
+`,
+	Long: `
+Generate a random container number with ISO 6346 specification.
+Only real owners are used. Serial number is pseudo random.
+Multiple generated container numbers are unique.
 
-generates a formatted random container number:
-
-  ABCU 123456-0
-
+Output can be formatted:
 
   ABC U 123456 0
      ↑ ↑      ↑
@@ -71,6 +65,6 @@ generates a formatted random container number:
 var count int
 
 func init() {
-	generateCmd.Flags().IntVarP(&count, "count", "c", 1, "generate container numbers")
+	generateCmd.Flags().IntVarP(&count, "count", "c", 1, "count of container numbers")
 	RootCmd.AddCommand(generateCmd)
 }

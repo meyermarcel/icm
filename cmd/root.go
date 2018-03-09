@@ -34,7 +34,17 @@ var RootCmd = &cobra.Command{
 	Use:     "iso6346",
 	Version: "0.1.0-beta",
 	Short:   "Parse or generate all ISO 6346 related data",
-	Long:    "Parse or generate all ISO 6346 related data",
+	Long:    `Parse or generate all ISO 6346 related data.
+
+Output can be formatted:
+
+  ABC U 123456 0
+     ↑ ↑      ↑
+     │ │      └─ separator between serial number and check digit
+     │ │
+     │ └─ separator between equipment category id and serial number
+     │
+     └─ separator between owner code and equipment category id`,
 }
 
 func Execute() {
