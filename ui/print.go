@@ -6,6 +6,12 @@ import (
 	"github.com/meyermarcel/iso6346/parser"
 )
 
+type Separators struct {
+	OwnerEquip  string
+	EquipSerial string
+	SerialCheck string
+}
+
 func PrintContNum(cn parser.ContNum) {
 
 	fmt.Println(fmtRegexIn(cn.RegexIn))
@@ -22,14 +28,14 @@ func PrintOwnerCode(oce parser.OwnerCodeOptEquipCat) {
 	fmt.Println()
 }
 
-func PrintGen(cn cont.Number, sepOwnerEquip, sepEquipSerial, sepSerialCheck string) {
+func PrintGen(cn cont.Number, separators Separators) {
 	fmt.Printf("%s%s%s%s%06d%s%d",
 		cn.OwnerCode().Value(),
-		sepOwnerEquip,
+		separators.OwnerEquip,
 		cn.EquipCatId().Value(),
-		sepEquipSerial,
+		separators.EquipSerial,
 		cn.SerialNumber().Value(),
-		sepSerialCheck,
+		separators.SerialCheck,
 		cn.CheckDigit())
 	fmt.Println()
 }

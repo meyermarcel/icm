@@ -57,7 +57,7 @@ generates a formatted random container number:
 		go cont.Gen(count, c)
 
 		for contNum := range c {
-			ui.PrintGen(contNum, sepOwnerEquip, sepEquipSerial, sepSerialCheck)
+			ui.PrintGen(contNum, ui.Separators{sepOwnerEquip, sepEquipSerial, sepSerialCheck})
 		}
 		os.Exit(0)
 	},
