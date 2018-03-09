@@ -17,15 +17,21 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/meyermarcel/iso6346/ui"
 	"github.com/meyermarcel/iso6346/parser"
+	"os"
 )
 
 var ownerParseCmd = &cobra.Command{
 	Use:   "parse",
 	Short: "Parse an owner",
-	Long: "Parse an owner",
-	Args: cobra.ExactArgs(1),
+	Long:  "Parse an owner",
+	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		ui.PrintOwnerCode(parser.ParseOwnerCodeOptEquipCat(args[0]))
+		oce := parser.ParseOwnerCodeOptEquipCat(args[0])
+		ui.PrintOwnerCode(oce)
+		if oce.OwnerCodeIn.IsValidFmt() {
+			os.Exit(0)
+		}
+		os.Exit(1)
 	},
 }
 

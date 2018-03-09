@@ -17,6 +17,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/meyermarcel/iso6346/cont"
 	"github.com/meyermarcel/iso6346/ui"
+	"os"
 )
 
 // generateCmd represents the generate command
@@ -58,6 +59,7 @@ generates a formatted random container number:
 		for contNum := range c {
 			ui.PrintGen(contNum, sepOwnerEquip, sepEquipSerial, sepSerialCheck)
 		}
+		os.Exit(0)
 	},
 }
 

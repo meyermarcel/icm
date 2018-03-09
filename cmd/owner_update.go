@@ -16,15 +16,17 @@ package cmd
 import (
 	"github.com/spf13/cobra"
 	"github.com/meyermarcel/iso6346/owner"
+	"os"
 )
 
 var ownerUpdateCmd = &cobra.Command{
 	Use:   "update",
 	Short: "Update owner definitions",
-	Long: "Update owner definitions",
-	Args: cobra.NoArgs,
+	Long:  "Update owner definitions",
+	Args:  cobra.NoArgs,
 	Run: func(cmd *cobra.Command, args []string) {
 		owner.Update()
+		os.Exit(0)
 	},
 }
 

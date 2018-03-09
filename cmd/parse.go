@@ -17,15 +17,21 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/meyermarcel/iso6346/ui"
 	"github.com/meyermarcel/iso6346/parser"
+	"os"
 )
 
 var parseCmd = &cobra.Command{
 	Use:   "parse",
 	Short: "Parse a container number",
-	Long: "Parse a container number",
-	Args: cobra.ExactArgs(1),
+	Long:  "Parse a container number",
+	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		ui.PrintContNum(parser.ParseContNum(args[0]))
+		num := parser.ParseContNum(args[0])
+		ui.PrintContNum(num)
+		if num.CheckDigitIn.IsValidCheckDigit {
+			os.Exit(0)
+		}
+		os.Exit(1)
 	},
 }
 
