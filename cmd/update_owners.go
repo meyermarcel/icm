@@ -14,16 +14,35 @@
 package cmd
 
 import (
+	"github.com/meyermarcel/iso6346/owner"
 	"github.com/spf13/cobra"
+	"os"
 )
 
-var ownerCodeCmd = &cobra.Command{
-	Use:   "owner",
-	Short: "Sub command for owner commands",
-	Long:  "Sub command for owner commands",
+var ownerUpdateCmd = &cobra.Command{
+	Use:   "update",
+	Short: "Update information of owners",
+	Example: `
+iso6346 update`,
+	Long: `
+Update information of owners from remote.
+Following information is available:
+
+  Owner code
+  Company
+  City
+  Country
+`,
+	Args: cobra.NoArgs,
+	Run:  updateOwners,
+}
+
+func updateOwners(cmd *cobra.Command, args []string) {
+	owner.Update(pathToDB)
+	os.Exit(0)
 }
 
 func init() {
 
-	RootCmd.AddCommand(ownerCodeCmd)
+	RootCmd.AddCommand(ownerUpdateCmd)
 }
