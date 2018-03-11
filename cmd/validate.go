@@ -27,20 +27,11 @@ var validateCmd = &cobra.Command{
 	Short: "Validate a container number",
 	Long: `Validate a container number.
 
-Output can be formatted:
-
-  ABC U 123456 0
-     ↑ ↑      ↑
-     │ │      └─ separator between serial number and check digit
-     │ │
-     │ └─ separator between equipment category id and serial number
-     │
-     └─ separator between owner code and equipment category id`,
+` + sepHelp,
 	Example: `
-iso6346 validate 'abcu 1234560'
+  iso6346 validate 'ABCU 1234560'
 
-iso6346 validate --only-owner 'abcu'
-`,
+  iso6346 validate --` + sepOE + ` '' --` + sepSC + ` '' 'ABCU 1234560'`,
 	Args: cobra.ExactArgs(1),
 	Run:  validate,
 }
@@ -49,6 +40,18 @@ var validateOnlyOwner bool
 
 func init() {
 	validateCmd.Flags().BoolVar(&validateOnlyOwner, "only-owner", false, "validate only owner code")
+
+	validateCmd.Flags().String(sepOE, "",
+		"ABC(*)U1234560  (*) separator between owner code and equipment category id")
+	validateCmd.Flags().String(sepES, "",
+		"ABCU(*)1234560  (*) separator between equipment category id and serial number")
+	validateCmd.Flags().String(sepSC, "",
+		"ABCU123456(*)0  (*) separator between serial number and check digit")
+
+	viper.BindPFlag(sepOE, validateCmd.Flags().Lookup(sepOE))
+	viper.BindPFlag(sepES, validateCmd.Flags().Lookup(sepES))
+	viper.BindPFlag(sepSC, validateCmd.Flags().Lookup(sepSC))
+
 	RootCmd.AddCommand(validateCmd)
 }
 
@@ -66,7 +69,7 @@ func validateOwner(input string) {
 
 	oce.OwnerCodeIn.Resolve(owner.Resolver(pathToDB))
 
-	ui.PrintOwnerCode(oce, viper.GetString(sepOwnerEquip))
+	ui.PrintOwnerCode(oce, viper.GetString(sepOE))
 
 	if oce.OwnerCodeIn.IsValidFmt() {
 		os.Exit(0)
@@ -80,9 +83,9 @@ func validateContNum(input string) {
 	num.OwnerCodeIn.Resolve(owner.Resolver(pathToDB))
 
 	ui.PrintContNum(num, ui.Separators{
-		viper.GetString(sepOwnerEquip),
-		viper.GetString(sepEquipSerial),
-		viper.GetString(sepSerialCheck),
+		viper.GetString(sepOE),
+		viper.GetString(sepES),
+		viper.GetString(sepSC),
 	})
 
 	if num.CheckDigitIn.IsValidCheckDigit {

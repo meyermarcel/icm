@@ -25,31 +25,19 @@ import (
 	"path/filepath"
 )
 
-var defaultCfg = []byte(
-	sepOwnerEquip + ": ' '\n" +
-		sepEquipSerial + ": ' '\n" +
-		sepSerialCheck + ": ' '\n")
+var sepHelp = `Configuration for separators is generated first time you
+execute a command that requires the configuration.
+
+Flags for output formatting can overridden with a config file.
+Edit default configuration:
+
+  ` + filepath.Join("$HOME", appDir, cfgName+".yml")
 
 var RootCmd = &cobra.Command{
 	Use:     "iso6346",
 	Version: "0.1.0-beta",
 	Short:   "Parse or generate ISO 6346 related data",
-	Long: `Parse or generate ISO 6346 related data.
-
-Configuration is generated first time you execute a command
-that requires the configuration.
-
-Flags for output formatting can overridden with a config file.
-Default configuration ("` + filepath.Join("$HOME", appDir, cfgName+".yml") + `"):
-
-` + string(defaultCfg) + `
-  ABC U 123456 0
-     ↑ ↑      ↑
-     │ │      └─ ` + sepOwnerEquip + `
-     │ │
-     │ └─ ` + sepEquipSerial + `
-     │
-     └─ ` + sepSerialCheck,
+	Long:    "Parse or generate ISO 6346 related data.",
 }
 
 func Execute() {
@@ -60,26 +48,18 @@ func Execute() {
 }
 
 const (
-	appDir         = ".iso6346"
-	dbName         = "iso6346.db"
-	cfgName        = "separators"
-	sepOwnerEquip  = "sep-owner-equip"
-	sepEquipSerial = "sep-equip-serial"
-	sepSerialCheck = "sep-serial-check"
+	appDir  = ".iso6346"
+	dbName  = "iso6346.db"
+	cfgName = "separators"
+	sepOE   = "sep-owner-equip"
+	sepES   = "sep-equip-serial"
+	sepSC   = "sep-serial-check"
 )
 
 var pathToDB string
 
 func init() {
 	cobra.OnInitialize(initConfig)
-	RootCmd.PersistentFlags().String(sepOwnerEquip, "",
-		"ABC(*)U1234560  (*) separator between owner code and equipment category id")
-	RootCmd.PersistentFlags().String(sepEquipSerial, "",
-		"ABCU(*)1234560  (*) separator between equipment category id and serial number")
-	RootCmd.PersistentFlags().String(sepSerialCheck, "",
-		"ABCU123456(*)0  (*) separator between serial number and check digit")
-
-	viper.BindPFlags(RootCmd.PersistentFlags())
 }
 
 func initConfig() {
@@ -119,8 +99,24 @@ func initDir(path string) string {
 }
 
 func initDefaultCfg(path string) {
+
+	sepDefaultCfg := []byte(`# Separators config
+#
+#  ABC U 123456 0
+#     ↑ ↑      ↑
+#     │ │      └─ ` + sepSC + `
+#     │ │
+#     │ └─ ` + sepES + `
+#     │
+#     └─ ` + sepOE + `
+#
+` + sepOE + `: ' '
+` + sepES + `: ' '
+` + sepSC + `: ' '
+`)
+
 	if _, err := os.Stat(path); os.IsNotExist(err) {
-		if err := ioutil.WriteFile(path, defaultCfg, 0644); err != nil {
+		if err := ioutil.WriteFile(path, sepDefaultCfg, 0644); err != nil {
 			fmt.Println("Can't write default config:", err)
 			os.Exit(1)
 		}

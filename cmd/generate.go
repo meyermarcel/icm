@@ -26,27 +26,15 @@ var generateCmd = &cobra.Command{
 	Use:     "generate",
 	Aliases: []string{"gen"},
 	Short:   "Generate a random container number",
-	Long: `
-Generate a random container number with ISO 6346 specification.
-Only real owners are used. Serial number is pseudo random.
-Multiple generated container numbers are unique.
+	Long: `Generate a random container number.
 
-Output can be formatted:
-
-  ABC U 123456 0
-     ↑ ↑      ↑
-     │ │      └─ separator between serial number and check digit
-     │ │
-     │ └─ separator between equipment category id and serial number
-     │
-     └─ separator between owner code and equipment category id`,
+` + sepHelp,
 	Example: `
   iso6346 generate
 
   iso6346 generate --count 5000
 
-  iso6346 generate --sep-owner-equip '' --sep-serial-check '-'
-`,
+  iso6346 generate --` + sepOE + ` '' --` + sepSC + ` ''`,
 	Args: cobra.NoArgs,
 	Run:  generate,
 }
@@ -57,9 +45,9 @@ func generate(cmd *cobra.Command, args []string) {
 
 	for contNum := range c {
 		ui.PrintGen(contNum, ui.Separators{
-			viper.GetString(sepOwnerEquip),
-			viper.GetString(sepEquipSerial),
-			viper.GetString(sepSerialCheck),
+			viper.GetString(sepOE),
+			viper.GetString(sepES),
+			viper.GetString(sepSC),
 		})
 	}
 	os.Exit(0)
@@ -69,5 +57,18 @@ var count int
 
 func init() {
 	generateCmd.Flags().IntVarP(&count, "count", "c", 1, "count of container numbers")
+
+	generateCmd.Flags().String(sepOE, "",
+		"ABC(*)U1234560  (*) separator between owner code and equipment category id")
+	generateCmd.Flags().String(sepES, "",
+		"ABCU(*)1234560  (*) separator between equipment category id and serial number")
+	generateCmd.Flags().String(sepSC, "",
+		"ABCU123456(*)0  (*) separator between serial number and check digit")
+
+	viper.BindPFlag(sepOE, generateCmd.Flags().Lookup(sepOE))
+	viper.BindPFlag(sepES, generateCmd.Flags().Lookup(sepES))
+	viper.BindPFlag(sepSC, generateCmd.Flags().Lookup(sepSC))
+
 	RootCmd.AddCommand(generateCmd)
+
 }

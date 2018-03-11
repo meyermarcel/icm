@@ -29,10 +29,9 @@ Following information is available:
   Owner code
   Company
   City
-  Country
-`,
+  Country`,
 	Example: `
-iso6346 update`,
+  iso6346 update`,
 	Args: cobra.NoArgs,
 	Run:  updateOwners,
 }
