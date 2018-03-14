@@ -7,7 +7,6 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
-	"unicode/utf8"
 )
 
 const ownerCodeOptEquipCatIdRegex = `([A-Za-z])[^A-Za-z]*([A-Za-z])?[^A-Za-z]*([A-Za-z])?[^JUZjuz]*([JUZjuz])?`
@@ -18,10 +17,14 @@ const contNumRegex = ownerCodeOptEquipCatIdRegex + `[^\d]*(\d)?[^\d]*(\d)?[^\d]*
 
 var contNumMatcher = regexp.MustCompile(contNumRegex)
 
+const sizeTypeRegex = `(?i)([1234ABCDEFGHKLMNP])[^0245689CDEFLMNP]*([0245689CDEFLMNP])?[^ABGHKNPRSUV]*(A0|B0|B1|B2|B3|B4|B5|B6|B7|B8|B9|G1|G2|G3|G4|G5|G6|G7|G8|G9|H0|H1|H2|H3|H4|H5|H6|H7|H8|H9|K0|K1|K2|K3|K4|K5|K6|K7|K8|K9|N0|N1|N2|N3|N4|N5|N6|N7|N8|N9|N9|P0|P1|P2|P3|P4|P5|P6|P7|P8|P9|R0|R1|R2|R3|R4|R5|R6|R7|R8|R9|S0|S1|S2|S3|S4|S5|S6|S7|S8|S9|U0|U1|U2|U3|U4|U5|U6|U7|U8|U9|V0|V1|V2|V3|V4|V5|V6|V7|V8|V9)?`
+
+var sizeTypeMatcher = regexp.MustCompile(sizeTypeRegex)
+
 type RegexIn struct {
-	matches        []string
-	value          string
-	matchesIndices map[int]bool
+	matches     []string
+	input       string
+	MatchRanges []int
 }
 
 func (pi RegexIn) getMatches(start, end int) (value string) {
@@ -40,12 +43,8 @@ func (pi RegexIn) getMatch(pos int) string {
 	return pi.getMatches(pos, pos+1)
 }
 
-func (pi RegexIn) Value() string {
-	return pi.value
-}
-
-func (pi RegexIn) Match(atPosition int) bool {
-	return pi.matchesIndices[atPosition]
+func (pi RegexIn) Input() string {
+	return pi.input
 }
 
 type In struct {
@@ -99,6 +98,18 @@ type CheckDigitIn struct {
 	CalcCheckDigit    int
 }
 
+type LengthIn struct {
+	In
+}
+
+type HeightWidthIn struct {
+	In
+}
+
+type TypeIn struct {
+	In
+}
+
 func (cdi *CheckDigitIn) calcCheckDigit(ocIn OwnerCodeIn, eciIn EquipCatIdIn, snIn SerialNumIn) {
 
 	cdi.CalcCheckDigit = cont.CalcCheckDigit(owner.NewCode(ocIn.In.Value()), equip_cat.NewIdFrom(eciIn.Value()), cont.SerialNumFrom(snIn.Value()))
@@ -120,6 +131,13 @@ type ContNum struct {
 	EquipCatIdIn EquipCatIdIn
 	SerialNumIn  SerialNumIn
 	CheckDigitIn CheckDigitIn
+}
+
+type SizeType struct {
+	RegexIn       RegexIn
+	LengthIn      LengthIn
+	HeightWidthIn HeightWidthIn
+	TypeIn        TypeIn
 }
 
 func (cn ContNum) IsCheckDigitCalculable() bool {
@@ -149,9 +167,19 @@ func ParseContNum(in string) ContNum {
 	return cni
 }
 
+func ParseSizeType(in string) SizeType {
+	sizeType := SizeType{}
+	parse := parse(in, *sizeTypeMatcher)
+	sizeType.RegexIn = parse
+	sizeType.LengthIn = LengthIn{In: NewIn(parse.getMatch(0, ), 1)}
+	sizeType.HeightWidthIn = HeightWidthIn{In: NewIn(parse.getMatch(1), 1)}
+	sizeType.TypeIn = TypeIn{In: NewIn(parse.getMatch(2), 2)}
+	return sizeType
+}
+
 func parse(in string, matcher regexp.Regexp) RegexIn {
 
-	regexIn := RegexIn{value: in}
+	regexIn := RegexIn{input: in}
 
 	subMatch := matcher.FindAllStringSubmatch(in, -1)
 
@@ -161,42 +189,7 @@ func parse(in string, matcher regexp.Regexp) RegexIn {
 
 	regexIn.matches = subMatch[0][1:]
 
-	matchRanges := matcher.FindAllStringSubmatchIndex(in, -1)[0][2:]
-
-	regexIn.matchesIndices = byteToRuneIndex(in, matchRanges)
+	regexIn.MatchRanges = matcher.FindAllStringSubmatchIndex(in, -1)[0][2:]
 
 	return regexIn
-}
-
-func byteToRuneIndex(in string, matchRanges []int) map[int]bool {
-	var matchesIndices []int
-
-	for i := 0; i < len(matchRanges)/2; i++ {
-		matchesIndices = append(matchesIndices, matchRanges[i*2])
-	}
-
-	byteShiftsForIndices := make([]int, len(matchesIndices))
-
-	for i := 0; i < len(in); i++ {
-		if !utf8.RuneStart(in[i]) {
-			for pos, element := range matchesIndices {
-				if element > i {
-					byteShiftsForIndices[pos]--
-				}
-			}
-		}
-	}
-
-	// apply byte shift indices
-	for pos, element := range matchesIndices {
-		matchesIndices[pos] = element + byteShiftsForIndices[pos]
-	}
-	var matchesIndicesMap = map[int]bool{}
-
-	for _, element := range matchesIndices {
-		if element >= 0 {
-			matchesIndicesMap[element] = true
-		}
-	}
-	return matchesIndicesMap
 }

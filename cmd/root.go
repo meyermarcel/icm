@@ -54,6 +54,8 @@ const (
 	sepOE   = "sep-owner-equip"
 	sepES   = "sep-equip-serial"
 	sepSC   = "sep-serial-check"
+	sepCS   = "sep-check-size"
+	sepST   = "sep-size-type"
 )
 
 var pathToDB string

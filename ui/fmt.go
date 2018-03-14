@@ -6,6 +6,7 @@ import (
 	"github.com/meyermarcel/iso6346/equip_cat"
 	"github.com/meyermarcel/iso6346/parser"
 	"strings"
+	"unicode/utf8"
 )
 
 var green = color.New(color.FgGreen).SprintFunc()
@@ -23,15 +24,32 @@ func fmtRegexIn(pi parser.RegexIn) string {
 
 	b := strings.Builder{}
 	b.WriteString("'")
-	inAsRunes := []rune(pi.Value())
-	for pos, char := range inAsRunes {
-		if pi.Match(pos) {
-			b.WriteString(fmt.Sprintf("%s", string(char)))
+
+	matchRangesIdx := 0
+
+	input := pi.Input()
+
+	for pos, w := 0, 0; pos < len(input); pos += w {
+
+		if matchRangesIdx < len(pi.MatchRanges) && pi.MatchRanges[matchRangesIdx] == pos {
+			matched := input[pos:pi.MatchRanges[matchRangesIdx+1]]
+			sumWidthSubStr := 0
+			for posSubStr, wSubStr := 0, 0; posSubStr < len(matched); posSubStr += wSubStr {
+				runeValue, width := utf8.DecodeRuneInString(matched[posSubStr:])
+				b.WriteString(fmt.Sprintf("%s", string(runeValue)))
+				wSubStr = width
+				sumWidthSubStr += width
+			}
+			w = sumWidthSubStr
+			matchRangesIdx += 2
 		} else {
-			b.WriteString(fmt.Sprintf("%s", grey(string(char))))
+			runeValue, width := utf8.DecodeRuneInString(input[pos:])
+			b.WriteString(fmt.Sprintf("%s", grey(string(runeValue))))
+			w = width
 		}
 	}
 	b.WriteString("'")
+
 	return b.String()
 }
 
@@ -95,6 +113,24 @@ func fmtParsedContNum(cn parser.ContNum, seps Separators) string {
 
 	return b.String()
 }
+
+func fmtParsedSizeType(st parser.SizeType) string {
+
+	b := strings.Builder{}
+	b.WriteString(indent)
+
+	b.WriteString(fmtIn(st.LengthIn.In))
+	b.WriteString(fmtIn(st.HeightWidthIn.In))
+	b.WriteString(fmtIn(st.TypeIn.In))
+
+	b.WriteString(fmtCheckMark(st.TypeIn.IsValidFmt()))
+
+	return b.String()
+}
+
+//func lengthTxt(sti parser.SizeTypeIn)PosTxt{
+//	
+//}
 
 func ownerCodeTxt(ownerCodeIn parser.OwnerCodeIn) PosTxt {
 	if !ownerCodeIn.IsValidFmt() {

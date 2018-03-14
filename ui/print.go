@@ -29,6 +29,14 @@ func PrintOwnerCode(oce parser.OwnerCodeOptEquipCat, sepOwnerEquip string) {
 	fmt.Println()
 }
 
+func PrintSizeType(st parser.SizeType) {
+
+	fmt.Println(fmtRegexIn(st.RegexIn))
+	fmt.Println()
+	fmt.Println(fmtParsedSizeType(st))
+	fmt.Println()
+}
+
 func PrintGen(cn cont.Number, seps Separators) {
 	fmt.Printf("%s%s%s%s%06d%s%d",
 		cn.OwnerCode().Value(),
