@@ -33,7 +33,7 @@ Edit default configuration:
 
   ` + filepath.Join("$HOME", appDir, cfgName+".yml")
 
-var RootCmd = &cobra.Command{
+var iso6346Cmd = &cobra.Command{
 	Use:     "iso6346",
 	Version: "0.1.0-beta",
 	Short:   "Parse or generate ISO 6346 related data",
@@ -41,7 +41,7 @@ var RootCmd = &cobra.Command{
 }
 
 func Execute() {
-	if err := RootCmd.Execute(); err != nil {
+	if err := iso6346Cmd.Execute(); err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}

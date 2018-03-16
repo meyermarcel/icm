@@ -69,6 +69,6 @@ func init() {
 	viper.BindPFlag(sepES, generateCmd.Flags().Lookup(sepES))
 	viper.BindPFlag(sepSC, generateCmd.Flags().Lookup(sepSC))
 
-	RootCmd.AddCommand(generateCmd)
+	iso6346Cmd.AddCommand(generateCmd)
 
 }

@@ -15,22 +15,14 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-	"github.com/meyermarcel/iso6346/ui"
-	"github.com/meyermarcel/iso6346/sizetype"
 )
 
-var sizeTypePrintCmd = &cobra.Command{
-	Use:   "print",
-	Short: "Print length, height, width and type codes",
-	Long:  "Print length, height, width and type codes.",
-	Example: `
-  iso6346 sizetype print`,
-	Args:  cobra.NoArgs,
-	Run: func(cmd *cobra.Command, args []string) {
-		ui.PrintSizeTypeDefs(sizetype.GetDef())
-	},
+var ownerCmd = &cobra.Command{
+	Use:   "owner",
+	Short: "Validate an owner or update owners.",
+	Long:  "Validate an owner or update owners.",
 }
 
 func init() {
-	sizetypeCmd.AddCommand(sizeTypePrintCmd)
+	iso6346Cmd.AddCommand(ownerCmd)
 }

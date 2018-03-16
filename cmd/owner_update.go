@@ -14,23 +14,33 @@
 package cmd
 
 import (
+	"github.com/meyermarcel/iso6346/owner"
 	"github.com/spf13/cobra"
-	"github.com/meyermarcel/iso6346/ui"
-	"github.com/meyermarcel/iso6346/sizetype"
+	"os"
 )
 
-var sizeTypePrintCmd = &cobra.Command{
-	Use:   "print",
-	Short: "Print length, height, width and type codes",
-	Long:  "Print length, height, width and type codes.",
+var ownerUpdateCmd = &cobra.Command{
+	Use:   "update",
+	Short: "Update information of owners",
+	Long: `Update information of owners from remote.
+Following information is available:
+
+  Owner code
+  Company
+  City
+  Country`,
 	Example: `
-  iso6346 sizetype print`,
-	Args:  cobra.NoArgs,
-	Run: func(cmd *cobra.Command, args []string) {
-		ui.PrintSizeTypeDefs(sizetype.GetDef())
-	},
+  iso6346 owner update`,
+	Args: cobra.NoArgs,
+	Run:  updateOwners,
+}
+
+func updateOwners(cmd *cobra.Command, args []string) {
+	owner.Update(pathToDB)
+	os.Exit(0)
 }
 
 func init() {
-	sizetypeCmd.AddCommand(sizeTypePrintCmd)
+
+	ownerCmd.AddCommand(ownerUpdateCmd)
 }

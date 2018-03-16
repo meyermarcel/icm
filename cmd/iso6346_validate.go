@@ -31,20 +31,12 @@ var validateCmd = &cobra.Command{
 	Example: `
   iso6346 validate 'ABCU 1234560'
 
-  iso6346 validate --` + sepOE + ` '' --` + sepSC + ` '' 'ABCU 1234560'
-
-  iso6346 validate --only-sizetype '20G0'`,
+  iso6346 validate --` + sepOE + ` '' --` + sepSC + ` '' 'ABCU 1234560'`,
 	Args: cobra.ExactArgs(1),
-	Run:  validate,
+	Run:  validateContNum,
 }
 
-var validateOnlyOwner bool
-var validateOnlySizeType bool
-
 func init() {
-	validateCmd.Flags().BoolVar(&validateOnlyOwner, "only-owner", false, "validate only owner code")
-	validateCmd.Flags().BoolVar(&validateOnlySizeType, "only-sizetype", false, "validate only size and type")
-
 	validateCmd.Flags().String(sepOE, "",
 		"ABC(*)U1234560  (*) separator between owner code and equipment category id")
 	validateCmd.Flags().String(sepES, "",
@@ -56,37 +48,11 @@ func init() {
 	viper.BindPFlag(sepES, validateCmd.Flags().Lookup(sepES))
 	viper.BindPFlag(sepSC, validateCmd.Flags().Lookup(sepSC))
 
-	RootCmd.AddCommand(validateCmd)
+	iso6346Cmd.AddCommand(validateCmd)
 }
 
-func validate(cmd *cobra.Command, args []string) {
-	if validateOnlyOwner {
-		validateOwner(args[0])
-	}
-
-	if validateOnlySizeType {
-		validateSizeType(args[0])
-	}
-	
-	validateContNum(args[0])
-
-}
-
-func validateOwner(input string) {
-	oce := parser.ParseOwnerCodeOptEquipCat(input)
-
-	oce.OwnerCodeIn.Resolve(owner.Resolver(pathToDB))
-
-	ui.PrintOwnerCode(oce, viper.GetString(sepOE))
-
-	if oce.OwnerCodeIn.IsValidFmt() {
-		os.Exit(0)
-	}
-	os.Exit(1)
-}
-
-func validateContNum(input string) {
-	num := parser.ParseContNum(input)
+func validateContNum(cmd *cobra.Command, args []string) {
+	num := parser.ParseContNum(args[0])
 
 	num.OwnerCodeIn.Resolve(owner.Resolver(pathToDB))
 
@@ -97,17 +63,6 @@ func validateContNum(input string) {
 	})
 
 	if num.CheckDigitIn.IsValidCheckDigit {
-		os.Exit(0)
-	}
-	os.Exit(1)
-}
-
-func validateSizeType(input string) {
-	st := parser.ParseSizeType(input)
-
-	ui.PrintSizeType(st)
-
-	if st.TypeIn.IsValidFmt() {
 		os.Exit(0)
 	}
 	os.Exit(1)
