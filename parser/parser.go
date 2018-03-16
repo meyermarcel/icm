@@ -24,7 +24,7 @@ var sizeTypeMatcher = regexp.MustCompile(sizeTypeRegex)
 type RegexIn struct {
 	matches     []string
 	input       string
-	MatchRanges []int
+	matchRanges []int
 }
 
 func (pi RegexIn) getMatches(start, end int) (value string) {
@@ -45,6 +45,10 @@ func (pi RegexIn) getMatch(pos int) string {
 
 func (pi RegexIn) Input() string {
 	return pi.input
+}
+
+func (pi RegexIn) MatchRanges() []int {
+	return pi.matchRanges
 }
 
 type In struct {
@@ -169,7 +173,7 @@ func parse(in string, matcher regexp.Regexp) RegexIn {
 
 	regexIn.matches = subMatch[0][1:]
 
-	regexIn.MatchRanges = matcher.FindAllStringSubmatchIndex(in, -1)[0][2:]
+	regexIn.matchRanges = matcher.FindAllStringSubmatchIndex(in, -1)[0][2:]
 
 	return regexIn
 }

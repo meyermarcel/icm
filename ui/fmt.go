@@ -31,8 +31,8 @@ func fmtRegexIn(pi parser.RegexIn) string {
 
 	for pos, w := 0, 0; pos < len(input); pos += w {
 
-		if matchRangesIdx < len(pi.MatchRanges) && pi.MatchRanges[matchRangesIdx] == pos {
-			matched := input[pos:pi.MatchRanges[matchRangesIdx+1]]
+		if matchRangesIdx < len(pi.MatchRanges()) && pi.MatchRanges()[matchRangesIdx] == pos {
+			matched := input[pos:pi.MatchRanges()[matchRangesIdx+1]]
 			sumWidthSubStr := 0
 			for posSubStr, wSubStr := 0, 0; posSubStr < len(matched); posSubStr += wSubStr {
 				runeValue, width := utf8.DecodeRuneInString(matched[posSubStr:])
