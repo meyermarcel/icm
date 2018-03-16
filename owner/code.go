@@ -28,10 +28,14 @@ func NewCode(value string) Code {
 
 func Resolver(pathToDB string) func(code Code) (Owner, bool) {
 	return func(code Code) (Owner, bool) {
-		return getOwner(openDB(pathToDB), code)
+		db := openDB(pathToDB)
+		defer db.Close()
+		return getOwner(db, code)
 	}
 }
 
 func GetRandomCodes(pathToDB string, count int) []Code {
-	return getRandomCodes(openDB(pathToDB), count)
+	db := openDB(pathToDB)
+	defer db.Close()
+	return getRandomCodes(db, count)
 }

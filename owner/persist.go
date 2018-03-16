@@ -141,6 +141,7 @@ func getRandomCodes(db *sql.DB, count int) []Code {
 func InitDB(pathToDB string) {
 
 	db := openDB(pathToDB)
+	defer db.Close()
 
 	sqlStmtOwnerExists := `SELECT name FROM sqlite_master WHERE type='table' AND name='owner';`
 	rows, err := db.Query(sqlStmtOwnerExists)
