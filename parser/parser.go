@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-const ownerCodeOptEquipCatIdRegex = `([A-Za-z])[^A-Za-z]*([A-Za-z])?[^A-Za-z]*([A-Za-z])?[^JUZjuz]*([JUZjuz])?`
+const ownerCodeOptEquipCatIdRegex = `(?i)([A-Z])[^A-Z]*([A-Z])?[^A-Z]*([A-Z])?[^JUZ]*([JUZ])?`
 
 var ownerCodeOptEquipCatIdMatcher = regexp.MustCompile(ownerCodeOptEquipCatIdRegex)
 
