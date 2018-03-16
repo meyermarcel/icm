@@ -84,33 +84,13 @@ func (oi *OwnerCodeIn) Resolve(fn func(code owner.Code) (owner.Owner, bool)) *Ow
 	return oi
 }
 
-type EquipCatIdIn struct {
-	In
-}
-
-type SerialNumIn struct {
-	In
-}
-
 type CheckDigitIn struct {
 	In
 	IsValidCheckDigit bool
 	CalcCheckDigit    int
 }
 
-type LengthIn struct {
-	In
-}
-
-type HeightWidthIn struct {
-	In
-}
-
-type TypeIn struct {
-	In
-}
-
-func (cdi *CheckDigitIn) calcCheckDigit(ocIn OwnerCodeIn, eciIn EquipCatIdIn, snIn SerialNumIn) {
+func (cdi *CheckDigitIn) calcCheckDigit(ocIn OwnerCodeIn, eciIn In, snIn In) {
 
 	cdi.CalcCheckDigit = cont.CalcCheckDigit(owner.NewCode(ocIn.In.Value()), equip_cat.NewIdFrom(eciIn.Value()), cont.SerialNumFrom(snIn.Value()))
 	if cdi.IsValidFmt() {
@@ -122,22 +102,22 @@ func (cdi *CheckDigitIn) calcCheckDigit(ocIn OwnerCodeIn, eciIn EquipCatIdIn, sn
 type OwnerCodeOptEquipCat struct {
 	RegexIn     RegexIn
 	OwnerCodeIn OwnerCodeIn
-	EquipCatIn  EquipCatIdIn
+	EquipCatIn  In
 }
 
 type ContNum struct {
 	RegexIn      RegexIn
 	OwnerCodeIn  OwnerCodeIn
-	EquipCatIdIn EquipCatIdIn
-	SerialNumIn  SerialNumIn
+	EquipCatIdIn In
+	SerialNumIn  In
 	CheckDigitIn CheckDigitIn
 }
 
 type SizeType struct {
 	RegexIn       RegexIn
-	LengthIn      LengthIn
-	HeightWidthIn HeightWidthIn
-	TypeIn        TypeIn
+	LengthIn      In
+	HeightWidthIn In
+	TypeIn        In
 }
 
 func (cn ContNum) IsCheckDigitCalculable() bool {
@@ -149,7 +129,7 @@ func ParseOwnerCodeOptEquipCat(in string) OwnerCodeOptEquipCat {
 	parse := parse(in, *ownerCodeOptEquipCatIdMatcher)
 	ownerOptCat.RegexIn = parse
 	ownerOptCat.OwnerCodeIn = OwnerCodeIn{In: NewIn(parse.getMatches(0, 3), 3)}
-	ownerOptCat.EquipCatIn = EquipCatIdIn{NewIn(parse.getMatch(3), 1)}
+	ownerOptCat.EquipCatIn = NewIn(parse.getMatch(3), 1)
 	return ownerOptCat
 }
 
@@ -158,8 +138,8 @@ func ParseContNum(in string) ContNum {
 	parse := parse(in, *contNumMatcher)
 	cni.RegexIn = parse
 	cni.OwnerCodeIn = OwnerCodeIn{In: NewIn(parse.getMatches(0, 3), 3)}
-	cni.EquipCatIdIn = EquipCatIdIn{NewIn(parse.getMatch(3), 1)}
-	cni.SerialNumIn = SerialNumIn{NewIn(parse.getMatches(4, 10), 6)}
+	cni.EquipCatIdIn = NewIn(parse.getMatch(3), 1)
+	cni.SerialNumIn = NewIn(parse.getMatches(4, 10), 6)
 	cni.CheckDigitIn = CheckDigitIn{In: NewIn(parse.getMatch(10), 1)}
 	if cni.IsCheckDigitCalculable() {
 		cni.CheckDigitIn.calcCheckDigit(cni.OwnerCodeIn, cni.EquipCatIdIn, cni.SerialNumIn)
@@ -171,9 +151,9 @@ func ParseSizeType(in string) SizeType {
 	sizeType := SizeType{}
 	parse := parse(in, *sizeTypeMatcher)
 	sizeType.RegexIn = parse
-	sizeType.LengthIn = LengthIn{In: NewIn(parse.getMatch(0, ), 1)}
-	sizeType.HeightWidthIn = HeightWidthIn{In: NewIn(parse.getMatch(1), 1)}
-	sizeType.TypeIn = TypeIn{In: NewIn(parse.getMatch(2), 2)}
+	sizeType.LengthIn = NewIn(parse.getMatch(0, ), 1)
+	sizeType.HeightWidthIn = NewIn(parse.getMatch(1), 1)
+	sizeType.TypeIn = NewIn(parse.getMatch(2), 2)
 	return sizeType
 }
 

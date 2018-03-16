@@ -62,7 +62,7 @@ func fmtOwnerCodeOptEquipCat(oce parser.OwnerCodeOptEquipCat, sepOwnerEquip stri
 
 	if oce.EquipCatIn.IsValidFmt() {
 		b.WriteString(sepOwnerEquip)
-		b.WriteString(fmtIn(oce.EquipCatIn.In))
+		b.WriteString(fmtIn(oce.EquipCatIn))
 	}
 
 	b.WriteString(fmtCheckMark(oce.OwnerCodeIn.IsValidFmt()))
@@ -119,9 +119,9 @@ func fmtParsedSizeType(st parser.SizeType) string {
 	b := strings.Builder{}
 	b.WriteString(indent)
 
-	b.WriteString(fmtIn(st.LengthIn.In))
-	b.WriteString(fmtIn(st.HeightWidthIn.In))
-	b.WriteString(fmtIn(st.TypeIn.In))
+	b.WriteString(fmtIn(st.LengthIn))
+	b.WriteString(fmtIn(st.HeightWidthIn))
+	b.WriteString(fmtIn(st.TypeIn))
 
 	b.WriteString(fmtCheckMark(st.TypeIn.IsValidFmt()))
 
@@ -150,9 +150,9 @@ func fmtContNum(cni parser.ContNum, seps Separators) string {
 	b.WriteString(indent)
 	b.WriteString(fmtOwnerCode(cni.OwnerCodeIn))
 	b.WriteString(seps.OwnerEquip)
-	b.WriteString(fmtIn(cni.EquipCatIdIn.In))
+	b.WriteString(fmtIn(cni.EquipCatIdIn))
 	b.WriteString(seps.EquipSerial)
-	b.WriteString(fmtIn(cni.SerialNumIn.In))
+	b.WriteString(fmtIn(cni.SerialNumIn))
 	b.WriteString(seps.SerialCheck)
 
 	if !cni.CheckDigitIn.IsValidCheckDigit && cni.CheckDigitIn.IsValidFmt() {
