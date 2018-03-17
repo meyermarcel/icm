@@ -28,8 +28,7 @@ var validateOwnerCmd = &cobra.Command{
 	Long: `Validate an owner.
 
 ` + sepHelp,
-	Example: `
-  ` + appName + ` owner validate 'ABC'
+	Example: `  ` + appName + ` owner validate 'ABC'
 
   ` + appName + ` owner validate --` + sepOE + ` '' 'ABCU'`,
 	Args: cobra.ExactArgs(1),

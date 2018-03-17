@@ -29,8 +29,7 @@ Following information is available:
   Company
   City
   Country`,
-	Example: `
-  ` + appName + ` owner update`,
+	Example: `  ` + appName + ` owner update`,
 	Args: cobra.NoArgs,
 	Run:  updateOwners,
 }

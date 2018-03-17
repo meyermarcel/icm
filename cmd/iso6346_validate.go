@@ -28,8 +28,7 @@ var validateCmd = &cobra.Command{
 	Long: `Validate a container number.
 
 ` + sepHelp,
-	Example: `
-  ` + appName + ` validate 'ABCU 1234560'
+	Example: `  ` + appName + ` validate 'ABCU 1234560'
 
   ` + appName + ` validate --` + sepOE + ` '' --` + sepSC + ` '' 'ABCU 1234560'`,
 	Args: cobra.ExactArgs(1),

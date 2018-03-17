@@ -28,8 +28,7 @@ var generateCmd = &cobra.Command{
 	Long: `Generate a random container number.
 
 ` + sepHelp,
-	Example: `
-  ` + appName + ` generate
+	Example: `  ` + appName + ` generate
 
   ` + appName + ` generate --count 5000
 

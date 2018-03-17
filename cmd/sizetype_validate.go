@@ -27,8 +27,7 @@ var sizetypeValidateCmd = &cobra.Command{
 	Long: `Validate a container number.
 
 ` + sepHelp,
-	Example: `
-  ` + appName + ` sizetype validate '20G1'
+	Example: `  ` + appName + ` sizetype validate '20G1'
 
   ` + appName + ` sizetype validate --` + sepST + ` '' '20G1'`,
 	Args: cobra.ExactArgs(1),
