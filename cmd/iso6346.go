@@ -34,7 +34,7 @@ Edit default configuration:
   ` + filepath.Join("$HOME", appDir, cfgName+".yml")
 
 var iso6346Cmd = &cobra.Command{
-	Use:     "iso6346",
+	Use:     appName,
 	Version: "0.1.0-beta",
 	Short:   "Parse or generate ISO 6346 related data",
 	Long:    "Parse or generate ISO 6346 related data.",
@@ -48,8 +48,9 @@ func Execute() {
 }
 
 const (
-	appDir  = ".iso6346"
-	dbName  = "iso6346.db"
+	appName = "iso6346"
+	appDir  = "." + appName
+	dbName  = appName + ".db"
 	cfgName = "separators"
 	sepOE   = "sep-owner-equip"
 	sepES   = "sep-equip-serial"

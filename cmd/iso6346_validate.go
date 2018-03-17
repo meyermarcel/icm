@@ -29,9 +29,9 @@ var validateCmd = &cobra.Command{
 
 ` + sepHelp,
 	Example: `
-  iso6346 validate 'ABCU 1234560'
+  ` + appName + ` validate 'ABCU 1234560'
 
-  iso6346 validate --` + sepOE + ` '' --` + sepSC + ` '' 'ABCU 1234560'`,
+  ` + appName + ` validate --` + sepOE + ` '' --` + sepSC + ` '' 'ABCU 1234560'`,
 	Args: cobra.ExactArgs(1),
 	Run:  validateContNum,
 }

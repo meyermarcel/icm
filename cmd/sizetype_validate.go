@@ -28,9 +28,9 @@ var sizetypeValidateCmd = &cobra.Command{
 
 ` + sepHelp,
 	Example: `
-  iso6346 sizetype validate '20G1'
+  ` + appName + ` sizetype validate '20G1'
 
-  iso6346 sizetype validate --` + sepST + ` '' '20G1'`,
+  ` + appName + ` sizetype validate --` + sepST + ` '' '20G1'`,
 	Args: cobra.ExactArgs(1),
 	Run:  validateSizeType,
 }

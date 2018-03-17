@@ -30,7 +30,7 @@ Following information is available:
   City
   Country`,
 	Example: `
-  iso6346 owner update`,
+  ` + appName + ` owner update`,
 	Args: cobra.NoArgs,
 	Run:  updateOwners,
 }

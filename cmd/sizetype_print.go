@@ -24,7 +24,7 @@ var sizeTypePrintCmd = &cobra.Command{
 	Short: "Print length, height, width and type codes",
 	Long:  "Print length, height, width and type codes.",
 	Example: `
-  iso6346 sizetype print`,
+  ` + appName + ` sizetype print`,
 	Args:  cobra.NoArgs,
 	Run: func(cmd *cobra.Command, args []string) {
 		ui.PrintSizeTypeDefs(sizetype.GetDef())
