@@ -7,8 +7,6 @@ import (
 	"time"
 )
 
-const appDir = ".iso6346"
-
 type Owner struct {
 	code    string
 	company string
