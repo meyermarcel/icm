@@ -105,8 +105,10 @@ func initDefaultCfg(path string) {
 
 	sepDefaultCfg := []byte(`# Separators config
 #
-#  ABC U 123456 0
-#     ↑ ↑      ↑
+#  ABC U 123456 0  20 G1
+#     ↑ ↑      ↑     ↑
+#     │ │      │     └─ ` + sepST + `
+#     │ │      │
 #     │ │      └─ ` + sepSC + `
 #     │ │
 #     │ └─ ` + sepES + `
@@ -116,6 +118,7 @@ func initDefaultCfg(path string) {
 ` + sepOE + `: ' '
 ` + sepES + `: ' '
 ` + sepSC + `: ' '
+` + sepST + `: ' '
 `)
 
 	if _, err := os.Stat(path); os.IsNotExist(err) {

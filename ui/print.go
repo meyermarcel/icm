@@ -29,11 +29,11 @@ func PrintOwnerCode(oce parser.OwnerCode) {
 	fmt.Println()
 }
 
-func PrintSizeType(st parser.SizeType) {
+func PrintSizeType(st parser.SizeType, sepSizeType string) {
 
 	fmt.Println(fmtRegexIn(st.RegexIn))
 	fmt.Println()
-	fmt.Println(fmtParsedSizeType(st))
+	fmt.Println(fmtParsedSizeType(st, sepSizeType))
 	fmt.Println()
 }
 

@@ -109,13 +109,14 @@ func fmtParsedContNum(cn parser.ContNum, seps Separators) string {
 	return b.String()
 }
 
-func fmtParsedSizeType(st parser.SizeType) string {
+func fmtParsedSizeType(st parser.SizeType, sepSizeType string) string {
 
 	b := strings.Builder{}
 	b.WriteString(indent)
 
 	b.WriteString(fmtIn(st.LengthIn))
 	b.WriteString(fmtIn(st.HeightWidthIn))
+	b.WriteString(sepSizeType)
 	b.WriteString(fmtIn(st.TypeIn))
 
 	b.WriteString(fmtCheckMark(st.TypeIn.IsValidFmt()))

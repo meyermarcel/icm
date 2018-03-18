@@ -46,7 +46,7 @@ func init() {
 func validateSizeType(cmd *cobra.Command, args []string) {
 	st := parser.ParseSizeType(args[0])
 
-	ui.PrintSizeType(st)
+	ui.PrintSizeType(st, viper.GetString(sepST))
 
 	if st.TypeIn.IsValidFmt() {
 		os.Exit(0)
