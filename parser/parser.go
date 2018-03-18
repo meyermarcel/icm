@@ -9,11 +9,11 @@ import (
 	"strings"
 )
 
-const ownerCodeOptEquipCatIdRegex = `(?i)([A-Z])[^A-Z]*([A-Z])?[^A-Z]*([A-Z])?[^JUZ]*([JUZ])?`
+const ownerCodeRegex = `(?i)([A-Z])[^A-Z]*([A-Z])?[^A-Z]*([A-Z])`
 
-var ownerCodeOptEquipCatIdMatcher = regexp.MustCompile(ownerCodeOptEquipCatIdRegex)
+var ownerCodeOptEquipCatIdMatcher = regexp.MustCompile(ownerCodeRegex)
 
-const contNumRegex = ownerCodeOptEquipCatIdRegex + `[^\d]*(\d)?[^\d]*(\d)?[^\d]*(\d)?[^\d]*(\d)?[^\d]*(\d)?[^\d]*(\d)?[^\d]*(\d)?`
+const contNumRegex = ownerCodeRegex + `[^JUZ]*([JUZ])?[^\d]*(\d)?[^\d]*(\d)?[^\d]*(\d)?[^\d]*(\d)?[^\d]*(\d)?[^\d]*(\d)?[^\d]*(\d)?`
 
 var contNumMatcher = regexp.MustCompile(contNumRegex)
 
@@ -103,10 +103,9 @@ func (cdi *CheckDigitIn) calcCheckDigit(ocIn OwnerCodeIn, eciIn In, snIn In) {
 	}
 }
 
-type OwnerCodeOptEquipCat struct {
+type OwnerCode struct {
 	RegexIn     RegexIn
 	OwnerCodeIn OwnerCodeIn
-	EquipCatIn  In
 }
 
 type ContNum struct {
@@ -128,12 +127,11 @@ func (cn ContNum) IsCheckDigitCalculable() bool {
 	return cn.OwnerCodeIn.IsValidFmt() && cn.EquipCatIdIn.IsValidFmt() && cn.SerialNumIn.IsValidFmt()
 }
 
-func ParseOwnerCodeOptEquipCat(in string) OwnerCodeOptEquipCat {
-	ownerOptCat := OwnerCodeOptEquipCat{}
+func ParseOwnerCodeOptEquipCat(in string) OwnerCode {
+	ownerOptCat := OwnerCode{}
 	parse := parse(in, *ownerCodeOptEquipCatIdMatcher)
 	ownerOptCat.RegexIn = parse
 	ownerOptCat.OwnerCodeIn = OwnerCodeIn{In: NewIn(parse.getMatches(0, 3), 3)}
-	ownerOptCat.EquipCatIn = NewIn(parse.getMatch(3), 1)
 	return ownerOptCat
 }
 

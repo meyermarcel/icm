@@ -53,17 +53,12 @@ func fmtRegexIn(pi parser.RegexIn) string {
 	return b.String()
 }
 
-func fmtOwnerCodeOptEquipCat(oce parser.OwnerCodeOptEquipCat, sepOwnerEquip string) string {
+func fmtOwnerCode(oce parser.OwnerCode) string {
 
 	b := strings.Builder{}
 	b.WriteString(indent)
 
-	b.WriteString(fmtOwnerCode(oce.OwnerCodeIn))
-
-	if oce.EquipCatIn.IsValidFmt() {
-		b.WriteString(sepOwnerEquip)
-		b.WriteString(fmtIn(oce.EquipCatIn))
-	}
+	b.WriteString(fmtOwnerCodeIn(oce.OwnerCodeIn))
 
 	b.WriteString(fmtCheckMark(oce.OwnerCodeIn.IsValidFmt()))
 
@@ -89,13 +84,13 @@ func fmtParsedContNum(cn parser.ContNum, seps Separators) string {
 	texts = append(texts, ownerCodeTxt(cn.OwnerCodeIn))
 
 	if !cn.EquipCatIdIn.IsValidFmt() {
-		texts = append(texts, NewPosHint(len(indent)+len(seps.OwnerEquip)+3, fmt.Sprintf("%s must be %s", underline("equipment category id"), equipCatIdsAsList())))
+		texts = append(texts, NewPosHint(len(indent+seps.OwnerEquip)+3, fmt.Sprintf("%s must be %s", underline("equipment category id"), equipCatIdsAsList())))
 	}
 	if !cn.SerialNumIn.IsValidFmt() {
-		texts = append(texts, NewPosHint(len(indent)+len(seps.OwnerEquip)+len(seps.EquipSerial)+6, fmt.Sprintf("%s must be %s", underline("serial number"), bold("6 numbers"))))
+		texts = append(texts, NewPosHint(len(indent+seps.OwnerEquip+seps.EquipSerial)+6, fmt.Sprintf("%s must be %s", underline("serial number"), bold("6 numbers"))))
 	}
 
-	cdPos := len(indent) + len(seps.OwnerEquip) + len(seps.EquipSerial) + len(seps.SerialCheck) + 10
+	cdPos := len(indent+seps.OwnerEquip+seps.EquipSerial+seps.SerialCheck) + 10
 	if !cn.CheckDigitIn.IsValidCheckDigit {
 		if cn.IsCheckDigitCalculable() {
 			if cn.CheckDigitIn.IsValidFmt() {
@@ -128,10 +123,6 @@ func fmtParsedSizeType(st parser.SizeType) string {
 	return b.String()
 }
 
-//func lengthTxt(sti parser.SizeTypeIn)PosTxt{
-//	
-//}
-
 func ownerCodeTxt(ownerCodeIn parser.OwnerCodeIn) PosTxt {
 	if !ownerCodeIn.IsValidFmt() {
 		return NewPosHint(len(indent)+1, fmt.Sprintf("%s must be %s", underline("owner code"), bold("3 letters")))
@@ -148,7 +139,7 @@ func fmtContNum(cni parser.ContNum, seps Separators) string {
 	b := strings.Builder{}
 
 	b.WriteString(indent)
-	b.WriteString(fmtOwnerCode(cni.OwnerCodeIn))
+	b.WriteString(fmtOwnerCodeIn(cni.OwnerCodeIn))
 	b.WriteString(seps.OwnerEquip)
 	b.WriteString(fmtIn(cni.EquipCatIdIn))
 	b.WriteString(seps.EquipSerial)
@@ -164,7 +155,7 @@ func fmtContNum(cni parser.ContNum, seps Separators) string {
 	return b.String()
 }
 
-func fmtOwnerCode(ownerCodeIn parser.OwnerCodeIn) string {
+func fmtOwnerCodeIn(ownerCodeIn parser.OwnerCodeIn) string {
 	if ownerCodeIn.IsValidFmt() {
 		if ownerCodeIn.OwnerFound {
 			return fmt.Sprintf("%s", green(ownerCodeIn.Value()))

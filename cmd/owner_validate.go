@@ -18,7 +18,6 @@ import (
 	"github.com/meyermarcel/iso6346/parser"
 	"github.com/meyermarcel/iso6346/ui"
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 	"os"
 )
 
@@ -28,19 +27,12 @@ var validateOwnerCmd = &cobra.Command{
 	Long: `Validate an owner.
 
 ` + sepHelp,
-	Example: `  ` + appName + ` owner validate 'ABC'
-
-  ` + appName + ` owner validate --` + sepOE + ` '' 'ABCU'`,
-	Args: cobra.ExactArgs(1),
-	Run:  validateOwner,
+	Example: `  ` + appName + ` owner validate 'ABCU'`,
+	Args:    cobra.ExactArgs(1),
+	Run:     validateOwner,
 }
 
 func init() {
-
-	validateOwnerCmd.Flags().String(sepOE, "",
-		"ABC(*)U1234560  (*) separator between owner code and equipment category id")
-
-	viper.BindPFlag(sepOE, validateOwnerCmd.Flags().Lookup(sepOE))
 
 	ownerCmd.AddCommand(validateOwnerCmd)
 }
@@ -50,7 +42,7 @@ func validateOwner(cmd *cobra.Command, args []string) {
 
 	oce.OwnerCodeIn.Resolve(owner.Resolver(pathToDB))
 
-	ui.PrintOwnerCode(oce, viper.GetString(sepOE))
+	ui.PrintOwnerCode(oce)
 
 	if oce.OwnerCodeIn.IsValidFmt() {
 		os.Exit(0)

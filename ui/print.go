@@ -21,11 +21,11 @@ func PrintContNum(cn parser.ContNum, seps Separators) {
 	fmt.Println()
 }
 
-func PrintOwnerCode(oce parser.OwnerCodeOptEquipCat, sepOwnerEquip string) {
+func PrintOwnerCode(oce parser.OwnerCode) {
 
 	fmt.Println(fmtRegexIn(oce.RegexIn))
 	fmt.Println()
-	fmt.Println(fmtOwnerCodeOptEquipCat(oce, sepOwnerEquip))
+	fmt.Println(fmtOwnerCode(oce))
 	fmt.Println()
 }
 
