@@ -50,7 +50,7 @@ func fmtSizeTypeDef(def sizetype.Def) string {
 	tableType.SetAutoWrapText(false)
 
 	for _, element := range def.Types {
-		tableType.Append([]string{element.Code, element.Info})
+		tableType.Append([]string{element.Code, element.TypeInfo})
 	}
 
 	tableType.Render()
@@ -62,7 +62,7 @@ func fmtSizeTypeDef(def sizetype.Def) string {
 
 	for _, group := range def.Groups {
 
-		tableGroup.Append([]string{group.Code, group.Info})
+		tableGroup.Append([]string{group.Code, group.GroupInfo})
 	}
 
 	tableGroup.Render()

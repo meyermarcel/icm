@@ -46,6 +46,7 @@ func generate(cmd *cobra.Command, args []string) {
 			viper.GetString(sepOE),
 			viper.GetString(sepES),
 			viper.GetString(sepSC),
+			"", "",
 		})
 	}
 	os.Exit(0)

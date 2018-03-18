@@ -20,6 +20,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"os"
+	"github.com/meyermarcel/iso6346/sizetype"
 )
 
 var validateCmd = &cobra.Command{
@@ -37,15 +38,21 @@ var validateCmd = &cobra.Command{
 
 func init() {
 	validateCmd.Flags().String(sepOE, "",
-		"ABC(*)U1234560  (*) separator between owner code and equipment category id")
+		"ABC(*)U1234560   20G1  (*) separator between owner code and equipment category id")
 	validateCmd.Flags().String(sepES, "",
-		"ABCU(*)1234560  (*) separator between equipment category id and serial number")
+		"ABCU(*)1234560   20G1  (*) separator between equipment category id and serial number")
 	validateCmd.Flags().String(sepSC, "",
-		"ABCU123456(*)0  (*) separator between serial number and check digit")
+		"ABCU123456(*)0   20G1  (*) separator between serial number and check digit")
+	validateCmd.Flags().String(sepCS, "",
+		"ABCU1234560 (*)  20G1  (*) separator between check digit and size")
+	validateCmd.Flags().String(sepST, "",
+		"ABCU1234560   20(*)G1  (*) separator between size and type")
 
 	viper.BindPFlag(sepOE, validateCmd.Flags().Lookup(sepOE))
 	viper.BindPFlag(sepES, validateCmd.Flags().Lookup(sepES))
 	viper.BindPFlag(sepSC, validateCmd.Flags().Lookup(sepSC))
+	viper.BindPFlag(sepCS, validateCmd.Flags().Lookup(sepCS))
+	viper.BindPFlag(sepST, validateCmd.Flags().Lookup(sepST))
 
 	iso6346Cmd.AddCommand(validateCmd)
 }
@@ -54,11 +61,16 @@ func validateContNum(cmd *cobra.Command, args []string) {
 	num := parser.ParseContNum(args[0])
 
 	num.OwnerCodeIn.Resolve(owner.Resolver(pathToDB))
+	num.LengthIn.Resolve(sizetype.GetLength)
+	num.HeightWidthIn.Resolve(sizetype.GetHeightAndWidth)
+	num.TypeAndGroupIn.Resolve(sizetype.GetTypeAndGroup)
 
 	ui.PrintContNum(num, ui.Separators{
 		viper.GetString(sepOE),
 		viper.GetString(sepES),
 		viper.GetString(sepSC),
+		viper.GetString(sepCS),
+		viper.GetString(sepST),
 	})
 
 	if num.CheckDigitIn.IsValidCheckDigit {

@@ -105,9 +105,11 @@ func initDefaultCfg(path string) {
 
 	sepDefaultCfg := []byte(`# Separators config
 #
-#  ABC U 123456 0  20 G1
-#     ↑ ↑      ↑     ↑
-#     │ │      │     └─ ` + sepST + `
+#  ABC U 123456 0   20 G1
+#     ↑ ↑      ↑  ↑   ↑
+#     │ │      │  │   └─ ` + sepST + `
+#     │ │      │  │
+#     │ │      │  └─ ` + sepCS + `
 #     │ │      │
 #     │ │      └─ ` + sepSC + `
 #     │ │
@@ -118,6 +120,7 @@ func initDefaultCfg(path string) {
 ` + sepOE + `: ' '
 ` + sepES + `: ' '
 ` + sepSC + `: ' '
+` + sepCS + `: '   '
 ` + sepST + `: ' '
 `)
 

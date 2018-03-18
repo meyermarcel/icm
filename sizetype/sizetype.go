@@ -13,46 +13,47 @@
 
 package sizetype
 
-type Code struct {
-	Size Size
-	Type string
-}
-
 type Size struct {
 	Code        string
-	HeightWidth HeightWidth
-	Len         Length
+	HeightWidth MappedHeightAndWidth
+	Length      MappedLength
 }
 
-type Length struct {
+type MappedLength struct {
 	Code   string
 	Length string
 }
 
-type HeightWidth struct {
+type MappedHeightAndWidth struct {
 	Code   string
 	Width  string
 	Height string
 }
 
-type Type struct {
-	Code string
-	Info string
+type MappedType struct {
+	Code     string
+	TypeInfo string
 }
 
-type Group struct {
-	Code string
-	Info string
+type MappedGroup struct {
+	Code      string
+	GroupInfo string
+}
+
+type MappedTypeAndGroup struct {
+	MappedType  MappedType
+	MappedGroup MappedGroup
 }
 
 type Def struct {
-	Lengths       []Length
-	HeightsWidths []HeightWidth
-	Types         []Type
-	Groups        []Group
+	Lengths       []MappedLength
+	HeightsWidths []MappedHeightAndWidth
+	Types         []MappedType
+	Groups        []MappedGroup
 }
 
-var lengths = []Length{
+var mappedLengths = []MappedLength{
+
 	{"1", "2991 mm"},
 	{"2", "6068 mm"},
 	{"3", "9125 mm"},
@@ -72,7 +73,17 @@ var lengths = []Length{
 	{"P", "16154 mm"},
 }
 
-var heightsWidths = []HeightWidth{
+func GetLength(code string) (MappedLength, bool) {
+
+	for _, lengthElement := range mappedLengths {
+		if lengthElement.Code == code {
+			return lengthElement, true
+		}
+	}
+	return MappedLength{}, false
+}
+
+var mappedHeightAndWidths = []MappedHeightAndWidth{
 	{"0", "2436 mm", "2438 mm"},
 	{"2", "2436 mm", "2591 mm"},
 	{"4", "2436 mm", "2743 mm"},
@@ -90,27 +101,19 @@ var heightsWidths = []HeightWidth{
 	{"P", "> 2500 mm", "> 2895 mm"},
 }
 
-var types = []Type{
-	{"G0", "(unassigned)"},
-	{"G1", "(unassigned)"},
-	{"G2", "(unassigned)"},
-	{"G3", "(unassigned)"},
-	{"G4", "(unassigned)"},
-	{"G5", "(unassigned)"},
-	{"G6", "(unassigned)"},
-	{"G7", "(unassigned)"},
-	{"G8", "(unassigned)"},
-	{"G9", "(unassigned)"},
-	{"V0", "(unassigned)"},
-	{"V1", "(unassigned)"},
-	{"V2", "(unassigned)"},
-	{"V3", "(unassigned)"},
-	{"V4", "(unassigned)"},
-	{"V5", "(unassigned)"},
-	{"V6", "(unassigned)"},
-	{"V7", "(unassigned)"},
-	{"V8", "(unassigned)"},
-	{"V9", "(unassigned)"},
+func GetHeightAndWidth(code string) (MappedHeightAndWidth, bool) {
+
+	for _, heightAndWidthElement := range mappedHeightAndWidths {
+		if heightAndWidthElement.Code == code {
+			return heightAndWidthElement, true
+
+		}
+	}
+	return MappedHeightAndWidth{}, false
+}
+
+var mappedTypes = []MappedType{
+	{"A0", "(unassigned)"},
 	{"B0", "(unassigned)"},
 	{"B1", "(unassigned)"},
 	{"B2", "(unassigned)"},
@@ -121,26 +124,16 @@ var types = []Type{
 	{"B7", "(unassigned)"},
 	{"B8", "(unassigned)"},
 	{"B9", "(unassigned)"},
-	{"S0", "(unassigned)"},
-	{"S1", "(unassigned)"},
-	{"S2", "(unassigned)"},
-	{"S3", "(unassigned)"},
-	{"S4", "(unassigned)"},
-	{"S5", "(unassigned)"},
-	{"S6", "(unassigned)"},
-	{"S7", "(unassigned)"},
-	{"S8", "(unassigned)"},
-	{"S9", "(unassigned)"},
-	{"R0", "(unassigned)"},
-	{"R1", "(unassigned)"},
-	{"R2", "(unassigned)"},
-	{"R3", "(unassigned)"},
-	{"R4", "(unassigned)"},
-	{"R5", "(unassigned)"},
-	{"R6", "(unassigned)"},
-	{"R7", "(unassigned)"},
-	{"R8", "(unassigned)"},
-	{"R9", "(unassigned)"},
+	{"G0", "(unassigned)"},
+	{"G1", "(unassigned)"},
+	{"G2", "(unassigned)"},
+	{"G3", "(unassigned)"},
+	{"G4", "(unassigned)"},
+	{"G5", "(unassigned)"},
+	{"G6", "(unassigned)"},
+	{"G7", "(unassigned)"},
+	{"G8", "(unassigned)"},
+	{"G9", "(unassigned)"},
 	{"H0", "(unassigned)"},
 	{"H1", "(unassigned)"},
 	{"H2", "(unassigned)"},
@@ -151,26 +144,6 @@ var types = []Type{
 	{"H7", "(unassigned)"},
 	{"H8", "(unassigned)"},
 	{"H9", "(unassigned)"},
-	{"U0", "(unassigned)"},
-	{"U1", "(unassigned)"},
-	{"U2", "(unassigned)"},
-	{"U3", "(unassigned)"},
-	{"U4", "(unassigned)"},
-	{"U5", "(unassigned)"},
-	{"U6", "(unassigned)"},
-	{"U7", "(unassigned)"},
-	{"U8", "(unassigned)"},
-	{"U9", "(unassigned)"},
-	{"P0", "(unassigned)"},
-	{"P1", "(unassigned)"},
-	{"P2", "(unassigned)"},
-	{"P3", "(unassigned)"},
-	{"P4", "(unassigned)"},
-	{"P5", "(unassigned)"},
-	{"P6", "(unassigned)"},
-	{"P7", "(unassigned)"},
-	{"P8", "(unassigned)"},
-	{"P9", "(unassigned)"},
 	{"K0", "(unassigned)"},
 	{"K1", "(unassigned)"},
 	{"K2", "(unassigned)"},
@@ -191,28 +164,111 @@ var types = []Type{
 	{"N7", "(unassigned)"},
 	{"N8", "(unassigned)"},
 	{"N9", "(unassigned)"},
-	{"A0", "(unassigned)"},
+	{"P0", "(unassigned)"},
+	{"P1", "(unassigned)"},
+	{"P2", "(unassigned)"},
+	{"P3", "(unassigned)"},
+	{"P4", "(unassigned)"},
+	{"P5", "(unassigned)"},
+	{"P6", "(unassigned)"},
+	{"P7", "(unassigned)"},
+	{"P8", "(unassigned)"},
+	{"P9", "(unassigned)"},
+	{"R0", "(unassigned)"},
+	{"R1", "(unassigned)"},
+	{"R2", "(unassigned)"},
+	{"R3", "(unassigned)"},
+	{"R4", "(unassigned)"},
+	{"R5", "(unassigned)"},
+	{"R6", "(unassigned)"},
+	{"R7", "(unassigned)"},
+	{"R8", "(unassigned)"},
+	{"R9", "(unassigned)"},
+	{"S0", "(unassigned)"},
+	{"S1", "(unassigned)"},
+	{"S2", "(unassigned)"},
+	{"S3", "(unassigned)"},
+	{"S4", "(unassigned)"},
+	{"S5", "(unassigned)"},
+	{"S6", "(unassigned)"},
+	{"S7", "(unassigned)"},
+	{"S8", "(unassigned)"},
+	{"S9", "(unassigned)"},
+	{"U0", "(unassigned)"},
+	{"U1", "(unassigned)"},
+	{"U2", "(unassigned)"},
+	{"U3", "(unassigned)"},
+	{"U4", "(unassigned)"},
+	{"U5", "(unassigned)"},
+	{"U6", "(unassigned)"},
+	{"U7", "(unassigned)"},
+	{"U8", "(unassigned)"},
+	{"U9", "(unassigned)"},
+	{"V0", "(unassigned)"},
+	{"V1", "(unassigned)"},
+	{"V2", "(unassigned)"},
+	{"V3", "(unassigned)"},
+	{"V4", "(unassigned)"},
+	{"V5", "(unassigned)"},
+	{"V6", "(unassigned)"},
+	{"V7", "(unassigned)"},
+	{"V8", "(unassigned)"},
+	{"V9", "(unassigned)"},
 }
 
-var groups = []Group{
-	{"G", "(unassigned)"},
-	{"V", "(unassigned)"},
+func getType(code string) (MappedType, bool) {
+
+	for _, typeElement := range mappedTypes {
+		if typeElement.Code == code {
+			return typeElement, true
+		}
+	}
+	return MappedType{}, false
+}
+
+var mappedGroups = []MappedGroup{
+	{"A", "(unassigned)"},
 	{"B", "(unassigned)"},
-	{"S", "(unassigned)"},
-	{"R", "(unassigned)"},
+	{"G", "(unassigned)"},
 	{"H", "(unassigned)"},
-	{"U", "(unassigned)"},
-	{"P", "(unassigned)"},
 	{"K", "(unassigned)"},
 	{"N", "(unassigned)"},
-	{"A", "(unassigned)"},
+	{"P", "(unassigned)"},
+	{"R", "(unassigned)"},
+	{"S", "(unassigned)"},
+	{"U", "(unassigned)"},
+	{"V", "(unassigned)"},
+}
+
+func getGroup(code string) (MappedGroup, bool) {
+
+	for _, groupElement := range mappedGroups {
+		if groupElement.Code == code {
+			return groupElement, true
+		}
+	}
+	return MappedGroup{}, false
+}
+
+func GetTypeAndGroup(code string) (MappedTypeAndGroup, bool) {
+	typeAndGroup := MappedTypeAndGroup{}
+	typeValue, typeFound := getType(code)
+	group, groupFound := getGroup(string(code[0]))
+
+	if !typeFound && !groupFound {
+		return typeAndGroup, false
+	}
+
+	typeAndGroup.MappedType = typeValue
+	typeAndGroup.MappedGroup = group
+	return typeAndGroup, true
 }
 
 func GetDef() Def {
 	return Def{
-		lengths,
-		heightsWidths,
-		types,
-		groups,
+		mappedLengths,
+		mappedHeightAndWidths,
+		mappedTypes,
+		mappedGroups,
 	}
 }

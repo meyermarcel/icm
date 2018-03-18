@@ -24,6 +24,13 @@ type Separators struct {
 	OwnerEquip  string
 	EquipSerial string
 	SerialCheck string
+	CheckSize   string
+	SizeType    string
+}
+
+func (s *Separators) offsetPosForSizeType() int {
+	//     owner                   equipment cat id         serial number            check digit
+	return 3 + len(s.OwnerEquip) + 1 + len(s.EquipSerial) + 6 + len(s.SerialCheck) + 1 + len(s.CheckSize)
 }
 
 func PrintContNum(cn parser.ContNum, seps Separators) {

@@ -19,12 +19,13 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"os"
+	"github.com/meyermarcel/iso6346/sizetype"
 )
 
 var sizetypeValidateCmd = &cobra.Command{
 	Use:   "validate",
-	Short: "Validate a container number",
-	Long: `Validate a container number.
+	Short: "Validate size and type codes",
+	Long: `Validate size and type codes.
 
 ` + sepHelp,
 	Example: `  ` + appName + ` sizetype validate '20G1'
@@ -46,9 +47,13 @@ func init() {
 func validateSizeType(cmd *cobra.Command, args []string) {
 	st := parser.ParseSizeType(args[0])
 
+	st.LengthIn.Resolve(sizetype.GetLength)
+	st.HeightWidthIn.Resolve(sizetype.GetHeightAndWidth)
+	st.TypeAndGroupIn.Resolve(sizetype.GetTypeAndGroup)
+
 	ui.PrintSizeType(st, viper.GetString(sepST))
 
-	if st.TypeIn.IsValidFmt() {
+	if st.LengthIn.IsValidFmt() && st.HeightWidthIn.IsValidFmt() && st.TypeAndGroupIn.IsValidFmt() {
 		os.Exit(0)
 	}
 	os.Exit(1)
