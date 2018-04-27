@@ -28,7 +28,7 @@ const (
 type PosTxt struct {
 	pos     int
 	txtType Type
-	values  []string
+	lines   []string
 }
 
 func NewPosHint(pos int, lines ...string) PosTxt {
@@ -47,11 +47,15 @@ func fmtTextsWithArrows(texts ...PosTxt) string {
 		return b.String()
 	}
 
-	spaces := calculateSpaces(texts)
+	var positions []int
+	for _, element := range texts {
+		positions = append(positions, element.pos)
+	}
+	spaces := calculateSpaces(positions)
 
-	for pos, message := range texts {
-		b.WriteString(spaces[pos])
-		switch message.txtType {
+	for idx, txt := range texts {
+		b.WriteString(spaces[idx])
+		switch txt.txtType {
 		case HINT:
 			b.WriteString("↑")
 		case INFO:
@@ -62,17 +66,21 @@ func fmtTextsWithArrows(texts ...PosTxt) string {
 	for len(texts) != 0 {
 
 		b.WriteString(fmt.Sprintln())
-		for pos, txt := range texts {
-			b.WriteString(spaces[pos])
-			if pos == len(texts)-1 {
-				for lineIx, line := range txt.values {
-					if lineIx == 0 {
+		for idx, txt := range texts {
+			b.WriteString(spaces[idx])
+			if idx == len(texts)-1 {
+				for lineIdx, line := range txt.lines {
+					if lineIdx == 0 {
 						b.WriteString("└─ ")
 						b.WriteString(line)
 					}
-					if lineIx > 0 {
+					if lineIdx > 0 {
 						b.WriteString(fmt.Sprintln())
-						b.WriteString(spaces[pos])
+						for i := 0; i < idx; i++ {
+							b.WriteString(spaces[i])
+							b.WriteString("│")
+						}
+						b.WriteString(spaces[idx])
 						b.WriteString("   ")
 						b.WriteString(line)
 					}
@@ -86,26 +94,27 @@ func fmtTextsWithArrows(texts ...PosTxt) string {
 
 		if len(texts) != 0 {
 			b.WriteString(fmt.Sprintln())
+			for idx := range texts {
+				b.WriteString(spaces[idx])
+				b.WriteString("│")
+			}
 		}
-		for pos := range texts {
-			b.WriteString(spaces[pos])
-			b.WriteString("│")
-		}
+
 	}
 	return b.String()
 }
 
-func calculateSpaces(texts []PosTxt) []string {
+func calculateSpaces(positions []int) []string {
 
 	var spaces []string
 	lastPos := 0
-	for pos, element := range texts {
-		spacesCount := element.pos - lastPos - 1
+	for idx, pos := range positions {
+		spacesCount := pos - lastPos - 1
 		spaces = append(spaces, "")
 		for i := 0; i <= spacesCount; i++ {
-			spaces[pos] += " "
+			spaces[idx] += " "
 		}
-		lastPos = element.pos + 1
+		lastPos = pos + 1
 	}
 	return spaces
 }
