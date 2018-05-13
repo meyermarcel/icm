@@ -1,3 +1,13 @@
+# Ignore binaries
+
+release/
+iso6346
+iso6346.exe
+iso6346.test
+iso6346.test.exe
+main
+main.exe
+
 # Do not commit vendor folder
 
 vendor/
