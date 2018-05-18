@@ -11,40 +11,41 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package owner
+package main
 
 import (
 	"database/sql"
-	_ "github.com/mattn/go-sqlite3"
 	"log"
 	"time"
+
+	_ "github.com/mattn/go-sqlite3"
 )
 
-type Owner struct {
+type owner struct {
 	code    string
 	company string
 	city    string
 	country string
 }
 
-func (o Owner) Code() string {
+func (o owner) Code() string {
 	return o.code
 }
 
-func (o Owner) Company() string {
+func (o owner) Company() string {
 	return o.company
 }
 
-func (o Owner) City() string {
+func (o owner) City() string {
 	return o.city
 }
 
-func (o Owner) Country() string {
+func (o owner) Country() string {
 	return o.country
 }
 
-func NewOwner(code, company, city, country string) Owner {
-	return Owner{code, company, city, country}
+func newOwner(code, company, city, country string) owner {
+	return owner{code, company, city, country}
 }
 
 func deleteOwners(db *sql.DB) {
@@ -95,7 +96,7 @@ func saveUpdatedTimeNow(db *sql.DB) {
 	tx.Commit()
 }
 
-func saveOwners(db *sql.DB, owners []Owner) {
+func saveOwners(db *sql.DB, owners []owner) {
 
 	tx, err := db.Begin()
 	checkErr(err)
@@ -111,7 +112,7 @@ func saveOwners(db *sql.DB, owners []Owner) {
 	tx.Commit()
 }
 
-func getOwner(db *sql.DB, code Code) (owner Owner, found bool) {
+func getOwner(db *sql.DB, code ownerCode) (owner owner, found bool) {
 	stmt, err := db.Prepare("SELECT company, city, country FROM owner WHERE code = ?")
 	checkErr(err)
 	defer stmt.Close()
@@ -123,10 +124,10 @@ func getOwner(db *sql.DB, code Code) (owner Owner, found bool) {
 	if err != nil {
 		return
 	}
-	return NewOwner(code.Value(), company, city, country), true
+	return newOwner(code.Value(), company, city, country), true
 }
 
-func getRandomCodes(db *sql.DB, count int) []Code {
+func getRandomCodes(db *sql.DB, count int) []ownerCode {
 	stmt, err := db.Prepare(`
 		SELECT code
 		FROM owner
@@ -139,17 +140,17 @@ func getRandomCodes(db *sql.DB, count int) []Code {
 	rows, err := stmt.Query(count)
 	checkErr(err)
 
-	var codes []Code
+	var codes []ownerCode
 	for rows.Next() {
 		var code string
 		err = rows.Scan(&code)
 		checkErr(err)
-		codes = append(codes, NewCode(code))
+		codes = append(codes, newOwnerCode(code))
 	}
 	return codes
 }
 
-func InitDB(pathToDB string) {
+func initDB(pathToDB string) {
 
 	db := openDB(pathToDB)
 	defer db.Close()

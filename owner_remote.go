@@ -11,14 +11,35 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package owner
+package main
 
 import (
-	"github.com/PuerkitoBio/goquery"
 	"log"
 	"sort"
 	"time"
+
+	"github.com/PuerkitoBio/goquery"
 )
+
+func update(pathToDB string) {
+
+	c := make(chan time.Time)
+
+	go getUpdatedTimeRemote(c)
+
+	db := openDB(pathToDB)
+	defer db.Close()
+	updatedTimeDB := getUpdatedTime(db)
+
+	updatedTimeRemote := <-c
+
+	if updatedTimeRemote.After(updatedTimeDB) {
+		owners := getOwnersRemote()
+		deleteOwners(db)
+		saveOwners(db, owners)
+		saveUpdatedTimeNow(db)
+	}
+}
 
 func getUpdatedTimeRemote(c chan time.Time) {
 	recentlyCreated := getRecentlyDate("https://www.bic-code.org/bic-codes/recently-created")
@@ -64,7 +85,7 @@ func getRecentlyDate(url string) time.Time {
 	return parsedDates[0]
 }
 
-func getOwnersRemote() (owners []Owner) {
+func getOwnersRemote() (owners []owner) {
 
 	url := "https://www.bic-code.org/bic-letter-search/?resultsperpage=17576&searchterm="
 
@@ -80,7 +101,7 @@ func getOwnersRemote() (owners []Owner) {
 		city := s.Parent().Find("td[data-label=City]").Text()
 		country := s.Parent().Find("td[data-label=Country]").Text()
 
-		owners = append(owners, NewOwner(code[0:3], company, city, country))
+		owners = append(owners, newOwner(code[0:3], company, city, country))
 	})
 
 	if len(owners) == 0 {

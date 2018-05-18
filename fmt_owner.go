@@ -11,47 +11,46 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package ui
+package main
 
 import (
-	"github.com/meyermarcel/iso6346/parser"
-	"strings"
 	"fmt"
+	"strings"
 )
 
-func fmtOwnerCode(oce parser.OwnerCode) string {
+func fmtOwnerCode(oce ownerCodeIn) string {
 
 	b := strings.Builder{}
 	b.WriteString(indent)
 
-	b.WriteString(fmtOwnerCodeIn(oce.OwnerCodeIn))
+	b.WriteString(fmtOwnerCodeIn(oce.ownerCodeInResolvable))
 
-	b.WriteString(fmtCheckMark(oce.OwnerCodeIn.IsValidFmt()))
+	b.WriteString(fmtCheckMark(oce.ownerCodeInResolvable.isValidFmt()))
 
 	b.WriteString(fmt.Sprintln())
 
-	b.WriteString(fmtTextsWithArrows(ownerCodeTxt(oce.OwnerCodeIn)))
+	b.WriteString(fmtTextsWithArrows(ownerCodeTxt(oce.ownerCodeInResolvable)))
 
 	return b.String()
 }
 
-func ownerCodeTxt(ownerCodeIn parser.OwnerCodeIn) PosTxt {
-	if !ownerCodeIn.IsValidFmt() {
-		return NewPosHint(len(indent)+1, fmt.Sprintf("%s must be %s", underline("owner code"), bold("3 letters")))
+func ownerCodeTxt(ownerCodeIn ownerCodeInResolvable) posTxt {
+	if !ownerCodeIn.isValidFmt() {
+		return newPosHint(len(indent)+1, fmt.Sprintf("%s must be %s", underline("owner code"), bold("3 letters")))
 	}
 	if ownerCodeIn.OwnerFound {
-		return NewPosInfo(len(indent)+1, ownerCodeIn.FoundOwner.Company(), ownerCodeIn.FoundOwner.City(), ownerCodeIn.FoundOwner.Country())
+		return newPosInfo(len(indent)+1, ownerCodeIn.FoundOwner.Company(), ownerCodeIn.FoundOwner.City(), ownerCodeIn.FoundOwner.Country())
 	}
-	return NewPosInfo(len(indent)+1, fmt.Sprintf("%s not found", underline("owner code")))
+	return newPosInfo(len(indent)+1, fmt.Sprintf("%s not found", underline("owner code")))
 
 }
 
-func fmtOwnerCodeIn(ownerCodeIn parser.OwnerCodeIn) string {
-	if ownerCodeIn.IsValidFmt() {
+func fmtOwnerCodeIn(ownerCodeIn ownerCodeInResolvable) string {
+	if ownerCodeIn.isValidFmt() {
 		if ownerCodeIn.OwnerFound {
 			return fmt.Sprintf("%s", green(ownerCodeIn.Value()))
 		}
 		return fmt.Sprintf("%s", yellow(ownerCodeIn.Value()))
 	}
-	return fmtIn(ownerCodeIn.In)
+	return fmtIn(ownerCodeIn.input)
 }

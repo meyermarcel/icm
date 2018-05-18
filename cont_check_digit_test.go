@@ -11,19 +11,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package cont
+package main
 
 import (
-	"github.com/meyermarcel/iso6346/equip_cat"
-	"github.com/meyermarcel/iso6346/owner"
 	"testing"
 )
 
 func TestCalcCheckDigit(t *testing.T) {
 	type args struct {
-		ownerCode  owner.Code
-		equipCatId equip_cat.Id
-		serialNum  SerialNum
+		ownerCode  ownerCode
+		equipCatID id
+		serialNum  serialNum
 	}
 	tests := []struct {
 		name string
@@ -31,28 +29,28 @@ func TestCalcCheckDigit(t *testing.T) {
 		want int
 	}{
 		{"Test ABC U 123456 0",
-			args{owner.NewCode("ABC"), equip_cat.NewIdU(), NewSerialNum(123456)},
+			args{newOwnerCode("ABC"), newEquipCatIDU(), newSerialNum(123456)},
 			0},
 		{"Test NYK U 008685 2",
-			args{owner.NewCode("NYK"), equip_cat.NewIdU(), NewSerialNum(8685)},
+			args{newOwnerCode("NYK"), newEquipCatIDU(), newSerialNum(8685)},
 			2},
 		{"Test NYK U 000000 0",
-			args{owner.NewCode("NYK"), equip_cat.NewIdU(), NewSerialNum(0)},
+			args{newOwnerCode("NYK"), newEquipCatIDU(), newSerialNum(0)},
 			0},
 		{"Test CMA U 163912 0",
-			args{owner.NewCode("CMA"), equip_cat.NewIdU(), NewSerialNum(163912)},
+			args{newOwnerCode("CMA"), newEquipCatIDU(), newSerialNum(163912)},
 			0},
 		{"Test CMA U 169312 0",
-			args{owner.NewCode("CMA"), equip_cat.NewIdU(), NewSerialNum(169312)},
+			args{newOwnerCode("CMA"), newEquipCatIDU(), newSerialNum(169312)},
 			0},
 		{"Test CSQ U 305438 3",
-			args{owner.NewCode("CSQ"), equip_cat.NewIdU(), NewSerialNum(305438)},
+			args{newOwnerCode("CSQ"), newEquipCatIDU(), newSerialNum(305438)},
 			3},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := CalcCheckDigit(tt.args.ownerCode, tt.args.equipCatId, tt.args.serialNum); got != tt.want {
-				t.Errorf("CalcCheckDigit() = %v, want %v", got, tt.want)
+			if got := calcCheckDigit(tt.args.ownerCode, tt.args.equipCatID, tt.args.serialNum); got != tt.want {
+				t.Errorf("calcCheckDigit() = %v, want %v", got, tt.want)
 			}
 		})
 	}

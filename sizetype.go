@@ -11,49 +11,42 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package sizetype
+package main
 
-type Size struct {
-	Code        string
-	HeightWidth MappedHeightAndWidth
-	Length      MappedLength
-}
-
-type MappedLength struct {
+type mappedLength struct {
 	Code   string
 	Length string
 }
 
-type MappedHeightAndWidth struct {
+type mappedHeightAndWidth struct {
 	Code   string
 	Width  string
 	Height string
 }
 
-type MappedType struct {
+type mappedType struct {
 	Code     string
 	TypeInfo string
 }
 
-type MappedGroup struct {
+type mappedGroup struct {
 	Code      string
 	GroupInfo string
 }
 
-type MappedTypeAndGroup struct {
-	MappedType  MappedType
-	MappedGroup MappedGroup
+type mappedTypeAndGroup struct {
+	MappedType  mappedType
+	MappedGroup mappedGroup
 }
 
-type Def struct {
-	Lengths       []MappedLength
-	HeightsWidths []MappedHeightAndWidth
-	Types         []MappedType
-	Groups        []MappedGroup
+type sizeTypeDef struct {
+	Lengths       []mappedLength
+	HeightsWidths []mappedHeightAndWidth
+	Types         []mappedType
+	Groups        []mappedGroup
 }
 
-var mappedLengths = []MappedLength{
-
+var mappedLengths = []mappedLength{
 	{"1", "2991 mm"},
 	{"2", "6068 mm"},
 	{"3", "9125 mm"},
@@ -73,17 +66,17 @@ var mappedLengths = []MappedLength{
 	{"P", "16154 mm"},
 }
 
-func GetLength(code string) (MappedLength, bool) {
+func getLength(code string) (mappedLength, bool) {
 
 	for _, lengthElement := range mappedLengths {
 		if lengthElement.Code == code {
 			return lengthElement, true
 		}
 	}
-	return MappedLength{}, false
+	return mappedLength{}, false
 }
 
-var mappedHeightAndWidths = []MappedHeightAndWidth{
+var mappedHeightAndWidths = []mappedHeightAndWidth{
 	{"0", "2436 mm", "2438 mm"},
 	{"2", "2436 mm", "2591 mm"},
 	{"4", "2436 mm", "2743 mm"},
@@ -101,7 +94,7 @@ var mappedHeightAndWidths = []MappedHeightAndWidth{
 	{"P", "> 2500 mm", "> 2895 mm"},
 }
 
-func GetHeightAndWidth(code string) (MappedHeightAndWidth, bool) {
+func getHeightAndWidth(code string) (mappedHeightAndWidth, bool) {
 
 	for _, heightAndWidthElement := range mappedHeightAndWidths {
 		if heightAndWidthElement.Code == code {
@@ -109,10 +102,10 @@ func GetHeightAndWidth(code string) (MappedHeightAndWidth, bool) {
 
 		}
 	}
-	return MappedHeightAndWidth{}, false
+	return mappedHeightAndWidth{}, false
 }
 
-var mappedTypes = []MappedType{
+var mappedTypes = []mappedType{
 	{"A0", "(unassigned)"},
 	{"B0", "(unassigned)"},
 	{"B1", "(unassigned)"},
@@ -216,17 +209,17 @@ var mappedTypes = []MappedType{
 	{"V9", "(unassigned)"},
 }
 
-func getType(code string) (MappedType, bool) {
+func getType(code string) (mappedType, bool) {
 
 	for _, typeElement := range mappedTypes {
 		if typeElement.Code == code {
 			return typeElement, true
 		}
 	}
-	return MappedType{}, false
+	return mappedType{}, false
 }
 
-var mappedGroups = []MappedGroup{
+var mappedGroups = []mappedGroup{
 	{"A", "(unassigned)"},
 	{"B", "(unassigned)"},
 	{"G", "(unassigned)"},
@@ -240,18 +233,18 @@ var mappedGroups = []MappedGroup{
 	{"V", "(unassigned)"},
 }
 
-func getGroup(code string) (MappedGroup, bool) {
+func getGroup(code string) (mappedGroup, bool) {
 
 	for _, groupElement := range mappedGroups {
 		if groupElement.Code == code {
 			return groupElement, true
 		}
 	}
-	return MappedGroup{}, false
+	return mappedGroup{}, false
 }
 
-func GetTypeAndGroup(code string) (MappedTypeAndGroup, bool) {
-	typeAndGroup := MappedTypeAndGroup{}
+func getTypeAndGroup(code string) (mappedTypeAndGroup, bool) {
+	typeAndGroup := mappedTypeAndGroup{}
 	typeValue, typeFound := getType(code)
 	group, groupFound := getGroup(string(code[0]))
 
@@ -264,8 +257,8 @@ func GetTypeAndGroup(code string) (MappedTypeAndGroup, bool) {
 	return typeAndGroup, true
 }
 
-func GetDef() Def {
-	return Def{
+func getSizeTypeDef() sizeTypeDef {
+	return sizeTypeDef{
 		mappedLengths,
 		mappedHeightAndWidths,
 		mappedTypes,

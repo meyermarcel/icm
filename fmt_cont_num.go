@@ -11,53 +11,51 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package ui
+package main
 
 import (
-	"github.com/meyermarcel/iso6346/parser"
-	"strings"
 	"fmt"
-	"github.com/meyermarcel/iso6346/equip_cat"
+	"strings"
 )
 
-func fmtParsedContNum(cn parser.ContNum, seps Separators) string {
+func fmtParsedContNum(cn contNumIn, seps separators) string {
 
 	b := strings.Builder{}
 
-	additionalSizeType := cn.LengthIn.IsValidFmt()
+	additionalSizeType := cn.LengthIn.isValidFmt()
 	b.WriteString(fmtContNum(cn, seps, additionalSizeType))
 
 	if additionalSizeType {
-		b.WriteString(fmtCheckMark(cn.CheckDigitIn.IsValidCheckDigit && cn.TypeAndGroupIn.IsValidFmt()))
+		b.WriteString(fmtCheckMark(cn.CheckDigitIn.IsValidCheckDigit && cn.TypeAndGroupIn.isValidFmt()))
 	} else {
 		b.WriteString(fmtCheckMark(cn.CheckDigitIn.IsValidCheckDigit))
 	}
 
 	b.WriteString(fmt.Sprintln())
 
-	var texts []PosTxt
+	var texts []posTxt
 
 	texts = append(texts, ownerCodeTxt(cn.OwnerCodeIn))
 
-	if !cn.EquipCatIdIn.IsValidFmt() {
-		texts = append(texts, NewPosHint(len(indent+seps.OwnerEquip)+3, fmt.Sprintf("%s must be %s", underline("equipment category id"), equipCatIdsAsList())))
+	if !cn.EquipCatIDIn.isValidFmt() {
+		texts = append(texts, newPosHint(len(indent+seps.OwnerEquip)+3, fmt.Sprintf("%s must be %s", underline("equipment category id"), equipCatIDsAsList())))
 	}
-	if !cn.SerialNumIn.IsValidFmt() {
-		texts = append(texts, NewPosHint(len(indent+seps.OwnerEquip+seps.EquipSerial)+6, fmt.Sprintf("%s must be %s", underline("serial number"), bold("6 numbers"))))
+	if !cn.SerialNumIn.isValidFmt() {
+		texts = append(texts, newPosHint(len(indent+seps.OwnerEquip+seps.EquipSerial)+6, fmt.Sprintf("%s must be %s", underline("serial number"), bold("6 numbers"))))
 	}
 
 	cdPos := len(indent+seps.OwnerEquip+seps.EquipSerial+seps.SerialCheck) + 10
 	if !cn.CheckDigitIn.IsValidCheckDigit {
-		if cn.IsCheckDigitCalculable() {
-			if cn.CheckDigitIn.IsValidFmt() {
-				texts = append(texts, NewPosHint(cdPos, fmt.Sprintf("%s is incorrect (correct: %s)", underline("check digit"),
+		if cn.isCheckDigitCalculable() {
+			if cn.CheckDigitIn.isValidFmt() {
+				texts = append(texts, newPosHint(cdPos, fmt.Sprintf("%s is incorrect (correct: %s)", underline("check digit"),
 					green(cn.CheckDigitIn.CalcCheckDigit))))
 			} else {
-				texts = append(texts, NewPosHint(cdPos, fmt.Sprintf("%s must be a %s (correct: %s)", underline("check digit"), bold("number"),
+				texts = append(texts, newPosHint(cdPos, fmt.Sprintf("%s must be a %s (correct: %s)", underline("check digit"), bold("number"),
 					green(cn.CheckDigitIn.CalcCheckDigit))))
 			}
 		} else {
-			texts = append(texts, NewPosHint(cdPos, fmt.Sprintf("%s is not calculable", underline("check digit"))))
+			texts = append(texts, newPosHint(cdPos, fmt.Sprintf("%s is not calculable", underline("check digit"))))
 		}
 	}
 
@@ -72,36 +70,36 @@ func fmtParsedContNum(cn parser.ContNum, seps Separators) string {
 	return b.String()
 }
 
-func fmtContNum(cn parser.ContNum, seps Separators, additionalSizeType bool) string {
+func fmtContNum(cn contNumIn, seps separators, additionalSizeType bool) string {
 
 	b := strings.Builder{}
 
 	b.WriteString(indent)
 	b.WriteString(fmtOwnerCodeIn(cn.OwnerCodeIn))
 	b.WriteString(seps.OwnerEquip)
-	b.WriteString(fmtIn(cn.EquipCatIdIn))
+	b.WriteString(fmtIn(cn.EquipCatIDIn))
 	b.WriteString(seps.EquipSerial)
 	b.WriteString(fmtIn(cn.SerialNumIn))
 	b.WriteString(seps.SerialCheck)
 
-	if !cn.CheckDigitIn.IsValidCheckDigit && cn.CheckDigitIn.IsValidFmt() {
+	if !cn.CheckDigitIn.IsValidCheckDigit && cn.CheckDigitIn.isValidFmt() {
 		b.WriteString(fmt.Sprintf("%s", yellow(string(cn.CheckDigitIn.Value()))))
 	} else {
-		b.WriteString(fmtIn(cn.CheckDigitIn.In))
+		b.WriteString(fmtIn(cn.CheckDigitIn.input))
 	}
 
 	if additionalSizeType {
 		b.WriteString(seps.CheckSize)
-		b.WriteString(fmtIn(cn.LengthIn.In))
-		b.WriteString(fmtIn(cn.HeightWidthIn.In))
+		b.WriteString(fmtIn(cn.LengthIn.input))
+		b.WriteString(fmtIn(cn.HeightWidthIn.input))
 		b.WriteString(seps.SizeType)
-		b.WriteString(fmtIn(cn.TypeAndGroupIn.In))
+		b.WriteString(fmtIn(cn.TypeAndGroupIn.input))
 	}
 
 	return b.String()
 }
 
-func equipCatIdsAsList() string {
-	ujz := equip_cat.Ids
+func equipCatIDsAsList() string {
+	ujz := equipCatIDs
 	return fmt.Sprintf("%s, %s or %s", green(string(ujz[0])), green(string(ujz[1])), green(string(ujz[2])))
 }

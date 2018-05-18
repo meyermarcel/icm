@@ -11,35 +11,35 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package ui
+package main
 
 import (
 	"fmt"
 	"strings"
 )
 
-type Type int
+type txtType int
 
 const (
-	HINT Type = iota
-	INFO
+	hint txtType = iota
+	info
 )
 
-type PosTxt struct {
+type posTxt struct {
 	pos     int
-	txtType Type
+	txtType txtType
 	lines   []string
 }
 
-func NewPosHint(pos int, lines ...string) PosTxt {
-	return PosTxt{pos, HINT, lines}
+func newPosHint(pos int, lines ...string) posTxt {
+	return posTxt{pos, hint, lines}
 }
 
-func NewPosInfo(pos int, lines ...string) PosTxt {
-	return PosTxt{pos, INFO, lines}
+func newPosInfo(pos int, lines ...string) posTxt {
+	return posTxt{pos, info, lines}
 }
 
-func fmtTextsWithArrows(texts ...PosTxt) string {
+func fmtTextsWithArrows(texts ...posTxt) string {
 
 	b := strings.Builder{}
 
@@ -56,9 +56,9 @@ func fmtTextsWithArrows(texts ...PosTxt) string {
 	for idx, txt := range texts {
 		b.WriteString(spaces[idx])
 		switch txt.txtType {
-		case HINT:
+		case hint:
 			b.WriteString("↑")
-		case INFO:
+		case info:
 			b.WriteString("│")
 		}
 	}

@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package owner
+package main
 
 import (
 	"log"
@@ -19,15 +19,15 @@ import (
 	"unicode/utf8"
 )
 
-type Code struct {
+type ownerCode struct {
 	value string
 }
 
-func (c Code) Value() string {
+func (c ownerCode) Value() string {
 	return c.value
 }
 
-func NewCode(value string) Code {
+func newOwnerCode(value string) ownerCode {
 
 	if utf8.RuneCountInString(value) != 3 {
 		log.Fatalf("'%s' is not three characters", value)
@@ -36,18 +36,18 @@ func NewCode(value string) Code {
 	if !regexp.MustCompile(`[A-Z]{3}`).MatchString(value) {
 		log.Fatalf("'%s' must be 3 letters", value)
 	}
-	return Code{value}
+	return ownerCode{value}
 }
 
-func Resolver(pathToDB string) func(code Code) (Owner, bool) {
-	return func(code Code) (Owner, bool) {
+func resolver(pathToDB string) func(code ownerCode) (owner, bool) {
+	return func(code ownerCode) (owner, bool) {
 		db := openDB(pathToDB)
 		defer db.Close()
 		return getOwner(db, code)
 	}
 }
 
-func GetRandomCodes(pathToDB string, count int) []Code {
+func getRandomOwnerCodes(pathToDB string, count int) []ownerCode {
 	db := openDB(pathToDB)
 	defer db.Close()
 	return getRandomCodes(db, count)

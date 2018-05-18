@@ -1,4 +1,4 @@
-package owner
+package main
 
 func sqlDump() string {
 	return `

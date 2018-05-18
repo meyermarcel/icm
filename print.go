@@ -11,16 +11,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package ui
+package main
 
 import (
 	"fmt"
-	"github.com/meyermarcel/iso6346/cont"
-	"github.com/meyermarcel/iso6346/parser"
-	"github.com/meyermarcel/iso6346/sizetype"
 )
 
-type Separators struct {
+type separators struct {
 	OwnerEquip  string
 	EquipSerial string
 	SerialCheck string
@@ -28,12 +25,12 @@ type Separators struct {
 	SizeType    string
 }
 
-func (s *Separators) offsetPosForSizeType() int {
+func (s *separators) offsetPosForSizeType() int {
 	//     owner                   equipment cat id         serial number            check digit
 	return 3 + len(s.OwnerEquip) + 1 + len(s.EquipSerial) + 6 + len(s.SerialCheck) + 1 + len(s.CheckSize)
 }
 
-func PrintContNum(cn parser.ContNum, seps Separators) {
+func printContNum(cn contNumIn, seps separators) {
 
 	fmt.Println(fmtRegexIn(cn.RegexIn))
 	fmt.Println()
@@ -41,7 +38,7 @@ func PrintContNum(cn parser.ContNum, seps Separators) {
 	fmt.Println()
 }
 
-func PrintOwnerCode(oce parser.OwnerCode) {
+func printOwnerCode(oce ownerCodeIn) {
 
 	fmt.Println(fmtRegexIn(oce.RegexIn))
 	fmt.Println()
@@ -49,7 +46,7 @@ func PrintOwnerCode(oce parser.OwnerCode) {
 	fmt.Println()
 }
 
-func PrintSizeType(st parser.SizeType, sepSizeType string) {
+func printSizeType(st sizeTypeIn, sepSizeType string) {
 
 	fmt.Println(fmtRegexIn(st.RegexIn))
 	fmt.Println()
@@ -57,11 +54,11 @@ func PrintSizeType(st parser.SizeType, sepSizeType string) {
 	fmt.Println()
 }
 
-func PrintGen(cn cont.Number, seps Separators) {
+func printGen(cn contNumber, seps separators) {
 	fmt.Printf("%s%s%s%s%06d%s%d",
 		cn.OwnerCode().Value(),
 		seps.OwnerEquip,
-		cn.EquipCatId().Value(),
+		cn.EquipCatID().Value(),
 		seps.EquipSerial,
 		cn.SerialNumber().Value(),
 		seps.SerialCheck,
@@ -69,6 +66,6 @@ func PrintGen(cn cont.Number, seps Separators) {
 	fmt.Println()
 }
 
-func PrintSizeTypeDefs(typeSizDef sizetype.Def) {
+func printSizeTypeDefs(typeSizDef sizeTypeDef) {
 	fmt.Println(fmtSizeTypeDef(typeSizDef))
 }

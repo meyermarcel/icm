@@ -11,35 +11,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package equip_cat
+package main
 
 import (
-	"log"
-	"regexp"
-	"unicode/utf8"
+	"strings"
 )
 
-var Ids = []rune("UJZ")
+/*
+This method is a modified version of a Go code sample from
+https://en.wikipedia.org/wiki/ISO_6346#Code_Sample_(Go)
+*/
+func calcCheckDigit(ownerCode ownerCode, equipCatID id, serialNum serialNum) int {
 
-type Id struct {
-	value string
-}
+	concat := ownerCode.Value() + equipCatID.Value()
 
-func (id Id) Value() string {
-	return id.value
-}
-
-func NewIdU() Id {
-	return Id{"U"}
-}
-
-func NewIdFrom(value string) Id {
-
-	if utf8.RuneCountInString(value) != 1 {
-		log.Fatalf("'%s' is not one character", value)
+	n := 0.0
+	d := 0.5
+	for _, character := range concat {
+		d *= 2
+		n += d * float64(strings.IndexRune("??????????A?BCDEFGHIJK?LMNOPQRSTU?VWXYZ", character))
 	}
-	if !regexp.MustCompile(`[UJZ]`).MatchString(value) {
-		log.Fatalf("'%s' must be U, J or Z", value)
+	div := 100000.0
+	for i := 0; i < 6; i++ {
+		d *= 2
+		n += d * float64(int(float64(serialNum.Value())/div)%10)
+		div /= 10
 	}
-	return Id{value}
+	return (int(n) - int(n/11)*11) % 10
 }

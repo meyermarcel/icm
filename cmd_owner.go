@@ -11,13 +11,41 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package cmd
+package main
 
 import (
-	"github.com/meyermarcel/iso6346/owner"
-	"github.com/spf13/cobra"
 	"os"
+
+	"github.com/spf13/cobra"
 )
+
+var ownerCmd = &cobra.Command{
+	Use:   "owner",
+	Short: "Validate an owner or update owners.",
+	Long:  "Validate an owner or update owners.",
+}
+
+var validateOwnerCmd = &cobra.Command{
+	Use:   "validate",
+	Short: "Validate an owner",
+	Long: `Validate an owner.
+
+` + sepHelp,
+	Example: `  ` + appName + ` owner validate 'ABCU'`,
+	Args:    cobra.ExactArgs(1),
+	Run: func(cmd *cobra.Command, args []string) {
+		oce := parseOwnerCodeOptEquipCat(args[0])
+
+		oce.ownerCodeInResolvable.resolve(resolver(pathToDB))
+
+		printOwnerCode(oce)
+
+		if oce.ownerCodeInResolvable.isValidFmt() {
+			os.Exit(0)
+		}
+		os.Exit(1)
+	},
+}
 
 var ownerUpdateCmd = &cobra.Command{
 	Use:   "update",
@@ -30,16 +58,15 @@ Following information is available:
   City
   Country`,
 	Example: `  ` + appName + ` owner update`,
-	Args: cobra.NoArgs,
-	Run:  updateOwners,
-}
-
-func updateOwners(cmd *cobra.Command, args []string) {
-	owner.Update(pathToDB)
-	os.Exit(0)
+	Args:    cobra.NoArgs,
+	Run: func(cmd *cobra.Command, args []string) {
+		update(pathToDB)
+		os.Exit(0)
+	},
 }
 
 func init() {
-
 	ownerCmd.AddCommand(ownerUpdateCmd)
+	ownerCmd.AddCommand(validateOwnerCmd)
+	iso6346Cmd.AddCommand(ownerCmd)
 }

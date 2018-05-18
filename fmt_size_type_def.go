@@ -11,16 +11,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package ui
+package main
 
 import (
-	"github.com/meyermarcel/iso6346/sizetype"
-	"strings"
 	"os"
+	"strings"
+
 	"github.com/olekukonko/tablewriter"
 )
 
-func fmtSizeTypeDef(def sizetype.Def) string {
+func fmtSizeTypeDef(def sizeTypeDef) string {
 
 	b := strings.Builder{}
 
@@ -56,7 +56,7 @@ func fmtSizeTypeDef(def sizetype.Def) string {
 	tableType.Render()
 
 	tableGroup := tablewriter.NewWriter(os.Stdout)
-	tableGroup.SetHeader([]string{"Code", "Group",})
+	tableGroup.SetHeader([]string{"Code", "Group"})
 	tableGroup.SetAlignment(tablewriter.ALIGN_LEFT)
 	tableGroup.SetAutoWrapText(false)
 

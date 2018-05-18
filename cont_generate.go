@@ -11,19 +11,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package cont
+package main
 
 import (
-	"github.com/meyermarcel/iso6346/equip_cat"
-	"github.com/meyermarcel/iso6346/owner"
 	"log"
 	"math/rand"
 	"time"
 )
 
-func Gen(pathToDB string, count int, c chan Number) {
+func genContNum(pathToDB string, count int, c chan contNumber) {
 
-	codes := owner.GetRandomCodes(pathToDB, count)
+	codes := getRandomOwnerCodes(pathToDB, count)
 	randOffset := rand.Int()
 	lenCodes := len(codes)
 
@@ -31,18 +29,18 @@ func Gen(pathToDB string, count int, c chan Number) {
 		log.Fatalf("'%d' exceeds generate limit %d (%d owners * 1000000 serial numbers)", count, lenCodes*1000000, lenCodes)
 	}
 
-	equipCatId := equip_cat.NewIdU()
+	equipCatID := newEquipCatIDU()
 
 	serialNumPasses := count / 1000000
 	for ownerOffset := 0; ownerOffset <= serialNumPasses; ownerOffset++ {
 
 		for i := 0; i < count && i < 1000000; i++ {
-			serialNum := NewSerialNum(permSerialNum((permSerialNum(i) + randOffset) % 1000000))
+			serialNum := newSerialNum(permSerialNum((permSerialNum(i) + randOffset) % 1000000))
 
 			code := codes[(i+ownerOffset)%lenCodes]
-			checkDigit := CalcCheckDigit(code, equipCatId, serialNum)
+			checkDigit := calcCheckDigit(code, equipCatID, serialNum)
 
-			c <- NewContNum(code, equipCatId, serialNum, checkDigit)
+			c <- newContNum(code, equipCatID, serialNum, checkDigit)
 		}
 		count -= 1000000
 	}

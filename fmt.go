@@ -11,12 +11,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package ui
+package main
 
 import (
 	"fmt"
+
 	"github.com/fatih/color"
-	"github.com/meyermarcel/iso6346/parser"
+
 	"strings"
 	"unicode/utf8"
 )
@@ -32,7 +33,7 @@ var underline = color.New(color.Underline).SprintFunc()
 const missingCharacter = "_"
 const indent = " "
 
-func fmtRegexIn(pi parser.RegexIn) string {
+func fmtRegexIn(pi regexIn) string {
 
 	b := strings.Builder{}
 	b.WriteString("'")
@@ -65,9 +66,9 @@ func fmtRegexIn(pi parser.RegexIn) string {
 	return b.String()
 }
 
-func fmtIn(in parser.In) string {
+func fmtIn(in input) string {
 
-	if in.IsValidFmt() {
+	if in.isValidFmt() {
 		return fmt.Sprintf("%s", green(in.Value()))
 	}
 

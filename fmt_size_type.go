@@ -11,31 +11,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package ui
+package main
 
 import (
-	"strings"
 	"fmt"
-	"github.com/meyermarcel/iso6346/parser"
+	"strings"
 )
 
-func fmtParsedSizeType(st parser.SizeType, sepSizeType string) string {
+func fmtParsedSizeType(st sizeTypeIn, sepSizeType string) string {
 
-	var texts []PosTxt
+	var texts []posTxt
 
-	texts = append(texts, lengthTxt(0, st.LengthIn))
-	texts = append(texts, heightWidthTxt(0, st.HeightWidthIn))
-	texts = append(texts, typeAndGroupTxt(0, st.TypeAndGroupIn, sepSizeType))
+	texts = append(texts, lengthTxt(0, st.lengthIn))
+	texts = append(texts, heightWidthTxt(0, st.heightWidthIn))
+	texts = append(texts, typeAndGroupTxt(0, st.typeAndGroupIn, sepSizeType))
 
 	b := strings.Builder{}
 	b.WriteString(indent)
 
-	b.WriteString(fmtIn(st.LengthIn.In))
-	b.WriteString(fmtIn(st.HeightWidthIn.In))
+	b.WriteString(fmtIn(st.lengthIn.input))
+	b.WriteString(fmtIn(st.heightWidthIn.input))
 	b.WriteString(sepSizeType)
-	b.WriteString(fmtIn(st.TypeAndGroupIn.In))
+	b.WriteString(fmtIn(st.typeAndGroupIn.input))
 
-	b.WriteString(fmtCheckMark(st.TypeAndGroupIn.IsValidFmt()))
+	b.WriteString(fmtCheckMark(st.typeAndGroupIn.isValidFmt()))
 
 	b.WriteString(fmt.Sprintln())
 
@@ -44,49 +43,49 @@ func fmtParsedSizeType(st parser.SizeType, sepSizeType string) string {
 	return b.String()
 }
 
-func lengthTxt(offset int, lengthIn parser.LengthIn) PosTxt {
-	if !lengthIn.IsValidFmt() {
-		return NewPosHint(offset+len(indent),
+func lengthTxt(offset int, lengthIn lengthIn) posTxt {
+	if !lengthIn.isValidFmt() {
+		return newPosHint(offset+len(indent),
 			fmt.Sprintf("%s must be a %s", underline("length code"), bold("valid number")))
 	}
 	if lengthIn.Found {
-		return NewPosInfo(offset+len(indent),
+		return newPosInfo(offset+len(indent),
 			fmt.Sprintf("%s: ", underline("length"))+
 				lengthIn.MappedLength.Length)
 	}
-	return NewPosInfo(offset+len(indent),
+	return newPosInfo(offset+len(indent),
 		fmt.Sprintf("%s not found", underline("length code")))
 }
 
-func heightWidthTxt(offset int, heightWidthIn parser.HeightWidthIn) PosTxt {
-	if !heightWidthIn.IsValidFmt() {
-		return NewPosHint(offset+len(indent)+1,
+func heightWidthTxt(offset int, heightWidthIn heightWidthIn) posTxt {
+	if !heightWidthIn.isValidFmt() {
+		return newPosHint(offset+len(indent)+1,
 			fmt.Sprintf("%s must be a %s", underline("height and width code"), bold("valid number")))
 	}
 	if heightWidthIn.Found {
-		return NewPosInfo(offset+len(indent)+1,
+		return newPosInfo(offset+len(indent)+1,
 			fmt.Sprintf("%s:  ", underline("width"))+
 				heightWidthIn.MappedHeightWidth.Width,
 			fmt.Sprintf("%s: ", underline("height"))+
 				heightWidthIn.MappedHeightWidth.Height)
 	}
-	return NewPosInfo(offset+len(indent)+1, fmt.Sprintf("%s not found", underline("height and width code")))
+	return newPosInfo(offset+len(indent)+1, fmt.Sprintf("%s not found", underline("height and width code")))
 }
 
-func typeAndGroupTxt(offset int, typeAndGroupIn parser.TypeAndGroupIn, sepSizeType string) PosTxt {
-	if !typeAndGroupIn.IsValidFmt() {
-		return NewPosHint(offset+len(indent+sepSizeType)+2,
+func typeAndGroupTxt(offset int, typeAndGroupIn typeAndGroupIn, sepSizeType string) posTxt {
+	if !typeAndGroupIn.isValidFmt() {
+		return newPosHint(offset+len(indent+sepSizeType)+2,
 			fmt.Sprintf("%s must be a %s", underline("type code"), bold("valid type")))
 	}
 	if typeAndGroupIn.Found {
-		return NewPosInfo(offset+len(indent+sepSizeType)+2,
+		return newPosInfo(offset+len(indent+sepSizeType)+2,
 			fmt.Sprintf("%s ", underline("group"))+
-				typeAndGroupIn.MappedTypeAndGroup.MappedGroup.Code+ ": "+
+				typeAndGroupIn.MappedTypeAndGroup.MappedGroup.Code+": "+
 				typeAndGroupIn.MappedTypeAndGroup.MappedGroup.GroupInfo,
 			fmt.Sprintf("%s ", underline("type"))+
-				typeAndGroupIn.MappedTypeAndGroup.MappedType.Code+ ": "+
+				typeAndGroupIn.MappedTypeAndGroup.MappedType.Code+": "+
 				typeAndGroupIn.MappedTypeAndGroup.MappedType.TypeInfo)
 	}
-	return NewPosInfo(offset+len(indent+sepSizeType)+2,
+	return newPosInfo(offset+len(indent+sepSizeType)+2,
 		fmt.Sprintf("%s not found", underline("type code")))
 }

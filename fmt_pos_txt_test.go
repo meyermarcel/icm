@@ -11,12 +11,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package ui
+package main
 
 import (
+	"fmt"
 	"reflect"
 	"testing"
-	"fmt"
 )
 
 func TestNewPosHint(t *testing.T) {
@@ -27,18 +27,18 @@ func TestNewPosHint(t *testing.T) {
 	tests := []struct {
 		name string
 		args args
-		want PosTxt
+		want posTxt
 	}{
 		{
 			"Constructor creates correct positioned hint",
 			args{2, []string{"line1", "line2"}},
-			PosTxt{2, 0, []string{"line1", "line2"}},
+			posTxt{2, 0, []string{"line1", "line2"}},
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := NewPosHint(tt.args.pos, tt.args.lines...); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("NewPosHint() = %v, want %v", got, tt.want)
+			if got := newPosHint(tt.args.pos, tt.args.lines...); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("newPosHint() = %v, want %v", got, tt.want)
 			}
 		})
 	}
@@ -52,18 +52,18 @@ func TestNewPosInfo(t *testing.T) {
 	tests := []struct {
 		name string
 		args args
-		want PosTxt
+		want posTxt
 	}{
 		{
 			"Constructor creates correct positioned info",
 			args{2, []string{"line1", "line2"}},
-			PosTxt{2, 1, []string{"line1", "line2"}},
+			posTxt{2, 1, []string{"line1", "line2"}},
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := NewPosInfo(tt.args.pos, tt.args.lines...); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("NewPosInfo() = %v, want %v", got, tt.want)
+			if got := newPosInfo(tt.args.pos, tt.args.lines...); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("newPosInfo() = %v, want %v", got, tt.want)
 			}
 		})
 	}
@@ -71,7 +71,7 @@ func TestNewPosInfo(t *testing.T) {
 
 func Test_fmtTextsWithArrows(t *testing.T) {
 	type args struct {
-		texts []PosTxt
+		texts []posTxt
 	}
 	tests := []struct {
 		name string
@@ -80,8 +80,8 @@ func Test_fmtTextsWithArrows(t *testing.T) {
 	}{
 		{
 			"Format vertical line",
-			args{[]PosTxt{
-				NewPosInfo(0, ""),
+			args{[]posTxt{
+				newPosInfo(0, ""),
 			}},
 			`
 │
@@ -89,8 +89,8 @@ func Test_fmtTextsWithArrows(t *testing.T) {
 		},
 		{
 			"Format arrow",
-			args{[]PosTxt{
-				NewPosHint(0, ""),
+			args{[]posTxt{
+				newPosHint(0, ""),
 			}},
 			`
 ↑
@@ -98,8 +98,8 @@ func Test_fmtTextsWithArrows(t *testing.T) {
 		},
 		{
 			"Format indent",
-			args{[]PosTxt{
-				NewPosHint(2, ""),
+			args{[]posTxt{
+				newPosHint(2, ""),
 			}},
 			`
   ↑
@@ -107,8 +107,8 @@ func Test_fmtTextsWithArrows(t *testing.T) {
 		},
 		{
 			"Format text",
-			args{[]PosTxt{
-				NewPosHint(0, "text"),
+			args{[]posTxt{
+				newPosHint(0, "text"),
 			}},
 			`
 ↑
@@ -116,8 +116,8 @@ func Test_fmtTextsWithArrows(t *testing.T) {
 		},
 		{
 			"Format with multiple lines",
-			args{[]PosTxt{
-				NewPosHint(0, "line0", "line1"),
+			args{[]posTxt{
+				newPosHint(0, "line0", "line1"),
 			}},
 			`
 ↑
@@ -126,9 +126,9 @@ func Test_fmtTextsWithArrows(t *testing.T) {
 		},
 		{
 			"Format multiple texts",
-			args{[]PosTxt{
-				NewPosHint(0, "text"),
-				NewPosInfo(2, "text"),
+			args{[]posTxt{
+				newPosHint(0, "text"),
+				newPosInfo(2, "text"),
 			}},
 			`
 ↑ │
@@ -138,9 +138,9 @@ func Test_fmtTextsWithArrows(t *testing.T) {
 		},
 		{
 			"Format multiple lines in second text",
-			args{[]PosTxt{
-				NewPosHint(0, "text"),
-				NewPosInfo(2, "line0", "line1"),
+			args{[]posTxt{
+				newPosHint(0, "text"),
+				newPosInfo(2, "line0", "line1"),
 			}},
 			`
 ↑ │
@@ -151,11 +151,11 @@ func Test_fmtTextsWithArrows(t *testing.T) {
 		},
 		{
 			"Format multiple lines in multiple texts",
-			args{[]PosTxt{
-				NewPosInfo(0, "pos0line0", "pos0line1", "pos0line2"),
-				NewPosHint(1, "pos1line0", "pos1line1"),
-				NewPosInfo(7, "pos7line0", "pos7line1", "pos7line2"),
-				NewPosHint(22, "pos22line0"),
+			args{[]posTxt{
+				newPosInfo(0, "pos0line0", "pos0line1", "pos0line2"),
+				newPosHint(1, "pos1line0", "pos1line1"),
+				newPosInfo(7, "pos7line0", "pos7line1", "pos7line2"),
+				newPosHint(22, "pos22line0"),
 			}},
 			`
 │↑     │              ↑
