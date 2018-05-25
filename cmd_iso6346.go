@@ -199,29 +199,8 @@ func getPathToAppDir(appDir string) string {
 
 func initDefaultCfg(path string) {
 
-	sepDefaultCfg := []byte(`# Separators config
-#
-#  ABC U 123456 0   20 G1
-#     ↑ ↑      ↑  ↑   ↑
-#     │ │      │  │   └─ ` + sepST + `
-#     │ │      │  │
-#     │ │      │  └─ ` + sepCS + `
-#     │ │      │
-#     │ │      └─ ` + sepSC + `
-#     │ │
-#     │ └─ ` + sepES + `
-#     │
-#     └─ ` + sepOE + `
-#
-` + sepOE + `: ' '
-` + sepES + `: ' '
-` + sepSC + `: ' '
-` + sepCS + `: '   '
-` + sepST + `: ' '
-`)
-
 	if _, err := os.Stat(path); os.IsNotExist(err) {
-		if err := ioutil.WriteFile(path, sepDefaultCfg, 0644); err != nil {
+		if err := ioutil.WriteFile(path, configSeparators(), 0644); err != nil {
 			fmt.Println("Can't write default config:", err)
 			os.Exit(1)
 		}
