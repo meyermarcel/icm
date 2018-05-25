@@ -65,7 +65,7 @@ var sizeTypePrintCmd = &cobra.Command{
 
 func init() {
 	sizeTypeValidateCmd.Flags().String(sepST, "",
-		"20(*)G1  (*) separator between size and type")
+		"20(*)G1  (*) separates size and type")
 
 	viper.BindPFlag(sepST, sizeTypeValidateCmd.Flags().Lookup(sepST))
 

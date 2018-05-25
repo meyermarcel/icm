@@ -127,11 +127,11 @@ func init() {
 	generateCmd.Flags().IntVarP(&count, "count", "c", 1, "count of container numbers")
 
 	generateCmd.Flags().String(sepOE, "",
-		"ABC(*)U1234560  (*) separator between owner code and equipment category id")
+		"ABC(*)U1234560  (*) separates owner code and equipment category id")
 	generateCmd.Flags().String(sepES, "",
-		"ABCU(*)1234560  (*) separator between equipment category id and serial number")
+		"ABCU(*)1234560  (*) separates equipment category id and serial number")
 	generateCmd.Flags().String(sepSC, "",
-		"ABCU123456(*)0  (*) separator between serial number and check digit")
+		"ABCU123456(*)0  (*) separates serial number and check digit")
 
 	viper.BindPFlag(sepOE, generateCmd.Flags().Lookup(sepOE))
 	viper.BindPFlag(sepES, generateCmd.Flags().Lookup(sepES))
@@ -140,15 +140,15 @@ func init() {
 	iso6346Cmd.AddCommand(generateCmd)
 
 	validateCmd.Flags().String(sepOE, "",
-		"ABC(*)U1234560   20G1  (*) separator between owner code and equipment category id")
+		"ABC(*)U1234560   20G1  (*) separates owner code and equipment category id")
 	validateCmd.Flags().String(sepES, "",
-		"ABCU(*)1234560   20G1  (*) separator between equipment category id and serial number")
+		"ABCU(*)1234560   20G1  (*) separates equipment category id and serial number")
 	validateCmd.Flags().String(sepSC, "",
-		"ABCU123456(*)0   20G1  (*) separator between serial number and check digit")
+		"ABCU123456(*)0   20G1  (*) separates serial number and check digit")
 	validateCmd.Flags().String(sepCS, "",
-		"ABCU1234560 (*)  20G1  (*) separator between check digit and size")
+		"ABCU1234560 (*)  20G1  (*) separates check digit and size")
 	validateCmd.Flags().String(sepST, "",
-		"ABCU1234560   20(*)G1  (*) separator between size and type")
+		"ABCU1234560   20(*)G1  (*) separates size and type")
 
 	viper.BindPFlag(sepOE, validateCmd.Flags().Lookup(sepOE))
 	viper.BindPFlag(sepES, validateCmd.Flags().Lookup(sepES))
