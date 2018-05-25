@@ -169,7 +169,7 @@ func initConfig() {
 
 	initDB(pathToDB)
 
-	initDefaultCfg(filepath.Join(appDirPath, cfgName+".yml"))
+	initFile(filepath.Join(appDirPath, cfgName+".yml"), configSeparators())
 
 	viper.AddConfigPath(appDirPath)
 	viper.SetConfigName(cfgName)
@@ -197,11 +197,11 @@ func getPathToAppDir(appDir string) string {
 	return filepath.Join(homeDir, appDir)
 }
 
-func initDefaultCfg(path string) {
+func initFile(path string, content []byte) {
 
 	if _, err := os.Stat(path); os.IsNotExist(err) {
-		if err := ioutil.WriteFile(path, configSeparators(), 0644); err != nil {
-			fmt.Println("Can't write default config:", err)
+		if err := ioutil.WriteFile(path, content, 0644); err != nil {
+			fmt.Println("Cannot write ", path, ":", err)
 			os.Exit(1)
 		}
 	}
