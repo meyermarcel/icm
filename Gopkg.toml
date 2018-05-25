@@ -38,6 +38,10 @@
   version = "1.7.0"
 
 [[constraint]]
+  name = "github.com/PuerkitoBio/goquery"
+  version = "1.4.0"
+
+[[constraint]]
   name = "github.com/mitchellh/go-homedir"
   branch = "master"
 
