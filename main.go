@@ -14,5 +14,5 @@
 package main
 
 func main() {
-	iso6346Cmd.Execute()
+	execute()
 }
