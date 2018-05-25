@@ -66,6 +66,6 @@ func printGen(cn contNumber, seps separators) {
 	fmt.Println()
 }
 
-func printSizeTypeDefs(typeSizDef sizeTypeDef) {
-	fmt.Println(fmtSizeTypeDef(typeSizDef))
+func printSizeTypeDefs(sizeTypeDef sizeTypeDef) {
+	fmt.Println(fmtSizeTypeDef(sizeTypeDef))
 }
