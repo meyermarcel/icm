@@ -32,6 +32,7 @@ var underline = color.New(color.Underline).SprintFunc()
 
 const missingCharacter = "_"
 const indent = " "
+const indentSize = len(indent)
 
 func fmtRegexIn(pi regexIn) string {
 

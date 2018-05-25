@@ -18,39 +18,39 @@ import (
 	"strings"
 )
 
-func fmtOwnerCode(oce ownerCodeIn) string {
+func fmtOwnerCode(oce ownerCodeOptEquipCatIDIn) string {
 
 	b := strings.Builder{}
 	b.WriteString(indent)
 
-	b.WriteString(fmtOwnerCodeIn(oce.ownerCodeInResolvable))
+	b.WriteString(fmtOwnerCodeIn(oce.ownerCodeIn))
 
-	b.WriteString(fmtCheckMark(oce.ownerCodeInResolvable.isValidFmt()))
+	b.WriteString(fmtCheckMark(oce.ownerCodeIn.isValidFmt()))
 
 	b.WriteString(fmt.Sprintln())
 
-	b.WriteString(fmtTextsWithArrows(ownerCodeTxt(oce.ownerCodeInResolvable)))
+	b.WriteString(fmtTextsWithArrows(ownerCodeTxt(oce.ownerCodeIn)))
 
 	return b.String()
 }
 
-func ownerCodeTxt(ownerCodeIn ownerCodeInResolvable) posTxt {
+func ownerCodeTxt(ownerCodeIn ownerCodeIn) posTxt {
 	if !ownerCodeIn.isValidFmt() {
-		return newPosHint(len(indent)+1, fmt.Sprintf("%s must be %s", underline("owner code"), bold("3 letters")))
+		return newPosHint(indentSize+1, fmt.Sprintf("%s must be %s and %s (e.g. %s)",
+			underline("owner code"),
+			bold("3 letters"),
+			bold("registered"),
+			underline(getRandomOwnerCodes(1)[0].Value())))
 	}
-	if ownerCodeIn.OwnerFound {
-		return newPosInfo(len(indent)+1, ownerCodeIn.FoundOwner.Company(), ownerCodeIn.FoundOwner.City(), ownerCodeIn.FoundOwner.Country())
-	}
-	return newPosInfo(len(indent)+1, fmt.Sprintf("%s not found", underline("owner code")))
-
+	return newPosInfo(indentSize+1,
+		ownerCodeIn.Owner.Company,
+		ownerCodeIn.Owner.City,
+		ownerCodeIn.Owner.Country)
 }
 
-func fmtOwnerCodeIn(ownerCodeIn ownerCodeInResolvable) string {
+func fmtOwnerCodeIn(ownerCodeIn ownerCodeIn) string {
 	if ownerCodeIn.isValidFmt() {
-		if ownerCodeIn.OwnerFound {
-			return fmt.Sprintf("%s", green(ownerCodeIn.Value()))
-		}
-		return fmt.Sprintf("%s", yellow(ownerCodeIn.Value()))
+		return fmt.Sprintf("%s", green(ownerCodeIn.Value()))
 	}
 	return fmtIn(ownerCodeIn.input)
 }

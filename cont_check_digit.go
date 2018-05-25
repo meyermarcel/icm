@@ -21,9 +21,9 @@ import (
 This method is a modified version of a Go code sample from
 https://en.wikipedia.org/wiki/ISO_6346#Code_Sample_(Go)
 */
-func calcCheckDigit(ownerCode ownerCode, equipCatID id, serialNum serialNum) int {
+func calcCheckDigit(ownerCode ownerCode, equipCatID equipCatID, serialNum serialNum) int {
 
-	concat := ownerCode.Value() + equipCatID.Value()
+	concat := ownerCode.Value() + equipCatID.Value
 
 	n := 0.0
 	d := 0.5

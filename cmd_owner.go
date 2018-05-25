@@ -36,11 +36,11 @@ var validateOwnerCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		oce := parseOwnerCodeOptEquipCat(args[0])
 
-		oce.ownerCodeInResolvable.resolve(resolver(pathToDB))
+		oce.ownerCodeIn.resolve(getOwner)
 
 		printOwnerCode(oce)
 
-		if oce.ownerCodeInResolvable.isValidFmt() {
+		if oce.ownerCodeIn.isValidFmt() {
 			os.Exit(0)
 		}
 		os.Exit(1)
@@ -60,7 +60,7 @@ Following information is available:
 	Example: `  ` + appName + ` owner update`,
 	Args:    cobra.NoArgs,
 	Run: func(cmd *cobra.Command, args []string) {
-		update(pathToDB)
+		update()
 		os.Exit(0)
 	},
 }

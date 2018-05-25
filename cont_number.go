@@ -16,14 +16,12 @@ package main
 import (
 	"fmt"
 	"log"
-	"regexp"
 	"strconv"
-	"unicode/utf8"
 )
 
 type contNumber struct {
 	ownerCode    ownerCode
-	equipCatID   id
+	equipCatID   equipCatID
 	serialNumber serialNum
 	checkDigit   int
 }
@@ -32,7 +30,7 @@ func (cn contNumber) OwnerCode() ownerCode {
 	return cn.ownerCode
 }
 
-func (cn contNumber) EquipCatID() id {
+func (cn contNumber) EquipCatID() equipCatID {
 	return cn.equipCatID
 }
 
@@ -45,7 +43,7 @@ func (cn contNumber) CheckDigit() int {
 }
 
 func newContNum(ownerCode ownerCode,
-	equipCatID id,
+	equipCatID equipCatID,
 	serialNumber serialNum,
 	checkDigit int) contNumber {
 
@@ -82,29 +80,4 @@ func newSerialNum(value int) serialNum {
 
 func (sn serialNum) String() string {
 	return fmt.Sprintf("%06d", sn.Value())
-}
-
-var equipCatIDs = []rune("UJZ")
-
-type id struct {
-	value string
-}
-
-func (id id) Value() string {
-	return id.value
-}
-
-func newEquipCatIDU() id {
-	return id{"U"}
-}
-
-func newEquipCatIDFrom(value string) id {
-
-	if utf8.RuneCountInString(value) != 1 {
-		log.Fatalf("'%s' is not one character", value)
-	}
-	if !regexp.MustCompile(`[UJZ]`).MatchString(value) {
-		log.Fatalf("'%s' must be U, J or Z", value)
-	}
-	return id{value}
 }

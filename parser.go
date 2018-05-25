@@ -14,6 +14,7 @@
 package main
 
 import (
+	"fmt"
 	"regexp"
 	"strconv"
 	"strings"
@@ -21,22 +22,48 @@ import (
 
 const caseInsensitive = `(?i)`
 
-const ownerCodeRegex = `([A-Z])[^A-Z]*([A-Z])?[^A-Z]*([A-Z])`
+//                        %s   %s Owner codes, for example: LAB|LBI|LXA|MTB|MTV|BHF|...
+const ownerCodeRegex = `[^%s]*(%s)`
 
-var ownerCodeOptEquipCatIDMatcher = regexp.MustCompile(caseInsensitive + ownerCodeRegex)
+func ownerCodeRegexResolved() string {
+	return fmt.Sprintf(ownerCodeRegex, getRegexPartOwners(), getRegexPartOwners())
+}
 
-const sizeTypeRegex = `[^0245689CDEFLMNP]*([0245689CDEFLMNP])?[^ABGHKNPRSUV]*(A0|B0|B1|B2|B3|B4|B5|B6|B7|B8|B9|G1|G2|G3|G4|G5|G6|G7|G8|G9|H0|H1|H2|H3|H4|H5|H6|H7|H8|H9|K0|K1|K2|K3|K4|K5|K6|K7|K8|K9|N0|N1|N2|N3|N4|N5|N6|N7|N8|N9|N9|P0|P1|P2|P3|P4|P5|P6|P7|P8|P9|R0|R1|R2|R3|R4|R5|R6|R7|R8|R9|S0|S1|S2|S3|S4|S5|S6|S7|S8|S9|U0|U1|U2|U3|U4|U5|U6|U7|U8|U9|V0|V1|V2|V3|V4|V5|V6|V7|V8|V9)?`
-const onlySizeType = `([1234ABCDEFGHKLMNP])`
+//                                       %s    %s Equipment category IDs, for example: UJZ
+const equipCatSerialCheckDigitRegex = `[^%s]*([%s])?[^\d]*(\d)?[^\d]*(\d)?[^\d]*(\d)?[^\d]*(\d)?[^\d]*(\d)?[^\d]*(\d)?[^\d]*(\d)?`
 
-var sizeTypeMatcher = regexp.MustCompile(caseInsensitive + onlySizeType + sizeTypeRegex)
+//                      %s Length codes, for example: 1234ABC...
+const onlySizeType = `([%s])`
 
-const optSizeType = `[^1234ABCDEFGHKLMNP]*([1234ABCDEFGHKLMNP])?`
+const optSizeType = `[^%s]*([%s])?`
 
-const contNumRegex = caseInsensitive + ownerCodeRegex +
-	`[^JUZ]*([JUZ])?[^\d]*(\d)?[^\d]*(\d)?[^\d]*(\d)?[^\d]*(\d)?[^\d]*(\d)?[^\d]*(\d)?[^\d]*(\d)?` +
-	optSizeType + sizeTypeRegex
+//                       %s    %s Height and width codes, for example: 0245CDE
+//                                     %s,   %s Type codes, for example: A1|B1|B2|...
+const sizeTypeRegex = `[^%s]*([%s])?[^(%s)]*(%s)?`
 
-var contNumMatcher = regexp.MustCompile(contNumRegex)
+func sizeTypeRegexResolved() string {
+	return fmt.Sprintf(sizeTypeRegex, getRegexPartHeightAndWidths(),
+		getRegexPartHeightAndWidths(), getRegexPartTypes(), getRegexPartTypes())
+}
+
+func ownerMatcher() *regexp.Regexp {
+	return regexp.MustCompile(caseInsensitive + ownerCodeRegexResolved())
+}
+
+func contNumMatcher() *regexp.Regexp {
+	return regexp.MustCompile(
+		caseInsensitive +
+			ownerCodeRegexResolved() +
+			fmt.Sprintf(equipCatSerialCheckDigitRegex, getRegexPartEquipCatIDs(), getRegexPartEquipCatIDs()) +
+			fmt.Sprintf(optSizeType, getRegexPartLengths(), getRegexPartLengths()) +
+			sizeTypeRegexResolved())
+}
+
+func sizeTypeMatcher() *regexp.Regexp {
+	return regexp.MustCompile(caseInsensitive +
+		fmt.Sprintf(onlySizeType, getRegexPartLengths()) +
+		sizeTypeRegexResolved())
+}
 
 type regexIn struct {
 	matches     []string
@@ -89,20 +116,30 @@ func newIn(value string, validLen int) input {
 	return input{value: value, validLen: validLen}
 }
 
-type ownerCodeInResolvable struct {
+type ownerCodeIn struct {
 	input
-	OwnerFound bool
-	FoundOwner owner
+	Owner owner
 }
 
-func (oi *ownerCodeInResolvable) resolve(fn func(code ownerCode) (owner, bool)) *ownerCodeInResolvable {
+func (oi *ownerCodeIn) resolve(fn func(code ownerCode) owner) *ownerCodeIn {
 
 	if oi.isValidFmt() {
-		foundOwner, found := fn(newOwnerCode(oi.Value()))
-		oi.OwnerFound = found
-		oi.FoundOwner = foundOwner
+		oi.Owner = fn(newOwnerCode(oi.Value()))
 	}
 	return oi
+}
+
+type equipCatIDIn struct {
+	input
+	EquipCatID equipCatID
+}
+
+func (eci *equipCatIDIn) resolve(fn func(code string) equipCatID) *equipCatIDIn {
+
+	if eci.isValidFmt() {
+		eci.EquipCatID = fn(eci.Value())
+	}
+	return eci
 }
 
 type checkDigitIn struct {
@@ -113,53 +150,44 @@ type checkDigitIn struct {
 
 type lengthIn struct {
 	input
-	Found        bool
-	MappedLength mappedLength
+	Length length
 }
 
-func (li *lengthIn) resolve(fn func(code string) (mappedLength, bool)) *lengthIn {
+func (li *lengthIn) resolve(fn func(code string) length) *lengthIn {
 
 	if li.isValidFmt() {
-		length, found := fn(li.Value())
-		li.MappedLength = length
-		li.Found = found
+		li.Length = fn(li.Value())
 	}
 	return li
 }
 
 type heightWidthIn struct {
 	input
-	Found             bool
-	MappedHeightWidth mappedHeightAndWidth
+	HeightWidth heightAndWidth
 }
 
-func (hwi *heightWidthIn) resolve(fn func(code string) (mappedHeightAndWidth, bool)) *heightWidthIn {
+func (hwi *heightWidthIn) resolve(fn func(code string) heightAndWidth) *heightWidthIn {
 
 	if hwi.isValidFmt() {
-		heightWidth, found := fn(hwi.Value())
-		hwi.Found = found
-		hwi.MappedHeightWidth = heightWidth
+		hwi.HeightWidth = fn(hwi.Value())
 	}
 	return hwi
 }
 
 type typeAndGroupIn struct {
 	input
-	Found              bool
-	MappedTypeAndGroup mappedTypeAndGroup
+	TypeAndGroup mappedTypeAndGroup
 }
 
-func (tgi *typeAndGroupIn) resolve(fn func(code string) (mappedTypeAndGroup, bool)) *typeAndGroupIn {
+func (tgi *typeAndGroupIn) resolve(fn func(code string) mappedTypeAndGroup) *typeAndGroupIn {
 
 	if tgi.isValidFmt() {
-		typeAndGroup, found := fn(tgi.Value())
-		tgi.Found = found
-		tgi.MappedTypeAndGroup = typeAndGroup
+		tgi.TypeAndGroup = fn(tgi.Value())
 	}
 	return tgi
 }
 
-func (cdi *checkDigitIn) calcCheckDigit(ocIn ownerCodeInResolvable, eciIn input, snIn input) {
+func (cdi *checkDigitIn) calcCheckDigit(ocIn ownerCodeIn, eciIn equipCatIDIn, snIn input) {
 
 	cdi.CalcCheckDigit = calcCheckDigit(newOwnerCode(ocIn.input.Value()), newEquipCatIDFrom(eciIn.Value()), serialNumFrom(snIn.Value()))
 	if cdi.isValidFmt() {
@@ -168,17 +196,18 @@ func (cdi *checkDigitIn) calcCheckDigit(ocIn ownerCodeInResolvable, eciIn input,
 	}
 }
 
-type ownerCodeIn struct {
-	RegexIn               regexIn
-	ownerCodeInResolvable ownerCodeInResolvable
+type ownerCodeOptEquipCatIDIn struct {
+	RegexIn     regexIn
+	ownerCodeIn ownerCodeIn
 }
 
-type contNumIn struct {
+type contNumOptSizeTypeIn struct {
 	RegexIn        regexIn
-	OwnerCodeIn    ownerCodeInResolvable
-	EquipCatIDIn   input
+	OwnerCodeIn    ownerCodeIn
+	EquipCatIDIn   equipCatIDIn
 	SerialNumIn    input
 	CheckDigitIn   checkDigitIn
+	sizeTypeExists bool
 	LengthIn       lengthIn
 	HeightWidthIn  heightWidthIn
 	TypeAndGroupIn typeAndGroupIn
@@ -191,41 +220,47 @@ type sizeTypeIn struct {
 	typeAndGroupIn typeAndGroupIn
 }
 
-func (cn contNumIn) isCheckDigitCalculable() bool {
+func (cn contNumOptSizeTypeIn) isCheckDigitCalculable() bool {
 	return cn.OwnerCodeIn.isValidFmt() && cn.EquipCatIDIn.isValidFmt() && cn.SerialNumIn.isValidFmt()
 }
 
-func parseOwnerCodeOptEquipCat(in string) ownerCodeIn {
-	ownerOptCat := ownerCodeIn{}
-	parse := parse(in, ownerCodeOptEquipCatIDMatcher)
+func (cn contNumOptSizeTypeIn) isValid() bool {
+	return cn.CheckDigitIn.IsValidCheckDigit &&
+		((!cn.LengthIn.isValidFmt() && !cn.HeightWidthIn.isValidFmt() && !cn.TypeAndGroupIn.isValidFmt()) ||
+			(cn.LengthIn.isValidFmt() && cn.HeightWidthIn.isValidFmt() && cn.TypeAndGroupIn.isValidFmt()))
+}
+
+func parseOwnerCodeOptEquipCat(in string) ownerCodeOptEquipCatIDIn {
+	ownerOptCat := ownerCodeOptEquipCatIDIn{}
+	parse := parse(in, ownerMatcher())
 	ownerOptCat.RegexIn = parse
-	ownerOptCat.ownerCodeInResolvable = ownerCodeInResolvable{input: newIn(parse.getMatches(0, 3), 3)}
+	ownerOptCat.ownerCodeIn = ownerCodeIn{input: newIn(parse.getMatch(0), 3)}
 	return ownerOptCat
 }
 
-func parseContNum(in string) contNumIn {
-	cni := contNumIn{}
-	parse := parse(in, contNumMatcher)
+func parseContNum(in string) contNumOptSizeTypeIn {
+	cni := contNumOptSizeTypeIn{}
+	parse := parse(in, contNumMatcher())
 	cni.RegexIn = parse
-	cni.OwnerCodeIn = ownerCodeInResolvable{input: newIn(parse.getMatches(0, 3), 3)}
-	cni.EquipCatIDIn = newIn(parse.getMatch(3), 1)
-	cni.SerialNumIn = newIn(parse.getMatches(4, 10), 6)
+	cni.OwnerCodeIn = ownerCodeIn{input: newIn(parse.getMatch(0), 3)}
+	cni.EquipCatIDIn = equipCatIDIn{input: newIn(parse.getMatch(1), 1)}
+	cni.SerialNumIn = newIn(parse.getMatches(2, 8), 6)
 
-	cni.CheckDigitIn = checkDigitIn{input: newIn(parse.getMatch(10), 1)}
+	cni.CheckDigitIn = checkDigitIn{input: newIn(parse.getMatch(8), 1)}
 	if cni.isCheckDigitCalculable() {
 		cni.CheckDigitIn.calcCheckDigit(cni.OwnerCodeIn, cni.EquipCatIDIn, cni.SerialNumIn)
 	}
 
-	cni.LengthIn = lengthIn{input: newIn(parse.getMatch(11), 1)}
-	cni.HeightWidthIn = heightWidthIn{input: newIn(parse.getMatch(12), 1)}
-	cni.TypeAndGroupIn = typeAndGroupIn{input: newIn(parse.getMatch(13), 2)}
+	cni.LengthIn = lengthIn{input: newIn(parse.getMatch(9), 1)}
+	cni.HeightWidthIn = heightWidthIn{input: newIn(parse.getMatch(10), 1)}
+	cni.TypeAndGroupIn = typeAndGroupIn{input: newIn(parse.getMatch(11), 2)}
 
 	return cni
 }
 
 func parseSizeType(in string) sizeTypeIn {
 	sizeType := sizeTypeIn{}
-	parse := parse(in, sizeTypeMatcher)
+	parse := parse(in, sizeTypeMatcher())
 	sizeType.RegexIn = parse
 	sizeType.lengthIn = lengthIn{input: newIn(parse.getMatch(0), 1)}
 	sizeType.heightWidthIn = heightWidthIn{input: newIn(parse.getMatch(1), 1)}

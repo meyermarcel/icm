@@ -20,7 +20,7 @@ import (
 func TestCalcCheckDigit(t *testing.T) {
 	type args struct {
 		ownerCode  ownerCode
-		equipCatID id
+		equipCatID equipCatID
 		serialNum  serialNum
 	}
 	tests := []struct {

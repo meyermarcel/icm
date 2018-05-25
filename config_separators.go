@@ -13,7 +13,10 @@
 
 package main
 
-func configSeparators() []byte {
+const ymlSepsName = "separators"
+const ymlSepsFileName = ymlSepsName + ".yml"
+
+func cfgSeparators() []byte {
 	return []byte(`# Separators config
 #
 #  ABC U 123456 0   20 G1

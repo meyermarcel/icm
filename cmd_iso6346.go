@@ -17,7 +17,6 @@ import (
 	"fmt"
 	"os"
 
-	"io/ioutil"
 	"path/filepath"
 
 	"github.com/mitchellh/go-homedir"
@@ -28,8 +27,6 @@ import (
 const (
 	appName = "iso6346"
 	appDir  = "." + appName
-	dbName  = appName + ".db"
-	cfgName = "separators"
 	sepOE   = "sep-owner-equip"
 	sepES   = "sep-equip-serial"
 	sepSC   = "sep-serial-check"
@@ -43,7 +40,7 @@ execute a command that requires the configuration.
 Flags for output formatting can overridden with a config file.
 Edit default configuration:
 
-  ` + filepath.Join("$HOME", appDir, cfgName+".yml")
+  ` + filepath.Join("$HOME", appDir, ymlSepsFileName)
 
 var iso6346Cmd = &cobra.Command{
 	Use:     appName,
@@ -75,7 +72,7 @@ var generateCmd = &cobra.Command{
 	Args: cobra.NoArgs,
 	Run: func(cmd *cobra.Command, args []string) {
 		c := make(chan contNumber)
-		go genContNum(pathToDB, count, c)
+		go genContNum(count, c)
 
 		for contNum := range c {
 			printGen(contNum, separators{
@@ -102,7 +99,8 @@ var validateCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		num := parseContNum(args[0])
 
-		num.OwnerCodeIn.resolve(resolver(pathToDB))
+		num.OwnerCodeIn.resolve(getOwner)
+		num.EquipCatIDIn.resolve(getEquipCatID)
 		num.LengthIn.resolve(getLength)
 		num.HeightWidthIn.resolve(getHeightAndWidth)
 		num.TypeAndGroupIn.resolve(getTypeAndGroup)
@@ -115,7 +113,7 @@ var validateCmd = &cobra.Command{
 			viper.GetString(sepST),
 		})
 
-		if num.CheckDigitIn.IsValidCheckDigit {
+		if num.isValid() {
 			os.Exit(0)
 		}
 		os.Exit(1)
@@ -159,23 +157,24 @@ func init() {
 	iso6346Cmd.AddCommand(validateCmd)
 }
 
-var pathToDB string
-
 func initConfig() {
 
 	appDirPath := initDir(getPathToAppDir(appDir))
 
-	pathToDB = filepath.Join(appDirPath, dbName)
+	initOwners(appDirPath)
+	initOwnersLastUpdate(appDirPath)
+	initCfgEquipCatIDs(appDirPath)
+	initCfgSizes(appDirPath)
+	initCfgTypes(appDirPath)
+	initCfgGroups(appDirPath)
 
-	initDB(pathToDB)
-
-	initFile(filepath.Join(appDirPath, cfgName+".yml"), configSeparators())
+	initFile(filepath.Join(appDirPath, ymlSepsFileName), cfgSeparators())
 
 	viper.AddConfigPath(appDirPath)
-	viper.SetConfigName(cfgName)
+	viper.SetConfigName(ymlSepsName)
 
 	if err := viper.ReadInConfig(); err != nil {
-		fmt.Println("Can't read config:", err)
+		fmt.Println("Cannot read config:", err)
 		os.Exit(1)
 	}
 }
@@ -195,14 +194,4 @@ func getPathToAppDir(appDir string) string {
 		os.Exit(1)
 	}
 	return filepath.Join(homeDir, appDir)
-}
-
-func initFile(path string, content []byte) {
-
-	if _, err := os.Stat(path); os.IsNotExist(err) {
-		if err := ioutil.WriteFile(path, content, 0644); err != nil {
-			fmt.Println("Cannot write ", path, ":", err)
-			os.Exit(1)
-		}
-	}
 }

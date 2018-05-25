@@ -19,9 +19,9 @@ import (
 	"time"
 )
 
-func genContNum(pathToDB string, count int, c chan contNumber) {
+func genContNum(count int, c chan contNumber) {
 
-	codes := getRandomOwnerCodes(pathToDB, count)
+	codes := getRandomOwnerCodes(count)
 	randOffset := rand.Int()
 	lenCodes := len(codes)
 

@@ -15,36 +15,31 @@ package main
 
 import (
 	"fmt"
+	"sort"
 	"strings"
 )
 
-func fmtParsedContNum(cn contNumIn, seps separators) string {
+func fmtParsedContNum(cn contNumOptSizeTypeIn, seps separators) string {
 
 	b := strings.Builder{}
 
-	additionalSizeType := cn.LengthIn.isValidFmt()
-	b.WriteString(fmtContNum(cn, seps, additionalSizeType))
+	sizeTypeExists := cn.LengthIn.isValidFmt()
+	b.WriteString(fmtContNum(cn, seps, sizeTypeExists))
 
-	if additionalSizeType {
-		b.WriteString(fmtCheckMark(cn.CheckDigitIn.IsValidCheckDigit && cn.TypeAndGroupIn.isValidFmt()))
-	} else {
-		b.WriteString(fmtCheckMark(cn.CheckDigitIn.IsValidCheckDigit))
-	}
+	b.WriteString(fmtCheckMark(cn.isValid()))
 
 	b.WriteString(fmt.Sprintln())
 
 	var texts []posTxt
 
 	texts = append(texts, ownerCodeTxt(cn.OwnerCodeIn))
+	texts = append(texts, equipCatIDTxt(0, cn.EquipCatIDIn, seps.OwnerEquip))
 
-	if !cn.EquipCatIDIn.isValidFmt() {
-		texts = append(texts, newPosHint(len(indent+seps.OwnerEquip)+3, fmt.Sprintf("%s must be %s", underline("equipment category id"), equipCatIDsAsList())))
-	}
 	if !cn.SerialNumIn.isValidFmt() {
-		texts = append(texts, newPosHint(len(indent+seps.OwnerEquip+seps.EquipSerial)+6, fmt.Sprintf("%s must be %s", underline("serial number"), bold("6 numbers"))))
+		texts = append(texts, newPosHint(indentSize+len(seps.OwnerEquip+seps.EquipSerial)+6, fmt.Sprintf("%s must be %s", underline("serial number"), bold("6 numbers"))))
 	}
 
-	cdPos := len(indent+seps.OwnerEquip+seps.EquipSerial+seps.SerialCheck) + 10
+	cdPos := indentSize + len(seps.OwnerEquip+seps.EquipSerial+seps.SerialCheck) + 10
 	if !cn.CheckDigitIn.IsValidCheckDigit {
 		if cn.isCheckDigitCalculable() {
 			if cn.CheckDigitIn.isValidFmt() {
@@ -59,7 +54,7 @@ func fmtParsedContNum(cn contNumIn, seps separators) string {
 		}
 	}
 
-	if additionalSizeType {
+	if sizeTypeExists {
 		texts = append(texts, lengthTxt(seps.offsetPosForSizeType(), cn.LengthIn))
 		texts = append(texts, heightWidthTxt(seps.offsetPosForSizeType(), cn.HeightWidthIn))
 		texts = append(texts, typeAndGroupTxt(seps.offsetPosForSizeType(), cn.TypeAndGroupIn, seps.SizeType))
@@ -70,20 +65,20 @@ func fmtParsedContNum(cn contNumIn, seps separators) string {
 	return b.String()
 }
 
-func fmtContNum(cn contNumIn, seps separators, additionalSizeType bool) string {
+func fmtContNum(cn contNumOptSizeTypeIn, seps separators, additionalSizeType bool) string {
 
 	b := strings.Builder{}
 
 	b.WriteString(indent)
 	b.WriteString(fmtOwnerCodeIn(cn.OwnerCodeIn))
 	b.WriteString(seps.OwnerEquip)
-	b.WriteString(fmtIn(cn.EquipCatIDIn))
+	b.WriteString(fmtIn(cn.EquipCatIDIn.input))
 	b.WriteString(seps.EquipSerial)
 	b.WriteString(fmtIn(cn.SerialNumIn))
 	b.WriteString(seps.SerialCheck)
 
 	if !cn.CheckDigitIn.IsValidCheckDigit && cn.CheckDigitIn.isValidFmt() {
-		b.WriteString(fmt.Sprintf("%s", yellow(string(cn.CheckDigitIn.Value()))))
+		b.WriteString(fmt.Sprintf("%s", red(string(cn.CheckDigitIn.Value()))))
 	} else {
 		b.WriteString(fmtIn(cn.CheckDigitIn.input))
 	}
@@ -99,7 +94,27 @@ func fmtContNum(cn contNumIn, seps separators, additionalSizeType bool) string {
 	return b.String()
 }
 
+func equipCatIDTxt(offset int, in equipCatIDIn, sepOwnerEquip string) posTxt {
+	if !in.isValidFmt() {
+		return newPosHint(offset+indentSize+len(sepOwnerEquip)+3, fmt.Sprintf("%s must be %s", underline("equipment category id"), equipCatIDsAsList()))
+	}
+	return newPosInfo(offset+indentSize+len(sepOwnerEquip)+3, in.EquipCatID.Info)
+}
+
 func equipCatIDsAsList() string {
-	ujz := equipCatIDs
-	return fmt.Sprintf("%s, %s or %s", green(string(ujz[0])), green(string(ujz[1])), green(string(ujz[2])))
+
+	b := strings.Builder{}
+
+	iDs := getEquipCatIDs()
+	sort.Strings(iDs)
+	for i, element := range iDs {
+		b.WriteString(green(element))
+		if i < len(iDs)-2 {
+			b.WriteString(", ")
+		}
+		if i == len(iDs)-2 {
+			b.WriteString(" or ")
+		}
+	}
+	return b.String()
 }

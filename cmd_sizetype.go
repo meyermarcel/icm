@@ -52,17 +52,6 @@ var sizeTypeValidateCmd = &cobra.Command{
 	},
 }
 
-var sizeTypePrintCmd = &cobra.Command{
-	Use:     "print",
-	Short:   "Print length, height, width and type codes",
-	Long:    "Print length, height, width and type codes.",
-	Example: `  ` + appName + ` sizetype print`,
-	Args:    cobra.NoArgs,
-	Run: func(cmd *cobra.Command, args []string) {
-		printSizeTypeDefs(getSizeTypeDef())
-	},
-}
-
 func init() {
 	sizeTypeValidateCmd.Flags().String(sepST, "",
 		"20(*)G1  (*) separates size and type")
@@ -70,6 +59,5 @@ func init() {
 	viper.BindPFlag(sepST, sizeTypeValidateCmd.Flags().Lookup(sepST))
 
 	sizeTypeCmd.AddCommand(sizeTypeValidateCmd)
-	sizeTypeCmd.AddCommand(sizeTypePrintCmd)
 	iso6346Cmd.AddCommand(sizeTypeCmd)
 }

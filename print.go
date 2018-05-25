@@ -30,7 +30,7 @@ func (s *separators) offsetPosForSizeType() int {
 	return 3 + len(s.OwnerEquip) + 1 + len(s.EquipSerial) + 6 + len(s.SerialCheck) + 1 + len(s.CheckSize)
 }
 
-func printContNum(cn contNumIn, seps separators) {
+func printContNum(cn contNumOptSizeTypeIn, seps separators) {
 
 	fmt.Println(fmtRegexIn(cn.RegexIn))
 	fmt.Println()
@@ -38,7 +38,7 @@ func printContNum(cn contNumIn, seps separators) {
 	fmt.Println()
 }
 
-func printOwnerCode(oce ownerCodeIn) {
+func printOwnerCode(oce ownerCodeOptEquipCatIDIn) {
 
 	fmt.Println(fmtRegexIn(oce.RegexIn))
 	fmt.Println()
@@ -58,14 +58,10 @@ func printGen(cn contNumber, seps separators) {
 	fmt.Printf("%s%s%s%s%06d%s%d",
 		cn.OwnerCode().Value(),
 		seps.OwnerEquip,
-		cn.EquipCatID().Value(),
+		cn.EquipCatID().Value,
 		seps.EquipSerial,
 		cn.SerialNumber().Value(),
 		seps.SerialCheck,
 		cn.CheckDigit())
 	fmt.Println()
-}
-
-func printSizeTypeDefs(sizeTypeDef sizeTypeDef) {
-	fmt.Println(fmtSizeTypeDef(sizeTypeDef))
 }

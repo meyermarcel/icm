@@ -45,47 +45,31 @@ func fmtParsedSizeType(st sizeTypeIn, sepSizeType string) string {
 
 func lengthTxt(offset int, lengthIn lengthIn) posTxt {
 	if !lengthIn.isValidFmt() {
-		return newPosHint(offset+len(indent),
+		return newPosHint(offset+indentSize,
 			fmt.Sprintf("%s must be a %s", underline("length code"), bold("valid number")))
 	}
-	if lengthIn.Found {
-		return newPosInfo(offset+len(indent),
-			fmt.Sprintf("%s: ", underline("length"))+
-				lengthIn.MappedLength.Length)
-	}
-	return newPosInfo(offset+len(indent),
-		fmt.Sprintf("%s not found", underline("length code")))
+	return newPosInfo(offset+indentSize,
+		"length: "+lengthIn.Length.Length)
 }
 
 func heightWidthTxt(offset int, heightWidthIn heightWidthIn) posTxt {
 	if !heightWidthIn.isValidFmt() {
-		return newPosHint(offset+len(indent)+1,
+		return newPosHint(offset+indentSize+1,
 			fmt.Sprintf("%s must be a %s", underline("height and width code"), bold("valid number")))
 	}
-	if heightWidthIn.Found {
-		return newPosInfo(offset+len(indent)+1,
-			fmt.Sprintf("%s:  ", underline("width"))+
-				heightWidthIn.MappedHeightWidth.Width,
-			fmt.Sprintf("%s: ", underline("height"))+
-				heightWidthIn.MappedHeightWidth.Height)
-	}
-	return newPosInfo(offset+len(indent)+1, fmt.Sprintf("%s not found", underline("height and width code")))
+	return newPosInfo(offset+indentSize+1,
+		"width:  "+heightWidthIn.HeightWidth.Width,
+		"height: "+heightWidthIn.HeightWidth.Height)
 }
 
 func typeAndGroupTxt(offset int, typeAndGroupIn typeAndGroupIn, sepSizeType string) posTxt {
 	if !typeAndGroupIn.isValidFmt() {
-		return newPosHint(offset+len(indent+sepSizeType)+2,
+		return newPosHint(offset+indentSize+len(sepSizeType)+2,
 			fmt.Sprintf("%s must be a %s", underline("type code"), bold("valid type")))
 	}
-	if typeAndGroupIn.Found {
-		return newPosInfo(offset+len(indent+sepSizeType)+2,
-			fmt.Sprintf("%s ", underline("group"))+
-				typeAndGroupIn.MappedTypeAndGroup.MappedGroup.Code+": "+
-				typeAndGroupIn.MappedTypeAndGroup.MappedGroup.GroupInfo,
-			fmt.Sprintf("%s ", underline("type"))+
-				typeAndGroupIn.MappedTypeAndGroup.MappedType.Code+": "+
-				typeAndGroupIn.MappedTypeAndGroup.MappedType.TypeInfo)
-	}
-	return newPosInfo(offset+len(indent+sepSizeType)+2,
-		fmt.Sprintf("%s not found", underline("type code")))
+	return newPosInfo(offset+indentSize+len(sepSizeType)+2,
+		"group "+typeAndGroupIn.TypeAndGroup.MappedGroup.Code+": "+
+			typeAndGroupIn.TypeAndGroup.MappedGroup.Info,
+		"type "+typeAndGroupIn.TypeAndGroup.MappedType.Code+": "+
+			typeAndGroupIn.TypeAndGroup.MappedType.TypeInfo)
 }
