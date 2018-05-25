@@ -40,3 +40,7 @@
 [[constraint]]
   name = "github.com/mitchellh/go-homedir"
   branch = "master"
+
+[[constraint]]
+  name = "github.com/olekukonko/tablewriter"
+  branch = "master"
