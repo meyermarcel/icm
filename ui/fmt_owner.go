@@ -11,11 +11,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package main
+package ui
 
 import (
 	"fmt"
 	"strings"
+
+	"github.com/meyermarcel/iso6346/data"
 )
 
 func fmtOwnerCode(oce ownerCodeOptEquipCatIDIn) string {
@@ -40,7 +42,7 @@ func ownerCodeTxt(ownerCodeIn ownerCodeIn) posTxt {
 			underline("owner code"),
 			bold("3 letters"),
 			bold("registered"),
-			underline(getRandomOwnerCodes(1)[0].Value())))
+			underline(data.GetRandomOwnerCodes(1)[0].Value())))
 	}
 	return newPosInfo(indentSize+1,
 		ownerCodeIn.Owner.Company,
@@ -50,7 +52,7 @@ func ownerCodeTxt(ownerCodeIn ownerCodeIn) posTxt {
 
 func fmtOwnerCodeIn(ownerCodeIn ownerCodeIn) string {
 	if ownerCodeIn.isValidFmt() {
-		return fmt.Sprintf("%s", green(ownerCodeIn.Value()))
+		return fmt.Sprintf("%s", green(ownerCodeIn.value))
 	}
 	return fmtIn(ownerCodeIn.input)
 }

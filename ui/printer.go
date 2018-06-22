@@ -11,13 +11,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package main
+package ui
 
 import (
 	"fmt"
+
+	"github.com/meyermarcel/iso6346/iso6346"
 )
 
-type separators struct {
+// Separators describes all separators between independent ISO 6346 data.
+type Separators struct {
 	OwnerEquip  string
 	EquipSerial string
 	SerialCheck string
@@ -25,14 +28,14 @@ type separators struct {
 	SizeType    string
 }
 
-func (s *separators) offsetPosForSizeType() int {
+func (s *Separators) offsetPosForSizeType() int {
 	//     owner                   equipment cat id         serial number            check digit
 	return 3 + len(s.OwnerEquip) + 1 + len(s.EquipSerial) + 6 + len(s.SerialCheck) + 1 + len(s.CheckSize)
 }
 
-func printContNum(cn contNumOptSizeTypeIn, seps separators) {
+func printContNum(cn contNumOptSizeTypeIn, seps Separators) {
 
-	fmt.Println(fmtRegexIn(cn.RegexIn))
+	fmt.Println(fmtRegexIn(cn.regexIn))
 	fmt.Println()
 	fmt.Println(fmtParsedContNum(cn, seps))
 	fmt.Println()
@@ -40,7 +43,7 @@ func printContNum(cn contNumOptSizeTypeIn, seps separators) {
 
 func printOwnerCode(oce ownerCodeOptEquipCatIDIn) {
 
-	fmt.Println(fmtRegexIn(oce.RegexIn))
+	fmt.Println(fmtRegexIn(oce.regexIn))
 	fmt.Println()
 	fmt.Println(fmtOwnerCode(oce))
 	fmt.Println()
@@ -54,7 +57,8 @@ func printSizeType(st sizeTypeIn, sepSizeType string) {
 	fmt.Println()
 }
 
-func printGen(cn contNumber, seps separators) {
+// PrintContNum prints a container number with given separators and a new line.
+func PrintContNum(cn iso6346.ContNumber, seps Separators) {
 	fmt.Printf("%s%s%s%s%06d%s%d",
 		cn.OwnerCode().Value(),
 		seps.OwnerEquip,

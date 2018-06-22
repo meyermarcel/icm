@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package main
+package cmd
 
 import (
 	"fmt"
@@ -19,6 +19,11 @@ import (
 
 	"path/filepath"
 
+	"github.com/meyermarcel/iso6346/data"
+	"github.com/meyermarcel/iso6346/iso6346"
+	"github.com/meyermarcel/iso6346/remote"
+	"github.com/meyermarcel/iso6346/ui"
+	"github.com/meyermarcel/iso6346/utils"
 	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -40,17 +45,20 @@ execute a command that requires the configuration.
 Flags for output formatting can overridden with a config file.
 Edit default configuration:
 
-  ` + filepath.Join("$HOME", appDir, ymlSepsFileName)
+  ` + filepath.Join("$HOME", appDir, ymlCfgFileName)
 
-var iso6346Cmd = &cobra.Command{
+// RootCmd represents the base command when called without any subcommands
+var RootCmd = &cobra.Command{
 	Use:     appName,
 	Version: "0.1.0-beta",
 	Short:   "Parse or generate ISO 6346 related data",
 	Long:    "Parse or generate ISO 6346 related data.",
 }
 
-func execute() {
-	if err := iso6346Cmd.Execute(); err != nil {
+// Execute adds all child commands to the root command and sets flags appropriately.
+// This is called by main.main(). It only needs to happen once to the rootCmd.
+func Execute() {
+	if err := RootCmd.Execute(); err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
@@ -71,15 +79,14 @@ var generateCmd = &cobra.Command{
   ` + appName + ` generate --` + sepOE + ` '' --` + sepSC + ` ''`,
 	Args: cobra.NoArgs,
 	Run: func(cmd *cobra.Command, args []string) {
-		c := make(chan contNumber)
-		go genContNum(count, c)
+		c := make(chan iso6346.ContNumber)
+		go iso6346.GenContNum(count, c, data.GetRandomOwnerCodes)
 
 		for contNum := range c {
-			printGen(contNum, separators{
-				viper.GetString(sepOE),
-				viper.GetString(sepES),
-				viper.GetString(sepSC),
-				"", "",
+			ui.PrintContNum(contNum, ui.Separators{
+				OwnerEquip:  viper.GetString(sepOE),
+				EquipSerial: viper.GetString(sepES),
+				SerialCheck: viper.GetString(sepSC),
 			})
 		}
 		os.Exit(0)
@@ -97,23 +104,16 @@ var validateCmd = &cobra.Command{
   ` + appName + ` validate --` + sepOE + ` '' --` + sepSC + ` '' 'ABCU 1234560'`,
 	Args: cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		num := parseContNum(args[0])
 
-		num.OwnerCodeIn.resolve(getOwner)
-		num.EquipCatIDIn.resolve(getEquipCatID)
-		num.LengthIn.resolve(getLength)
-		num.HeightWidthIn.resolve(getHeightAndWidth)
-		num.TypeAndGroupIn.resolve(getTypeAndGroup)
-
-		printContNum(num, separators{
-			viper.GetString(sepOE),
-			viper.GetString(sepES),
-			viper.GetString(sepSC),
-			viper.GetString(sepCS),
-			viper.GetString(sepST),
+		valid := ui.ParseAndPrintContNum(args[0], ui.Separators{
+			OwnerEquip:  viper.GetString(sepOE),
+			EquipSerial: viper.GetString(sepES),
+			SerialCheck: viper.GetString(sepSC),
+			CheckSize:   viper.GetString(sepCS),
+			SizeType:    viper.GetString(sepST),
 		})
 
-		if num.isValid() {
+		if valid {
 			os.Exit(0)
 		}
 		os.Exit(1)
@@ -135,7 +135,7 @@ func init() {
 	viper.BindPFlag(sepES, generateCmd.Flags().Lookup(sepES))
 	viper.BindPFlag(sepSC, generateCmd.Flags().Lookup(sepSC))
 
-	iso6346Cmd.AddCommand(generateCmd)
+	RootCmd.AddCommand(generateCmd)
 
 	validateCmd.Flags().String(sepOE, "",
 		"ABC(*)U1234560   20G1  (*) separates owner code and equipment category id")
@@ -154,24 +154,27 @@ func init() {
 	viper.BindPFlag(sepCS, validateCmd.Flags().Lookup(sepCS))
 	viper.BindPFlag(sepST, validateCmd.Flags().Lookup(sepST))
 
-	iso6346Cmd.AddCommand(validateCmd)
+	RootCmd.AddCommand(validateCmd)
 }
 
 func initConfig() {
 
 	appDirPath := initDir(getPathToAppDir(appDir))
 
-	initOwners(appDirPath)
-	initOwnersLastUpdate(appDirPath)
-	initCfgEquipCatIDs(appDirPath)
-	initCfgSizes(appDirPath)
-	initCfgTypes(appDirPath)
-	initCfgGroups(appDirPath)
-
-	initFile(filepath.Join(appDirPath, ymlSepsFileName), cfgSeparators())
+	utils.InitFile(filepath.Join(appDirPath, ymlCfgFileName), cfgSeparators())
 
 	viper.AddConfigPath(appDirPath)
-	viper.SetConfigName(ymlSepsName)
+	viper.SetConfigName(ymlCfgName)
+
+	appDirPathData := initDir(filepath.Join(appDirPath, "data"))
+
+	data.InitOwnersData(appDirPathData)
+	remote.InitOwnersLastUpdate(appDirPathData)
+
+	data.InitEquipCatIDsData(appDirPathData)
+	data.InitSizesData(appDirPathData)
+	data.InitTypesData(appDirPathData)
+	data.InitGroupsData(appDirPathData)
 
 	if err := viper.ReadInConfig(); err != nil {
 		fmt.Println("Cannot read config:", err)
@@ -189,9 +192,6 @@ func initDir(path string) string {
 
 func getPathToAppDir(appDir string) string {
 	homeDir, err := homedir.Dir()
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
+	utils.CheckErr(err)
 	return filepath.Join(homeDir, appDir)
 }

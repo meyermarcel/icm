@@ -11,19 +11,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package main
+package data
 
 import (
-	"log"
 	"math/rand"
 	"path/filepath"
-	"regexp"
-	"unicode/utf8"
+
+	"io/ioutil"
+
+	"github.com/meyermarcel/iso6346/iso6346"
+	"github.com/meyermarcel/iso6346/utils"
 )
 
 const ownersFileName = "owners.json"
 
-const dateFormat = "2006-01-02"
+var loadedOwners map[string]owner
+var pathToOwners string
 
 type owner struct {
 	Code    string `json:"code"`
@@ -32,46 +35,36 @@ type owner struct {
 	Country string `json:"country"`
 }
 
-var loadedOwners map[string]owner
-var pathToOwners string
-
-func initOwners(appDirPath string) {
-	pathToOwners = initFile(filepath.Join(appDirPath, ownersFileName), []byte(ownersJSON))
-	jsonUnmarshal(readFile(pathToOwners), &loadedOwners)
+// InitOwnersData writes owners file to path if it not exists and loads its data to memory.
+func InitOwnersData(path string) {
+	pathToOwners = utils.InitFile(filepath.Join(path, ownersFileName), []byte(ownersJSON))
+	b, err := ioutil.ReadFile(pathToOwners)
+	utils.CheckErr(err)
+	utils.JSONUnmarshal(b, &loadedOwners)
 }
 
-type ownerCode struct {
-	value string
+// GetOwner returns an owner for an owner code.
+func GetOwner(code iso6346.OwnerCode) iso6346.Owner {
+	return toIso6346Owner(loadedOwners[code.Value()])
 }
 
-func (c ownerCode) Value() string {
-	return c.value
+func toIso6346Owner(owner owner) iso6346.Owner {
+	return iso6346.Owner{
+		Code:    iso6346.NewOwnerCode(owner.Code),
+		Company: owner.Company,
+		City:    owner.City,
+		Country: owner.Country}
 }
 
-func newOwnerCode(value string) ownerCode {
-
-	if utf8.RuneCountInString(value) != 3 {
-		log.Fatalf("'%s' is not three characters", value)
-	}
-
-	if !regexp.MustCompile(`[A-Z]{3}`).MatchString(value) {
-		log.Fatalf("'%s' must be 3 letters", value)
-	}
-	return ownerCode{value}
-}
-
-func getOwner(code ownerCode) owner {
-	return loadedOwners[code.Value()]
-}
-
-func getRandomOwnerCodes(count int) []ownerCode {
-	var codes []ownerCode
+// GetRandomOwnerCodes returns a count of owner codes.
+func GetRandomOwnerCodes(count int) []iso6346.OwnerCode {
+	var codes []iso6346.OwnerCode
 
 	for k := range loadedOwners {
 		if len(codes) >= count {
 			break
 		}
-		codes = append(codes, newOwnerCode(k))
+		codes = append(codes, iso6346.NewOwnerCode(k))
 	}
 	rand.Shuffle(len(codes), func(i, j int) {
 		codes[i], codes[j] = codes[j], codes[i]
@@ -79,21 +72,31 @@ func getRandomOwnerCodes(count int) []ownerCode {
 	return codes
 }
 
-func updateOwners(newOwners map[string]owner) {
+// UpdateOwners accepts a map of owner code to owner and updates the local owner file.
+func UpdateOwners(newOwners map[string]iso6346.Owner) {
 	for k, v := range newOwners {
 		if _, exists := loadedOwners[k]; !exists {
-			loadedOwners[k] = v
+			loadedOwners[k] = toSerializableOwner(v)
 		}
 	}
-	writeFile(pathToOwners, jsonMarshal(loadedOwners))
+	err := ioutil.WriteFile(pathToOwners, utils.JSONMarshal(loadedOwners), 0644)
+	utils.CheckErr(err)
 }
 
-func getRegexPartOwners() string {
-	var regexString string
+func toSerializableOwner(ownerToConvert iso6346.Owner) owner {
+	return owner{ownerToConvert.Code.Value(),
+		ownerToConvert.Company,
+		ownerToConvert.City,
+		ownerToConvert.Country}
+}
+
+// GetOwnerCodes returns all owner codes.
+func GetOwnerCodes() []string {
+	keys := make([]string, 0, len(loadedOwners))
 	for k := range loadedOwners {
-		regexString += k + "|"
+		keys = append(keys, k)
 	}
-	return regexString[:len(regexString)-1]
+	return keys
 }
 
 const ownersJSON = `{

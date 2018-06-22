@@ -11,30 +11,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package main
+package iso6346
 
-const ymlSepsName = "separators"
-const ymlSepsFileName = ymlSepsName + ".yml"
+// HeightAndWidth describes width and height of first code in an ISO 6346 size code.
+type HeightAndWidth struct {
+	Width  string
+	Height string
+}
 
-func cfgSeparators() []byte {
-	return []byte(`# Separators config
-#
-#  ABC U 123456 0   20 G1
-#     ↑ ↑      ↑  ↑   ↑
-#     │ │      │  │   └─ ` + sepST + `
-#     │ │      │  │
-#     │ │      │  └─ ` + sepCS + `
-#     │ │      │
-#     │ │      └─ ` + sepSC + `
-#     │ │
-#     │ └─ ` + sepES + `
-#     │
-#     └─ ` + sepOE + `
-#
-` + sepOE + `: ' '
-` + sepES + `: ' '
-` + sepSC + `: ' '
-` + sepCS + `: '   '
-` + sepST + `: ' '
-`)
+// Length describes length of second code in an ISO 6346 size code.
+type Length struct {
+	Length string
 }

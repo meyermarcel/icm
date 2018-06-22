@@ -11,9 +11,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package main
+package data
 
-import "path/filepath"
+import (
+	"path/filepath"
+
+	"io/ioutil"
+
+	"github.com/meyermarcel/iso6346/iso6346"
+	"github.com/meyermarcel/iso6346/utils"
+)
 
 const groupsFileName = "groups.json"
 
@@ -32,20 +39,18 @@ const groupsJSON = `{
 }
 `
 
-type group struct {
-	Code string
-	Info string
+var loadedGroups map[string]string
+
+// InitGroupsData writes group file to path if it not exists and loads its data to memory.
+func InitGroupsData(path string) {
+	pathToGroups := utils.InitFile(filepath.Join(path, groupsFileName), []byte(groupsJSON))
+	b, err := ioutil.ReadFile(pathToGroups)
+	utils.CheckErr(err)
+	utils.JSONUnmarshal(b, &loadedGroups)
 }
 
-var loadedCfgGroups map[string]string
+func getGroup(code string) (iso6346.TypeGroup, bool) {
+	info, exists := loadedGroups[code]
 
-func initCfgGroups(appDirPath string) {
-	pathToGroups := initFile(filepath.Join(appDirPath, groupsFileName), []byte(groupsJSON))
-	jsonUnmarshal(readFile(pathToGroups), &loadedCfgGroups)
-}
-
-func getGroup(code string) (group, bool) {
-	info, exists := loadedCfgGroups[code]
-
-	return group{code, info}, exists
+	return iso6346.TypeGroup{Code: code, Info: info}, exists
 }

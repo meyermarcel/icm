@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package main
+package remote
 
 import (
 	"log"
@@ -20,9 +20,17 @@ import (
 	"time"
 
 	"github.com/PuerkitoBio/goquery"
+	"github.com/meyermarcel/iso6346/data"
+	"github.com/meyermarcel/iso6346/iso6346"
+	"github.com/meyermarcel/iso6346/utils"
 )
 
-func update() {
+// Update owner by sending an request to server, parse HTML and write new owners to local file.
+// First Update requests timestamp of last created or cancelled owners and writes it to file
+// if local timestamp is older than received timestamp.
+// Than if local data is outdated all owners will be requested.
+// This avoids unnecessary expensive rendered responses of server.
+func Update() {
 
 	ownersLastUpdateRemote := getOwnersLastUpdateRemote()
 
@@ -30,7 +38,7 @@ func update() {
 
 	if ownersLastUpdateRemote.After(ownersLastUpdateLocal) {
 		ownersRemote := getOwnersRemote()
-		updateOwners(ownersRemote)
+		data.UpdateOwners(ownersRemote)
 		saveNowForOwnersLastUpdate()
 	}
 }
@@ -75,12 +83,12 @@ func getRecentlyDate(url string) time.Time {
 	return parsedDates[0]
 }
 
-func getOwnersRemote() map[string]owner {
+func getOwnersRemote() map[string]iso6346.Owner {
 	url := "https://www.bic-code.org/bic-letter-search/?resultsperpage=17576&searchterm="
 
 	const query = "tr td[data-label=Code]"
 
-	owners := map[string]owner{}
+	owners := map[string]iso6346.Owner{}
 
 	getBody(url).Find(query).Each(func(i int, s *goquery.Selection) {
 		code := s.Parent().Find("td[data-label=Code]").Text()
@@ -88,7 +96,7 @@ func getOwnersRemote() map[string]owner {
 		city := s.Parent().Find("td[data-label=City]").Text()
 		country := s.Parent().Find("td[data-label=Country]").Text()
 
-		owners[code[0:3]] = owner{code[0:3], company, city, country}
+		owners[code[0:3]] = iso6346.Owner{Code: iso6346.NewOwnerCode(code[0:3]), Company: company, City: city, Country: country}
 	})
 
 	if len(owners) == 0 {
@@ -99,17 +107,13 @@ func getOwnersRemote() map[string]owner {
 
 func getBody(url string) *goquery.Document {
 	res, err := http.Get(url)
-	if err != nil {
-		log.Fatal(err)
-	}
+	utils.CheckErr(err)
 	defer res.Body.Close()
 	if res.StatusCode != 200 {
 		log.Fatalf("status code error: %d %s", res.StatusCode, res.Status)
 	}
 
 	doc, err := goquery.NewDocumentFromReader(res.Body)
-	if err != nil {
-		log.Fatal(err)
-	}
+	utils.CheckErr(err)
 	return doc
 }

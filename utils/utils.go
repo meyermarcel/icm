@@ -11,50 +11,45 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package main
+package utils
 
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"os"
 )
 
-func jsonMarshal(t interface{}) []byte {
+// JSONMarshal marshals given interface to JSON without escaping string for HTML and handles error.
+func JSONMarshal(t interface{}) []byte {
 	buffer := &bytes.Buffer{}
 	encoder := json.NewEncoder(buffer)
 	encoder.SetEscapeHTML(false)
 	err := encoder.Encode(t)
-	if err != nil {
-		panic(err)
-	}
+	CheckErr(err)
 	return buffer.Bytes()
 }
 
-func jsonUnmarshal(data []byte, v interface{}) {
+// JSONUnmarshal wraps known unmarshal method and handles error.
+func JSONUnmarshal(data []byte, v interface{}) {
 	err := json.Unmarshal(data, v)
-	if err != nil {
-		panic(err)
-	}
+	CheckErr(err)
 }
 
-func readFile(path string) []byte {
-	b, err := ioutil.ReadFile(path)
-	if err != nil {
-		panic(err)
-	}
-	return b
-}
-
-func writeFile(path string, data []byte) {
-	if err := ioutil.WriteFile(path, data, 0644); err != nil {
-		panic(err)
-	}
-}
-
-func initFile(path string, content []byte) string {
+// InitFile writs file tp path if it not exists.
+func InitFile(path string, content []byte) string {
 	if _, err := os.Stat(path); os.IsNotExist(err) {
-		writeFile(path, content)
+		err := ioutil.WriteFile(path, content, 0644)
+		CheckErr(err)
 	}
 	return path
+}
+
+// CheckErr prints error exits with exit code 1 if err is not nil.
+func CheckErr(err error) {
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
 }

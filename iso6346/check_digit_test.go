@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package main
+package iso6346
 
 import (
 	"testing"
@@ -19,9 +19,9 @@ import (
 
 func TestCalcCheckDigit(t *testing.T) {
 	type args struct {
-		ownerCode  ownerCode
-		equipCatID equipCatID
-		serialNum  serialNum
+		ownerCode  OwnerCode
+		equipCatID EquipCatID
+		serialNum  SerialNum
 	}
 	tests := []struct {
 		name string
@@ -29,27 +29,27 @@ func TestCalcCheckDigit(t *testing.T) {
 		want int
 	}{
 		{"Test ABC U 123456 0",
-			args{newOwnerCode("ABC"), newEquipCatIDU(), newSerialNum(123456)},
+			args{NewOwnerCode("ABC"), NewEquipCatIDU(), NewSerialNum(123456)},
 			0},
 		{"Test NYK U 008685 2",
-			args{newOwnerCode("NYK"), newEquipCatIDU(), newSerialNum(8685)},
+			args{NewOwnerCode("NYK"), NewEquipCatIDU(), NewSerialNum(8685)},
 			2},
 		{"Test NYK U 000000 0",
-			args{newOwnerCode("NYK"), newEquipCatIDU(), newSerialNum(0)},
+			args{NewOwnerCode("NYK"), NewEquipCatIDU(), NewSerialNum(0)},
 			0},
 		{"Test CMA U 163912 0",
-			args{newOwnerCode("CMA"), newEquipCatIDU(), newSerialNum(163912)},
+			args{NewOwnerCode("CMA"), NewEquipCatIDU(), NewSerialNum(163912)},
 			0},
 		{"Test CMA U 169312 0",
-			args{newOwnerCode("CMA"), newEquipCatIDU(), newSerialNum(169312)},
+			args{NewOwnerCode("CMA"), NewEquipCatIDU(), NewSerialNum(169312)},
 			0},
 		{"Test CSQ U 305438 3",
-			args{newOwnerCode("CSQ"), newEquipCatIDU(), newSerialNum(305438)},
+			args{NewOwnerCode("CSQ"), NewEquipCatIDU(), NewSerialNum(305438)},
 			3},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := calcCheckDigit(tt.args.ownerCode, tt.args.equipCatID, tt.args.serialNum); got != tt.want {
+			if got := CalcCheckDigit(tt.args.ownerCode, tt.args.equipCatID, tt.args.serialNum); got != tt.want {
 				t.Errorf("calcCheckDigit() = %v, want %v", got, tt.want)
 			}
 		})

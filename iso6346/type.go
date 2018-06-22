@@ -11,23 +11,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package main
+package iso6346
 
-type mappedTypeAndGroup struct {
-	MappedType  mappedType
-	MappedGroup group
-}
-
-func getTypeAndGroup(code string) mappedTypeAndGroup {
-	typeAndGroup := mappedTypeAndGroup{}
-	typeValue, typeFound := getType(code)
-	group, groupFound := getGroup(string(code[0]))
-
-	if !typeFound && !groupFound {
-		return typeAndGroup
-	}
-
-	typeAndGroup.MappedType = typeValue
-	typeAndGroup.MappedGroup = group
-	return typeAndGroup
+// Type has code and information about an ISO 6346 type.
+type Type struct {
+	Code string
+	Info string
 }

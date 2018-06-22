@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package main
+package iso6346
 
 import (
 	"log"
@@ -19,9 +19,11 @@ import (
 	"time"
 )
 
-func genContNum(count int, c chan contNumber) {
+// GenContNum creates a specified count of container numbers. Random owner code generator
+// is needed to define owner code values in generated container numbers.
+func GenContNum(count int, c chan ContNumber, randomOwnerCodes func(count int) []OwnerCode) {
 
-	codes := getRandomOwnerCodes(count)
+	codes := randomOwnerCodes(count)
 	randOffset := rand.Int()
 	lenCodes := len(codes)
 
@@ -29,18 +31,18 @@ func genContNum(count int, c chan contNumber) {
 		log.Fatalf("'%d' exceeds generate limit %d (%d owners * 1000000 serial numbers)", count, lenCodes*1000000, lenCodes)
 	}
 
-	equipCatID := newEquipCatIDU()
+	equipCatID := NewEquipCatIDU()
 
 	serialNumPasses := count / 1000000
 	for ownerOffset := 0; ownerOffset <= serialNumPasses; ownerOffset++ {
 
 		for i := 0; i < count && i < 1000000; i++ {
-			serialNum := newSerialNum(permSerialNum((permSerialNum(i) + randOffset) % 1000000))
+			serialNum := NewSerialNum(permSerialNum((permSerialNum(i) + randOffset) % 1000000))
 
 			code := codes[(i+ownerOffset)%lenCodes]
-			checkDigit := calcCheckDigit(code, equipCatID, serialNum)
+			checkDigit := CalcCheckDigit(code, equipCatID, serialNum)
 
-			c <- newContNum(code, equipCatID, serialNum, checkDigit)
+			c <- NewContNum(code, equipCatID, serialNum, checkDigit)
 		}
 		count -= 1000000
 	}

@@ -1,4 +1,4 @@
-// Copyright © 2017 Marcel Meyer meyermarcel@posteo.de
+// Copyright © 2018 Marcel Meyer meyermarcel@posteo.de
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -11,10 +11,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package main
+package iso6346
 
-import "github.com/meyermarcel/iso6346/cmd"
-
-func main() {
-	cmd.Execute()
+// TypeGroup has code and information about an ISO 6346 type group.
+type TypeGroup struct {
+	Code string
+	Info string
 }

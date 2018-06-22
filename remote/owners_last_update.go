@@ -11,14 +11,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package main
+package remote
 
 import (
-	"log"
 	"path/filepath"
 	"strings"
 	"time"
+
+	"io/ioutil"
+
+	"github.com/meyermarcel/iso6346/utils"
 )
+
+const dateFormat = "2006-01-02"
 
 const ownersLastUpdateFileName = "owners-last-update"
 const ownersLastUpdate = "2018-06-15" + "\n"
@@ -26,22 +31,24 @@ const ownersLastUpdate = "2018-06-15" + "\n"
 var loadedOwnersLastUpdate string
 var pathToOwnersLastUpdate string
 
-func initOwnersLastUpdate(appDirPath string) {
+// InitOwnersLastUpdate writes last update file to path if it not exists and loads its data to memory.
+func InitOwnersLastUpdate(appDirPath string) {
 	pathToOwnersLastUpdate = filepath.Join(appDirPath, ownersLastUpdateFileName)
-	initFile(pathToOwnersLastUpdate, []byte(ownersLastUpdate))
-	loadedOwnersLastUpdate = string(readFile(pathToOwnersLastUpdate))
+	utils.InitFile(pathToOwnersLastUpdate, []byte(ownersLastUpdate))
+	b, err := ioutil.ReadFile(pathToOwnersLastUpdate)
+	utils.CheckErr(err)
+	loadedOwnersLastUpdate = string(b)
 }
 
 func getOwnersLastUpdate() time.Time {
 	dateString := strings.TrimSuffix(loadedOwnersLastUpdate, "\n")
 
 	date, err := time.Parse(dateFormat, dateString)
-	if err != nil {
-		log.Fatal("Cannot parse time ", dateString, ":", err)
-	}
+	utils.CheckErr(err)
 	return date
 }
 
 func saveNowForOwnersLastUpdate() {
-	writeFile(pathToOwnersLastUpdate, []byte(time.Now().Format(dateFormat)+"\n"))
+	err := ioutil.WriteFile(pathToOwnersLastUpdate, []byte(time.Now().Format(dateFormat)+"\n"), 0644)
+	utils.CheckErr(err)
 }

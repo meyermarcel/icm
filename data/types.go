@@ -11,38 +11,42 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package main
+package data
 
 import (
 	"path/filepath"
+
+	"io/ioutil"
+
+	"github.com/meyermarcel/iso6346/iso6346"
+	"github.com/meyermarcel/iso6346/utils"
 )
 
-type mappedType struct {
-	Code     string
-	TypeInfo string
-}
-
-const jsonTypesFileName = "types.json"
+const typesFileName = "types.json"
 
 var loadedTypes map[string]string
 
-func initCfgTypes(appDirPath string) {
-	pathToTypes := initFile(filepath.Join(appDirPath, jsonTypesFileName), []byte(typesJSON))
-	jsonUnmarshal(readFile(pathToTypes), &loadedTypes)
+// InitTypesData writes type file to path if it not exists and loads its data to memory.
+func InitTypesData(path string) {
+	pathToTypes := utils.InitFile(filepath.Join(path, typesFileName), []byte(typesJSON))
+	b, err := ioutil.ReadFile(pathToTypes)
+	utils.CheckErr(err)
+	utils.JSONUnmarshal(b, &loadedTypes)
 }
 
-func getType(code string) (mappedType, bool) {
+func getType(code string) (iso6346.Type, bool) {
 	typeInfo, exists := loadedTypes[code]
 
-	return mappedType{code, typeInfo}, exists
+	return iso6346.Type{Code: code, Info: typeInfo}, exists
 }
 
-func getRegexPartTypes() string {
-	var regexString string
+// GetTypeCodes returns all type codes.
+func GetTypeCodes() []string {
+	keys := make([]string, 0, len(loadedTypes))
 	for k := range loadedTypes {
-		regexString += k + "|"
+		keys = append(keys, k)
 	}
-	return regexString[:len(regexString)-1]
+	return keys
 }
 
 const typesJSON = `{

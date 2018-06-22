@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package main
+package ui
 
 import (
 	"fmt"
@@ -41,12 +41,12 @@ func fmtRegexIn(pi regexIn) string {
 
 	matchRangesIdx := 0
 
-	input := pi.Input()
+	input := pi.input
 
 	for pos, w := 0, 0; pos < len(input); pos += w {
 
-		if matchRangesIdx < len(pi.MatchRanges()) && pi.MatchRanges()[matchRangesIdx] == pos {
-			matched := input[pos:pi.MatchRanges()[matchRangesIdx+1]]
+		if matchRangesIdx < len(pi.matchRanges) && pi.matchRanges[matchRangesIdx] == pos {
+			matched := input[pos:pi.matchRanges[matchRangesIdx+1]]
 			sumWidthSubStr := 0
 			for posSubStr, wSubStr := 0, 0; posSubStr < len(matched); posSubStr += wSubStr {
 				runeValue, width := utf8.DecodeRuneInString(matched[posSubStr:])
@@ -70,18 +70,18 @@ func fmtRegexIn(pi regexIn) string {
 func fmtIn(in input) string {
 
 	if in.isValidFmt() {
-		return fmt.Sprintf("%s", green(in.Value()))
+		return fmt.Sprintf("%s", green(in.value))
 	}
 
 	b := strings.Builder{}
 
 	startIndexMissingCharacters := 0
-	for pos, element := range in.Value() {
+	for pos, element := range in.value {
 		b.WriteString(fmt.Sprintf("%s", yellow(string(element))))
 		startIndexMissingCharacters = pos + 1
 	}
 
-	for i := startIndexMissingCharacters; i < in.ValidLen(); i++ {
+	for i := startIndexMissingCharacters; i < in.validLen; i++ {
 		b.WriteString(fmt.Sprintf("%s", red(missingCharacter)))
 	}
 

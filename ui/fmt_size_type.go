@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package main
+package ui
 
 import (
 	"fmt"
@@ -68,8 +68,8 @@ func typeAndGroupTxt(offset int, typeAndGroupIn typeAndGroupIn, sepSizeType stri
 			fmt.Sprintf("%s must be a %s", underline("type code"), bold("valid type")))
 	}
 	return newPosInfo(offset+indentSize+len(sepSizeType)+2,
-		"group "+typeAndGroupIn.TypeAndGroup.MappedGroup.Code+": "+
-			typeAndGroupIn.TypeAndGroup.MappedGroup.Info,
-		"type "+typeAndGroupIn.TypeAndGroup.MappedType.Code+": "+
-			typeAndGroupIn.TypeAndGroup.MappedType.TypeInfo)
+		"group "+typeAndGroupIn.TypeAndGroup.GetGroupCode()+": "+
+			typeAndGroupIn.TypeAndGroup.GetGroupInfo(),
+		"type "+typeAndGroupIn.TypeAndGroup.GetTypeCode()+": "+
+			typeAndGroupIn.TypeAndGroup.GetTypeInfo())
 }

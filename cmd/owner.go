@@ -11,11 +11,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package main
+package cmd
 
 import (
 	"os"
 
+	"github.com/meyermarcel/iso6346/remote"
+	"github.com/meyermarcel/iso6346/ui"
 	"github.com/spf13/cobra"
 )
 
@@ -34,13 +36,10 @@ var validateOwnerCmd = &cobra.Command{
 	Example: `  ` + appName + ` owner validate 'ABCU'`,
 	Args:    cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		oce := parseOwnerCodeOptEquipCat(args[0])
 
-		oce.ownerCodeIn.resolve(getOwner)
+		valid := ui.ParseAndPrintOwnerCodeOptEquipCat(args[0])
 
-		printOwnerCode(oce)
-
-		if oce.ownerCodeIn.isValidFmt() {
+		if valid {
 			os.Exit(0)
 		}
 		os.Exit(1)
@@ -60,7 +59,7 @@ Following information is available:
 	Example: `  ` + appName + ` owner update`,
 	Args:    cobra.NoArgs,
 	Run: func(cmd *cobra.Command, args []string) {
-		update()
+		remote.Update()
 		os.Exit(0)
 	},
 }
@@ -68,5 +67,5 @@ Following information is available:
 func init() {
 	ownerCmd.AddCommand(ownerUpdateCmd)
 	ownerCmd.AddCommand(validateOwnerCmd)
-	iso6346Cmd.AddCommand(ownerCmd)
+	RootCmd.AddCommand(ownerCmd)
 }

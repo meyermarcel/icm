@@ -11,11 +11,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package main
+package cmd
 
 import (
 	"os"
 
+	"github.com/meyermarcel/iso6346/ui"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -37,15 +38,10 @@ var sizeTypeValidateCmd = &cobra.Command{
   ` + appName + ` sizetype validate --` + sepST + ` '' '20G1'`,
 	Args: cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		st := parseSizeType(args[0])
 
-		st.lengthIn.resolve(getLength)
-		st.heightWidthIn.resolve(getHeightAndWidth)
-		st.typeAndGroupIn.resolve(getTypeAndGroup)
+		valid := ui.ParseAndPrintSizeType(args[0], viper.GetString(sepST))
 
-		printSizeType(st, viper.GetString(sepST))
-
-		if st.lengthIn.isValidFmt() && st.heightWidthIn.isValidFmt() && st.typeAndGroupIn.isValidFmt() {
+		if valid {
 			os.Exit(0)
 		}
 		os.Exit(1)
@@ -59,5 +55,5 @@ func init() {
 	viper.BindPFlag(sepST, sizeTypeValidateCmd.Flags().Lookup(sepST))
 
 	sizeTypeCmd.AddCommand(sizeTypeValidateCmd)
-	iso6346Cmd.AddCommand(sizeTypeCmd)
+	RootCmd.AddCommand(sizeTypeCmd)
 }

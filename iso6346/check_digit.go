@@ -11,18 +11,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package main
+package iso6346
 
 import (
 	"strings"
 )
 
-/*
-This method is a modified version of a Go code sample from
-https://en.wikipedia.org/wiki/ISO_6346#Code_Sample_(Go)
-*/
-func calcCheckDigit(ownerCode ownerCode, equipCatID equipCatID, serialNum serialNum) int {
+// CalcCheckDigit calculates check digit for owner, equipment category ID and serial number.
+// This is a modified snippet from https://en.wikipedia.org/wiki/ISO_6346#Code_Sample_(Go).
+func CalcCheckDigit(ownerCode OwnerCode, equipCatID EquipCatID, serialNum SerialNum) int {
 
+	//
+	//
 	concat := ownerCode.Value() + equipCatID.Value
 
 	n := 0.0

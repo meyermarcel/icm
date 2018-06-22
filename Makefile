@@ -1,5 +1,6 @@
 PACKAGES := $(shell go list ./... | grep -v /vendor)
 BIN_DIR := $(GOPATH)/bin
+BUILD_DIR := build
 BINARY := iso6346
 
 .PHONY: all
@@ -9,12 +10,7 @@ all: clean test lint build
 clean:
 	go clean -x
 	rm -rf release
-
-GOMETALINTER := $(BIN_DIR)/gometalinter
-
-$(GOMETALINTER):
-	go get -u github.com/alecthomas/gometalinter
-	gometalinter --install &> /dev/null
+	rm -rf $(BUILD_DIR)
 
 .PHONY: fmt
 fmt:
@@ -25,12 +21,12 @@ test:
 	go test $(PACKAGES)
 
 .PHONY: lint
-lint: $(GOMETALINTER)
+lint: 
 	gometalinter --disable-all --enable=vet --enable=golint --enable=gotype --enable=goimports --vendor ./...
 
 .PHONY: build
 build:
-	go build -o $(BINARY)
+	go build -o $(BUILD_DIR)/$(BINARY)
 
 VERSION ?= vlatest
 PLATFORMS := windows linux darwin

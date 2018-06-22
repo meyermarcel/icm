@@ -11,17 +11,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package main
+package data
 
 import (
 	"path/filepath"
-	"strings"
+
+	"io/ioutil"
+
+	"github.com/meyermarcel/iso6346/iso6346"
+	"github.com/meyermarcel/iso6346/utils"
 )
 
 const sizesFileName = "sizes.json"
 
-type length struct {
-	Length string
+var loadedSizes sizes
+
+type sizes struct {
+	Length         map[string]string         `json:"length"`
+	HeightAndWidth map[string]heightAndWidth `json:"heightAndWidth"`
 }
 
 type heightAndWidth struct {
@@ -29,42 +36,43 @@ type heightAndWidth struct {
 	Height string `json:"width"`
 }
 
-var loadedCfgSizes sizes
-
-type sizes struct {
-	Length         map[string]string         `json:"length"`
-	HeightAndWidth map[string]heightAndWidth `json:"heightAndWidth"`
+// InitSizesData writes size file to path if it not exists and loads its data to memory.
+func InitSizesData(path string) {
+	pathToSizes := utils.InitFile(filepath.Join(path, sizesFileName), []byte(lengthWidthAndHeightJSON))
+	b, err := ioutil.ReadFile(pathToSizes)
+	utils.CheckErr(err)
+	utils.JSONUnmarshal(b, &loadedSizes)
 }
 
-func initCfgSizes(appDirPath string) {
-	pathToSizes := initFile(filepath.Join(appDirPath, sizesFileName), []byte(lengthWidthAndHeightJSON))
-	jsonUnmarshal(readFile(pathToSizes), &loadedCfgSizes)
-}
-
-func getRegexPartLengths() string {
-	keys := make([]string, 0, len(loadedCfgSizes.Length))
-	for k := range loadedCfgSizes.Length {
+// GetLengthCodes returns all length codes.
+func GetLengthCodes() []string {
+	keys := make([]string, 0, len(loadedSizes.Length))
+	for k := range loadedSizes.Length {
 		keys = append(keys, k)
 	}
-	return strings.Join(keys, "")
+	return keys
 }
 
-func getRegexPartHeightAndWidths() string {
-	keys := make([]string, 0, len(loadedCfgSizes.HeightAndWidth))
-	for k := range loadedCfgSizes.HeightAndWidth {
+// GetHeightAndWidthCodes returns all height and width codes.
+func GetHeightAndWidthCodes() []string {
+	keys := make([]string, 0, len(loadedSizes.HeightAndWidth))
+	for k := range loadedSizes.HeightAndWidth {
 		keys = append(keys, k)
 	}
-	return strings.Join(keys, "")
+	return keys
 }
 
-func getLength(code string) length {
+// GetLength returns length for a given length code.
+func GetLength(code string) iso6346.Length {
 
-	mappedLength := loadedCfgSizes.Length[code]
-	return length{mappedLength}
+	mappedLength := loadedSizes.Length[code]
+	return iso6346.Length{Length: mappedLength}
 }
 
-func getHeightAndWidth(code string) heightAndWidth {
-	return loadedCfgSizes.HeightAndWidth[code]
+// GetHeightAndWidth returns height and width for given height and width code.
+func GetHeightAndWidth(code string) iso6346.HeightAndWidth {
+	heightAndWidth := loadedSizes.HeightAndWidth[code]
+	return iso6346.HeightAndWidth{Width: heightAndWidth.Width, Height: heightAndWidth.Height}
 }
 
 const lengthWidthAndHeightJSON = `{
