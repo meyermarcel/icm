@@ -78,6 +78,11 @@ var generateCmd = &cobra.Command{
 
   ` + appName + ` generate --` + sepOE + ` '' --` + sepSC + ` ''`,
 	Args: cobra.NoArgs,
+	PreRun: func(cmd *cobra.Command, args []string) {
+		viper.BindPFlag(sepOE, cmd.Flags().Lookup(sepOE))
+		viper.BindPFlag(sepES, cmd.Flags().Lookup(sepES))
+		viper.BindPFlag(sepSC, cmd.Flags().Lookup(sepSC))
+	},
 	Run: func(cmd *cobra.Command, args []string) {
 		c := make(chan iso6346.ContNumber)
 		go iso6346.GenContNum(count, c, data.GetRandomOwnerCodes)
@@ -103,6 +108,13 @@ var validateCmd = &cobra.Command{
 
   ` + appName + ` validate --` + sepOE + ` '' --` + sepSC + ` '' 'ABCU 1234560'`,
 	Args: cobra.ExactArgs(1),
+	PreRun: func(cmd *cobra.Command, args []string) {
+		viper.BindPFlag(sepOE, cmd.Flags().Lookup(sepOE))
+		viper.BindPFlag(sepES, cmd.Flags().Lookup(sepES))
+		viper.BindPFlag(sepSC, cmd.Flags().Lookup(sepSC))
+		viper.BindPFlag(sepCS, cmd.Flags().Lookup(sepCS))
+		viper.BindPFlag(sepST, cmd.Flags().Lookup(sepST))
+	},
 	Run: func(cmd *cobra.Command, args []string) {
 
 		valid := ui.ParseAndPrintContNum(args[0], ui.Separators{
@@ -131,10 +143,6 @@ func init() {
 	generateCmd.Flags().String(sepSC, "",
 		"ABCU123456(*)0  (*) separates serial number and check digit")
 
-	viper.BindPFlag(sepOE, generateCmd.Flags().Lookup(sepOE))
-	viper.BindPFlag(sepES, generateCmd.Flags().Lookup(sepES))
-	viper.BindPFlag(sepSC, generateCmd.Flags().Lookup(sepSC))
-
 	RootCmd.AddCommand(generateCmd)
 
 	validateCmd.Flags().String(sepOE, "",
@@ -147,12 +155,6 @@ func init() {
 		"ABCU1234560 (*)  20G1  (*) separates check digit and size")
 	validateCmd.Flags().String(sepST, "",
 		"ABCU1234560   20(*)G1  (*) separates size and type")
-
-	viper.BindPFlag(sepOE, validateCmd.Flags().Lookup(sepOE))
-	viper.BindPFlag(sepES, validateCmd.Flags().Lookup(sepES))
-	viper.BindPFlag(sepSC, validateCmd.Flags().Lookup(sepSC))
-	viper.BindPFlag(sepCS, validateCmd.Flags().Lookup(sepCS))
-	viper.BindPFlag(sepST, validateCmd.Flags().Lookup(sepST))
 
 	RootCmd.AddCommand(validateCmd)
 }
