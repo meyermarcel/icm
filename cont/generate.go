@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package iso6346
+package cont
 
 import (
 	"log"
@@ -19,9 +19,9 @@ import (
 	"time"
 )
 
-// GenContNum creates a specified count of container numbers. Random owner code generator
+// GenNum creates a specified count of container numbers. Random owner code generator
 // is needed to define owner code values in generated container numbers.
-func GenContNum(count int, c chan ContNumber, randomOwnerCodes func(count int) []OwnerCode) {
+func GenNum(count int, c chan Number, randomOwnerCodes func(count int) []OwnerCode) {
 
 	codes := randomOwnerCodes(count)
 	randOffset := rand.Int()
@@ -42,7 +42,7 @@ func GenContNum(count int, c chan ContNumber, randomOwnerCodes func(count int) [
 			code := codes[(i+ownerOffset)%lenCodes]
 			checkDigit := CalcCheckDigit(code, equipCatID, serialNum)
 
-			c <- NewContNum(code, equipCatID, serialNum, checkDigit)
+			c <- NewNum(code, equipCatID, serialNum, checkDigit)
 		}
 		count -= 1000000
 	}

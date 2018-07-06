@@ -18,8 +18,8 @@ import (
 
 	"io/ioutil"
 
-	"github.com/meyermarcel/iso6346/iso6346"
-	"github.com/meyermarcel/iso6346/utils"
+	"github.com/meyermarcel/icm/cont"
+	"github.com/meyermarcel/icm/utils"
 )
 
 const equipCatIDsFileName = "equipment-category-ids.json"
@@ -41,10 +41,10 @@ func InitEquipCatIDsData(path string) {
 }
 
 // GetEquipCat returns equipment category for given code.
-func GetEquipCat(code string) iso6346.EquipCat {
+func GetEquipCat(code string) cont.EquipCat {
 	info := loadedEquipCatIDs[code]
 
-	return iso6346.NewEquipCatID(iso6346.NewEquipCatIDFrom(code), info)
+	return cont.NewEquipCatID(cont.NewEquipCatIDFrom(code), info)
 }
 
 // GetEquipCatIDs returns all equipment category IDs.

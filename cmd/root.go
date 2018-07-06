@@ -19,18 +19,20 @@ import (
 
 	"path/filepath"
 
-	"github.com/meyermarcel/iso6346/data"
-	"github.com/meyermarcel/iso6346/iso6346"
-	"github.com/meyermarcel/iso6346/remote"
-	"github.com/meyermarcel/iso6346/ui"
-	"github.com/meyermarcel/iso6346/utils"
+	"github.com/meyermarcel/icm/cont"
+	"github.com/meyermarcel/icm/data"
+	"github.com/meyermarcel/icm/remote"
+	"github.com/meyermarcel/icm/ui"
+	"github.com/meyermarcel/icm/utils"
 	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
 
+var version = "dev"
+
 const (
-	appName = "iso6346"
+	appName = "icm"
 	appDir  = "." + appName
 	sepOE   = "sep-owner-equip"
 	sepES   = "sep-equip-serial"
@@ -50,9 +52,9 @@ Edit default configuration:
 // RootCmd represents the base command when called without any subcommands
 var RootCmd = &cobra.Command{
 	Use:     appName,
-	Version: "0.1.0-beta",
-	Short:   "Parse or generate ISO 6346 related data",
-	Long:    "Parse or generate ISO 6346 related data.",
+	Version: version,
+	Short:   "Validate or generate intermodal container markings",
+	Long:    "Validate or generate intermodal container markings.",
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -84,8 +86,8 @@ var generateCmd = &cobra.Command{
 		viper.BindPFlag(sepSC, cmd.Flags().Lookup(sepSC))
 	},
 	Run: func(cmd *cobra.Command, args []string) {
-		c := make(chan iso6346.ContNumber)
-		go iso6346.GenContNum(count, c, data.GetRandomOwnerCodes)
+		c := make(chan cont.Number)
+		go cont.GenNum(count, c, data.GetRandomOwnerCodes)
 
 		for contNum := range c {
 			ui.PrintContNum(contNum, ui.Separators{

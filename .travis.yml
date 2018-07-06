@@ -1,23 +1,15 @@
 language: go
 go:
-  - "1.10"
+- "1.10.3"
+
 before_install:
-  - curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
-  - dep ensure
-  - go get -u github.com/alecthomas/gometalinter
-  - gometalinter --install
+- curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+- dep ensure
+- go get -u github.com/alecthomas/gometalinter
+- gometalinter --install
+
 script:
-  - make
-before_deploy:
-  - make VERSION=${TRAVIS_TAG} release -j2
-deploy:
-  provider: releases
-  api_key:
-    secure: "wYtXCY8tFC+DNZNDBy+pWa/CdUxumR/hPg6FsegJHCTqCl/kZR6gXbYOdUwLEzeXfR25j61D10IMbNWauVuCoeaIgyEp0j33n0hmb6Q7ynCnwCqAZmlDbcSJXpPLzl1IBAOwBGmau8uKYWPu7eFiwYeKUv2VwAdtiwyGW0Yhdae+Y2XcdDuXfVTyb2fKQmDuJQ6SAeJEqBSmry0vIsVYHmvE8WWaBcBa3FyHBG0nbsGaPDhLQFoX5LcyzvhZCSrWRfE42xDGSJudLigvsbAvcN0bkAiRNcL1dFSoi9TorSTlI8qT0IutAvHeTLwkLAzePASN7yuUWQBRlP9tYyDHClV2dLSc53A4hOOYt+ZB9knqU04O4t3m2NFpLWrU1H3A+p3WSyJxIq933CVU3wdFAW/PkFKzBwyGSFToBIQlsTvNrPJvh26HcpAoQ6ZjnPz5VXMD+vLzYCH4xynJr/vDDeOPHU37aaEdpDd4XU7ZA3KVxB7kQhspD6AaQEu/Rt4Kl9mmGq4T8G0yoUJ6YfIpTdzp4vbiFTpknSrEY6MXIKCiE7hzwehG/BuHd4EqVKhWXp6q4UHSDLT/Hf2d+MmwSWpF1h4cmhNXvvGpxx3iCRkP09UQ0Qo/tCKxqd1Jic515opMpDnm1yXVTWSYK0SzDnhwNzSLmtsvUj7TyTYoFbY="
-  file: release/*
-  file_glob: true
-  skip_cleanup: true
-  on:
-    tags: true
+- make
+
 notifications:
   email: false

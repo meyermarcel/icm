@@ -20,7 +20,7 @@ import (
 
 	"io/ioutil"
 
-	"github.com/meyermarcel/iso6346/utils"
+	"github.com/meyermarcel/icm/utils"
 )
 
 const dateFormat = "2006-01-02"

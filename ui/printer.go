@@ -16,10 +16,10 @@ package ui
 import (
 	"fmt"
 
-	"github.com/meyermarcel/iso6346/iso6346"
+	"github.com/meyermarcel/icm/cont"
 )
 
-// Separators describes all separators between independent ISO 6346 data.
+// Separators describes all separators between independent container markings.
 type Separators struct {
 	OwnerEquip  string
 	EquipSerial string
@@ -58,7 +58,7 @@ func printSizeType(st sizeTypeIn, sepSizeType string) {
 }
 
 // PrintContNum prints a container number with given separators and a new line.
-func PrintContNum(cn iso6346.ContNumber, seps Separators) {
+func PrintContNum(cn cont.Number, seps Separators) {
 	fmt.Printf("%s%s%s%s%06d%s%d",
 		cn.OwnerCode().Value(),
 		seps.OwnerEquip,

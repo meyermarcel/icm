@@ -1,7 +1,7 @@
 PACKAGES := $(shell go list ./... | grep -v /vendor)
 BIN_DIR := $(GOPATH)/bin
 BUILD_DIR := build
-BINARY := iso6346
+BINARY := icm
 
 .PHONY: all
 all: clean test lint build
@@ -9,7 +9,6 @@ all: clean test lint build
 .PHONY: clean
 clean:
 	go clean -x
-	rm -rf release
 	rm -rf $(BUILD_DIR)
 
 .PHONY: fmt
@@ -27,18 +26,6 @@ lint:
 .PHONY: build
 build:
 	go build -o $(BUILD_DIR)/$(BINARY)
-
-VERSION ?= vlatest
-PLATFORMS := windows linux darwin
-os = $(word 1, $@)
-
-.PHONY: $(PLATFORMS)
-$(PLATFORMS):
-	mkdir -p release
-	GOOS=$(os) GOARCH=amd64 go build -o release/$(BINARY)-$(VERSION)-$(os)-amd64
-
-.PHONY: release
-release: windows linux darwin
 
 .PHONY: dep
 dep:

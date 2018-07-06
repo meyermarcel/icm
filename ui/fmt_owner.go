@@ -17,7 +17,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/meyermarcel/iso6346/data"
+	"github.com/meyermarcel/icm/data"
 )
 
 func fmtOwnerCode(oce ownerCodeOptEquipCatIDIn) string {

@@ -13,22 +13,22 @@
 
 package data
 
-import "github.com/meyermarcel/iso6346/iso6346"
+import "github.com/meyermarcel/icm/cont"
 
 // TypeAndGroup encapsulates type and group.
 type TypeAndGroup struct {
-	typeIso iso6346.Type
-	group   iso6346.TypeGroup
+	typeCont cont.Type
+	group    cont.TypeGroup
 }
 
 // GetTypeCode returns type code.
 func (mtg TypeAndGroup) GetTypeCode() string {
-	return mtg.typeIso.Code
+	return mtg.typeCont.Code
 }
 
 // GetTypeInfo returns type information.
 func (mtg TypeAndGroup) GetTypeInfo() string {
-	return mtg.typeIso.Info
+	return mtg.typeCont.Info
 }
 
 // GetGroupCode returns group code.
@@ -51,7 +51,7 @@ func GetTypeAndGroup(code string) TypeAndGroup {
 		return typeAndGroup
 	}
 
-	typeAndGroup.typeIso = typeValue
+	typeAndGroup.typeCont = typeValue
 	typeAndGroup.group = group
 	return typeAndGroup
 }

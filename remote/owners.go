@@ -20,9 +20,9 @@ import (
 	"time"
 
 	"github.com/PuerkitoBio/goquery"
-	"github.com/meyermarcel/iso6346/data"
-	"github.com/meyermarcel/iso6346/iso6346"
-	"github.com/meyermarcel/iso6346/utils"
+	"github.com/meyermarcel/icm/cont"
+	"github.com/meyermarcel/icm/data"
+	"github.com/meyermarcel/icm/utils"
 )
 
 // Update owner by sending an request to server, parse HTML and write new owners to local file.
@@ -83,12 +83,12 @@ func getRecentlyDate(url string) time.Time {
 	return parsedDates[0]
 }
 
-func getOwnersRemote() map[string]iso6346.Owner {
+func getOwnersRemote() map[string]cont.Owner {
 	url := "https://www.bic-code.org/bic-letter-search/?resultsperpage=17576&searchterm="
 
 	const query = "tr td[data-label=Code]"
 
-	owners := map[string]iso6346.Owner{}
+	owners := map[string]cont.Owner{}
 
 	getBody(url).Find(query).Each(func(i int, s *goquery.Selection) {
 		code := s.Parent().Find("td[data-label=Code]").Text()
@@ -96,7 +96,7 @@ func getOwnersRemote() map[string]iso6346.Owner {
 		city := s.Parent().Find("td[data-label=City]").Text()
 		country := s.Parent().Find("td[data-label=Country]").Text()
 
-		owners[code[0:3]] = iso6346.Owner{Code: iso6346.NewOwnerCode(code[0:3]), Company: company, City: city, Country: country}
+		owners[code[0:3]] = cont.Owner{Code: cont.NewOwnerCode(code[0:3]), Company: company, City: city, Country: country}
 	})
 
 	if len(owners) == 0 {

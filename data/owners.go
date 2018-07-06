@@ -19,8 +19,8 @@ import (
 
 	"io/ioutil"
 
-	"github.com/meyermarcel/iso6346/iso6346"
-	"github.com/meyermarcel/iso6346/utils"
+	"github.com/meyermarcel/icm/cont"
+	"github.com/meyermarcel/icm/utils"
 )
 
 const ownersFileName = "owners.json"
@@ -44,27 +44,27 @@ func InitOwnersData(path string) {
 }
 
 // GetOwner returns an owner for an owner code.
-func GetOwner(code iso6346.OwnerCode) iso6346.Owner {
-	return toIso6346Owner(loadedOwners[code.Value()])
+func GetOwner(code cont.OwnerCode) cont.Owner {
+	return toOwner(loadedOwners[code.Value()])
 }
 
-func toIso6346Owner(owner owner) iso6346.Owner {
-	return iso6346.Owner{
-		Code:    iso6346.NewOwnerCode(owner.Code),
+func toOwner(owner owner) cont.Owner {
+	return cont.Owner{
+		Code:    cont.NewOwnerCode(owner.Code),
 		Company: owner.Company,
 		City:    owner.City,
 		Country: owner.Country}
 }
 
 // GetRandomOwnerCodes returns a count of owner codes.
-func GetRandomOwnerCodes(count int) []iso6346.OwnerCode {
-	var codes []iso6346.OwnerCode
+func GetRandomOwnerCodes(count int) []cont.OwnerCode {
+	var codes []cont.OwnerCode
 
 	for k := range loadedOwners {
 		if len(codes) >= count {
 			break
 		}
-		codes = append(codes, iso6346.NewOwnerCode(k))
+		codes = append(codes, cont.NewOwnerCode(k))
 	}
 	rand.Shuffle(len(codes), func(i, j int) {
 		codes[i], codes[j] = codes[j], codes[i]
@@ -73,7 +73,7 @@ func GetRandomOwnerCodes(count int) []iso6346.OwnerCode {
 }
 
 // UpdateOwners accepts a map of owner code to owner and updates the local owner file.
-func UpdateOwners(newOwners map[string]iso6346.Owner) {
+func UpdateOwners(newOwners map[string]cont.Owner) {
 	for k, v := range newOwners {
 		if _, exists := loadedOwners[k]; !exists {
 			loadedOwners[k] = toSerializableOwner(v)
@@ -83,7 +83,7 @@ func UpdateOwners(newOwners map[string]iso6346.Owner) {
 	utils.CheckErr(err)
 }
 
-func toSerializableOwner(ownerToConvert iso6346.Owner) owner {
+func toSerializableOwner(ownerToConvert cont.Owner) owner {
 	return owner{ownerToConvert.Code.Value(),
 		ownerToConvert.Company,
 		ownerToConvert.City,
@@ -184,6 +184,12 @@ const ownersJSON = `{
     "city": "HELSINKI",
     "country": "Finland"
   },
+  "ACB": {
+    "code": "ACB",
+    "company": "ACB CONTAINERS NV",
+    "city": "Antwerpen",
+    "country": "Belgium"
+  },
   "ACC": {
     "code": "ACC",
     "company": "ATLANTIC COAST CONTAINER",
@@ -225,6 +231,12 @@ const ownersJSON = `{
     "company": "CARDIGAS",
     "city": "HEUSDEN-ZOLDER",
     "country": "Belgium"
+  },
+  "ACR": {
+    "code": "ACR",
+    "company": "ACCIPITER OILFIELD EQUIPMENT",
+    "city": "DALIAN",
+    "country": "China"
   },
   "ACS": {
     "code": "ACS",
@@ -435,6 +447,12 @@ const ownersJSON = `{
     "company": "AGA GAS AB",
     "city": "MITCHELDEAN",
     "country": "United Kingdom"
+  },
+  "AHG": {
+    "code": "AHG",
+    "company": "AL GHAITH INDUSTRIES L.L.C",
+    "city": "Abu Dhabi",
+    "country": "United Arab Emirates"
   },
   "AHL": {
     "code": "AHL",
@@ -1180,6 +1198,12 @@ const ownersJSON = `{
     "city": "MIDDLESBROUGH CLEVELAND",
     "country": "United Kingdom"
   },
+  "BAJ": {
+    "code": "BAJ",
+    "company": "KEMENTRIAN PERHUBUNGAN",
+    "city": "JAKARTA PUSAT",
+    "country": "Indonesia"
+  },
   "BAK": {
     "code": "BAK",
     "company": "BADRAKH ENERGY LLC",
@@ -1244,6 +1268,12 @@ const ownersJSON = `{
     "code": "BBR",
     "company": "ITAKA TRANS",
     "city": "Saint-Petersburg",
+    "country": "Russian Federation"
+  },
+  "BBS": {
+    "code": "BBS",
+    "company": "LLC COMPANY SPECTRANSCONTAINER",
+    "city": "Moscow",
     "country": "Russian Federation"
   },
   "BBT": {
@@ -2074,6 +2104,12 @@ const ownersJSON = `{
     "city": "ROTTERDAM",
     "country": "Netherlands"
   },
+  "CAF": {
+    "code": "CAF",
+    "company": "CISAF SRL",
+    "city": "BERGAMO",
+    "country": "Italy"
+  },
   "CAI": {
     "code": "CAI",
     "company": "CAI INTERNATIONAL",
@@ -2428,6 +2464,12 @@ const ownersJSON = `{
     "city": "OTTAWA, ONTARIO  K1A OK2",
     "country": "Canada"
   },
+  "CFH": {
+    "code": "CFH",
+    "company": "SHANDONG CONGLIN FRUEHAUF AUTOMOBILE CO.,LTD",
+    "city": "Longkou",
+    "country": "China"
+  },
   "CFM": {
     "code": "CFM",
     "company": "STATE ENTERPRISE RAILWAYS OF MOLDOVA",
@@ -2457,6 +2499,12 @@ const ownersJSON = `{
     "company": "C.A.B. COOPERATIVA AUTOTRASPORTATORI SOC.COOP",
     "city": "PERUGIA",
     "country": "Italy"
+  },
+  "CGE": {
+    "code": "CGE",
+    "company": "P.U.H. CENTER-GAZ ZBIGNIEW JANAS",
+    "city": "Częstochowa",
+    "country": "Poland"
   },
   "CGG": {
     "code": "CGG",
@@ -4402,11 +4450,23 @@ const ownersJSON = `{
     "city": "ZALAEGERSZEG",
     "country": "Hungary"
   },
+  "EDZ": {
+    "code": "EDZ",
+    "company": "E-COMMODITIES HOLDINGS LIMITED",
+    "city": "Beiijng",
+    "country": "China"
+  },
   "EEE": {
     "code": "EEE",
     "company": "E2E SUPPLY CHAIN MANAGEMENT LIMITED",
     "city": "KARACHI",
     "country": "Pakistan"
+  },
+  "EET": {
+    "code": "EET",
+    "company": "ENERGO-TRANS",
+    "city": "Moscou",
+    "country": "Russian Federation"
   },
   "EFC": {
     "code": "EFC",
@@ -4431,6 +4491,12 @@ const ownersJSON = `{
     "company": "EUROPEAN FOOD TRANSPORT N.V.",
     "city": "WILLEBROEK",
     "country": "Belgium"
+  },
+  "EGA": {
+    "code": "EGA",
+    "company": "ELGAS",
+    "city": "Matraville",
+    "country": "Australia"
   },
   "EGF": {
     "code": "EGF",
@@ -5362,6 +5428,12 @@ const ownersJSON = `{
     "city": "Taipei",
     "country": "Taiwan (China)"
   },
+  "FMM": {
+    "code": "FMM",
+    "company": "MOERDIJK TANKCONTAINER TRADING BV",
+    "city": "Moerdijk",
+    "country": "Netherlands"
+  },
   "FMR": {
     "code": "FMR",
     "company": "FYFFES INTERNATIONAL",
@@ -5752,6 +5824,12 @@ const ownersJSON = `{
     "city": "MOL",
     "country": "Belgium"
   },
+  "GCC": {
+    "code": "GCC",
+    "company": "GREEN CONTAINERS AB",
+    "city": "Læsø",
+    "country": "Denmark"
+  },
   "GCE": {
     "code": "GCE",
     "company": "SEACO SRL",
@@ -6124,6 +6202,12 @@ const ownersJSON = `{
     "city": "NOUMEA CCEDEX",
     "country": "New Caledonia"
   },
+  "GNL": {
+    "code": "GNL",
+    "company": "GANG ZONG TRADE (SHANGHAI) CO., LTD",
+    "city": "SHANGHAI",
+    "country": "China"
+  },
   "GNR": {
     "code": "GNR",
     "company": "GENERON IGS",
@@ -6309,6 +6393,12 @@ const ownersJSON = `{
     "company": "NAVITRANS FRANCE",
     "city": "Marseille",
     "country": "France"
+  },
+  "GSH": {
+    "code": "GSH",
+    "company": "GSH OF ALABAMA, LLC",
+    "city": "Huntsville",
+    "country": "United States"
   },
   "GSI": {
     "code": "GSI",
@@ -7114,6 +7204,12 @@ const ownersJSON = `{
     "city": "PEARL RIVER, NY 10965",
     "country": "United States"
   },
+  "HTS": {
+    "code": "HTS",
+    "company": "HTS LLC",
+    "city": "MOSCOW",
+    "country": "Russian Federation"
+  },
   "HTU": {
     "code": "HTU",
     "company": "KIECA TRANS",
@@ -7576,6 +7672,12 @@ const ownersJSON = `{
     "city": "WOODCLIFF LAKE, N.J. 07677",
     "country": "United States"
   },
+  "INR": {
+    "code": "INR",
+    "company": "LOGITEX INVEST, LLC",
+    "city": "Moscow",
+    "country": "Russian Federation"
+  },
   "INS": {
     "code": "INS",
     "company": "INSTANTA",
@@ -7779,6 +7881,12 @@ const ownersJSON = `{
     "company": "IWS INTERNATIONALE WEIN UND SPIRITUOSEN TRANSPORTE GMBH",
     "city": "PRISDORF",
     "country": "Germany"
+  },
+  "IWL": {
+    "code": "IWL",
+    "company": "IMPALA TERMINALS GROUP B.V.",
+    "city": "Genf",
+    "country": "Switzerland"
   },
   "IWR": {
     "code": "IWR",
@@ -8188,6 +8296,12 @@ const ownersJSON = `{
     "city": "Brussels",
     "country": "Belgium"
   },
+  "KEN": {
+    "code": "KEN",
+    "company": "KENT REMOVALS & STORAGE",
+    "city": "Clayton",
+    "country": "Australia"
+  },
   "KER": {
     "code": "KER",
     "company": "TEMPRA AS",
@@ -8362,6 +8476,12 @@ const ownersJSON = `{
     "city": "HIROSHIMA-PREF",
     "country": "Japan"
   },
+  "KMC": {
+    "code": "KMC",
+    "company": "KMARIN CHEMICAL CORPORATION (KMCC)",
+    "city": "Seoul",
+    "country": "Korea, Republic of"
+  },
   "KMI": {
     "code": "KMI",
     "company": "KUANG MING ENTERPRISE CO. LTD",
@@ -8517,6 +8637,12 @@ const ownersJSON = `{
     "company": "KRONOSPAN SZCZECINEK SP. Z O.O.",
     "city": "Szczecinek",
     "country": "Poland"
+  },
+  "KTC": {
+    "code": "KTC",
+    "company": "AEROSOL GAS COMPANY, INC",
+    "city": "San Ramon",
+    "country": "United States"
   },
   "KTD": {
     "code": "KTD",
@@ -8679,6 +8805,12 @@ const ownersJSON = `{
     "company": "LIEBHERR-WERK BIBERACH GMBH",
     "city": "BIBERACH",
     "country": "Germany"
+  },
+  "LBG": {
+    "code": "LBG",
+    "company": "LUBIAO CONTAINER CO., LTD",
+    "city": "Road Town Tortola",
+    "country": "Virgin Islands, British"
   },
   "LBI": {
     "code": "LBI",
@@ -8986,6 +9118,12 @@ const ownersJSON = `{
     "city": "VALOGNES",
     "country": "France"
   },
+  "LMY": {
+    "code": "LMY",
+    "company": "LINDE MALAYSIA SDN BHD",
+    "city": "Selangor",
+    "country": "Malaysia"
+  },
   "LND": {
     "code": "LND",
     "company": "LINDE LLC",
@@ -9147,6 +9285,12 @@ const ownersJSON = `{
     "company": "LIGHTSAIL ENERGY INC.",
     "city": "Berkeley",
     "country": "United States"
+  },
+  "LTC": {
+    "code": "LTC",
+    "company": "LEASE TC BV",
+    "city": "Bergen",
+    "country": "Netherlands"
   },
   "LTE": {
     "code": "LTE",
@@ -9531,6 +9675,12 @@ const ownersJSON = `{
     "company": "MMD OFFSHORE ENGINEERING LTD",
     "city": "JIADING",
     "country": "China"
+  },
+  "MDP": {
+    "code": "MDP",
+    "company": "MODERN SHIPPING LINES CO LTD",
+    "city": "Hong Kong",
+    "country": "HK"
   },
   "MDS": {
     "code": "MDS",
@@ -10174,6 +10324,12 @@ const ownersJSON = `{
     "city": "GENEVE",
     "country": "Switzerland"
   },
+  "MTA": {
+    "code": "MTA",
+    "company": "MULTIMODAL EXPRESS ANDALUCIA SL",
+    "city": "SEVILLA",
+    "country": "Spain"
+  },
   "MTB": {
     "code": "MTB",
     "company": "MULTIBOXX LIMITED",
@@ -10522,6 +10678,12 @@ const ownersJSON = `{
     "city": "WARRINGTON WA36AS",
     "country": "United Kingdom"
   },
+  "NDC": {
+    "code": "NDC",
+    "company": "NIDEC",
+    "city": "ROCHE LA MOLIERE",
+    "country": "France"
+  },
   "NDS": {
     "code": "NDS",
     "company": "NILE DUTCH AFRICA LINE",
@@ -10575,6 +10737,12 @@ const ownersJSON = `{
     "company": "MITSUBISHI GAS CHEMICAL COMPANY INC",
     "city": "TOKYO",
     "country": "Japan"
+  },
+  "NFC": {
+    "code": "NFC",
+    "company": "NATIONAL FACTORY FOR PROCESSING AND TREATING MINERALS",
+    "city": "Dammam",
+    "country": "Saudi Arabia"
   },
   "NFL": {
     "code": "NFL",
@@ -11242,6 +11410,12 @@ const ownersJSON = `{
     "city": "MILANO MI",
     "country": "Italy"
   },
+  "OMS": {
+    "code": "OMS",
+    "company": "ORICA MINING SERVICES PORTUGAL",
+    "city": "Aljustrel",
+    "country": "Portugal"
+  },
   "ONE": {
     "code": "ONE",
     "company": "OCEAN NETWORK EXPRESS PTE. LTD.",
@@ -11325,6 +11499,12 @@ const ownersJSON = `{
     "company": "VINCI & CAMPAGNA SPA",
     "city": "Cagliari",
     "country": "Italy"
+  },
+  "ORN": {
+    "code": "ORN",
+    "company": "ORANO CYCLE",
+    "city": "PIERRELATTE CEDEX",
+    "country": "France"
   },
   "ORP": {
     "code": "ORP",
@@ -12904,11 +13084,29 @@ const ownersJSON = `{
     "city": "RIGA",
     "country": "Latvia"
   },
+  "RSI": {
+    "code": "RSI",
+    "company": "RASA INDUSTRIES, LTD.",
+    "city": "Tokyo",
+    "country": "Japan"
+  },
   "RSL": {
     "code": "RSL",
     "company": "MATSON SOUTH PACIFIC LTD",
     "city": "AUCKLAND",
     "country": "New Zealand"
+  },
+  "RSP": {
+    "code": "RSP",
+    "company": "REACH HOLDING GROUP (SHANGHAI) CO.,LTD",
+    "city": "SHANGHAI",
+    "country": "China"
+  },
+  "RSR": {
+    "code": "RSR",
+    "company": "LTD SUCCESSFUL TEAM RUSSIAN STEEL",
+    "city": "Moscow",
+    "country": "Russian Federation"
   },
   "RSS": {
     "code": "RSS",
@@ -13396,6 +13594,12 @@ const ownersJSON = `{
     "city": "PIERRELATTE",
     "country": "France"
   },
+  "SEU": {
+    "code": "SEU",
+    "company": "STONEHAVEN ENGINEERING LTD",
+    "city": "Stonehaven",
+    "country": "United Kingdom"
+  },
   "SEV": {
     "code": "SEV",
     "company": "SEVEL SPA SOCIETA EUROPA",
@@ -13491,6 +13695,12 @@ const ownersJSON = `{
     "company": "SICGIL INDUSTRIAL GASES LTD",
     "city": "CHENNAI - TAMIL NADU",
     "country": "India"
+  },
+  "SGM": {
+    "code": "SGM",
+    "company": "SIGMA DENIZCILIK KONT.VE.LOJ.SANT.TIC.",
+    "city": "ISTANBUL",
+    "country": "Turkey"
   },
   "SGN": {
     "code": "SGN",
@@ -14878,6 +15088,12 @@ const ownersJSON = `{
     "city": "GENOVA  GE",
     "country": "Italy"
   },
+  "THG": {
+    "code": "THG",
+    "company": "BEIJING TIANHAI CRYOGENIC EQUIPMENT CO. LTD.",
+    "city": "Beijing",
+    "country": "China"
+  },
   "THI": {
     "code": "THI",
     "company": "THIELMANN FINANCIAL SOLUTIONS AG",
@@ -14985,6 +15201,12 @@ const ownersJSON = `{
     "company": "T.I.S CONTAINER LTD",
     "city": "Hong Kong",
     "country": "HK"
+  },
+  "TJZ": {
+    "code": "TJZ",
+    "company": "HANGZHOU TIEJI FREIGHT CO., LTD",
+    "city": "HANGZHOU",
+    "country": "China"
   },
   "TKC": {
     "code": "TKC",
@@ -15351,6 +15573,12 @@ const ownersJSON = `{
     "company": "TRANSPORTES QUIMICOS RAMIREZ SL",
     "city": "SANLUCAR LA MAYOR-SEVILLA",
     "country": "Spain"
+  },
+  "TRA": {
+    "code": "TRA",
+    "company": "SHAANXI NON-FERROUS TIAN HONG REC SILICON MATERIALS CO LTD",
+    "city": "Yulin",
+    "country": "China"
   },
   "TRD": {
     "code": "TRD",
@@ -15772,6 +16000,12 @@ const ownersJSON = `{
     "city": "",
     "country": "Panama"
   },
+  "UGN": {
+    "code": "UGN",
+    "company": "UMDASCH GROUP NEWCON",
+    "city": "Amstetten",
+    "country": "Austria"
+  },
   "UGP": {
     "code": "UGP",
     "company": "JSC BEREZKAGAS UGRA",
@@ -16168,6 +16402,12 @@ const ownersJSON = `{
     "city": "SOUTHAMPTON S030 ZHE",
     "country": "United Kingdom"
   },
+  "VPT": {
+    "code": "VPT",
+    "company": "VPT KOMPRESSOREN GMBH",
+    "city": "Remscheid",
+    "country": "Germany"
+  },
   "VRA": {
     "code": "VRA",
     "company": "NORDIC BULKERS AB",
@@ -16209,6 +16449,12 @@ const ownersJSON = `{
     "company": "VSKY INT'L CORP",
     "city": "SHANGHAI",
     "country": "China"
+  },
+  "VSN": {
+    "code": "VSN",
+    "company": "VOSTSIBNEFTEGAS AO",
+    "city": "Krasnoyarsk",
+    "country": "Russian Federation"
   },
   "VST": {
     "code": "VST",
@@ -16449,6 +16695,12 @@ const ownersJSON = `{
     "company": "SPEDITION BAUMLE DORMAGEN GMBH",
     "city": "DORMAGEN",
     "country": "Germany"
+  },
+  "WGR": {
+    "code": "WGR",
+    "company": "WEIL GROUP RESOURCES, LLC",
+    "city": "Richmond",
+    "country": "United States"
   },
   "WGS": {
     "code": "WGS",
@@ -16810,6 +17062,12 @@ const ownersJSON = `{
     "city": "PURCHASE, NY 10577",
     "country": "United States"
   },
+  "YOL": {
+    "code": "YOL",
+    "company": "ONIDA CONTAINER LEASING CO., LTD.",
+    "city": "KOWLOON",
+    "country": "HK"
+  },
   "YPR": {
     "code": "YPR",
     "company": "SITRA",
@@ -16965,6 +17223,12 @@ const ownersJSON = `{
     "company": "CARGOSTORE WORLDWIDE TRADING LIMITED",
     "city": "LONDON SW19 7QD",
     "country": "United Kingdom"
+  },
+  "ZVL": {
+    "code": "ZVL",
+    "company": "OLEXIA GROUP S.A.",
+    "city": "Luxembourg",
+    "country": "Luxembourg"
   },
   "ZWF": {
     "code": "ZWF",

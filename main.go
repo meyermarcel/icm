@@ -13,7 +13,7 @@
 
 package main
 
-import "github.com/meyermarcel/iso6346/cmd"
+import "github.com/meyermarcel/icm/cmd"
 
 func main() {
 	cmd.Execute()

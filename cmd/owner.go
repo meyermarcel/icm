@@ -16,8 +16,8 @@ package cmd
 import (
 	"os"
 
-	"github.com/meyermarcel/iso6346/remote"
-	"github.com/meyermarcel/iso6346/ui"
+	"github.com/meyermarcel/icm/remote"
+	"github.com/meyermarcel/icm/ui"
 	"github.com/spf13/cobra"
 )
 

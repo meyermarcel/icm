@@ -11,9 +11,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package iso6346
+package cont
 
-// Type has code and information about an ISO 6346 type.
+// Type has code and information about the specified standard type.
 type Type struct {
 	Code string
 	Info string

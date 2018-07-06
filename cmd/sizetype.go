@@ -16,7 +16,7 @@ package cmd
 import (
 	"os"
 
-	"github.com/meyermarcel/iso6346/ui"
+	"github.com/meyermarcel/icm/ui"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )

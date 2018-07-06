@@ -18,8 +18,8 @@ import (
 
 	"io/ioutil"
 
-	"github.com/meyermarcel/iso6346/iso6346"
-	"github.com/meyermarcel/iso6346/utils"
+	"github.com/meyermarcel/icm/cont"
+	"github.com/meyermarcel/icm/utils"
 )
 
 const groupsFileName = "groups.json"
@@ -49,8 +49,8 @@ func InitGroupsData(path string) {
 	utils.JSONUnmarshal(b, &loadedGroups)
 }
 
-func getGroup(code string) (iso6346.TypeGroup, bool) {
+func getGroup(code string) (cont.TypeGroup, bool) {
 	info, exists := loadedGroups[code]
 
-	return iso6346.TypeGroup{Code: code, Info: info}, exists
+	return cont.TypeGroup{Code: code, Info: info}, exists
 }

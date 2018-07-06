@@ -18,7 +18,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/meyermarcel/iso6346/data"
+	"github.com/meyermarcel/icm/data"
 )
 
 func fmtParsedContNum(cn contNumOptSizeTypeIn, seps Separators) string {

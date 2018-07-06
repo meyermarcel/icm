@@ -18,8 +18,8 @@ import (
 
 	"io/ioutil"
 
-	"github.com/meyermarcel/iso6346/iso6346"
-	"github.com/meyermarcel/iso6346/utils"
+	"github.com/meyermarcel/icm/cont"
+	"github.com/meyermarcel/icm/utils"
 )
 
 const sizesFileName = "sizes.json"
@@ -63,16 +63,16 @@ func GetHeightAndWidthCodes() []string {
 }
 
 // GetLength returns length for a given length code.
-func GetLength(code string) iso6346.Length {
+func GetLength(code string) cont.Length {
 
 	mappedLength := loadedSizes.Length[code]
-	return iso6346.Length{Length: mappedLength}
+	return cont.Length{Length: mappedLength}
 }
 
 // GetHeightAndWidth returns height and width for given height and width code.
-func GetHeightAndWidth(code string) iso6346.HeightAndWidth {
+func GetHeightAndWidth(code string) cont.HeightAndWidth {
 	heightAndWidth := loadedSizes.HeightAndWidth[code]
-	return iso6346.HeightAndWidth{Width: heightAndWidth.Width, Height: heightAndWidth.Height}
+	return cont.HeightAndWidth{Width: heightAndWidth.Width, Height: heightAndWidth.Height}
 }
 
 const lengthWidthAndHeightJSON = `{

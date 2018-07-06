@@ -11,15 +11,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package iso6346
+package cont
 
-// HeightAndWidth describes width and height of first code in an ISO 6346 size code.
-type HeightAndWidth struct {
-	Width  string
-	Height string
-}
-
-// Length describes length of second code in an ISO 6346 size code.
-type Length struct {
-	Length string
+// TypeGroup has code and information about an specified type group.
+type TypeGroup struct {
+	Code string
+	Info string
 }

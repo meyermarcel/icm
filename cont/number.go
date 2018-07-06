@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package iso6346
+package cont
 
 import (
 	"fmt"
@@ -19,8 +19,8 @@ import (
 	"strconv"
 )
 
-// ContNumber is a container number with needed properties to conform to ISO 6346.
-type ContNumber struct {
+// Number is a container number with needed properties to conform to the specified standard.
+type Number struct {
 	ownerCode    OwnerCode
 	equipCatID   EquipCatID
 	serialNumber SerialNum
@@ -28,33 +28,33 @@ type ContNumber struct {
 }
 
 // OwnerCode returns the owner code of container number.
-func (cn ContNumber) OwnerCode() OwnerCode {
+func (cn Number) OwnerCode() OwnerCode {
 	return cn.ownerCode
 }
 
 // EquipCatID returns the equipment category ID of container number.
-func (cn ContNumber) EquipCatID() EquipCatID {
+func (cn Number) EquipCatID() EquipCatID {
 	return cn.equipCatID
 }
 
 // SerialNumber returns the serial number of container number.
-func (cn ContNumber) SerialNumber() SerialNum {
+func (cn Number) SerialNumber() SerialNum {
 	return cn.serialNumber
 }
 
 // CheckDigit returns the check digit of container number.
-func (cn ContNumber) CheckDigit() int {
+func (cn Number) CheckDigit() int {
 	return cn.checkDigit
 }
 
-// NewContNum creates new container number with check digit.
+// NewNum creates new container number with check digit.
 // To have a correct check digit calculate it before.
-func NewContNum(ownerCode OwnerCode,
+func NewNum(ownerCode OwnerCode,
 	equipCatID EquipCatID,
 	serialNumber SerialNum,
-	checkDigit int) ContNumber {
+	checkDigit int) Number {
 
-	return ContNumber{ownerCode: ownerCode,
+	return Number{ownerCode: ownerCode,
 		equipCatID:   equipCatID,
 		serialNumber: serialNumber,
 		checkDigit:   checkDigit}

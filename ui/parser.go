@@ -19,8 +19,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/meyermarcel/iso6346/data"
-	"github.com/meyermarcel/iso6346/iso6346"
+	"github.com/meyermarcel/icm/cont"
+	"github.com/meyermarcel/icm/data"
 )
 
 const caseInsensitive = `(?i)`
@@ -105,23 +105,23 @@ func newIn(value string, validLen int) input {
 
 type ownerCodeIn struct {
 	input
-	Owner iso6346.Owner
+	Owner cont.Owner
 }
 
-func (oi *ownerCodeIn) resolve(fn func(code iso6346.OwnerCode) iso6346.Owner) *ownerCodeIn {
+func (oi *ownerCodeIn) resolve(fn func(code cont.OwnerCode) cont.Owner) *ownerCodeIn {
 
 	if oi.isValidFmt() {
-		oi.Owner = fn(iso6346.NewOwnerCode(oi.value))
+		oi.Owner = fn(cont.NewOwnerCode(oi.value))
 	}
 	return oi
 }
 
 type equipCatIDIn struct {
 	input
-	EquipCat iso6346.EquipCat
+	EquipCat cont.EquipCat
 }
 
-func (eci *equipCatIDIn) resolve(fn func(code string) iso6346.EquipCat) *equipCatIDIn {
+func (eci *equipCatIDIn) resolve(fn func(code string) cont.EquipCat) *equipCatIDIn {
 
 	if eci.isValidFmt() {
 		eci.EquipCat = fn(eci.value)
@@ -137,10 +137,10 @@ type checkDigitIn struct {
 
 type lengthIn struct {
 	input
-	Length iso6346.Length
+	Length cont.Length
 }
 
-func (li *lengthIn) resolve(fn func(code string) iso6346.Length) *lengthIn {
+func (li *lengthIn) resolve(fn func(code string) cont.Length) *lengthIn {
 
 	if li.isValidFmt() {
 		li.Length = fn(li.value)
@@ -150,10 +150,10 @@ func (li *lengthIn) resolve(fn func(code string) iso6346.Length) *lengthIn {
 
 type heightWidthIn struct {
 	input
-	HeightWidth iso6346.HeightAndWidth
+	HeightWidth cont.HeightAndWidth
 }
 
-func (hwi *heightWidthIn) resolve(fn func(code string) iso6346.HeightAndWidth) *heightWidthIn {
+func (hwi *heightWidthIn) resolve(fn func(code string) cont.HeightAndWidth) *heightWidthIn {
 
 	if hwi.isValidFmt() {
 		hwi.HeightWidth = fn(hwi.value)
@@ -176,7 +176,7 @@ func (tgi *typeAndGroupIn) resolve(fn func(code string) data.TypeAndGroup) *type
 
 func (cdi *checkDigitIn) calcCheckDigit(ocIn ownerCodeIn, eciIn equipCatIDIn, snIn input) {
 
-	cdi.CalcCheckDigit = iso6346.CalcCheckDigit(iso6346.NewOwnerCode(ocIn.input.value), iso6346.NewEquipCatIDFrom(eciIn.value), iso6346.NewSerialNumFrom(snIn.value))
+	cdi.CalcCheckDigit = cont.CalcCheckDigit(cont.NewOwnerCode(ocIn.input.value), cont.NewEquipCatIDFrom(eciIn.value), cont.NewSerialNumFrom(snIn.value))
 	if cdi.isValidFmt() {
 		cd, _ := strconv.Atoi(cdi.value)
 		cdi.IsValidCheckDigit = cd == cdi.CalcCheckDigit

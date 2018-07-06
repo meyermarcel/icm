@@ -1,10 +1,47 @@
-= Container number validator and generator
+= Validate or generate intermodal container markings
 
-image:https://travis-ci.org/meyermarcel/iso6346.svg?branch=master["Build Status", link="https://travis-ci.org/meyermarcel/iso6346"]
+image:https://travis-ci.org/meyermarcel/icm.svg?branch=master["Build Status", link="https://travis-ci.org/meyermarcel/icm"]
 
 == Installation
 
-[source,bash]
+=== macOS
+
 ----
-go get -u github.com/meyermarcel/iso6346
+brew install meyermarcel/tap/icm
 ----
+
+=== Linux
+
+Documentation will be added.
+
+=== Windows
+
+Documentation will be added.
+
+== Development
+
+=== Preparation
+
+----
+go get -u github.com/meyermarcel/icm
+----
+
+Recommended for development:
+
+* https://golang.org/doc/install[Golang 1.10.3]
+
+* https://golang.github.io/dep/docs/installation.html[Go Dep 0.5.0]
+
+* https://github.com/alecthomas/gometalinter#installing[Gometalinter]
+
+* GNU Make
+
+=== Build
+
+----
+make
+----
+
+== License
+
+icm is released under the Apache 2.0 license. See https://github.com/meyermarcel/icm/blob/master/LICENSE[LICENSE]

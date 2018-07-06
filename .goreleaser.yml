@@ -1,0 +1,49 @@
+builds:
+- env:
+  - CGO_ENABLED=0
+  goos:
+  - linux
+  - darwin
+  - windows
+  goarch:
+  - 386
+  - amd64
+  - arm
+  - arm64
+  ldflags:
+  - -s -w -X cmd/root.version={{.Version}}
+
+checksum:
+  name_template: '{{ .ProjectName }}_checksums.txt'
+
+archive:
+  name_template: '{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}'
+  replacements:
+    darwin: Darwin
+    linux: Linux
+    windows: Windows
+    386: i386
+    amd64: x86_64
+  format_overrides:
+  - goos: windows
+    format: zip
+
+brew:
+  github:
+    owner: meyermarcel
+    name: homebrew-tap
+  folder: Formula
+  description: "Validate or generate intermodal container markings."
+  homepage: "https://github.com/meyermarcel/icm"
+  install: |
+    bin.install "icm"
+    # Install bash completion
+    output = Utils.popen_read("#{bin}/icm completion bash")
+    (bash_completion/"icm").write output
+
+    # Install zsh completion
+    output = Utils.popen_read("#{bin}/icm completion zsh")
+    (zsh_completion/"_icm").write output
+
+  test: |
+    system "#{bin}/icm --version"

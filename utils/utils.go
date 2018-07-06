@@ -28,7 +28,9 @@ func JSONMarshal(t interface{}) []byte {
 	encoder.SetEscapeHTML(false)
 	err := encoder.Encode(t)
 	CheckErr(err)
-	return buffer.Bytes()
+	var fmt bytes.Buffer
+	json.Indent(&fmt, buffer.Bytes(), "", "  ")
+	return fmt.Bytes()
 }
 
 // JSONUnmarshal wraps known unmarshal method and handles error.

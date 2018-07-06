@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package iso6346
+package cont
 
 import (
 	"log"
@@ -27,7 +27,7 @@ type Owner struct {
 	Country string
 }
 
-// OwnerCode is the ISO 6346 owner code.
+// OwnerCode represents the container owner.
 type OwnerCode struct {
 	value string
 }

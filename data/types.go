@@ -18,8 +18,8 @@ import (
 
 	"io/ioutil"
 
-	"github.com/meyermarcel/iso6346/iso6346"
-	"github.com/meyermarcel/iso6346/utils"
+	"github.com/meyermarcel/icm/cont"
+	"github.com/meyermarcel/icm/utils"
 )
 
 const typesFileName = "types.json"
@@ -34,10 +34,10 @@ func InitTypesData(path string) {
 	utils.JSONUnmarshal(b, &loadedTypes)
 }
 
-func getType(code string) (iso6346.Type, bool) {
+func getType(code string) (cont.Type, bool) {
 	typeInfo, exists := loadedTypes[code]
 
-	return iso6346.Type{Code: code, Info: typeInfo}, exists
+	return cont.Type{Code: code, Info: typeInfo}, exists
 }
 
 // GetTypeCodes returns all type codes.
