@@ -4,8 +4,8 @@
 [[projects]]
   name = "github.com/PuerkitoBio/goquery"
   packages = ["."]
-  revision = "a86ea073017a6beddef78c8659e7224e8ca634b0"
-  version = "v1.4.0"
+  revision = "dc2ec5c7ca4d9aae063b79b9f581dd3ea6afd2b2"
+  version = "v1.4.1"
 
 [[projects]]
   name = "github.com/andybalholm/cascadia"
@@ -160,6 +160,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "98ed8d15b614f4d52034a718fec77c3ad4a7b5bc9db8794b48a90a48f9822968"
+  inputs-digest = "3e40fb8629b6bfacb062e70f566aa984aabf04994114e0acfcd06861fb8b94a7"
   solver-name = "gps-cdcl"
   solver-version = 1
