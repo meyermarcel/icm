@@ -1,4 +1,6 @@
-= iso6346
+= Container number validator and generator
+
+image:https://travis-ci.org/meyermarcel/iso6346.svg?branch=master["Build Status", link="https://travis-ci.org/meyermarcel/iso6346"]
 
 == Installation
 
@@ -6,4 +8,3 @@
 ----
 go get -u github.com/meyermarcel/iso6346
 ----
-
