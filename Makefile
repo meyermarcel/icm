@@ -4,7 +4,7 @@ BUILD_DIR := build
 BINARY := icm
 
 .PHONY: all
-all: clean test lint build
+all: dep clean test lint build
 
 .PHONY: clean
 clean:
@@ -29,7 +29,7 @@ build:
 
 .PHONY: dep
 dep:
-	dep ensure
+	dep ensure -v
 
 .PHONY: install
 install:
