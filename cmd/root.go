@@ -29,8 +29,6 @@ import (
 	"github.com/spf13/viper"
 )
 
-var version = "dev"
-
 const (
 	appName = "icm"
 	appDir  = "." + appName
@@ -51,15 +49,15 @@ Edit default configuration:
 
 // RootCmd represents the base command when called without any subcommands
 var RootCmd = &cobra.Command{
-	Use:     appName,
-	Version: version,
-	Short:   "Validate or generate intermodal container markings",
-	Long:    "Validate or generate intermodal container markings.",
+	Use:   appName,
+	Short: "Validate or generate intermodal container markings",
+	Long:  "Validate or generate intermodal container markings.",
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
-func Execute() {
+func Execute(version string) {
+	RootCmd.Version = version
 	if err := RootCmd.Execute(); err != nil {
 		fmt.Println(err)
 		os.Exit(1)

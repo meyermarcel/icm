@@ -13,8 +13,12 @@
 
 package main
 
-import "github.com/meyermarcel/icm/cmd"
+import (
+	"github.com/meyermarcel/icm/cmd"
+)
+
+var version = "dev"
 
 func main() {
-	cmd.Execute()
+	cmd.Execute(version)
 }
