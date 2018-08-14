@@ -15,6 +15,7 @@ package ui
 
 import (
 	"fmt"
+	"sort"
 	"strings"
 )
 
@@ -31,6 +32,10 @@ type posTxt struct {
 	lines   []string
 }
 
+func (pt *posTxt) addLines(lines ...string) {
+	pt.lines = append(pt.lines, lines...)
+}
+
 func newPosHint(pos int, lines ...string) posTxt {
 	return posTxt{pos, hint, lines}
 }
@@ -40,6 +45,19 @@ func newPosInfo(pos int, lines ...string) posTxt {
 }
 
 func fmtTextsWithArrows(texts ...posTxt) string {
+	sort.Slice(texts, func(i, j int) bool {
+		return texts[i].pos < texts[j].pos
+	})
+	for idx, element := range texts {
+		if idx > 0 && texts[idx-1].pos == element.pos {
+			texts[idx-1].addLines(element.lines...)
+			texts = append(texts[:idx], texts[idx+1:]...)
+		}
+	}
+	return fmtTexts(texts)
+}
+
+func fmtTexts(texts []posTxt) string {
 
 	b := strings.Builder{}
 

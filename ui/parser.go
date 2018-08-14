@@ -179,7 +179,7 @@ func (cdi *checkDigitIn) calcCheckDigit(ocIn ownerCodeIn, eciIn equipCatIDIn, sn
 	cdi.CalcCheckDigit = cont.CalcCheckDigit(cont.NewOwnerCode(ocIn.input.value), cont.NewEquipCatIDFrom(eciIn.value), cont.NewSerialNumFrom(snIn.value))
 	if cdi.isValidFmt() {
 		cd, _ := strconv.Atoi(cdi.value)
-		cdi.IsValidCheckDigit = cd == cdi.CalcCheckDigit
+		cdi.IsValidCheckDigit = cd == cdi.CalcCheckDigit%10
 	}
 }
 

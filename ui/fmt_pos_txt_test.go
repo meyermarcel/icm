@@ -137,6 +137,29 @@ func Test_fmtTextsWithArrows(t *testing.T) {
 └─ text`,
 		},
 		{
+			"Ignore order of texts",
+			args{[]posTxt{
+				newPosInfo(2, "text"),
+				newPosHint(0, "text"),
+			}},
+			`
+↑ │
+│ └─ text
+│
+└─ text`,
+		},
+		{
+			"Stack multiple texts on same position",
+			args{[]posTxt{
+				newPosHint(2, "text 1"),
+				newPosInfo(2, "text 2"),
+			}},
+			`
+  ↑
+  └─ text 1
+     text 2`,
+		},
+		{
 			"Format multiple lines in second text",
 			args{[]posTxt{
 				newPosHint(0, "text"),
@@ -154,8 +177,8 @@ func Test_fmtTextsWithArrows(t *testing.T) {
 			args{[]posTxt{
 				newPosInfo(0, "pos0line0", "pos0line1", "pos0line2"),
 				newPosHint(1, "pos1line0", "pos1line1"),
-				newPosInfo(7, "pos7line0", "pos7line1", "pos7line2"),
 				newPosHint(22, "pos22line0"),
+				newPosInfo(7, "pos7line0", "pos7line1", "pos7line2"),
 			}},
 			`
 │↑     │              ↑

@@ -28,7 +28,8 @@ func GenNum(count int, c chan Number, randomOwnerCodes func(count int) []OwnerCo
 	lenCodes := len(codes)
 
 	if count > lenCodes*1000000 {
-		log.Fatalf("'%d' exceeds generate limit %d (%d owners * 1000000 serial numbers)", count, lenCodes*1000000, lenCodes)
+		log.Fatalf("'%d' exceeds generate limit %d (%d owners * 1000000 serial numbers)",
+			count, lenCodes*1000000, lenCodes)
 	}
 
 	equipCatID := NewEquipCatIDU()
@@ -41,8 +42,12 @@ func GenNum(count int, c chan Number, randomOwnerCodes func(count int) []OwnerCo
 
 			code := codes[(i+ownerOffset)%lenCodes]
 			checkDigit := CalcCheckDigit(code, equipCatID, serialNum)
+			if checkDigit != 10 {
+				c <- NewNum(code, equipCatID, serialNum, checkDigit)
+			} else {
+				count++
+			}
 
-			c <- NewNum(code, equipCatID, serialNum, checkDigit)
 		}
 		count -= 1000000
 	}

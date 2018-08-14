@@ -50,12 +50,12 @@ func fmtParsedContNum(cn contNumOptSizeTypeIn, seps Separators) string {
 		if cn.isCheckDigitCalculable() {
 			if cn.checkDigitIn.isValidFmt() {
 				texts = append(texts, newPosHint(cdPos,
-					fmt.Sprintf("%s is incorrect (correct: %s)",
+					fmt.Sprintf("calculated %s is %s",
 						underline("check digit"),
 						green(cn.checkDigitIn.CalcCheckDigit))))
 			} else {
 				texts = append(texts, newPosHint(cdPos,
-					fmt.Sprintf("%s must be a %s (correct: %s)",
+					fmt.Sprintf("%s must be a %s (calculated: %s)",
 						underline("check digit"),
 						bold("number"),
 						green(cn.checkDigitIn.CalcCheckDigit))))
@@ -65,6 +65,11 @@ func fmtParsedContNum(cn contNumOptSizeTypeIn, seps Separators) string {
 				fmt.Sprintf("%s is not calculable",
 					underline("check digit"))))
 		}
+	}
+
+	if cn.checkDigitIn.CalcCheckDigit == 10 {
+		texts = append(texts, newPosHint(cdPos, fmt.Sprintf("It is not recommended to use a %s", underline("serial number")),
+			fmt.Sprintf("that generates %s %s (0).", underline("check digit"), yellow(10))))
 	}
 
 	if sizeTypeExists {
@@ -92,6 +97,8 @@ func fmtContNum(cn contNumOptSizeTypeIn, seps Separators, additionalSizeType boo
 
 	if !cn.checkDigitIn.IsValidCheckDigit && cn.checkDigitIn.isValidFmt() {
 		b.WriteString(fmt.Sprintf("%s", red(string(cn.checkDigitIn.value))))
+	} else if cn.checkDigitIn.CalcCheckDigit == 10 {
+		b.WriteString(fmt.Sprintf("%s", yellow(string(cn.checkDigitIn.value))))
 	} else {
 		b.WriteString(fmtIn(cn.checkDigitIn.input))
 	}

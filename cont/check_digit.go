@@ -37,5 +37,5 @@ func CalcCheckDigit(ownerCode OwnerCode, equipCatID EquipCatID, serialNum Serial
 		n += d * float64(int(float64(serialNum.Value())/div)%10)
 		div /= 10
 	}
-	return (int(n) - int(n/11)*11) % 10
+	return int(n) - int(n/11)*11
 }

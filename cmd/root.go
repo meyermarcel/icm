@@ -69,7 +69,12 @@ var count int
 var generateCmd = &cobra.Command{
 	Use:   "generate",
 	Short: "Generate a random container number",
-	Long: `Generate a random container number.
+	Long: `Owners specified in
+
+  ` + filepath.Join("$HOME", appDir) + `
+
+are used. Container numbers with check digit 10 are excluded.
+Equipment category ID 'U' is used for every container number.
 
 ` + sepHelp,
 	Example: `  ` + appName + ` generate
