@@ -25,6 +25,10 @@ archive:
   format_overrides:
   - goos: windows
     format: zip
+  files:
+  - LICENSE
+  - README.adoc
+  - docs/*
 
 brew:
   github:
