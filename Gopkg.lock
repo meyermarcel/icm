@@ -18,14 +18,6 @@
   version = "v1.0.0"
 
 [[projects]]
-  digest = "1:982e2547680f9fd2212c6443ab73ea84eef40ee1cdcecb61d997de838445214c"
-  name = "github.com/cpuguy83/go-md2man"
-  packages = ["md2man"]
-  pruneopts = ""
-  revision = "20f5889cbdc3c73dbd2862796665e7c465ade7d1"
-  version = "v1.0.8"
-
-[[projects]]
   digest = "1:e988ed0ca0d81f4d28772760c02ee95084961311291bdfefc1b04617c178b722"
   name = "github.com/fatih/color"
   packages = ["."]
@@ -117,14 +109,6 @@
   version = "v1.1.0"
 
 [[projects]]
-  digest = "1:fd0e88ec70bf0efce538ec8b968a824d992cc60a6cf1539698aa366b3527a053"
-  name = "github.com/russross/blackfriday"
-  packages = ["."]
-  pruneopts = ""
-  revision = "55d61fa8aa702f59229e6cff85793c22e580eaf5"
-  version = "v1.5.1"
-
-[[projects]]
   digest = "1:d3e2e29bc7342053edc85e1ad751275694a96d58516f749cf3413db1a0eca2ba"
   name = "github.com/spf13/afero"
   packages = [
@@ -146,10 +130,7 @@
 [[projects]]
   digest = "1:a1403cc8a94b8d7956ee5e9694badef0e7b051af289caad1cf668331e3ffa4f6"
   name = "github.com/spf13/cobra"
-  packages = [
-    ".",
-    "doc",
-  ]
+  packages = ["."]
   pruneopts = ""
   revision = "ef82de70bb3f60c65fb8eebacbb2d122ef517385"
   version = "v0.0.3"
@@ -228,7 +209,6 @@
     "github.com/fatih/color",
     "github.com/mitchellh/go-homedir",
     "github.com/spf13/cobra",
-    "github.com/spf13/cobra/doc",
     "github.com/spf13/viper",
   ]
   solver-name = "gps-cdcl"
