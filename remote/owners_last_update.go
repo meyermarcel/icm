@@ -26,7 +26,7 @@ import (
 const dateFormat = "2006-01-02"
 
 const ownersLastUpdateFileName = "owners-last-update"
-const ownersLastUpdate = "2018-06-15" + "\n"
+const ownersLastUpdate = "2018-08-13" + "\n"
 
 var loadedOwnersLastUpdate string
 var pathToOwnersLastUpdate string
