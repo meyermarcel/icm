@@ -1,0 +1,35 @@
+= Create gif
+
+This works for bash and macOS.
+
+. Install requirements
+* https://github.com/icholy/ttygif
+* https://github.com/icetee/pv
+* ImageMagick
+
+. Use 80x30 terminal size
+
+. Start recording
++
+`ttyrec usage`
+
+. Execute scripted session
++
+`./demo.sh`
+
+. Stop recording
++
+kbd:[Ctrl + D]
+
+. Convert ttyplay file to gif
++
+`ttygif usage`
+
+. Trim gif
++
+Open gif with macOS Preview and delete unwanted frames.
+Saving operation takes time!
+
+. Optimize gif with ImageMagick and remove old gif
++
+`convert tty.gif -coalesce -layers OptimizeFrame usage.gif && rm tty.gif`
