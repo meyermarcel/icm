@@ -1,4 +1,4 @@
-= Create gif
+= Create demo gif
 
 This works for bash and macOS.
 
@@ -11,7 +11,7 @@ This works for bash and macOS.
 
 . Start recording
 +
-`ttyrec usage`
+`ttyrec demo`
 
 . Execute scripted session
 +
@@ -23,7 +23,7 @@ kbd:[Ctrl + D]
 
 . Convert ttyplay file to gif
 +
-`ttygif usage`
+`ttygif demo`
 
 . Trim gif
 +
@@ -32,4 +32,4 @@ Saving operation takes time!
 
 . Optimize gif with ImageMagick and remove old gif
 +
-`convert tty.gif -coalesce -layers OptimizeFrame usage.gif && rm tty.gif`
+`convert tty.gif -coalesce -layers OptimizeFrame demo.gif && rm tty.gif`

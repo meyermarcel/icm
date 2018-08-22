@@ -4,9 +4,10 @@ release/
 build/
 dist/
 
-# Ignore ttyrec file
-docs/usage
-docs/.!*
+# Ignore ttyrec files
+gif/demo
+gif/tty.gif
+gif/.!*
 
 # Do not commit vendor folder
 

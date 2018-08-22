@@ -1,11 +1,11 @@
 :experimental:
-:imagesdir: docs
+:imagesdir: gif
 
 = Validate or generate intermodal container markings
 
 image:https://travis-ci.org/meyermarcel/icm.svg?branch=master["Build Status", link="https://travis-ci.org/meyermarcel/icm"]
 
-image:usage.gif[Usage of icm]
+image:demo.gif[Demo of icm]
 
 == Installation
 
