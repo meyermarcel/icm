@@ -14,23 +14,44 @@
 package cont
 
 import (
-	"log"
+	"fmt"
 	"math/rand"
 	"time"
 )
 
+// Result is the return value that includes a container number or an error.
+type Result struct {
+	contNum Number
+	err     error
+}
+
+// ContNum returns the container number.
+func (gcn *Result) ContNum() Number {
+	return gcn.contNum
+}
+
+// Err returns the error.
+func (gcn *Result) Err() error {
+	return gcn.err
+}
+
 // GenNum creates a specified count of container numbers. Random owner code generator
 // is needed to define owner code values in generated container numbers.
-func GenNum(count int, c chan Number, randomOwnerCodes func(count int) []OwnerCode) {
+func GenNum(count int, c chan Result, random func(count int) []OwnerCode) {
 
-	codes := randomOwnerCodes(count)
-	randOffset := rand.Int()
+	codes := random(count)
 	lenCodes := len(codes)
 
-	if count > lenCodes*1000000 {
-		log.Fatalf("'%d' exceeds generate limit %d (%d owners * 1000000 serial numbers)",
-			count, lenCodes*1000000, lenCodes)
+	// An 11th of 1.000.000 serial numbers produce check digit 10.
+	//                  909091 = ( 1.000.000 / 11 ) * 10
+	if count > lenCodes*909091 {
+		c <- Result{err: fmt.Errorf("'%d' exceeds generate limit %d (%d owners * 909091 serial numbers)",
+			count, lenCodes*909091, lenCodes)}
+		close(c)
+		return
 	}
+
+	randOffset := rand.Int()
 
 	equipCatID := NewEquipCatIDU()
 
@@ -43,7 +64,7 @@ func GenNum(count int, c chan Number, randomOwnerCodes func(count int) []OwnerCo
 			code := codes[(i+ownerOffset)%lenCodes]
 			checkDigit := CalcCheckDigit(code, equipCatID, serialNum)
 			if checkDigit != 10 {
-				c <- NewNum(code, equipCatID, serialNum, checkDigit)
+				c <- Result{contNum: NewNum(code, equipCatID, serialNum, checkDigit)}
 			} else {
 				count++
 			}

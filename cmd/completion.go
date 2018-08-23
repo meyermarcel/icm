@@ -14,39 +14,40 @@
 package cmd
 
 import (
-	"os"
+	"io"
 
 	"github.com/spf13/cobra"
 )
 
-var completionCmd = &cobra.Command{
-	Use:   "completion",
-	Short: "Generate scripts completion for shells",
-	Long:  "Generate scripts completion for shells.",
-}
+func newCompletionCmd(writer io.Writer, rootCmd *cobra.Command) *cobra.Command {
+	completionCmd := &cobra.Command{
+		Use:   "completion",
+		Short: "Generate scripts completion for shells",
+		Long:  "Generate scripts completion for shells.",
+	}
 
-var bashCmd = &cobra.Command{
-	Use:   "bash",
-	Short: "Generate bash completion scripts",
-	Long:  "Generate bash completion scripts.",
-	Args:  cobra.NoArgs,
-	Run: func(cmd *cobra.Command, args []string) {
-		RootCmd.GenBashCompletion(os.Stdout)
-	},
-}
+	bashCmd := &cobra.Command{
+		Use:   "bash",
+		Short: "Generate bash completion scripts",
+		Long:  "Generate bash completion scripts.",
+		Args:  cobra.NoArgs,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return rootCmd.GenBashCompletion(writer)
+		},
+	}
 
-var zshCmd = &cobra.Command{
-	Use:   "zsh",
-	Short: "Generate zsh completion scripts",
-	Long:  "Generate zsh completion scripts.",
-	Args:  cobra.NoArgs,
-	Run: func(cmd *cobra.Command, args []string) {
-		RootCmd.GenZshCompletion(os.Stdout)
-	},
-}
+	zshCmd := &cobra.Command{
+		Use:   "zsh",
+		Short: "Generate zsh completion scripts",
+		Long:  "Generate zsh completion scripts.",
+		Args:  cobra.NoArgs,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return rootCmd.GenZshCompletion(writer)
+		},
+	}
 
-func init() {
 	completionCmd.AddCommand(bashCmd)
 	completionCmd.AddCommand(zshCmd)
-	RootCmd.AddCommand(completionCmd)
+
+	return completionCmd
 }

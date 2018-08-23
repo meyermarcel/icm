@@ -11,45 +11,87 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package data
+package file
 
 import (
+	"encoding/json"
+	"io/ioutil"
 	"path/filepath"
 
-	"io/ioutil"
+	"github.com/meyermarcel/icm/internal/data"
 
-	"github.com/meyermarcel/icm/cont"
-	"github.com/meyermarcel/icm/utils"
+	"github.com/meyermarcel/icm/internal/cont"
 )
 
-const typesFileName = "types.json"
+const (
+	typeFileName  = "type.json"
+	groupFileName = "group.json"
+)
 
-var loadedTypes map[string]string
-
-// InitTypesData writes type file to path if it not exists and loads its data to memory.
-func InitTypesData(path string) {
-	pathToTypes := utils.InitFile(filepath.Join(path, typesFileName), []byte(typesJSON))
-	b, err := ioutil.ReadFile(pathToTypes)
-	utils.CheckErr(err)
-	utils.JSONUnmarshal(b, &loadedTypes)
+type typeAndGroupDecoder struct {
+	types  map[string]string
+	groups map[string]string
 }
 
-func getType(code string) (cont.Type, bool) {
-	typeInfo, exists := loadedTypes[code]
+// NewTypeDecoder writes type and group file to path if it not exists and
+// returns a struct that uses this file as a data source.
+func NewTypeDecoder(path string) (data.TypeDecoder, error) {
+	typeAndGroup := &typeAndGroupDecoder{}
+	pathToType := filepath.Join(path, typeFileName)
+	if err := initFile(pathToType, []byte(typeJSON)); err != nil {
+		return nil, err
+	}
+	b, err := ioutil.ReadFile(pathToType)
+	if err != nil {
+		return nil, err
+	}
+	if err := json.Unmarshal(b, &typeAndGroup.types); err != nil {
+		return nil, err
+	}
 
-	return cont.Type{Code: code, Info: typeInfo}, exists
+	pathToGroup := filepath.Join(path, groupFileName)
+	if err := initFile(pathToGroup, []byte(groupJSON)); err != nil {
+		return nil, err
+	}
+	b, err = ioutil.ReadFile(pathToGroup)
+	if err != nil {
+		return nil, err
+	}
+	if err := json.Unmarshal(b, &typeAndGroup.groups); err != nil {
+		return nil, err
+	}
+	return typeAndGroup, nil
 }
 
-// GetTypeCodes returns all type codes.
-func GetTypeCodes() []string {
-	keys := make([]string, 0, len(loadedTypes))
-	for k := range loadedTypes {
+// Decode returns type and group for type code.
+func (tg *typeAndGroupDecoder) Decode(code string) cont.TypeAndGroup {
+	typeAndGroup := cont.TypeAndGroup{}
+
+	typeInfo, exists := tg.types[code]
+	typeValue, typeFound := cont.Type{Code: code, Info: typeInfo}, exists
+
+	info, exists := tg.groups[string(code[0])]
+	group, groupFound := cont.Group{Code: code, Info: info}, exists
+
+	if !typeFound && !groupFound {
+		return typeAndGroup
+	}
+
+	typeAndGroup.TypeCont = typeValue
+	typeAndGroup.Group = group
+	return typeAndGroup
+}
+
+// AllCodes returns all type codes.
+func (tg *typeAndGroupDecoder) AllCodes() []string {
+	keys := make([]string, 0, len(tg.types))
+	for k := range tg.types {
 		keys = append(keys, k)
 	}
 	return keys
 }
 
-const typesJSON = `{
+const typeJSON = `{
   "A0": "(unassigned)",
   "B0": "(unassigned)",
   "B1": "(unassigned)",
@@ -150,5 +192,20 @@ const typesJSON = `{
   "V7": "(unassigned)",
   "V8": "(unassigned)",
   "V9": "(unassigned)"
+}
+`
+
+const groupJSON = `{
+  "A": "(unassigned)",
+  "B": "(unassigned)",
+  "G": "(unassigned)",
+  "H": "(unassigned)",
+  "K": "(unassigned)",
+  "N": "(unassigned)",
+  "P": "(unassigned)",
+  "R": "(unassigned)",
+  "S": "(unassigned)",
+  "U": "(unassigned)",
+  "V": "(unassigned)"
 }
 `

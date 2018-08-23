@@ -11,16 +11,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package ui
+package cmd
 
 import (
+	"errors"
 	"fmt"
 	"regexp"
 	"strconv"
 	"strings"
 
-	"github.com/meyermarcel/icm/cont"
-	"github.com/meyermarcel/icm/data"
+	"github.com/meyermarcel/icm/internal/data"
+
+	"github.com/meyermarcel/icm/internal/cont"
 )
 
 const caseInsensitive = `(?i)`
@@ -28,8 +30,8 @@ const caseInsensitive = `(?i)`
 //                        %s   %s Owner codes, for example: LAB|LBI|LXA|MTB|MTV|BHF|...
 const ownerCodeRegex = `[^%s]*(%s)`
 
-func ownerCodeRegexResolved() string {
-	return fmt.Sprintf(ownerCodeRegex, strings.Join(data.GetOwnerCodes(), "|"), strings.Join(data.GetOwnerCodes(), "|"))
+func ownerCodeRegexResolved(ownerDecoder data.OwnerDecoder) string {
+	return fmt.Sprintf(ownerCodeRegex, strings.Join(ownerDecoder.AllCodes(), "|"), strings.Join(ownerDecoder.AllCodes(), "|"))
 }
 
 //                                       %s    %s Equipment category IDs, for example: UJZ
@@ -41,31 +43,31 @@ const onlySizeType = `([%s])`
 const optSizeType = `[^%s]*([%s])?`
 
 //                       %s    %s Height and width codes, for example: 0245CDE
-//                                     %s,   %s Type codes, for example: A1|B1|B2|...
+//                                     %s,   %s TypeDecoder codes, for example: A1|B1|B2|...
 const sizeTypeRegex = `[^%s]*([%s])?[^(%s)]*(%s)?`
 
-func sizeTypeRegexResolved() string {
-	return fmt.Sprintf(sizeTypeRegex, strings.Join(data.GetHeightAndWidthCodes(), ""),
-		strings.Join(data.GetHeightAndWidthCodes(), ""), strings.Join(data.GetTypeCodes(), "|"), strings.Join(data.GetTypeCodes(), "|"))
+func sizeTypeRegexResolved(sizeTypeDecoders sizeTypeDecoders) string {
+	return fmt.Sprintf(sizeTypeRegex, strings.Join(sizeTypeDecoders.heightAndWidthDecoder.AllCodes(), ""),
+		strings.Join(sizeTypeDecoders.heightAndWidthDecoder.AllCodes(), ""), strings.Join(sizeTypeDecoders.typeDecoder.AllCodes(), "|"), strings.Join(sizeTypeDecoders.typeDecoder.AllCodes(), "|"))
 }
 
-func ownerMatcher() *regexp.Regexp {
-	return regexp.MustCompile(caseInsensitive + ownerCodeRegexResolved())
+func ownerMatcher(ownerData data.OwnerDecoder) *regexp.Regexp {
+	return regexp.MustCompile(caseInsensitive + ownerCodeRegexResolved(ownerData))
 }
 
-func contNumMatcher() *regexp.Regexp {
+func contNumMatcher(decoders decoders) *regexp.Regexp {
 	return regexp.MustCompile(
 		caseInsensitive +
-			ownerCodeRegexResolved() +
-			fmt.Sprintf(equipCatSerialCheckDigitRegex, strings.Join(data.GetEquipCatIDs(), ""), strings.Join(data.GetEquipCatIDs(), "")) +
-			fmt.Sprintf(optSizeType, strings.Join(data.GetLengthCodes(), ""), strings.Join(data.GetLengthCodes(), "")) +
-			sizeTypeRegexResolved())
+			ownerCodeRegexResolved(decoders.ownerDecodeUpdater) +
+			fmt.Sprintf(equipCatSerialCheckDigitRegex, strings.Join(decoders.equipCatDecoder.AllIDs(), ""), strings.Join(decoders.equipCatDecoder.AllIDs(), "")) +
+			fmt.Sprintf(optSizeType, strings.Join(decoders.sizeTypeDecoders.lengthDecoder.AllCodes(), ""), strings.Join(decoders.sizeTypeDecoders.lengthDecoder.AllCodes(), "")) +
+			sizeTypeRegexResolved(decoders.sizeTypeDecoders))
 }
 
-func sizeTypeMatcher() *regexp.Regexp {
+func sizeTypeMatcher(sizeTypeDecoders sizeTypeDecoders) *regexp.Regexp {
 	return regexp.MustCompile(caseInsensitive +
-		fmt.Sprintf(onlySizeType, strings.Join(data.GetLengthCodes(), "")) +
-		sizeTypeRegexResolved())
+		fmt.Sprintf(onlySizeType, strings.Join(sizeTypeDecoders.lengthDecoder.AllCodes(), "")) +
+		sizeTypeRegexResolved(sizeTypeDecoders))
 }
 
 type regexIn struct {
@@ -163,10 +165,10 @@ func (hwi *heightWidthIn) resolve(fn func(code string) cont.HeightAndWidth) *hei
 
 type typeAndGroupIn struct {
 	input
-	TypeAndGroup data.TypeAndGroup
+	TypeAndGroup cont.TypeAndGroup
 }
 
-func (tgi *typeAndGroupIn) resolve(fn func(code string) data.TypeAndGroup) *typeAndGroupIn {
+func (tgi *typeAndGroupIn) resolve(fn func(code string) cont.TypeAndGroup) *typeAndGroupIn {
 
 	if tgi.isValidFmt() {
 		tgi.TypeAndGroup = fn(tgi.value)
@@ -225,38 +227,27 @@ func (sti sizeTypeIn) isValid() bool {
 	return sti.lengthIn.isValidFmt() && sti.heightWidthIn.isValidFmt() && sti.typeAndGroupIn.isValidFmt()
 }
 
-// ParseAndPrintOwnerCodeOptEquipCat parses and prints owner code with an optional equipment category ID.
-func ParseAndPrintOwnerCodeOptEquipCat(in string) bool {
-	parseOwnerCodeOptEquipCat := parseOwnerCodeOptEquipCat(in)
-	printOwnerCode(parseOwnerCodeOptEquipCat)
-	return parseOwnerCodeOptEquipCat.isValid()
-}
-
-func parseOwnerCodeOptEquipCat(in string) ownerCodeOptEquipCatIDIn {
+func parseOwnerCodeOptEquipCat(in string, owner data.OwnerDecoder) (ownerCodeOptEquipCatIDIn, error) {
 	ownerOptCat := ownerCodeOptEquipCatIDIn{}
-	parse := parse(in, ownerMatcher())
+	parse := parse(in, ownerMatcher(owner))
 	ownerOptCat.regexIn = parse
 	ownerOptCat.ownerCodeIn = ownerCodeIn{input: newIn(parse.getMatch(0), 3)}
-	ownerOptCat.ownerCodeIn.resolve(data.GetOwner)
-	return ownerOptCat
+	ownerOptCat.ownerCodeIn.resolve(owner.Decode)
+
+	if !ownerOptCat.isValid() {
+		return ownerOptCat, errors.New("ownerDecodeUpdater code is not valid")
+	}
+	return ownerOptCat, nil
 }
 
-// ParseAndPrintContNum parses and prints container number and uses separators for output.
-// Given separators are not used for to parse input.
-func ParseAndPrintContNum(in string, seps Separators) bool {
-	parsedContNum := parseContNum(in)
-	printContNum(parsedContNum, seps)
-	return parsedContNum.isValid()
-}
-
-func parseContNum(in string) contNumOptSizeTypeIn {
+func parseContNum(in string, decoders decoders) (contNumOptSizeTypeIn, error) {
 	cni := contNumOptSizeTypeIn{}
-	parse := parse(in, contNumMatcher())
+	parse := parse(in, contNumMatcher(decoders))
 	cni.regexIn = parse
 	cni.ownerCodeIn = ownerCodeIn{input: newIn(parse.getMatch(0), 3)}
-	cni.ownerCodeIn.resolve(data.GetOwner)
+	cni.ownerCodeIn.resolve(decoders.ownerDecodeUpdater.Decode)
 	cni.equipCatIDIn = equipCatIDIn{input: newIn(parse.getMatch(1), 1)}
-	cni.equipCatIDIn.resolve(data.GetEquipCat)
+	cni.equipCatIDIn.resolve(decoders.equipCatDecoder.Decode)
 	cni.serialNumIn = newIn(parse.getMatches(2, 8), 6)
 
 	cni.checkDigitIn = checkDigitIn{input: newIn(parse.getMatch(8), 1)}
@@ -265,50 +256,48 @@ func parseContNum(in string) contNumOptSizeTypeIn {
 	}
 
 	cni.lengthIn = lengthIn{input: newIn(parse.getMatch(9), 1)}
-	cni.lengthIn.resolve(data.GetLength)
+	cni.lengthIn.resolve(decoders.sizeTypeDecoders.lengthDecoder.Decode)
 	cni.heightWidthIn = heightWidthIn{input: newIn(parse.getMatch(10), 1)}
-	cni.heightWidthIn.resolve(data.GetHeightAndWidth)
+	cni.heightWidthIn.resolve(decoders.sizeTypeDecoders.heightAndWidthDecoder.Decode)
 	cni.typeAndGroupIn = typeAndGroupIn{input: newIn(parse.getMatch(11), 2)}
-	cni.typeAndGroupIn.resolve(data.GetTypeAndGroup)
+	cni.typeAndGroupIn.resolve(decoders.sizeTypeDecoders.typeDecoder.Decode)
 
-	return cni
+	if !cni.isValid() {
+		return cni, errors.New("container number is not valid")
+	}
+	return cni, nil
 }
 
-// ParseAndPrintSizeType parses and prints size and type and uses separator between size and type for output.
-// Separator between size and type is not used for to parse input.
-func ParseAndPrintSizeType(in string, sepSizeType string) bool {
-	parsedSizeType := parseSizeType(in)
-	printSizeType(parsedSizeType, sepSizeType)
-	return parsedSizeType.isValid()
-}
-
-func parseSizeType(in string) sizeTypeIn {
+func parseSizeType(in string, sizeTypeDecoders sizeTypeDecoders) (sizeTypeIn, error) {
 	sizeType := sizeTypeIn{}
-	parse := parse(in, sizeTypeMatcher())
+	parse := parse(in, sizeTypeMatcher(sizeTypeDecoders))
 	sizeType.RegexIn = parse
 	sizeType.lengthIn = lengthIn{input: newIn(parse.getMatch(0), 1)}
-	sizeType.lengthIn.resolve(data.GetLength)
+	sizeType.lengthIn.resolve(sizeTypeDecoders.lengthDecoder.Decode)
 	sizeType.heightWidthIn = heightWidthIn{input: newIn(parse.getMatch(1), 1)}
-	sizeType.heightWidthIn.resolve(data.GetHeightAndWidth)
+	sizeType.heightWidthIn.resolve(sizeTypeDecoders.heightAndWidthDecoder.Decode)
 	sizeType.typeAndGroupIn = typeAndGroupIn{input: newIn(parse.getMatch(2), 2)}
-	sizeType.typeAndGroupIn.resolve(data.GetTypeAndGroup)
+	sizeType.typeAndGroupIn.resolve(sizeTypeDecoders.typeDecoder.Decode)
 
-	return sizeType
+	if !sizeType.isValid() {
+		return sizeType, errors.New("sizetype is not valid")
+	}
+	return sizeType, nil
 }
 
 func parse(in string, matcher *regexp.Regexp) regexIn {
 
 	regexIn := regexIn{input: in}
 
-	subMatch := matcher.FindAllStringSubmatch(in, -1)
+	subMatch := matcher.FindStringSubmatch(in)
 
 	if len(subMatch) == 0 {
 		return regexIn
 	}
 
-	regexIn.matches = subMatch[0][1:]
+	regexIn.matches = subMatch[1:]
 
-	regexIn.matchRanges = matcher.FindAllStringSubmatchIndex(in, -1)[0][2:]
+	regexIn.matchRanges = matcher.FindStringSubmatchIndex(in)[2:]
 
 	return regexIn
 }

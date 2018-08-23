@@ -9,6 +9,6 @@ dist/
 vendor/
 
 # ttyrec files
-gif/demo
-gif/tty.gif
-gif/.!*
+docs/gif/demo
+docs/gif/tty.gif
+docs/gif/.!*

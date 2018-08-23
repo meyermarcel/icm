@@ -11,32 +11,41 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package cmd
+package configs
 
-const ymlCfgName = "config"
-const ymlCfgFileName = ymlCfgName + ".yml"
+// Name of the config files and keys for configurable separators
+const (
+	Name           = "config"
+	NameWithYmlExt = Name + ".yml"
+	SepOE          = "sep-owner-equip"
+	SepES          = "sep-equip-serial"
+	SepSC          = "sep-serial-check"
+	SepCS          = "sep-check-size"
+	SepST          = "sep-size-type"
+)
 
-func cfgSeparators() []byte {
+// Cfg returns default config
+func Cfg() []byte {
 	return []byte(`# Config
 #
 #  Separators
 #
 #  ABC U 123456 0   20 G1
 #     ↑ ↑      ↑  ↑   ↑
-#     │ │      │  │   └─ ` + sepST + `
+#     │ │      │  │   └─ ` + SepST + `
 #     │ │      │  │
-#     │ │      │  └─ ` + sepCS + `
+#     │ │      │  └─ ` + SepCS + `
 #     │ │      │
-#     │ │      └─ ` + sepSC + `
+#     │ │      └─ ` + SepSC + `
 #     │ │
-#     │ └─ ` + sepES + `
+#     │ └─ ` + SepES + `
 #     │
-#     └─ ` + sepOE + `
+#     └─ ` + SepOE + `
 #
-` + sepOE + `: ' '
-` + sepES + `: ' '
-` + sepSC + `: ' '
-` + sepCS + `: '   '
-` + sepST + `: ' '
+` + SepOE + `: ' '
+` + SepES + `: ' '
+` + SepSC + `: ' '
+` + SepCS + `: '   '
+` + SepST + `: ' '
 `)
 }

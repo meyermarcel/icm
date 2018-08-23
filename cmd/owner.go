@@ -14,58 +14,66 @@
 package cmd
 
 import (
-	"os"
+	"io"
 
-	"github.com/meyermarcel/icm/remote"
-	"github.com/meyermarcel/icm/ui"
+	"github.com/meyermarcel/icm/internal/data"
+
 	"github.com/spf13/cobra"
 )
 
-var ownerCmd = &cobra.Command{
-	Use:   "owner",
-	Short: "Validate an owner or update owners.",
-	Long:  "Validate an owner or update owners.",
+func newOwnerCmd(
+	writer io.Writer,
+	owner data.OwnerDecodeUpdater,
+	timestampUpdater data.TimestampUpdater,
+	ownerURL string) *cobra.Command {
+	ownerCmd := &cobra.Command{
+		Use:   "ownerDecodeUpdater",
+		Short: "Validate an ownerDecodeUpdater or update owners.",
+		Long:  "Validate an ownerDecodeUpdater or update owners.",
+	}
+	ownerCmd.AddCommand(newValidateOwnerCmd(writer, owner))
+	ownerCmd.AddCommand(newUpdateOwnerCmd(owner, timestampUpdater, ownerURL))
+
+	return ownerCmd
 }
 
-var validateOwnerCmd = &cobra.Command{
-	Use:   "validate",
-	Short: "Validate an owner",
-	Long: `Validate an owner.
+func newValidateOwnerCmd(writer io.Writer, owner data.OwnerDecoder) *cobra.Command {
+	command := &cobra.Command{
+		Use:   "validate",
+		Short: "Validate an ownerDecodeUpdater",
+		Long: `Validate an ownerDecodeUpdater.
 
 ` + sepHelp,
-	Example: `  ` + appName + ` owner validate 'ABCU'`,
-	Args:    cobra.ExactArgs(1),
-	Run: func(cmd *cobra.Command, args []string) {
-
-		valid := ui.ParseAndPrintOwnerCodeOptEquipCat(args[0])
-
-		if valid {
-			os.Exit(0)
-		}
-		os.Exit(1)
-	},
+		Example: `  ` + appName + ` ownerDecodeUpdater validate 'ABCU'`,
+		Args:    cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			in, err := parseOwnerCodeOptEquipCat(args[0], owner)
+			printOwnerCode(writer, in, owner)
+			return err
+		},
+	}
+	return command
 }
 
-var ownerUpdateCmd = &cobra.Command{
-	Use:   "update",
-	Short: "Update information of owners",
-	Long: `Update information of owners from remote.
+func newUpdateOwnerCmd(
+	ownerUpdater data.OwnerUpdater,
+	timestampUpdater data.TimestampUpdater,
+	ownerURL string) *cobra.Command {
+	ownerUpdateCmd := &cobra.Command{
+		Use:   "update",
+		Short: "Update information of owners",
+		Long: `Update information of owners from remote.
 Following information is available:
 
   Owner code
   Company
   City
   Country`,
-	Example: `  ` + appName + ` owner update`,
-	Args:    cobra.NoArgs,
-	Run: func(cmd *cobra.Command, args []string) {
-		remote.Update()
-		os.Exit(0)
-	},
-}
-
-func init() {
-	ownerCmd.AddCommand(ownerUpdateCmd)
-	ownerCmd.AddCommand(validateOwnerCmd)
-	RootCmd.AddCommand(ownerCmd)
+		Example: `  ` + appName + ` ownerDecodeUpdater update`,
+		Args:    cobra.NoArgs,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return update(ownerUpdater, timestampUpdater, ownerURL)
+		},
+	}
+	return ownerUpdateCmd
 }

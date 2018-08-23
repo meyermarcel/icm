@@ -11,17 +11,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package ui
+package cmd
 
 import (
 	"fmt"
 	"sort"
 	"strings"
 
-	"github.com/meyermarcel/icm/data"
+	"github.com/meyermarcel/icm/internal/data"
 )
 
-func fmtParsedContNum(cn contNumOptSizeTypeIn, seps Separators) string {
+func fmtParsedContNum(cn contNumOptSizeTypeIn, decoders decoders, seps separators) string {
 
 	b := strings.Builder{}
 
@@ -34,8 +34,8 @@ func fmtParsedContNum(cn contNumOptSizeTypeIn, seps Separators) string {
 
 	var texts []posTxt
 
-	texts = append(texts, ownerCodeTxt(cn.ownerCodeIn))
-	texts = append(texts, equipCatIDTxt(0, cn.equipCatIDIn, seps.OwnerEquip))
+	texts = append(texts, ownerCodeTxt(cn.ownerCodeIn, decoders.ownerDecodeUpdater.GenerateRandomCodes))
+	texts = append(texts, equipCatIDTxt(0, cn.equipCatIDIn, decoders.equipCatDecoder, seps.OwnerEquip))
 
 	if !cn.serialNumIn.isValidFmt() {
 		texts = append(texts,
@@ -83,7 +83,7 @@ func fmtParsedContNum(cn contNumOptSizeTypeIn, seps Separators) string {
 	return b.String()
 }
 
-func fmtContNum(cn contNumOptSizeTypeIn, seps Separators, additionalSizeType bool) string {
+func fmtContNum(cn contNumOptSizeTypeIn, seps separators, additionalSizeType bool) string {
 
 	b := strings.Builder{}
 
@@ -114,21 +114,21 @@ func fmtContNum(cn contNumOptSizeTypeIn, seps Separators, additionalSizeType boo
 	return b.String()
 }
 
-func equipCatIDTxt(offset int, in equipCatIDIn, sepOwnerEquip string) posTxt {
+func equipCatIDTxt(offset int, in equipCatIDIn, equipCatDecoder data.EquipCatDecoder, sepOwnerEquip string) posTxt {
 	if !in.isValidFmt() {
 		return newPosHint(offset+indentSize+len(sepOwnerEquip)+3,
 			fmt.Sprintf("%s must be %s",
 				underline("equipment category id"),
-				equipCatIDsAsList()))
+				equipCatIDsAsList(equipCatDecoder)))
 	}
 	return newPosInfo(offset+indentSize+len(sepOwnerEquip)+3, in.EquipCat.Info)
 }
 
-func equipCatIDsAsList() string {
+func equipCatIDsAsList(equipCatDecoder data.EquipCatDecoder) string {
 
 	b := strings.Builder{}
 
-	iDs := data.GetEquipCatIDs()
+	iDs := equipCatDecoder.AllIDs()
 	sort.Strings(iDs)
 	for i, element := range iDs {
 		b.WriteString(green(element))

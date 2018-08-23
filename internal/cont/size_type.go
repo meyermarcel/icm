@@ -23,3 +23,41 @@ type HeightAndWidth struct {
 type Length struct {
 	Length string
 }
+
+// Type has code and information about the specified standard type.
+type Type struct {
+	Code string
+	Info string
+}
+
+// Group has code and information about an specified type group.
+type Group struct {
+	Code string
+	Info string
+}
+
+// TypeAndGroup encapsulates type and group.
+type TypeAndGroup struct {
+	TypeCont Type
+	Group    Group
+}
+
+// TypeCode returns type code.
+func (mtg TypeAndGroup) TypeCode() string {
+	return mtg.TypeCont.Code
+}
+
+// TypeInfo returns type information.
+func (mtg TypeAndGroup) TypeInfo() string {
+	return mtg.TypeCont.Info
+}
+
+// GroupCode returns group code.
+func (mtg TypeAndGroup) GroupCode() string {
+	return mtg.Group.Code
+}
+
+// GroupInfo returns group information.
+func (mtg TypeAndGroup) GroupInfo() string {
+	return mtg.Group.Info
+}

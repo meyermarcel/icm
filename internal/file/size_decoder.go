@@ -11,22 +11,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package data
+package file
 
 import (
+	"encoding/json"
 	"path/filepath"
+
+	"github.com/meyermarcel/icm/internal/data"
 
 	"io/ioutil"
 
-	"github.com/meyermarcel/icm/cont"
-	"github.com/meyermarcel/icm/utils"
+	"github.com/meyermarcel/icm/internal/cont"
 )
 
-const sizesFileName = "sizes.json"
+const sizeFileName = "size.json"
 
-var loadedSizes sizes
-
-type sizes struct {
+type size struct {
 	Length         map[string]string         `json:"length"`
 	HeightAndWidth map[string]heightAndWidth `json:"heightAndWidth"`
 }
@@ -36,43 +36,78 @@ type heightAndWidth struct {
 	Height string `json:"width"`
 }
 
-// InitSizesData writes size file to path if it not exists and loads its data to memory.
-func InitSizesData(path string) {
-	pathToSizes := utils.InitFile(filepath.Join(path, sizesFileName), []byte(lengthWidthAndHeightJSON))
+// NewLengthDecoder writes last update lengths, height and width file to path if it not exists and
+// returns a struct that uses this file as a data source.
+func NewLengthDecoder(path string) (data.LengthDecoder, error) {
+	pathToSizes := filepath.Join(path, sizeFileName)
+	if err := initFile(pathToSizes, []byte(lengthWidthAndHeightJSON)); err != nil {
+		return nil, err
+	}
 	b, err := ioutil.ReadFile(pathToSizes)
-	utils.CheckErr(err)
-	utils.JSONUnmarshal(b, &loadedSizes)
+	if err != nil {
+		return nil, err
+	}
+
+	var size size
+	if err := json.Unmarshal(b, &size); err != nil {
+		return nil, err
+	}
+	return &lengthDecoder{size.Length}, nil
 }
 
-// GetLengthCodes returns all length codes.
-func GetLengthCodes() []string {
-	keys := make([]string, 0, len(loadedSizes.Length))
-	for k := range loadedSizes.Length {
+type lengthDecoder struct {
+	lengths map[string]string
+}
+
+// Decode returns length for a given length code.
+func (l *lengthDecoder) Decode(code string) cont.Length {
+	return cont.Length{Length: l.lengths[code]}
+}
+
+// AllCodes returns all length codes.
+func (l *lengthDecoder) AllCodes() []string {
+	keys := make([]string, 0, len(l.lengths))
+	for k := range l.lengths {
 		keys = append(keys, k)
 	}
 	return keys
 }
 
-// GetHeightAndWidthCodes returns all height and width codes.
-func GetHeightAndWidthCodes() []string {
-	keys := make([]string, 0, len(loadedSizes.HeightAndWidth))
-	for k := range loadedSizes.HeightAndWidth {
-		keys = append(keys, k)
+// NewHeightAndWidthDecoder initializes the file of lengths, height and width and
+// returns a new height and width file data source.
+func NewHeightAndWidthDecoder(path string) (data.HeightAndWidthDecoder, error) {
+	var size size
+	pathToSizes := filepath.Join(path, sizeFileName)
+	if err := initFile(pathToSizes, []byte(lengthWidthAndHeightJSON)); err != nil {
+		return nil, err
 	}
-	return keys
+	b, err := ioutil.ReadFile(pathToSizes)
+	if err != nil {
+		return nil, err
+	}
+	if err := json.Unmarshal(b, &size); err != nil {
+		return nil, err
+	}
+	return &heightAndWidthDecoder{size.HeightAndWidth}, err
 }
 
-// GetLength returns length for a given length code.
-func GetLength(code string) cont.Length {
-
-	mappedLength := loadedSizes.Length[code]
-	return cont.Length{Length: mappedLength}
+type heightAndWidthDecoder struct {
+	heightAndWidths map[string]heightAndWidth
 }
 
-// GetHeightAndWidth returns height and width for given height and width code.
-func GetHeightAndWidth(code string) cont.HeightAndWidth {
-	heightAndWidth := loadedSizes.HeightAndWidth[code]
+// Decode returns height and width for given height and width code.
+func (hw *heightAndWidthDecoder) Decode(code string) cont.HeightAndWidth {
+	heightAndWidth := hw.heightAndWidths[code]
 	return cont.HeightAndWidth{Width: heightAndWidth.Width, Height: heightAndWidth.Height}
+}
+
+// AllCodes returns all height and width codes.
+func (hw *heightAndWidthDecoder) AllCodes() []string {
+	keys := make([]string, 0, len(hw.heightAndWidths))
+	for k := range hw.heightAndWidths {
+		keys = append(keys, k)
+	}
+	return keys
 }
 
 const lengthWidthAndHeightJSON = `{

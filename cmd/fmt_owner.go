@@ -11,16 +11,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package ui
+package cmd
 
 import (
 	"fmt"
 	"strings"
 
-	"github.com/meyermarcel/icm/data"
+	"github.com/meyermarcel/icm/internal/cont"
 )
 
-func fmtOwnerCode(oce ownerCodeOptEquipCatIDIn) string {
+func fmtOwnerCode(oce ownerCodeOptEquipCatIDIn, fn func(count int) []cont.OwnerCode) string {
 
 	b := strings.Builder{}
 	b.WriteString(indent)
@@ -31,18 +31,18 @@ func fmtOwnerCode(oce ownerCodeOptEquipCatIDIn) string {
 
 	b.WriteString(fmt.Sprintln())
 
-	b.WriteString(fmtTextsWithArrows(ownerCodeTxt(oce.ownerCodeIn)))
+	b.WriteString(fmtTextsWithArrows(ownerCodeTxt(oce.ownerCodeIn, fn)))
 
 	return b.String()
 }
 
-func ownerCodeTxt(ownerCodeIn ownerCodeIn) posTxt {
+func ownerCodeTxt(ownerCodeIn ownerCodeIn, randomOwnerCodes func(count int) []cont.OwnerCode) posTxt {
 	if !ownerCodeIn.isValidFmt() {
 		return newPosHint(indentSize+1, fmt.Sprintf("%s must be %s and %s (e.g. %s)",
-			underline("owner code"),
+			underline("ownerDecodeUpdater code"),
 			bold("3 letters"),
 			bold("registered"),
-			underline(data.GetRandomOwnerCodes(1)[0].Value())))
+			underline(randomOwnerCodes(1)[0].Value())))
 	}
 	return newPosInfo(indentSize+1,
 		ownerCodeIn.Owner.Company,
