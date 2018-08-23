@@ -49,13 +49,13 @@ Documentation will be added.
 
 == Local development
 
-. Install requirements
+. Requirements
 * https://golang.org/doc/install[Golang 1.10.3]
 * https://golang.github.io/dep/docs/installation.html[Go Dep 0.5.0]
 * https://github.com/alecthomas/gometalinter#installing[Gometalinter]
-* GNU Make
+* https://www.gnu.org/software/make/[GNU Make]
 
-. Ensure that all requirements installed
+. To build project execute
 +
 `make`
 
