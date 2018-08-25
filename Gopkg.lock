@@ -86,14 +86,6 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:99651e95333755cbe5c9768c1b80031300acca64a80870b40309202b32585a5a"
-  name = "github.com/mitchellh/go-homedir"
-  packages = ["."]
-  pruneopts = ""
-  revision = "3864e76763d94a6df2f9960b16a20a33da9f9a66"
-
-[[projects]]
-  branch = "master"
   digest = "1:eb9117392ee8e7aa44f78e0db603f70b1050ee0ebda4bd40040befb5b218c546"
   name = "github.com/mitchellh/mapstructure"
   packages = ["."]
@@ -207,7 +199,6 @@
   input-imports = [
     "github.com/PuerkitoBio/goquery",
     "github.com/fatih/color",
-    "github.com/mitchellh/go-homedir",
     "github.com/spf13/cobra",
     "github.com/spf13/viper",
   ]

@@ -25,7 +25,7 @@ lint:
 
 .PHONY: build
 build:
-	go build -o $(BUILD_DIR)/$(BINARY)
+	go build -tags osusergo -o $(BUILD_DIR)/$(BINARY)
 
 .PHONY: dep
 dep:

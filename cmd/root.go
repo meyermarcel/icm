@@ -19,12 +19,13 @@ import (
 
 	"path/filepath"
 
+	"os/user"
+
 	"github.com/meyermarcel/icm/cont"
 	"github.com/meyermarcel/icm/data"
 	"github.com/meyermarcel/icm/remote"
 	"github.com/meyermarcel/icm/ui"
 	"github.com/meyermarcel/icm/utils"
-	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -166,7 +167,10 @@ func init() {
 
 func initConfig() {
 
-	appDirPath := initDir(getPathToAppDir(appDir))
+	current, err := user.Current()
+	utils.CheckErr(err)
+
+	appDirPath := initDir(filepath.Join(current.HomeDir, appDir))
 
 	utils.InitFile(filepath.Join(appDirPath, ymlCfgFileName), cfgSeparators())
 
@@ -195,10 +199,4 @@ func initDir(path string) string {
 		os.Mkdir(path, os.ModeDir|0700)
 	}
 	return path
-}
-
-func getPathToAppDir(appDir string) string {
-	homeDir, err := homedir.Dir()
-	utils.CheckErr(err)
-	return filepath.Join(homeDir, appDir)
 }

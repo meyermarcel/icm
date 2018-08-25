@@ -1,5 +1,8 @@
 builds:
-- env:
+- flags:
+  - -tags
+  - osusergo
+  env:
   - CGO_ENABLED=0
   goos:
   - linux
