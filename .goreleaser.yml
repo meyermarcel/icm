@@ -29,7 +29,7 @@ archive:
   files:
   - LICENSE
   - README.adoc
-  - docs/*
+  - gif/demo.gif
 
 brew:
   github:
