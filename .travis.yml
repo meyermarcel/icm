@@ -2,6 +2,9 @@ language: go
 go:
 - "1.11"
 
+env:
+- CGO_ENABLED=0
+
 before_install:
 - curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
 - go get -u github.com/alecthomas/gometalinter
