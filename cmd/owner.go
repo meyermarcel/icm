@@ -27,9 +27,9 @@ func newOwnerCmd(
 	timestampUpdater data.TimestampUpdater,
 	ownerURL string) *cobra.Command {
 	ownerCmd := &cobra.Command{
-		Use:   "ownerDecodeUpdater",
-		Short: "Validate an ownerDecodeUpdater or update owners.",
-		Long:  "Validate an ownerDecodeUpdater or update owners.",
+		Use:   "owner",
+		Short: "Validate an owner or update owners.",
+		Long:  "Validate an owner or update owners.",
 	}
 	ownerCmd.AddCommand(newValidateOwnerCmd(writer, owner))
 	ownerCmd.AddCommand(newUpdateOwnerCmd(owner, timestampUpdater, ownerURL))
@@ -40,11 +40,11 @@ func newOwnerCmd(
 func newValidateOwnerCmd(writer io.Writer, owner data.OwnerDecoder) *cobra.Command {
 	command := &cobra.Command{
 		Use:   "validate",
-		Short: "Validate an ownerDecodeUpdater",
-		Long: `Validate an ownerDecodeUpdater.
+		Short: "Validate an owner",
+		Long: `Validate an owner.
 
 ` + sepHelp,
-		Example: `  ` + appName + ` ownerDecodeUpdater validate 'ABCU'`,
+		Example: `  ` + appName + ` owner validate 'ABCU'`,
 		Args:    cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			in, err := parseOwnerCodeOptEquipCat(args[0], owner)
@@ -69,7 +69,7 @@ Following information is available:
   Company
   City
   Country`,
-		Example: `  ` + appName + ` ownerDecodeUpdater update`,
+		Example: `  ` + appName + ` owner update`,
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return update(ownerUpdater, timestampUpdater, ownerURL)

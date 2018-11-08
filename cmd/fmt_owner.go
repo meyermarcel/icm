@@ -39,7 +39,7 @@ func fmtOwnerCode(oce ownerCodeOptEquipCatIDIn, fn func(count int) []cont.OwnerC
 func ownerCodeTxt(ownerCodeIn ownerCodeIn, randomOwnerCodes func(count int) []cont.OwnerCode) posTxt {
 	if !ownerCodeIn.isValidFmt() {
 		return newPosHint(indentSize+1, fmt.Sprintf("%s must be %s and %s (e.g. %s)",
-			underline("ownerDecodeUpdater code"),
+			underline("owner code"),
 			bold("3 letters"),
 			bold("registered"),
 			underline(randomOwnerCodes(1)[0].Value())))

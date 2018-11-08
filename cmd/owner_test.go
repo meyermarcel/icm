@@ -83,7 +83,7 @@ func Test_newValidateOwnerCmd(t *testing.T) {
 
  ___  ✘
   ↑
-  └─ ownerDecodeUpdater code must be 3 letters and registered (e.g. RAN)
+  └─ owner code must be 3 letters and registered (e.g. RAN)
 
 `,
 		},

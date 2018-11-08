@@ -184,7 +184,7 @@ Equipment category ID 'U' is used for every container number.
 	generateCmd.Flags().IntVarP(&count, "count", "c", 1, "count of container numbers")
 
 	generateCmd.Flags().String(configs.SepOE, "",
-		"ABC(*)U1234560  (*) separates ownerDecodeUpdater code and equipment category id")
+		"ABC(*)U1234560  (*) separates owner code and equipment category id")
 	generateCmd.Flags().String(configs.SepES, "",
 		"ABCU(*)1234560  (*) separates equipment category id and serial number")
 	generateCmd.Flags().String(configs.SepSC, "",
@@ -225,7 +225,7 @@ func newValidateCmd(writer io.Writer, data decoders) *cobra.Command {
 		},
 	}
 	validateCmd.Flags().String(configs.SepOE, "",
-		"ABC(*)U1234560   20G1  (*) separates ownerDecodeUpdater code and equipment category id")
+		"ABC(*)U1234560   20G1  (*) separates owner code and equipment category id")
 	validateCmd.Flags().String(configs.SepES, "",
 		"ABCU(*)1234560   20G1  (*) separates equipment category id and serial number")
 	validateCmd.Flags().String(configs.SepSC, "",

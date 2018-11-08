@@ -235,7 +235,7 @@ func parseOwnerCodeOptEquipCat(in string, owner data.OwnerDecoder) (ownerCodeOpt
 	ownerOptCat.ownerCodeIn.resolve(owner.Decode)
 
 	if !ownerOptCat.isValid() {
-		return ownerOptCat, errors.New("ownerDecodeUpdater code is not valid")
+		return ownerOptCat, errors.New("owner code is not valid")
 	}
 	return ownerOptCat, nil
 }
