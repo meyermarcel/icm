@@ -70,19 +70,27 @@ func (of *ownerDecoderUpdater) AllCodes() []string {
 }
 
 // Decode returns an owner for an owner code.
-func (of *ownerDecoderUpdater) Decode(code cont.OwnerCode) cont.Owner {
-	return toOwner(of.owners[code.Value()])
+func (of *ownerDecoderUpdater) Decode(code string) (bool, cont.Owner) {
+	if val, ok := of.owners[code]; ok {
+		return true, cont.Owner{
+			Code:    code,
+			Company: val.Company,
+			City:    val.City,
+			Country: val.Country,
+		}
+	}
+	return false, cont.Owner{}
 }
 
 // GenerateRandomCodes returns a count of owner codes.
-func (of *ownerDecoderUpdater) GenerateRandomCodes(count int) []cont.OwnerCode {
-	var codes []cont.OwnerCode
+func (of *ownerDecoderUpdater) GenerateRandomCodes(count int) []string {
+	var codes []string
 
-	for k := range of.owners {
+	for code := range of.owners {
 		if len(codes) >= count {
 			break
 		}
-		codes = append(codes, cont.NewOwnerCode(k))
+		codes = append(codes, code)
 	}
 	rand.Shuffle(len(codes), func(i, j int) {
 		codes[i], codes[j] = codes[j], codes[i]
@@ -115,20 +123,15 @@ func marshalNoHTMLEsc(t interface{}) ([]byte, error) {
 		return nil, err
 	}
 	var fmtJSON bytes.Buffer
-	json.Indent(&fmtJSON, buffer.Bytes(), "", "  ")
+	err = json.Indent(&fmtJSON, buffer.Bytes(), "", "  ")
+	if err != nil {
+		return nil, err
+	}
 	return fmtJSON.Bytes(), nil
 }
 
-func toOwner(owner owner) cont.Owner {
-	return cont.Owner{
-		Code:    cont.NewOwnerCode(owner.Code),
-		Company: owner.Company,
-		City:    owner.City,
-		Country: owner.Country}
-}
-
 func toSerializableOwner(ownerToConvert cont.Owner) owner {
-	return owner{ownerToConvert.Code.Value(),
+	return owner{ownerToConvert.Code,
 		ownerToConvert.Company,
 		ownerToConvert.City,
 		ownerToConvert.Country}

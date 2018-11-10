@@ -13,14 +13,9 @@
 
 package cont
 
-import (
-	"log"
-	"unicode/utf8"
-)
-
 // EquipCat has an ID and additional information for the ID.
 type EquipCat struct {
-	Value EquipCatID
+	Value string
 	Info  string
 }
 
@@ -29,20 +24,7 @@ type EquipCatID struct {
 	Value string
 }
 
-// NewEquipCatIDU creates a new equipment category ID with U as value.
-func NewEquipCatIDU() EquipCatID {
-	return EquipCatID{"U"}
-}
-
-// NewEquipCatIDFrom creates a new equipment category ID from a string value.
-func NewEquipCatIDFrom(value string) EquipCatID {
-	if utf8.RuneCountInString(value) != 1 {
-		log.Fatalf("'%s' is not one character", value)
-	}
-	return EquipCatID{value}
-}
-
 // NewEquipCatID creates a new equipment category with an ID and an information.
-func NewEquipCatID(id EquipCatID, info string) EquipCat {
+func NewEquipCatID(id string, info string) EquipCat {
 	return EquipCat{id, info}
 }

@@ -18,24 +18,15 @@ import (
 )
 
 // CalcCheckDigit calculates check digit for owner, equipment category ID and serial number.
-// This is a modified snippet from https://en.wikipedia.org/wiki/ISO_6346#Code_Sample_(Go).
-func CalcCheckDigit(ownerCode OwnerCode, equipCatID EquipCatID, serialNum SerialNum) int {
+func CalcCheckDigit(ownerCode string, equipCatID string, serialNum string) int {
 
-	//
-	//
-	concat := ownerCode.Value() + equipCatID.Value
+	concat := ownerCode + equipCatID + serialNum
 
 	n := 0.0
 	d := 0.5
 	for _, character := range concat {
 		d *= 2
-		n += d * float64(strings.IndexRune("??????????A?BCDEFGHIJK?LMNOPQRSTU?VWXYZ", character))
-	}
-	div := 100000.0
-	for i := 0; i < 6; i++ {
-		d *= 2
-		n += d * float64(int(float64(serialNum.Value())/div)%10)
-		div /= 10
+		n += d * float64(strings.IndexRune("0123456789A?BCDEFGHIJK?LMNOPQRSTU?VWXYZ", character))
 	}
 	return int(n) - int(n/11)*11
 }

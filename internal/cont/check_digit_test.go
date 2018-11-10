@@ -19,9 +19,9 @@ import (
 
 func TestCalcCheckDigit(t *testing.T) {
 	type args struct {
-		ownerCode  OwnerCode
-		equipCatID EquipCatID
-		serialNum  SerialNum
+		ownerCode  string
+		equipCatID string
+		serialNum  string
 	}
 	tests := []struct {
 		name string
@@ -29,22 +29,22 @@ func TestCalcCheckDigit(t *testing.T) {
 		want int
 	}{
 		{"Test ABC U 123456 0",
-			args{NewOwnerCode("ABC"), NewEquipCatIDU(), NewSerialNum(123456)},
+			args{"ABC", "U", "123456"},
 			0},
 		{"Test NYK U 008685 2",
-			args{NewOwnerCode("NYK"), NewEquipCatIDU(), NewSerialNum(8685)},
+			args{"NYK", "U", "008685"},
 			2},
 		{"Test NYK U 000000 0",
-			args{NewOwnerCode("NYK"), NewEquipCatIDU(), NewSerialNum(0)},
+			args{"NYK", "U", "000000"},
 			10},
 		{"Test CMA U 163912 (1)0",
-			args{NewOwnerCode("CMA"), NewEquipCatIDU(), NewSerialNum(163912)},
+			args{"CMA", "U", "163912"},
 			10},
 		{"Test CMA U 169312 0",
-			args{NewOwnerCode("CMA"), NewEquipCatIDU(), NewSerialNum(169312)},
+			args{"CMA", "U", "169312"},
 			0},
 		{"Test CSQ U 305438 3",
-			args{NewOwnerCode("CSQ"), NewEquipCatIDU(), NewSerialNum(305438)},
+			args{"CSQ", "U", "305438"},
 			3},
 	}
 	for _, tt := range tests {

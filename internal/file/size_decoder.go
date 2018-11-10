@@ -27,32 +27,32 @@ import (
 const sizeFileName = "size.json"
 
 type size struct {
-	Length         map[string]string         `json:"length"`
-	HeightAndWidth map[string]heightAndWidth `json:"heightAndWidth"`
+	Length      map[string]string      `json:"length"`
+	HeightWidth map[string]heightWidth `json:"heightWidth"`
 }
 
-type heightAndWidth struct {
+type heightWidth struct {
 	Width  string `json:"height"`
 	Height string `json:"width"`
 }
 
-// NewLengthDecoder writes last update lengths, height and width file to path if it not exists and
+// NewSizeDecoder writes last update lengths, height and width file to path if it not exists and
 // returns a struct that uses this file as a data source.
-func NewLengthDecoder(path string) (data.LengthDecoder, error) {
+func NewSizeDecoder(path string) (data.LengthDecoder, data.HeightWidthDecoder, error) {
 	pathToSizes := filepath.Join(path, sizeFileName)
-	if err := initFile(pathToSizes, []byte(lengthWidthAndHeightJSON)); err != nil {
-		return nil, err
+	if err := initFile(pathToSizes, []byte(lengthHeightWidthJSON)); err != nil {
+		return nil, nil, err
 	}
 	b, err := ioutil.ReadFile(pathToSizes)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	var size size
 	if err := json.Unmarshal(b, &size); err != nil {
-		return nil, err
+		return nil, nil, err
 	}
-	return &lengthDecoder{size.Length}, nil
+	return &lengthDecoder{size.Length}, &heightWidthDecoder{size.HeightWidth}, nil
 }
 
 type lengthDecoder struct {
@@ -60,8 +60,11 @@ type lengthDecoder struct {
 }
 
 // Decode returns length for a given length code.
-func (l *lengthDecoder) Decode(code string) cont.Length {
-	return cont.Length{Length: l.lengths[code]}
+func (l *lengthDecoder) Decode(code string) (bool, cont.Length) {
+	if val, ok := l.lengths[code]; ok {
+		return true, cont.Length{Length: val}
+	}
+	return false, cont.Length{}
 }
 
 // AllCodes returns all length codes.
@@ -73,44 +76,28 @@ func (l *lengthDecoder) AllCodes() []string {
 	return keys
 }
 
-// NewHeightAndWidthDecoder initializes the file of lengths, height and width and
-// returns a new height and width file data source.
-func NewHeightAndWidthDecoder(path string) (data.HeightAndWidthDecoder, error) {
-	var size size
-	pathToSizes := filepath.Join(path, sizeFileName)
-	if err := initFile(pathToSizes, []byte(lengthWidthAndHeightJSON)); err != nil {
-		return nil, err
-	}
-	b, err := ioutil.ReadFile(pathToSizes)
-	if err != nil {
-		return nil, err
-	}
-	if err := json.Unmarshal(b, &size); err != nil {
-		return nil, err
-	}
-	return &heightAndWidthDecoder{size.HeightAndWidth}, err
-}
-
-type heightAndWidthDecoder struct {
-	heightAndWidths map[string]heightAndWidth
+type heightWidthDecoder struct {
+	heightWidths map[string]heightWidth
 }
 
 // Decode returns height and width for given height and width code.
-func (hw *heightAndWidthDecoder) Decode(code string) cont.HeightAndWidth {
-	heightAndWidth := hw.heightAndWidths[code]
-	return cont.HeightAndWidth{Width: heightAndWidth.Width, Height: heightAndWidth.Height}
+func (hw *heightWidthDecoder) Decode(code string) (bool, cont.HeightWidth) {
+	if val, ok := hw.heightWidths[code]; ok {
+		return true, cont.HeightWidth{Width: val.Width, Height: val.Height}
+	}
+	return false, cont.HeightWidth{}
 }
 
 // AllCodes returns all height and width codes.
-func (hw *heightAndWidthDecoder) AllCodes() []string {
-	keys := make([]string, 0, len(hw.heightAndWidths))
-	for k := range hw.heightAndWidths {
+func (hw *heightWidthDecoder) AllCodes() []string {
+	keys := make([]string, 0, len(hw.heightWidths))
+	for k := range hw.heightWidths {
 		keys = append(keys, k)
 	}
 	return keys
 }
 
-const lengthWidthAndHeightJSON = `{
+const lengthHeightWidthJSON = `{
   "length": {
     "1": "2991 mm",
     "2": "6068 mm",
@@ -130,66 +117,66 @@ const lengthWidthAndHeightJSON = `{
     "N": "14935 mm",
     "P": "16154 mm"
   },
-  "heightAndWidth": {
+  "heightWidth": {
     "0": {
-      "width": "2436 mm",
-      "height": "2438 mm"
+      "height": "2438 mm",
+      "width": "2436 mm"
     },
     "2": {
-      "width": "2436 mm",
-      "height": "2591 mm"
+      "height": "2591 mm",
+      "width": "2436 mm"
     },
     "4": {
-      "width": "2436 mm",
-      "height": "2743 mm"
+      "height": "2743 mm",
+      "width": "2436 mm"
     },
     "5": {
-      "width": "2436 mm",
-      "height": "2895 mm"
+      "height": "2895 mm",
+      "width": "2436 mm"
     },
     "6": {
-      "width": "2436 mm",
-      "height": "> 2895 mm"
+      "height": "> 2895 mm",
+      "width": "2436 mm"
     },
     "8": {
-      "width": "2436 mm",
-      "height": "1295 mm"
+      "height": "1295 mm",
+      "width": "2436 mm"
     },
     "9": {
-      "width": "2436 mm",
-      "height": "< 1219 mm"
+      "height": "< 1219 mm",
+      "width": "2436 mm"
     },
     "C": {
-      "width": "> 2438 mm and ≤ 2500 mm",
-      "height": "2591 mm"
+      "height": "2591 mm",
+      "width": "> 2438 mm and ≤ 2500 mm"
     },
     "D": {
-      "width": "> 2438 mm and ≤ 2500 mm",
-      "height": "2743 mm"
+      "height": "2743 mm",
+      "width": "> 2438 mm and ≤ 2500 mm"
     },
     "E": {
-      "width": "> 2438 mm and ≤ 2500 mm",
-      "height": "2895 mm"
+      "height": "2895 mm",
+      "width": "> 2438 mm and ≤ 2500 mm"
     },
     "F": {
-      "width": "> 2438 mm and ≤ 2500 mm",
-      "height": "> 2895 mm"
+      "height": "> 2895 mm",
+      "width": "> 2438 mm and ≤ 2500 mm"
     },
     "L": {
-      "width": "> 2500 mm",
-      "height": "2591 mm"
+      "height": "2591 mm",
+      "width": "> 2500 mm"
     },
     "M": {
-      "width": "> 2500 mm",
-      "height": "2743 mm"
+      "height": "2743 mm",
+      "width": "> 2500 mm"
     },
     "N": {
-      "width": "> 2500 mm",
-      "height": "2895 mm"
+      "height": "2895 mm",
+      "width": "> 2500 mm"
     },
     "P": {
-      "width": "> 2500 mm",
-      "height": "> 2895 mm"
+      "height": "> 2895 mm",
+      "width": "> 2500 mm"
     }
   }
 }

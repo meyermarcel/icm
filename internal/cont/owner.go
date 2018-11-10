@@ -13,15 +13,9 @@
 
 package cont
 
-import (
-	"log"
-	"regexp"
-	"unicode/utf8"
-)
-
 // Owner has a code and associated company with its location in the form of country and city.
 type Owner struct {
-	Code    OwnerCode
+	Code    string
 	Company string
 	City    string
 	Country string
@@ -30,22 +24,4 @@ type Owner struct {
 // OwnerCode represents the container owner.
 type OwnerCode struct {
 	value string
-}
-
-// Value returns the string value of an OwnerCode.
-func (c OwnerCode) Value() string {
-	return c.value
-}
-
-// NewOwnerCode creates a new OwnerCode from a string value.
-func NewOwnerCode(value string) OwnerCode {
-
-	if utf8.RuneCountInString(value) != 3 {
-		log.Fatalf("'%s' is not three characters", value)
-	}
-
-	if !regexp.MustCompile(`[A-Z]{3}`).MatchString(value) {
-		log.Fatalf("'%s' must be 3 letters", value)
-	}
-	return OwnerCode{value}
 }

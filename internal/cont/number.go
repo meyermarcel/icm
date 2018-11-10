@@ -13,32 +13,26 @@
 
 package cont
 
-import (
-	"fmt"
-	"log"
-	"strconv"
-)
-
 // Number is a container number with needed properties to conform to the specified standard.
 type Number struct {
-	ownerCode    OwnerCode
-	equipCatID   EquipCatID
-	serialNumber SerialNum
+	ownerCode    string
+	equipCatID   string
+	serialNumber string
 	checkDigit   int
 }
 
 // OwnerCode returns the owner code of container number.
-func (cn Number) OwnerCode() OwnerCode {
+func (cn Number) OwnerCode() string {
 	return cn.ownerCode
 }
 
 // EquipCatID returns the equipment category ID of container number.
-func (cn Number) EquipCatID() EquipCatID {
+func (cn Number) EquipCatID() string {
 	return cn.equipCatID
 }
 
 // SerialNumber returns the serial number of container number.
-func (cn Number) SerialNumber() SerialNum {
+func (cn Number) SerialNumber() string {
 	return cn.serialNumber
 }
 
@@ -49,46 +43,13 @@ func (cn Number) CheckDigit() int {
 
 // NewNum creates new container number with check digit.
 // To have a correct check digit calculate it before.
-func NewNum(ownerCode OwnerCode,
-	equipCatID EquipCatID,
-	serialNumber SerialNum,
+func NewNum(ownerCode string,
+	equipCatID string,
+	serialNumber string,
 	checkDigit int) Number {
 
 	return Number{ownerCode: ownerCode,
 		equipCatID:   equipCatID,
 		serialNumber: serialNumber,
 		checkDigit:   checkDigit}
-}
-
-// SerialNum is a 6 digit number found in a container number.
-type SerialNum struct {
-	value int
-}
-
-// Value returns int value of serial number.
-func (sn SerialNum) Value() int {
-	return sn.value
-}
-
-// NewSerialNumFrom creates new serial number from a string value.
-func NewSerialNumFrom(value string) SerialNum {
-
-	num, err := strconv.Atoi(value)
-	if err != nil {
-		log.Fatalf("Could not parse '%s' to number", value)
-	}
-	return NewSerialNum(num)
-}
-
-// NewSerialNum creates new serial number from an int value.
-func NewSerialNum(value int) SerialNum {
-
-	if value < 0 || value > 999999 {
-		log.Fatalf("'%d' is not '>= 0' and '<= 999999'", value)
-	}
-	return SerialNum{value}
-}
-
-func (sn SerialNum) String() string {
-	return fmt.Sprintf("%06d", sn.Value())
 }

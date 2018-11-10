@@ -13,7 +13,7 @@
 
 package configs
 
-// Name of the config files and keys for configurable separators
+// Name of the config files and keys for configurable separators.
 const (
 	Name           = "config"
 	NameWithYmlExt = Name + ".yml"
@@ -24,7 +24,7 @@ const (
 	SepST          = "sep-size-type"
 )
 
-// Cfg returns default config
+// Cfg returns default config.
 func Cfg() []byte {
 	return []byte(`# Config
 #

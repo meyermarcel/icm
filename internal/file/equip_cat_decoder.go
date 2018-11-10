@@ -54,13 +54,15 @@ type equipCatDecoder struct {
 }
 
 // Decode decodes ID to equipment category ID.
-func (ec *equipCatDecoder) Decode(ID string) cont.EquipCat {
-	info := ec.categories[ID]
-	return cont.NewEquipCatID(cont.NewEquipCatIDFrom(ID), info)
+func (ec *equipCatDecoder) Decode(ID string) (bool, cont.EquipCat) {
+	if val, ok := ec.categories[ID]; ok {
+		return true, cont.NewEquipCatID(ID, val)
+	}
+	return false, cont.EquipCat{}
 }
 
-// AllIDs returns all equipment category IDs.
-func (ec *equipCatDecoder) AllIDs() []string {
+// AllCatIDs returns all equipment category IDs.
+func (ec *equipCatDecoder) AllCatIDs() []string {
 	keys := make([]string, 0, len(ec.categories))
 	for k := range ec.categories {
 		keys = append(keys, k)

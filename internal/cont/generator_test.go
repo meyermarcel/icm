@@ -22,8 +22,8 @@ import (
 
 func TestNewRandomUniqueGenerator(t *testing.T) {
 	type args struct {
-		count int
-		codes []OwnerCode
+		count      int
+		ownerCodes []string
 	}
 	tests := []struct {
 		name    string
@@ -33,9 +33,9 @@ func TestNewRandomUniqueGenerator(t *testing.T) {
 	}{
 		{
 			"Constructor returns correct RandomUniqueGenerator",
-			args{3, []OwnerCode{NewOwnerCode("ABC"), NewOwnerCode("DEF"), NewOwnerCode("GHI")}},
+			args{3, []string{"ABC", "DEF", "GHI"}},
 			&RandomUniqueGenerator{
-				codes:      []OwnerCode{NewOwnerCode("ABC"), NewOwnerCode("DEF"), NewOwnerCode("GHI")},
+				codes:      []string{"ABC", "DEF", "GHI"},
 				lenCodes:   3,
 				randOffset: 5577006791947779410,
 			},
@@ -43,19 +43,19 @@ func TestNewRandomUniqueGenerator(t *testing.T) {
 		},
 		{
 			"Exceed maximum of unique container numbers",
-			args{909092, []OwnerCode{NewOwnerCode("ABC")}},
+			args{909092, []string{"ABC"}},
 			nil,
 			true,
 		},
 		{
 			"Count is lower than minimum count 1",
-			args{0, []OwnerCode{NewOwnerCode("ABC")}},
+			args{0, []string{"ABC"}},
 			nil,
 			true,
 		},
 		{
 			"Minimum one owner code is needed",
-			args{1, []OwnerCode{}},
+			args{1, []string{}},
 			nil,
 			true,
 		},
@@ -63,7 +63,7 @@ func TestNewRandomUniqueGenerator(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			rand.Seed(1)
-			got, err := NewRandomUniqueGenerator(tt.args.count, tt.args.codes)
+			got, err := NewRandomUniqueGenerator(tt.args.count, tt.args.ownerCodes)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("NewRandomUniqueGenerator() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -99,7 +99,7 @@ func TestRandomUniqueGenerator_Generate(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			g, _ := NewRandomUniqueGenerator(tt.count, []OwnerCode{NewOwnerCode("ABC"), NewOwnerCode("DEF")})
+			g, _ := NewRandomUniqueGenerator(tt.count, []string{"ABC", "DEF"})
 
 			contNumbers := map[string]bool{}
 			for i := 0; i < tt.count; i++ {
@@ -114,8 +114,8 @@ func TestRandomUniqueGenerator_Generate(t *testing.T) {
 }
 
 func contNumToString(contNum Number) string {
-	return contNum.OwnerCode().Value() +
+	return contNum.OwnerCode() +
 		fmt.Sprintf("%d", contNum.CheckDigit()) +
-		contNum.SerialNumber().String() +
+		contNum.SerialNumber() +
 		fmt.Sprintf("%d", contNum.CheckDigit())
 }

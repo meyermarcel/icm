@@ -25,11 +25,9 @@ type OwnerDecodeUpdater interface {
 
 // OwnerDecoder represents a data source for owner specific data.
 type OwnerDecoder interface {
-	Decode(code cont.OwnerCode) cont.Owner
+	Decode(code string) (bool, cont.Owner)
 
-	AllCodes() []string
-
-	GenerateRandomCodes(count int) []cont.OwnerCode
+	GenerateRandomCodes(count int) []string
 }
 
 // OwnerUpdater updates owners of an implemented source.
@@ -37,35 +35,29 @@ type OwnerUpdater interface {
 	Update(newOwners map[string]cont.Owner) error
 }
 
-// TimestampUpdater updates a timestamp with an implemented time.
-type TimestampUpdater interface {
-	Update() error
-}
-
 // EquipCatDecoder represents a data source for equipment category ID specific data.
 type EquipCatDecoder interface {
-	Decode(ID string) cont.EquipCat
+	Decode(ID string) (bool, cont.EquipCat)
 
-	AllIDs() []string
+	AllCatIDs() []string
 }
 
 // LengthDecoder encapsulates data sources for length
 type LengthDecoder interface {
-	Decode(code string) cont.Length
-
-	AllCodes() []string
+	Decode(code string) (bool, cont.Length)
 }
 
-// HeightAndWidthDecoder encapsulates data sources for height and width
-type HeightAndWidthDecoder interface {
-	Decode(code string) cont.HeightAndWidth
-
-	AllCodes() []string
+// HeightWidthDecoder encapsulates data sources for height and width
+type HeightWidthDecoder interface {
+	Decode(code string) (bool, cont.HeightWidth)
 }
 
 // TypeDecoder represents a data source for type data
 type TypeDecoder interface {
-	Decode(code string) cont.TypeAndGroup
+	Decode(code string) (bool, cont.TypeAndGroup)
+}
 
-	AllCodes() []string
+// TimestampUpdater updates a timestamp with an implemented time.
+type TimestampUpdater interface {
+	Update() error
 }

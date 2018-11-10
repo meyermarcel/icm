@@ -14,10 +14,17 @@
 package cmd
 
 import (
+	"bufio"
+	"bytes"
 	"fmt"
 	"io"
 	"io/ioutil"
 	"os"
+	"strings"
+
+	"github.com/meyermarcel/icm/internal/cont"
+
+	"github.com/meyermarcel/icm/internal/input"
 
 	"github.com/meyermarcel/icm/internal/data"
 
@@ -27,7 +34,6 @@ import (
 
 	"os/user"
 
-	"github.com/meyermarcel/icm/internal/cont"
 	"github.com/meyermarcel/icm/internal/file"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -36,13 +42,13 @@ import (
 type decoders struct {
 	ownerDecodeUpdater data.OwnerDecodeUpdater
 	equipCatDecoder    data.EquipCatDecoder
-	sizeTypeDecoders   sizeTypeDecoders
+	sizeTypeDecoders
 }
 
 type sizeTypeDecoders struct {
-	lengthDecoder         data.LengthDecoder
-	heightAndWidthDecoder data.HeightAndWidthDecoder
-	typeDecoder           data.TypeDecoder
+	lengthDecoder      data.LengthDecoder
+	heightWidthDecoder data.HeightWidthDecoder
+	typeDecoder        data.TypeDecoder
 }
 
 const (
@@ -85,10 +91,7 @@ func Execute(version string) {
 	equipCatDecoder, err := file.NewEquipCatDecoder(appDirDataPath)
 	checkErr(err)
 
-	lengthDecoder, err := file.NewLengthDecoder(appDirDataPath)
-	checkErr(err)
-
-	heightAndWidthDecoder, err := file.NewHeightAndWidthDecoder(appDirDataPath)
+	lengthDecoder, heightWidthDecoder, err := file.NewSizeDecoder(appDirDataPath)
 	checkErr(err)
 
 	typeDecoder, err := file.NewTypeDecoder(appDirDataPath)
@@ -105,19 +108,19 @@ func Execute(version string) {
 			equipCatDecoder,
 			sizeTypeDecoders{
 				lengthDecoder,
-				heightAndWidthDecoder,
+				heightWidthDecoder,
 				typeDecoder},
 		},
 		timestampUpdater,
 		ownerURL)
 
 	err = rootCmd.Execute()
+	// err is printed by cobra.
 	if err != nil {
 		os.Exit(1)
 	}
 }
 
-// RootCmd represents the base command when called without any subcommands
 func newRootCmd(version string, writer io.Writer,
 	decoders decoders,
 	timestampUpdater data.TimestampUpdater,
@@ -133,15 +136,14 @@ func newRootCmd(version string, writer io.Writer,
 	rootCmd.AddCommand(newCompletionCmd(writer, rootCmd))
 	rootCmd.AddCommand(newGenerateCmd(writer, decoders.ownerDecodeUpdater))
 	rootCmd.AddCommand(newValidateCmd(writer, decoders))
-	rootCmd.AddCommand(newOwnerCmd(writer, decoders.ownerDecodeUpdater, timestampUpdater, ownerURL))
-	rootCmd.AddCommand(newSizeTypeCmd(writer, decoders.sizeTypeDecoders))
+	rootCmd.AddCommand(newUpdateOwnerCmd(decoders.ownerDecodeUpdater, timestampUpdater, ownerURL))
 
 	return rootCmd
 }
 
 var count int
 
-func newGenerateCmd(writer io.Writer, ownerData data.OwnerDecoder) *cobra.Command {
+func newGenerateCmd(writer io.Writer, ownerDecoder data.OwnerDecoder) *cobra.Command {
 	generateCmd := &cobra.Command{
 		Use:   "generate",
 		Short: "Generate a random container number",
@@ -159,23 +161,32 @@ Equipment category ID 'U' is used for every container number.
 
   ` + appName + ` generate --` + configs.SepOE + ` '' --` + configs.SepSC + ` ''`,
 		Args: cobra.NoArgs,
-		PreRun: func(cmd *cobra.Command, args []string) {
-			viper.BindPFlag(configs.SepOE, cmd.Flags().Lookup(configs.SepOE))
-			viper.BindPFlag(configs.SepES, cmd.Flags().Lookup(configs.SepES))
-			viper.BindPFlag(configs.SepSC, cmd.Flags().Lookup(configs.SepSC))
+		PreRunE: func(cmd *cobra.Command, args []string) error {
+			err := viper.BindPFlag(configs.SepOE, cmd.Flags().Lookup(configs.SepOE))
+			err = viper.BindPFlag(configs.SepES, cmd.Flags().Lookup(configs.SepES))
+			err = viper.BindPFlag(configs.SepSC, cmd.Flags().Lookup(configs.SepSC))
+			if err != nil {
+				return err
+			}
+			return nil
 		},
 		RunE: func(cmd *cobra.Command, args []string) error {
 
-			generator, err := cont.NewRandomUniqueGenerator(count, ownerData.GenerateRandomCodes(count))
+			generator, err := cont.NewRandomUniqueGenerator(count, ownerDecoder.GenerateRandomCodes(count))
 			if err != nil {
 				return err
 			}
 			for i := 0; i < count; i++ {
-				printContNum(writer, generator.Generate(), separators{
-					OwnerEquip:  viper.GetString(configs.SepOE),
-					EquipSerial: viper.GetString(configs.SepES),
-					SerialCheck: viper.GetString(configs.SepSC),
-				})
+				contNumber := generator.Generate()
+				_, err := io.WriteString(writer,
+					fmt.Sprintf("%s%s%s%s%s%s%d\n",
+						contNumber.OwnerCode(), viper.GetString(configs.SepOE),
+						contNumber.EquipCatID(), viper.GetString(configs.SepES),
+						contNumber.SerialNumber(), viper.GetString(configs.SepSC),
+						contNumber.CheckDigit()))
+				if err != nil {
+					return err
+				}
 			}
 			return nil
 		},
@@ -191,36 +202,60 @@ Equipment category ID 'U' is used for every container number.
 	return generateCmd
 }
 
-func newValidateCmd(writer io.Writer, data decoders) *cobra.Command {
+func newValidateCmd(writer io.Writer, decoders decoders) *cobra.Command {
 	validateCmd := &cobra.Command{
 		Use:   "validate",
-		Short: "Validate a container number",
-		Long: `Validate a container number.
+		Short: "Validate intermodal container markings",
+		Long: `Validate intermodal container markings.
 
 ` + sepHelp,
 		Example: `  ` + appName + ` validate 'ABCU 1234560'
 
+  ` + appName + ` validate 'ABCU'
+
+  ` + appName + ` validate '20G1'
+
   ` + appName + ` validate --` + configs.SepOE + ` '' --` + configs.SepSC + ` '' 'ABCU 1234560'`,
 		Args: cobra.ExactArgs(1),
-		PreRun: func(cmd *cobra.Command, args []string) {
-			viper.BindPFlag(configs.SepOE, cmd.Flags().Lookup(configs.SepOE))
-			viper.BindPFlag(configs.SepES, cmd.Flags().Lookup(configs.SepES))
-			viper.BindPFlag(configs.SepSC, cmd.Flags().Lookup(configs.SepSC))
-			viper.BindPFlag(configs.SepCS, cmd.Flags().Lookup(configs.SepCS))
-			viper.BindPFlag(configs.SepST, cmd.Flags().Lookup(configs.SepST))
+		PreRunE: func(cmd *cobra.Command, args []string) error {
+			err := viper.BindPFlag(configs.SepOE, cmd.Flags().Lookup(configs.SepOE))
+			err = viper.BindPFlag(configs.SepES, cmd.Flags().Lookup(configs.SepES))
+			err = viper.BindPFlag(configs.SepSC, cmd.Flags().Lookup(configs.SepSC))
+			err = viper.BindPFlag(configs.SepCS, cmd.Flags().Lookup(configs.SepCS))
+			err = viper.BindPFlag(configs.SepST, cmd.Flags().Lookup(configs.SepST))
+			if err != nil {
+				return err
+			}
+			return nil
 		},
 		RunE: func(cmd *cobra.Command, args []string) error {
 
-			parsedContNum, err := parseContNum(args[0], data)
+			reader := strings.NewReader(args[0])
+			bufReader := bufio.NewReader(reader)
+			peek, _ := bufReader.Peek(bufReader.Buffered())
 
-			printContNumVal(writer, parsedContNum, data, separators{
-				OwnerEquip:  viper.GetString(configs.SepOE),
-				EquipSerial: viper.GetString(configs.SepES),
-				SerialCheck: viper.GetString(configs.SepSC),
-				CheckSize:   viper.GetString(configs.SepCS),
-				SizeType:    viper.GetString(configs.SepST),
-			})
-			return err
+			validator := newIcmValidator(decoders)
+
+			if isSingleLine(string(peek)) {
+				buf := new(bytes.Buffer)
+				_, _ = buf.ReadFrom(reader)
+				inputs := validator.Validate(buf.String())
+				fancyPrinter := input.NewFancyPrinter(writer, inputs)
+				fancyPrinter.SetIndent("  ")
+				fancyPrinter.SetSeparators(
+					viper.GetString(configs.SepOE),
+					viper.GetString(configs.SepES),
+					viper.GetString(configs.SepSC),
+					viper.GetString(configs.SepCS),
+					"",
+					viper.GetString(configs.SepST),
+				)
+				err := fancyPrinter.Print()
+				if err != nil {
+					return err
+				}
+			}
+			return nil
 		},
 	}
 	validateCmd.Flags().String(configs.SepOE, "",
@@ -236,10 +271,45 @@ func newValidateCmd(writer io.Writer, data decoders) *cobra.Command {
 	return validateCmd
 }
 
+func isSingleLine(s string) bool {
+	scanner := bufio.NewScanner(strings.NewReader(s))
+	counter := 0
+	for scanner.Scan() {
+		counter++
+		if counter > 1 {
+			return false
+		}
+	}
+	return true
+}
+
+func newUpdateOwnerCmd(
+	ownerUpdater data.OwnerUpdater,
+	timestampUpdater data.TimestampUpdater,
+	ownerURL string) *cobra.Command {
+	ownerUpdateCmd := &cobra.Command{
+		Use:   "update",
+		Short: "Update information of owners",
+		Long: `Update information of owners from remote.
+Following information is available:
+
+  Owner code
+  Company
+  City
+  Country`,
+		Example: `  ` + appName + ` update`,
+		Args:    cobra.NoArgs,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return update(ownerUpdater, timestampUpdater, ownerURL)
+		},
+	}
+	return ownerUpdateCmd
+}
+
 func initDir(path string) string {
 
 	if _, err := os.Stat(path); os.IsNotExist(err) {
-		os.Mkdir(path, os.ModeDir|0700)
+		_ = os.Mkdir(path, os.ModeDir|0700)
 	}
 	return path
 }

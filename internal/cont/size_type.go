@@ -13,8 +13,8 @@
 
 package cont
 
-// HeightAndWidth describes width and height of first code in specified standard size code.
-type HeightAndWidth struct {
+// HeightWidth describes width and height of first code in specified standard size code.
+type HeightWidth struct {
 	Width  string
 	Height string
 }
@@ -26,38 +26,18 @@ type Length struct {
 
 // Type has code and information about the specified standard type.
 type Type struct {
-	Code string
-	Info string
+	TypeCode string
+	TypeInfo string
 }
 
 // Group has code and information about an specified type group.
 type Group struct {
-	Code string
-	Info string
+	GroupCode string
+	GroupInfo string
 }
 
 // TypeAndGroup encapsulates type and group.
 type TypeAndGroup struct {
-	TypeCont Type
-	Group    Group
-}
-
-// TypeCode returns type code.
-func (mtg TypeAndGroup) TypeCode() string {
-	return mtg.TypeCont.Code
-}
-
-// TypeInfo returns type information.
-func (mtg TypeAndGroup) TypeInfo() string {
-	return mtg.TypeCont.Info
-}
-
-// GroupCode returns group code.
-func (mtg TypeAndGroup) GroupCode() string {
-	return mtg.Group.Code
-}
-
-// GroupInfo returns group information.
-func (mtg TypeAndGroup) GroupInfo() string {
-	return mtg.Group.Info
+	Type
+	Group
 }

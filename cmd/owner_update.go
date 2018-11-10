@@ -54,7 +54,7 @@ func ownersRemote(url string) (map[string]cont.Owner, error) {
 		city := s.Parent().Find("td[data-label=City]").Text()
 		country := s.Parent().Find("td[data-label=Country]").Text()
 
-		owners[code[0:3]] = cont.Owner{Code: cont.NewOwnerCode(code[0:3]), Company: company, City: city, Country: country}
+		owners[code[0:3]] = cont.Owner{Code: code[0:3], Company: company, City: city, Country: country}
 	})
 
 	if len(owners) == 0 {

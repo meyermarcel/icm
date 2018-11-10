@@ -23,7 +23,7 @@ import (
 // RandomUniqueGenerator holds state for generating random unique container numbers.
 // Use NewRandomUniqueGenerator for initialization.
 type RandomUniqueGenerator struct {
-	codes       []OwnerCode
+	codes       []string
 	lenCodes    int
 	randOffset  int
 	ownerOffset int
@@ -33,7 +33,7 @@ type RandomUniqueGenerator struct {
 // NewRandomUniqueGenerator returns a new random unique container number generator.
 // If possible maximum unique container numbers are exceeded, count is less than 1 or
 // no owner codes are passed then nil and error is returned.
-func NewRandomUniqueGenerator(count int, randomCodes []OwnerCode) (*RandomUniqueGenerator, error) {
+func NewRandomUniqueGenerator(count int, randomCodes []string) (*RandomUniqueGenerator, error) {
 
 	lenCodes := len(randomCodes)
 
@@ -47,7 +47,7 @@ func NewRandomUniqueGenerator(count int, randomCodes []OwnerCode) (*RandomUnique
 	}
 
 	if lenCodes < 1 {
-		return nil, errors.New("cannot generate container numbers without owner codes")
+		return nil, errors.New("cannot generate container numbers without owner ownerCodes")
 	}
 
 	return &RandomUniqueGenerator{
@@ -61,10 +61,9 @@ func NewRandomUniqueGenerator(count int, randomCodes []OwnerCode) (*RandomUnique
 // than passed count in constructor.
 func (g *RandomUniqueGenerator) Generate() Number {
 
-	serialNum := NewSerialNum(permSerialNum((permSerialNum(g.serialNumIt) + g.randOffset) % 1000000))
+	serialNum := fmt.Sprintf("%06d", permSerialNum((permSerialNum(g.serialNumIt)+g.randOffset)%1000000))
 	code := g.codes[(g.serialNumIt+g.ownerOffset)%g.lenCodes]
-	equipCatID := NewEquipCatIDU()
-	checkDigit := CalcCheckDigit(code, equipCatID, serialNum)
+	checkDigit := CalcCheckDigit(code, "U", serialNum)
 
 	if g.serialNumIt < 1000000 {
 		g.serialNumIt++
@@ -76,7 +75,7 @@ func (g *RandomUniqueGenerator) Generate() Number {
 	if checkDigit == 10 {
 		return g.Generate()
 	}
-	return NewNum(code, equipCatID, serialNum, checkDigit)
+	return NewNum(code, "U", serialNum, checkDigit)
 }
 
 func init() {
