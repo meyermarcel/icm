@@ -165,14 +165,13 @@ Equipment category ID 'U' is used for every container number.
 			viper.BindPFlag(configs.SepSC, cmd.Flags().Lookup(configs.SepSC))
 		},
 		RunE: func(cmd *cobra.Command, args []string) error {
-			c := make(chan cont.Result)
-			go cont.GenNum(count, c, ownerData.GenerateRandomCodes)
 
-			for result := range c {
-				if result.Err() != nil {
-					return result.Err()
-				}
-				printContNum(writer, result.ContNum(), separators{
+			generator, err := cont.NewRandomUniqueGenerator(count, ownerData.GenerateRandomCodes(count))
+			if err != nil {
+				return err
+			}
+			for i := 0; i < count; i++ {
+				printContNum(writer, generator.Generate(), separators{
 					OwnerEquip:  viper.GetString(configs.SepOE),
 					EquipSerial: viper.GetString(configs.SepES),
 					SerialCheck: viper.GetString(configs.SepSC),
