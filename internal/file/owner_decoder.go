@@ -714,12 +714,6 @@ const ownerJSON = `{
     "city": "Seoul",
     "country": "Korea, Republic of"
   },
-  "ALX": {
-    "code": "ALX",
-    "company": "AIR LIQUIDE ELECTRONICS GMBH",
-    "city": "DUSSELDORF",
-    "country": "Germany"
-  },
   "AMB": {
     "code": "AMB",
     "company": "AMBIKA SRL",
@@ -1013,6 +1007,12 @@ const ownerJSON = `{
     "company": "NORDIC BULKERS AB",
     "city": "GOTHENBURG",
     "country": "Sweden"
+  },
+  "ASK": {
+    "code": "ASK",
+    "company": "AS TRUCKING GROUP LLC",
+    "city": "Laredo",
+    "country": "United States"
   },
   "ASL": {
     "code": "ASL",
@@ -1416,6 +1416,12 @@ const ownerJSON = `{
     "city": "OSLO",
     "country": "Norway"
   },
+  "BCO": {
+    "code": "BCO",
+    "company": "N.V. COBO CONSTRUCTION",
+    "city": "PARAMARIBO",
+    "country": "Suriname"
+  },
   "BCS": {
     "code": "BCS",
     "company": "BALTIC CONTAINER SERVICE LTD",
@@ -1683,7 +1689,7 @@ const ownerJSON = `{
   "BLN": {
     "code": "BLN",
     "company": "BRIDGE LOGISTICS LLC",
-    "city": "MOSCOW",
+    "city": "NAKHODKA",
     "country": "Russian Federation"
   },
   "BLP": {
@@ -2304,6 +2310,12 @@ const ownerJSON = `{
     "city": "Saint Petersbourg",
     "country": "Russian Federation"
   },
+  "CBN": {
+    "code": "CBN",
+    "company": "CUBNER SAS",
+    "city": "PERIGUEUX",
+    "country": "France"
+  },
   "CBO": {
     "code": "CBO",
     "company": "N.V. COBO CONSTRUCTION",
@@ -2470,6 +2482,12 @@ const ownerJSON = `{
     "code": "CEA",
     "company": "ORANO TN-LMC",
     "city": "VALOGNES",
+    "country": "France"
+  },
+  "CEC": {
+    "code": "CEC",
+    "company": "CCR CONTAINERS SAS",
+    "city": "NEUILLY SUR SEINE CEDEX",
     "country": "France"
   },
   "CEF": {
@@ -2892,6 +2910,12 @@ const ownerJSON = `{
     "city": "BRIDGETOWN BB11144",
     "country": "Barbados"
   },
+  "CLQ": {
+    "code": "CLQ",
+    "company": "CLIQ CONTAINER TRADING LIMITED",
+    "city": "Edinburgh",
+    "country": "United Kingdom"
+  },
   "CLS": {
     "code": "CLS",
     "company": "CARAVEL LOGISTICS PRIVATE LIMITED",
@@ -3101,6 +3125,12 @@ const ownerJSON = `{
     "company": "CEYLON OXYGEN LIMITED",
     "city": "Colombo",
     "country": "Sri Lanka"
+  },
+  "COY": {
+    "code": "COY",
+    "company": "CONTAINENTAL LTD",
+    "city": "KEW SURREY",
+    "country": "United Kingdom"
   },
   "COZ": {
     "code": "COZ",
@@ -3413,6 +3443,12 @@ const ownerJSON = `{
     "company": "CHEMICAL TRANSFER CO. INC.",
     "city": "STOCKTON, CA 95206",
     "country": "United States"
+  },
+  "CTI": {
+    "code": "CTI",
+    "company": "CHLORITECH INDUSTRIES",
+    "city": "Vadodara",
+    "country": "India"
   },
   "CTK": {
     "code": "CTK",
@@ -4950,6 +4986,12 @@ const ownerJSON = `{
     "city": "PRUSZCZ GDANSKI",
     "country": "Poland"
   },
+  "ERM": {
+    "code": "ERM",
+    "company": "ERMONT SAS",
+    "city": "LORETTE",
+    "country": "France"
+  },
   "ERN": {
     "code": "ERN",
     "company": "WIHELM ERNST GMBH",
@@ -5103,7 +5145,7 @@ const ownerJSON = `{
   "EVO": {
     "code": "EVO",
     "company": "EVOLUTION GERADORES LTDA",
-    "city": "ITAJAI",
+    "city": "Itajai-Santa Catarina (SC)",
     "country": "Brazil"
   },
   "EVR": {
@@ -5156,7 +5198,7 @@ const ownerJSON = `{
   },
   "EYT": {
     "code": "EYT",
-    "company": "HARBIN EYT TECH & TRADE CO.,LTD",
+    "company": "HARBIN EYT TECH&TRADE SHARE CO., LTD",
     "city": "Harbin",
     "country": "China"
   },
@@ -5309,6 +5351,12 @@ const ownerJSON = `{
     "company": "FLORENS ASSET MANAGEMENT COMPANY LIMITED",
     "city": "Hong Kong",
     "country": "HK"
+  },
+  "FDA": {
+    "code": "FDA",
+    "company": "FORMOSA DAIKIN ADVANCED CHEMICALS",
+    "city": "TAIPEI",
+    "country": "Taiwan (China)"
   },
   "FDC": {
     "code": "FDC",
@@ -5978,7 +6026,7 @@ const ownerJSON = `{
   },
   "GCU": {
     "code": "GCU",
-    "company": "NOBLE CONTAINER LEASING SINGAPORE PTE LTD",
+    "company": "GLOBAL CONTAINER REPO PTE LTD",
     "city": "Singapore",
     "country": "Singapore"
   },
@@ -6095,6 +6143,12 @@ const ownerJSON = `{
     "company": "GEOMAR",
     "city": "KIEL",
     "country": "Germany"
+  },
+  "GGA": {
+    "code": "GGA",
+    "company": "GLOBAL MARITIME ALGERIE",
+    "city": "Batna",
+    "country": "Algeria"
   },
   "GGC": {
     "code": "GGC",
@@ -6888,6 +6942,12 @@ const ownerJSON = `{
     "city": "SEOUL",
     "country": "Korea, Republic of"
   },
+  "HDP": {
+    "code": "HDP",
+    "company": "HIMDILING PRO LTD",
+    "city": "Moscow",
+    "country": "Russian Federation"
+  },
   "HDS": {
     "code": "HDS",
     "company": "KUEHNE + NAGEL DRINKS LOGISTICS LTD",
@@ -7103,6 +7163,12 @@ const ownerJSON = `{
     "company": "HAEFELI AG",
     "city": "LENZBURG",
     "country": "Switzerland"
+  },
+  "HLM": {
+    "code": "HLM",
+    "company": "LANFER TRANSPORTE GMBH & CO. KG",
+    "city": "Meppen",
+    "country": "Germany"
   },
   "HLS": {
     "code": "HLS",
@@ -8574,12 +8640,6 @@ const ownerJSON = `{
     "city": "PETERSHAUSEN",
     "country": "Germany"
   },
-  "KLS": {
-    "code": "KLS",
-    "company": "MARINI MAKINA",
-    "city": "ANKARA",
-    "country": "Turkey"
-  },
   "KLT": {
     "code": "KLT",
     "company": "KAWASAKI KISEN KAISHA LTD - K LINE",
@@ -9366,6 +9426,12 @@ const ownerJSON = `{
     "city": "PIIKKIO",
     "country": "Finland"
   },
+  "LSG": {
+    "code": "LSG",
+    "company": "LANDSEA GLOBAL TASIMACILIK VE TICARET A.",
+    "city": "ISTANBUL",
+    "country": "Turkey"
+  },
   "LSH": {
     "code": "LSH",
     "company": "LS HOLDING APS",
@@ -9395,12 +9461,6 @@ const ownerJSON = `{
     "company": "LS INTERTANK APS",
     "city": "FREDERICIA",
     "country": "Denmark"
-  },
-  "LSX": {
-    "code": "LSX",
-    "company": "LIGHTSAIL ENERGY INC.",
-    "city": "Berkeley, CA 94710",
-    "country": "United States"
   },
   "LTC": {
     "code": "LTC",
@@ -9482,9 +9542,9 @@ const ownerJSON = `{
   },
   "LXL": {
     "code": "LXL",
-    "company": "CAN LINK INTERNATIONAL LEASE LTD",
-    "city": "RICHMOND",
-    "country": "Canada"
+    "company": "KMT GAS",
+    "city": "Sichuan Province,",
+    "country": "China"
   },
   "LXS": {
     "code": "LXS",
@@ -10670,7 +10730,7 @@ const ownerJSON = `{
   },
   "NAF": {
     "code": "NAF",
-    "company": "NORWEGIAN DEFENCE LOGISTIC ORG - AIR",
+    "company": "NDMA",
     "city": "KJELLER",
     "country": "Norway"
   },
@@ -11786,8 +11846,8 @@ const ownerJSON = `{
   },
   "OXN": {
     "code": "OXN",
-    "company": "OXON ITALIA S.P.A.",
-    "city": "PERO MI",
+    "company": "SIPCAM OXON S.P.A",
+    "city": "MILANO MI",
     "country": "Italy"
   },
   "OXY": {
@@ -12269,6 +12329,12 @@ const ownerJSON = `{
     "company": "KQ SPEEDIE LUB 2 LLC",
     "city": "LIHUE,  HI 96766",
     "country": "United States"
+  },
+  "PNI": {
+    "code": "PNI",
+    "company": "PT. PELAYARAN NASIONAL INDONESIA",
+    "city": "JAKARTA",
+    "country": "Indonesia"
   },
   "PNM": {
     "code": "PNM",
@@ -13950,6 +14016,12 @@ const ownerJSON = `{
     "city": "HILVARENBEEK",
     "country": "Netherlands"
   },
+  "SIC": {
+    "code": "SIC",
+    "company": "SUNRISE CONTAINER SERVICE CO. LTD",
+    "city": "Mahe",
+    "country": "Seychelles"
+  },
   "SID": {
     "code": "SID",
     "company": "CHEMIKALIEN UND FLUESSIGKEITSTRANSPORTE A. SIEPMANN GMBH",
@@ -14412,12 +14484,6 @@ const ownerJSON = `{
     "city": "GUJARAT",
     "country": "India"
   },
-  "SPS": {
-    "code": "SPS",
-    "company": "CONTAINERS COMPLETE LIMITED T/A SPACEWISE",
-    "city": "WELLINGTON",
-    "country": "New Zealand"
-  },
   "SPT": {
     "code": "SPT",
     "company": "SCHENK-PAPENDRECHT BV",
@@ -14681,12 +14747,6 @@ const ownerJSON = `{
     "company": "SUOMEN VUOKRAKONTTI OY",
     "city": "RAJAMAKI",
     "country": "Finland"
-  },
-  "SVL": {
-    "code": "SVL",
-    "company": "SAVEL ELECTRONIC",
-    "city": "GOLCUK-KOCAELI",
-    "country": "Turkey"
   },
   "SVM": {
     "code": "SVM",
@@ -15018,12 +15078,6 @@ const ownerJSON = `{
     "city": "Columbia, MD 21046",
     "country": "United States"
   },
-  "TCQ": {
-    "code": "TCQ",
-    "company": "TRANSPORT CANADA",
-    "city": "WINNIPEG, MB",
-    "country": "Canada"
-  },
   "TCR": {
     "code": "TCR",
     "company": "TRANS-CHINA EXPRESS (HK) CO LIMITED",
@@ -15059,6 +15113,12 @@ const ownerJSON = `{
     "company": "TRANSMIT CONTAINERS LTD",
     "city": "ABERDEEN",
     "country": "United Kingdom"
+  },
+  "TDE": {
+    "code": "TDE",
+    "company": "TDS SHIPPING LLC",
+    "city": "Dubai",
+    "country": "United Arab Emirates"
   },
   "TDI": {
     "code": "TDI",
@@ -15107,6 +15167,12 @@ const ownerJSON = `{
     "company": "PT PELAYARAN TEMPURAN EMAS,TBK",
     "city": "JAKARTA UTARA",
     "country": "Indonesia"
+  },
+  "TEI": {
+    "code": "TEI",
+    "company": "BEIJING TRANS EURASIA INTERNATIONAL LOGISTICS LTD.",
+    "city": "Beijing",
+    "country": "China"
   },
   "TEL": {
     "code": "TEL",
@@ -15221,6 +15287,12 @@ const ownerJSON = `{
     "company": "TAIWAN SPECIAL CHEMICALS CORPORATION",
     "city": "CHANGHUA COUNTY",
     "country": "Taiwan (China)"
+  },
+  "TGG": {
+    "code": "TGG",
+    "company": "TIGER GAS (SHANGHAI) LIMITED",
+    "city": "SHANGHAI",
+    "country": "China"
   },
   "TGH": {
     "code": "TGH",
@@ -15612,12 +15684,6 @@ const ownerJSON = `{
     "city": "COLUMBIA, MD-21045",
     "country": "United States"
   },
-  "TNK": {
-    "code": "TNK",
-    "company": "TRANSTANK PTY LTD",
-    "city": "KEILOR PARK",
-    "country": "Australia"
-  },
   "TNM": {
     "code": "TNM",
     "company": "TRANSPORTATION COMPANY TRANS MERIDIAN",
@@ -15636,6 +15702,12 @@ const ownerJSON = `{
     "city": "VALOGNES",
     "country": "France"
   },
+  "TNR": {
+    "code": "TNR",
+    "company": "TECHNOAZOT R&P LTD",
+    "city": "Moscow",
+    "country": "Russian Federation"
+  },
   "TNS": {
     "code": "TNS",
     "company": "UNICO LOGISTICS CO LTD",
@@ -15653,12 +15725,6 @@ const ownerJSON = `{
     "company": "TAIPEI OXYGEN & GAS CO.",
     "city": "New Taipei City",
     "country": "Taiwan (China)"
-  },
-  "TOD": {
-    "code": "TOD",
-    "company": "TTS LLC",
-    "city": "FRISCO, TX 75033",
-    "country": "United States"
   },
   "TOE": {
     "code": "TOE",
@@ -15954,12 +16020,6 @@ const ownerJSON = `{
     "city": "TAIPEI",
     "country": "Taiwan (China)"
   },
-  "TSU": {
-    "code": "TSU",
-    "company": "TOMAS SANCHEZ TRANSPORTES CISTERNAS SL",
-    "city": "SANTA MARTA",
-    "country": "Spain"
-  },
   "TSV": {
     "code": "TSV",
     "company": "SHIPPING COMPANY TRANSIT SV LLC",
@@ -16091,6 +16151,12 @@ const ownerJSON = `{
     "company": "TWS TANKCONTAINER-LEASING GMBH & CO KG",
     "city": "Hamburg",
     "country": "Germany"
+  },
+  "TWW": {
+    "code": "TWW",
+    "company": "TURKMEN AK YOL",
+    "city": "Ashgabat",
+    "country": "Turkmenistan"
   },
   "TXG": {
     "code": "TXG",
@@ -16325,12 +16391,6 @@ const ownerJSON = `{
     "company": "UNITED STATES ARMY",
     "city": "SCOTT AFB, IL-62225-5006",
     "country": "United States"
-  },
-  "USE": {
-    "code": "USE",
-    "company": "U.S. EMBASSY - DEPARTMENT OF STATE",
-    "city": "Baghdad",
-    "country": "Iraq"
   },
   "USF": {
     "code": "USF",
@@ -17291,6 +17351,12 @@ const ownerJSON = `{
     "company": "STAR OIL MAURITANIE",
     "city": "NOUAKCHOTT",
     "country": "Mauritania"
+  },
+  "YXE": {
+    "code": "YXE",
+    "company": "YIWU TIMEX INDUSTRIAL INVESTMENT CO.,LTD",
+    "city": "YIWU",
+    "country": "China"
   },
   "YYC": {
     "code": "YYC",
