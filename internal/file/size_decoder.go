@@ -67,15 +67,6 @@ func (l *lengthDecoder) Decode(code string) (bool, cont.Length) {
 	return false, cont.Length{}
 }
 
-// AllCodes returns all length codes.
-func (l *lengthDecoder) AllCodes() []string {
-	keys := make([]string, 0, len(l.lengths))
-	for k := range l.lengths {
-		keys = append(keys, k)
-	}
-	return keys
-}
-
 type heightWidthDecoder struct {
 	heightWidths map[string]heightWidth
 }
@@ -86,15 +77,6 @@ func (hw *heightWidthDecoder) Decode(code string) (bool, cont.HeightWidth) {
 		return true, cont.HeightWidth{Width: val.Width, Height: val.Height}
 	}
 	return false, cont.HeightWidth{}
-}
-
-// AllCodes returns all height and width codes.
-func (hw *heightWidthDecoder) AllCodes() []string {
-	keys := make([]string, 0, len(hw.heightWidths))
-	for k := range hw.heightWidths {
-		keys = append(keys, k)
-	}
-	return keys
 }
 
 const lengthHeightWidthJSON = `{

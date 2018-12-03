@@ -82,15 +82,6 @@ func (tg *typeAndGroupDecoder) Decode(code string) (bool, cont.TypeAndGroup) {
 	return true, typeAndGroup
 }
 
-// AllCodes returns all type codes.
-func (tg *typeAndGroupDecoder) AllCodes() []string {
-	keys := make([]string, 0, len(tg.types))
-	for k := range tg.types {
-		keys = append(keys, k)
-	}
-	return keys
-}
-
 const typeJSON = `{
   "A0": "(unassigned)",
   "B0": "(unassigned)",

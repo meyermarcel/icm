@@ -60,15 +60,6 @@ type ownerDecoderUpdater struct {
 	path   string
 }
 
-// AllCodes returns all owner codes.
-func (of *ownerDecoderUpdater) AllCodes() []string {
-	keys := make([]string, 0, len(of.owners))
-	for k := range of.owners {
-		keys = append(keys, k)
-	}
-	return keys
-}
-
 // Decode returns an owner for an owner code.
 func (of *ownerDecoderUpdater) Decode(code string) (bool, cont.Owner) {
 	if val, ok := of.owners[code]; ok {

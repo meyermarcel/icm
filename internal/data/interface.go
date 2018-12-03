@@ -17,13 +17,13 @@ import (
 	"github.com/meyermarcel/icm/internal/cont"
 )
 
-// OwnerDecodeUpdater is the interface that groups the basic Decode and Update methods.
+// OwnerDecodeUpdater is the interface that groups the Decode and Update methods.
 type OwnerDecodeUpdater interface {
 	OwnerDecoder
 	OwnerUpdater
 }
 
-// OwnerDecoder represents a data source for owner specific data.
+// OwnerDecoder decodes a code to an owner or generates a random owner.
 type OwnerDecoder interface {
 	Decode(code string) (bool, cont.Owner)
 
@@ -35,24 +35,24 @@ type OwnerUpdater interface {
 	Update(newOwners map[string]cont.Owner) error
 }
 
-// EquipCatDecoder represents a data source for equipment category ID specific data.
+// EquipCatDecoder decodes an ID to an equipment category.
 type EquipCatDecoder interface {
 	Decode(ID string) (bool, cont.EquipCat)
 
 	AllCatIDs() []string
 }
 
-// LengthDecoder encapsulates data sources for length
+// LengthDecoder decodes a code to a length.
 type LengthDecoder interface {
 	Decode(code string) (bool, cont.Length)
 }
 
-// HeightWidthDecoder encapsulates data sources for height and width
+// HeightWidthDecoder decodes a code to height and width.
 type HeightWidthDecoder interface {
 	Decode(code string) (bool, cont.HeightWidth)
 }
 
-// TypeDecoder represents a data source for type data
+// TypeDecoder decodes a code to type and group.
 type TypeDecoder interface {
 	Decode(code string) (bool, cont.TypeAndGroup)
 }
