@@ -13,7 +13,7 @@
 
 package configs
 
-// Name of the config files and keys for configurable separators.
+// Name of the config files and keys for configuration and flags.
 const (
 	Name           = "config"
 	NameWithYmlExt = Name + ".yml"
@@ -22,13 +22,12 @@ const (
 	SepSC          = "sep-serial-check"
 	SepCS          = "sep-check-size"
 	SepST          = "sep-size-type"
+	Pattern        = "pattern"
 )
 
 // Cfg returns default config.
 func Cfg() []byte {
-	return []byte(`# Config
-#
-#  Separators
+	return []byte(`#  Separators
 #
 #  ABC U 123456 0   20 G1
 #     ↑ ↑      ↑  ↑   ↑
@@ -47,5 +46,13 @@ func Cfg() []byte {
 ` + SepSC + `: ' '
 ` + SepCS + `: '   '
 ` + SepST + `: ' '
+
+# Pattern matching mode
+#                     auto = matches automatically a pattern
+#         container-number = matches a container number
+#                    owner = matches a three letter owner code
+# owner-equipment-category = matches a three letter owner code with equipment category ID
+#                size-type = matches length, width+height and type code
+pattern: auto
 `)
 }

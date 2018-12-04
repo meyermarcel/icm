@@ -17,11 +17,34 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/meyermarcel/icm/internal/data"
-
 	"github.com/PuerkitoBio/goquery"
 	"github.com/meyermarcel/icm/internal/cont"
+	"github.com/meyermarcel/icm/internal/data"
+	"github.com/spf13/cobra"
 )
+
+func newUpdateOwnerCmd(
+	ownerUpdater data.OwnerUpdater,
+	timestampUpdater data.TimestampUpdater,
+	ownerURL string) *cobra.Command {
+	updateCmd := &cobra.Command{
+		Use:   "update",
+		Short: "Update information of owners",
+		Long: `Update information of owners from remote.
+Following information is available:
+
+  Owner code
+  Company
+  City
+  Country`,
+		Example: `  ` + appName + ` update`,
+		Args:    cobra.NoArgs,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return update(ownerUpdater, timestampUpdater, ownerURL)
+		},
+	}
+	return updateCmd
+}
 
 func update(ownerUpdater data.OwnerUpdater, timestampUpdater data.TimestampUpdater, ownerURL string) error {
 

@@ -20,8 +20,3 @@ type Owner struct {
 	City    string
 	Country string
 }
-
-// OwnerCode represents the container owner.
-type OwnerCode struct {
-	value string
-}
