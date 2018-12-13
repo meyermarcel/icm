@@ -96,7 +96,6 @@ func (fp *FancyPrinter) Print() error {
 	b.WriteString(fmt.Sprintln())
 	b.WriteString(fmtTextsWithArrows(texts...))
 	b.WriteString(fmt.Sprintln())
-	b.WriteString(fmt.Sprintln())
 
 	_, _ = io.WriteString(fp.writer, b.String())
 	return nil
@@ -191,6 +190,7 @@ func fmtTexts(texts []posTxt) string {
 		}
 
 	}
+	b.WriteString(fmt.Sprintln())
 	return b.String()
 }
 
