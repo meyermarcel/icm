@@ -23,6 +23,7 @@ const (
 	SepCS          = "sep-check-size"
 	SepST          = "sep-size-type"
 	Pattern        = "pattern"
+	Count          = "count"
 )
 
 // Cfg returns default config.
@@ -54,5 +55,8 @@ func Cfg() []byte {
 # owner-equipment-category = matches a three letter owner code with equipment category ID
 #                size-type = matches length, width+height and type code
 ` + Pattern + `: auto
+
+# Count of container numbers for generation
+` + Count + `: 1
 `)
 }
