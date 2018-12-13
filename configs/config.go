@@ -53,6 +53,6 @@ func Cfg() []byte {
 #                    owner = matches a three letter owner code
 # owner-equipment-category = matches a three letter owner code with equipment category ID
 #                size-type = matches length, width+height and type code
-pattern: auto
+` + Pattern + `: auto
 `)
 }
