@@ -133,26 +133,18 @@ func newValidateCmd(writer, writerErr io.Writer, viperCfg *viper.Viper, decoders
 				fancyPrinter := input.NewFancyPrinter(writer, inputs)
 				fancyPrinter.SetIndent("  ")
 
-				switch patternStr {
-				case auto, containerNumber, owner, ownerEquipmentCategory:
-					if len(inputs) == 3 {
-						fancyPrinter.SetSeparators(
-							"",
-							viperCfg.GetString(configs.SepST),
-						)
-					} else {
-						fancyPrinter.SetSeparators(
-							viperCfg.GetString(configs.SepOE),
-							viperCfg.GetString(configs.SepES),
-							viperCfg.GetString(configs.SepSC),
-							viperCfg.GetString(configs.SepCS),
-							"",
-							viperCfg.GetString(configs.SepST),
-						)
-					}
-
-				case sizeType:
+                // only size-type has 3 inputs
+				if len(inputs) == 3 {
 					fancyPrinter.SetSeparators(
+						"",
+						viperCfg.GetString(configs.SepST),
+					)
+				} else {
+					fancyPrinter.SetSeparators(
+						viperCfg.GetString(configs.SepOE),
+						viperCfg.GetString(configs.SepES),
+						viperCfg.GetString(configs.SepSC),
+						viperCfg.GetString(configs.SepCS),
 						"",
 						viperCfg.GetString(configs.SepST),
 					)
