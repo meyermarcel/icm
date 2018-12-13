@@ -247,7 +247,7 @@ func Test_validateCmd(t *testing.T) {
 		{
 			"Validate input with pattern container-number",
 			[]string{" abc "},
-			[]cfgOverride{{"pattern", "container-number"}},
+			[]cfgOverride{{configs.Pattern, containerNumber}},
 			false,
 			`
   ABC________  ✘
@@ -267,7 +267,7 @@ func Test_validateCmd(t *testing.T) {
 		{
 			"Validate input with pattern owner",
 			[]string{" abc u "},
-			[]cfgOverride{{"pattern", "owner"}},
+			[]cfgOverride{{configs.Pattern, owner}},
 			false,
 			`
   ABC  ✔
@@ -281,7 +281,7 @@ func Test_validateCmd(t *testing.T) {
 		{
 			"Validate input with pattern owner-equipment-category",
 			[]string{" abc "},
-			[]cfgOverride{{"pattern", "owner-equipment-category"}},
+			[]cfgOverride{{configs.Pattern, ownerEquipmentCategory}},
 			false,
 			`
   ABC_  ✘
@@ -297,7 +297,7 @@ func Test_validateCmd(t *testing.T) {
 		{
 			"Validate input with pattern size-type",
 			[]string{" abc "},
-			[]cfgOverride{{"pattern", "size-type"}},
+			[]cfgOverride{{configs.Pattern, sizeType}},
 			false,
 			`
   AB__  ✘
@@ -312,7 +312,7 @@ func Test_validateCmd(t *testing.T) {
 `,
 		},
 		{
-			"Validate input with separators",
+			"Validate input with custom separators",
 			[]string{" abc u 123456 0 20 g1  "},
 			[]cfgOverride{
 				{configs.SepOE, "***"},
@@ -338,6 +338,26 @@ func Test_validateCmd(t *testing.T) {
    └─ some-company
       some-city
       some-country
+
+`,
+		},
+		{
+			"Validate sizetype input with custom separators",
+			[]string{" 20 g1 "},
+			[]cfgOverride{
+				{configs.SepST, "***"},
+			},
+			false,
+			`
+  20***G1  ✔
+  ↑↑    ↑
+  ││    └─ type:  some-type
+  ││       group: some-group
+  ││
+  │└─ height: some-height
+  │   width:  some-width
+  │
+  └─ length: some-length
 
 `,
 		},

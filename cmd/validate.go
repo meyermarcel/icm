@@ -23,15 +23,28 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/meyermarcel/icm/configs"
-	"github.com/spf13/cobra"
-	"github.com/spf13/pflag"
-	"github.com/spf13/viper"
-
 	"github.com/fatih/color"
+	"github.com/meyermarcel/icm/configs"
 	"github.com/meyermarcel/icm/internal/cont"
 	"github.com/meyermarcel/icm/internal/data"
 	"github.com/meyermarcel/icm/internal/input"
+	"github.com/spf13/cobra"
+	"github.com/spf13/pflag"
+	"github.com/spf13/viper"
+)
+
+const patternModesInfo string = `                    auto = matches automatically a pattern
+        container-number = matches a container number
+                   owner = matches a three letter owner code
+owner-equipment-category = matches a three letter owner code with equipment category ID
+               size-type = matches length, width+height and type code`
+
+const (
+	auto                   = "auto"
+	containerNumber        = "container-number"
+	owner                  = "owner"
+	ownerEquipmentCategory = "owner-equipment-category"
+	sizeType               = "size-type"
 )
 
 var (
@@ -65,22 +78,16 @@ func (*patternValue) Type() string {
 
 func newPatternValue() *patternValue {
 	return &patternValue{
-		value: "auto",
+		value: auto,
 		patterns: map[string]newPattern{
-			"auto":                     newAutoPattern,
-			"container-number":         newContNumPattern,
-			"owner":                    newOwnerPattern,
-			"owner-equipment-category": newOwnerEquipCatPattern,
-			"size-type":                newSizeTypePattern,
+			auto:                   newAutoPattern,
+			containerNumber:        newContNumPattern,
+			owner:                  newOwnerPattern,
+			ownerEquipmentCategory: newOwnerEquipCatPattern,
+			sizeType:               newSizeTypePattern,
 		},
 	}
 }
-
-const patternModesInfo string = `                    auto = matches automatically a pattern
-        container-number = matches a container number
-                   owner = matches a three letter owner code
-owner-equipment-category = matches a three letter owner code with equipment category ID
-               size-type = matches length, width+height and type code`
 
 type newPattern func(decoders decoders) [][]input.Input
 
@@ -115,7 +122,8 @@ func newValidateCmd(writer, writerErr io.Writer, viperCfg *viper.Viper, decoders
 			if err != nil {
 				return err
 			}
-			pattern := pValue.newPattern(viperCfg.GetString("pattern"))(decoders)
+			patternStr := viperCfg.GetString(configs.Pattern)
+			pattern := pValue.newPattern(patternStr)(decoders)
 			validator := input.NewValidator(pattern)
 
 			if isSingleLine(string(peek)) {
@@ -124,14 +132,32 @@ func newValidateCmd(writer, writerErr io.Writer, viperCfg *viper.Viper, decoders
 				inputs := validator.Validate(buf.String())
 				fancyPrinter := input.NewFancyPrinter(writer, inputs)
 				fancyPrinter.SetIndent("  ")
-				fancyPrinter.SetSeparators(
-					viperCfg.GetString(configs.SepOE),
-					viperCfg.GetString(configs.SepES),
-					viperCfg.GetString(configs.SepSC),
-					viperCfg.GetString(configs.SepCS),
-					"",
-					viperCfg.GetString(configs.SepST),
-				)
+
+				switch patternStr {
+				case auto, containerNumber, owner, ownerEquipmentCategory:
+					if len(inputs) == 3 {
+						fancyPrinter.SetSeparators(
+							"",
+							viperCfg.GetString(configs.SepST),
+						)
+					} else {
+						fancyPrinter.SetSeparators(
+							viperCfg.GetString(configs.SepOE),
+							viperCfg.GetString(configs.SepES),
+							viperCfg.GetString(configs.SepSC),
+							viperCfg.GetString(configs.SepCS),
+							"",
+							viperCfg.GetString(configs.SepST),
+						)
+					}
+
+				case sizeType:
+					fancyPrinter.SetSeparators(
+						"",
+						viperCfg.GetString(configs.SepST),
+					)
+				}
+
 				err := fancyPrinter.Print()
 				if err != nil {
 					return err
