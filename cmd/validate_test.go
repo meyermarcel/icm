@@ -315,25 +315,25 @@ func Test_validateCmd(t *testing.T) {
 			"Validate input with separators",
 			[]string{" abc u 123456 0 20 g1  "},
 			[]cfgOverride{
-				{configs.SepOE, "*"},
-				{configs.SepES, "$"},
-				{configs.SepSC, "%"},
-				{configs.SepCS, "&"},
-				{configs.SepST, "-"},
+				{configs.SepOE, "***"},
+				{configs.SepES, "+++"},
+				{configs.SepSC, "‧‧‧"},
+				{configs.SepCS, ">>>"},
+				{configs.SepST, "---"},
 			},
 			false,
 			`
-  ABC*U$123456%0&20-G1  ✔
-   ↑  ↑          ↑↑  ↑
-   │  │          ││  └─ type:  some-type
-   │  │          ││     group: some-group
-   │  │          ││
-   │  │          │└─ height: some-height
-   │  │          │   width:  some-width
-   │  │          │
-   │  │          └─ length: some-length
-   │  │
-   │  └─ some-equip-cat-ID
+  ABC***U+++123456‧‧‧0>>>20---G1  ✔
+   ↑    ↑                ↑↑    ↑
+   │    │                ││    └─ type:  some-type
+   │    │                ││       group: some-group
+   │    │                ││
+   │    │                │└─ height: some-height
+   │    │                │   width:  some-width
+   │    │                │
+   │    │                └─ length: some-length
+   │    │
+   │    └─ some-equip-cat-ID
    │
    └─ some-company
       some-city

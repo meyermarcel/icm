@@ -320,6 +320,32 @@ a b  ✔
 
 `,
 		},
+		{
+			"Print separators",
+			fields{
+				inputs: []Input{
+					{
+						runeCount: 1,
+						value:     "a",
+					},
+					{
+						runeCount: 1,
+						value:     "b",
+					},
+					{
+						runeCount: 1,
+						value:     "c",
+					},
+				},
+				separators: []string{"---", "‧‧‧"},
+			},
+			false,
+			`
+a---b‧‧‧c  ✘
+
+
+`,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

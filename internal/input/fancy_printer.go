@@ -18,6 +18,7 @@ import (
 	"io"
 	"sort"
 	"strings"
+	"unicode/utf8"
 
 	"github.com/fatih/color"
 )
@@ -89,7 +90,7 @@ func (fp *FancyPrinter) Print() error {
 			}
 			texts = append(texts, posTxt)
 		}
-		pos += input.runeCount + len(sep)
+		pos += input.runeCount + utf8.RuneCountInString(sep)
 	}
 	b.WriteString(fmtCheckMark(fp.inputs[len(fp.inputs)-1].valid))
 	b.WriteString(fmt.Sprintln())
