@@ -33,12 +33,6 @@ import (
 	"github.com/spf13/viper"
 )
 
-const patternModesInfo string = `                    auto = matches automatically a pattern
-        container-number = matches a container number
-                   owner = matches a three letter owner code
-owner-equipment-category = matches a three letter owner code with equipment category ID
-               size-type = matches length, width+height and type code`
-
 const (
 	auto                   = "auto"
 	containerNumber        = "container-number"
@@ -46,6 +40,12 @@ const (
 	ownerEquipmentCategory = "owner-equipment-category"
 	sizeType               = "size-type"
 )
+
+const patternModesInfo string = `                    ` + auto + ` = matches automatically a pattern
+        ` + containerNumber + ` = matches a container number
+                   ` + owner + ` = matches a three letter owner code
+` + ownerEquipmentCategory + ` = matches a three letter owner code with equipment category ID
+               ` + sizeType + ` = matches length, width+height and type code`
 
 var (
 	yellow    = color.New(color.FgYellow).SprintFunc()
@@ -112,7 +112,7 @@ func newValidateCmd(writer, writerErr io.Writer, viperCfg *viper.Viper, decoders
 
   ` + appName + ` validate --` + configs.SepOE + ` '' --` + configs.SepSC + ` '' 'ABCU 1234560'
   
-  ` + appName + ` validate --pattern container-number 'ABCU 123456'`,
+  ` + appName + ` validate --` + configs.Pattern + ` ` + containerNumber + ` 'ABCU 123456'`,
 		Args: cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 
@@ -133,7 +133,7 @@ func newValidateCmd(writer, writerErr io.Writer, viperCfg *viper.Viper, decoders
 				fancyPrinter := input.NewFancyPrinter(writer, inputs)
 				fancyPrinter.SetIndent("  ")
 
-                // only size-type has 3 inputs
+				// only size-type has 3 inputs
 				if len(inputs) == 3 {
 					fancyPrinter.SetSeparators(
 						"",
