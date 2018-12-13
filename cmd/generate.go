@@ -67,13 +67,13 @@ Equipment category ID 'U' is used for every container number.
 			return nil
 		},
 	}
-	generateCmd.Flags().IntP(configs.Count, "c", 1, "count of container numbers")
+	generateCmd.Flags().IntP(configs.Count, "c", configs.CountDefVal, "count of container numbers")
 
-	generateCmd.Flags().String(configs.SepOE, "",
+	generateCmd.Flags().String(configs.SepOE, configs.SepOEDefVal,
 		"ABC(*)U1234560  (*) separates owner code and equipment category id")
-	generateCmd.Flags().String(configs.SepES, "",
+	generateCmd.Flags().String(configs.SepES, configs.SepESDefVal,
 		"ABCU(*)1234560  (*) separates equipment category id and serial number")
-	generateCmd.Flags().String(configs.SepSC, "",
+	generateCmd.Flags().String(configs.SepSC, configs.SepSCDefVal,
 		"ABCU123456(*)0  (*) separates serial number and check digit")
 	return generateCmd
 }

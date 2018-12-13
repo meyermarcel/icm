@@ -78,7 +78,7 @@ func (*patternValue) Type() string {
 
 func newPatternValue() *patternValue {
 	return &patternValue{
-		value: auto,
+		value: configs.PatternDefVal,
 		patterns: map[string]newPattern{
 			auto:                   newAutoPattern,
 			containerNumber:        newContNumPattern,
@@ -160,15 +160,15 @@ func newValidateCmd(writer, writerErr io.Writer, viperCfg *viper.Viper, decoders
 	}
 	validateCmd.Flags().VarP(pValue, configs.Pattern, "p",
 		fmt.Sprintf("sets pattern matching mode to\n%s\n", patternModesInfo))
-	validateCmd.Flags().String(configs.SepOE, "",
+	validateCmd.Flags().String(configs.SepOE, configs.SepOEDefVal,
 		"ABC(*)U1234560   20G1  (*) separates owner code and equipment category id")
-	validateCmd.Flags().String(configs.SepES, "",
+	validateCmd.Flags().String(configs.SepES, configs.SepESDefVal,
 		"ABCU(*)1234560   20G1  (*) separates equipment category id and serial number")
-	validateCmd.Flags().String(configs.SepSC, "",
+	validateCmd.Flags().String(configs.SepSC, configs.SepSCDefVal,
 		"ABCU123456(*)0   20G1  (*) separates serial number and check digit")
-	validateCmd.Flags().String(configs.SepCS, "",
+	validateCmd.Flags().String(configs.SepCS, configs.SepCSDefVal,
 		"ABCU1234560 (*)  20G1  (*) separates check digit and size")
-	validateCmd.Flags().String(configs.SepST, "",
+	validateCmd.Flags().String(configs.SepST, configs.SepSTDefVal,
 		"ABCU1234560   20(*)G1  (*) separates size and type")
 	err := viperCfg.BindPFlags(validateCmd.Flags())
 	writeErr(writerErr, err)

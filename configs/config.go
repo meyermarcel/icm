@@ -13,17 +13,26 @@
 
 package configs
 
+import "fmt"
+
 // Name of the config files and keys for configuration and flags.
 const (
 	Name           = "config"
 	NameWithYmlExt = Name + ".yml"
 	SepOE          = "sep-owner-equip"
+	SepOEDefVal    = " "
 	SepES          = "sep-equip-serial"
+	SepESDefVal    = " "
 	SepSC          = "sep-serial-check"
+	SepSCDefVal    = " "
 	SepCS          = "sep-check-size"
+	SepCSDefVal    = "   "
 	SepST          = "sep-size-type"
+	SepSTDefVal    = " "
 	Pattern        = "pattern"
+	PatternDefVal  = "auto"
 	Count          = "count"
+	CountDefVal    = 1
 )
 
 // Cfg returns default config.
@@ -42,11 +51,11 @@ func Cfg() []byte {
 #     │
 #     └─ ` + SepOE + `
 #
-` + SepOE + `: ' '
-` + SepES + `: ' '
-` + SepSC + `: ' '
-` + SepCS + `: '   '
-` + SepST + `: ' '
+` + SepOE + `:  '` + SepOEDefVal + `'
+` + SepES + `: '` + SepESDefVal + `'
+` + SepSC + `: '` + SepSCDefVal + `'
+` + SepCS + `:   '` + SepCSDefVal + ` '
+` + SepST + `:    '` + SepSTDefVal + `'
 
 # Pattern matching mode
 #                     auto = matches automatically a pattern
@@ -54,9 +63,9 @@ func Cfg() []byte {
 #                    owner = matches a three letter owner code
 # owner-equipment-category = matches a three letter owner code with equipment category ID
 #                size-type = matches length, width+height and type code
-` + Pattern + `: auto
+` + Pattern + `: ` + PatternDefVal + `
 
 # Count of container numbers for generation
-` + Count + `: 1
+` + Count + `: ` + fmt.Sprintf("%d", CountDefVal) + `
 `)
 }

@@ -162,17 +162,17 @@ func Test_validateCmd(t *testing.T) {
 			nil,
 			false,
 			`
-  ABCU123456020G1  ✔
-   ↑ ↑       ↑↑ ↑
-   │ │       ││ └─ type:  some-type
-   │ │       ││    group: some-group
-   │ │       ││
-   │ │       │└─ height: some-height
-   │ │       │   width:  some-width
-   │ │       │
-   │ │       └─ length: some-length
-   │ │
-   │ └─ some-equip-cat-ID
+  ABC U 123456 0   20 G1  ✔
+   ↑  ↑            ↑↑  ↑
+   │  │            ││  └─ type:  some-type
+   │  │            ││     group: some-group
+   │  │            ││
+   │  │            │└─ height: some-height
+   │  │            │   width:  some-width
+   │  │            │
+   │  │            └─ length: some-length
+   │  │
+   │  └─ some-equip-cat-ID
    │
    └─ some-company
       some-city
@@ -186,9 +186,9 @@ func Test_validateCmd(t *testing.T) {
 			nil,
 			false,
 			`
-  ABCU1234560  ✔
-   ↑ ↑
-   │ └─ some-equip-cat-ID
+  ABC U 123456 0  ✔
+   ↑  ↑
+   │  └─ some-equip-cat-ID
    │
    └─ some-company
       some-city
@@ -202,9 +202,9 @@ func Test_validateCmd(t *testing.T) {
 			nil,
 			false,
 			`
-  ABCU  ✔
-   ↑ ↑
-   │ └─ some-equip-cat-ID
+  ABC U  ✔
+   ↑  ↑
+   │  └─ some-equip-cat-ID
    │
    └─ some-company
       some-city
@@ -232,10 +232,10 @@ func Test_validateCmd(t *testing.T) {
 			nil,
 			false,
 			`
-  20G1  ✔
-  ↑↑ ↑
-  ││ └─ type:  some-type
-  ││    group: some-group
+  20 G1  ✔
+  ↑↑  ↑
+  ││  └─ type:  some-type
+  ││     group: some-group
   ││
   │└─ height: some-height
   │   width:  some-width
@@ -250,13 +250,13 @@ func Test_validateCmd(t *testing.T) {
 			[]cfgOverride{{configs.Pattern, containerNumber}},
 			false,
 			`
-  ABC________  ✘
-   ↑ ↑   ↑  ↑
-   │ │   │  └─ check digit is not calculable
-   │ │   │
-   │ │   └─ serial number is not 6 numbers long
-   │ │
-   │ └─ equipment category id is not U
+  ABC _ ______ _  ✘
+   ↑  ↑    ↑   ↑
+   │  │    │   └─ check digit is not calculable
+   │  │    │
+   │  │    └─ serial number is not 6 numbers long
+   │  │
+   │  └─ equipment category id is not U
    │
    └─ some-company
       some-city
@@ -284,9 +284,9 @@ func Test_validateCmd(t *testing.T) {
 			[]cfgOverride{{configs.Pattern, ownerEquipmentCategory}},
 			false,
 			`
-  ABC_  ✘
-   ↑ ↑
-   │ └─ equipment category id is not U
+  ABC _  ✘
+   ↑  ↑
+   │  └─ equipment category id is not U
    │
    └─ some-company
       some-city
@@ -300,9 +300,9 @@ func Test_validateCmd(t *testing.T) {
 			[]cfgOverride{{configs.Pattern, sizeType}},
 			false,
 			`
-  AB__  ✘
-  ↑↑ ↑
-  ││ └─ type code is not a valid number or a valid character
+  AB __  ✘
+  ↑↑  ↑
+  ││  └─ type code is not a valid number or a valid character
   ││
   │└─ height: some-height
   │   width:  some-width
