@@ -14,6 +14,7 @@
 package cmd
 
 import (
+	"bufio"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -96,9 +97,10 @@ func Execute(version string) {
 	timestampUpdater, err := file.NewTimestampUpdater(appDirDataPath)
 	checkErr(stderr, err)
 
+	bufWriter := bufio.NewWriter(os.Stdout)
 	rootCmd := newRootCmd(
 		version,
-		os.Stdout,
+		bufWriter,
 		stderr,
 		viperCfg,
 		decoders{
@@ -112,9 +114,13 @@ func Execute(version string) {
 		timestampUpdater,
 		ownerURL)
 
-	err = rootCmd.Execute()
-	checkCmdErr(err)
-	checkErr(stderr, err)
+	execErr := rootCmd.Execute()
+
+	bufErr := bufWriter.Flush()
+	writeErr(stderr, bufErr)
+
+	checkCmdErr(execErr)
+	checkErr(stderr, execErr)
 }
 
 func newRootCmd(
