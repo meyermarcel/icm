@@ -71,14 +71,14 @@ func Execute(version string) {
 
 	pathToCfg := filepath.Join(appDirPath, configs.NameWithYmlExt)
 	if _, err := os.Stat(pathToCfg); os.IsNotExist(err) {
-		err = ioutil.WriteFile(pathToCfg, configs.Cfg(), 0644)
-		checkErr(stderr, err)
+		errWrite := ioutil.WriteFile(pathToCfg, configs.Cfg(), 0644)
+		checkErr(stderr, errWrite)
 	}
 	viperCfg := viper.New()
 	viperCfg.AddConfigPath(appDirPath)
 	viperCfg.SetConfigName(configs.Name)
-	err = viperCfg.ReadInConfig()
-	checkErr(stderr, err)
+	readErr := viperCfg.ReadInConfig()
+	checkErr(stderr, readErr)
 
 	appDirDataPath := initDir(filepath.Join(appDirPath, "data"))
 
@@ -114,13 +114,13 @@ func Execute(version string) {
 		timestampUpdater,
 		ownerURL)
 
-	execErr := rootCmd.Execute()
+	errCmd := rootCmd.Execute()
 
-	bufErr := bufWriter.Flush()
-	writeErr(stderr, bufErr)
+	errBuf := bufWriter.Flush()
+	writeErr(stderr, errBuf)
 
-	checkCmdErr(execErr)
-	checkErr(stderr, execErr)
+	checkErrCmd(errCmd)
+	checkErr(stderr, errCmd)
 }
 
 func newRootCmd(
@@ -154,7 +154,7 @@ func initDir(path string) string {
 	return path
 }
 
-func checkCmdErr(err error) {
+func checkErrCmd(err error) {
 	switch err.(type) {
 	case *errValidate:
 		os.Exit(1)
