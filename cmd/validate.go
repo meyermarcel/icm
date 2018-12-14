@@ -33,6 +33,20 @@ import (
 	"github.com/spf13/viper"
 )
 
+type errValidate struct {
+	message string
+}
+
+func newErrValidate(message string) error {
+	return &errValidate{
+		message: message,
+	}
+}
+
+func (e *errValidate) Error() string {
+	return e.message
+}
+
 const (
 	auto                   = "auto"
 	containerNumber        = "container-number"
@@ -126,10 +140,13 @@ func newValidateCmd(writer, writerErr io.Writer, viperCfg *viper.Viper, decoders
 			pattern := pValue.newPattern(patternStr)(decoders)
 			validator := input.NewValidator(pattern)
 
+			var inputErr error
+
 			if isSingleLine(string(peek)) {
 				buf := new(bytes.Buffer)
 				_, _ = buf.ReadFrom(reader)
-				inputs := validator.Validate(buf.String())
+				var inputs []input.Input
+				inputs, inputErr = validator.Validate(buf.String())
 				fancyPrinter := input.NewFancyPrinter(writer, inputs)
 				fancyPrinter.SetIndent("  ")
 
@@ -155,7 +172,7 @@ func newValidateCmd(writer, writerErr io.Writer, viperCfg *viper.Viper, decoders
 					return err
 				}
 			}
-			return nil
+			return inputErr
 		},
 	}
 	validateCmd.Flags().VarP(pValue, configs.Pattern, "p",
@@ -248,22 +265,22 @@ func newOwnerInput(ownerDecodeUpdater data.OwnerDecodeUpdater) input.Input {
 	owner := input.NewInput(
 		3,
 		regexp.MustCompile(`[A-Za-z]{3}`).FindStringIndex,
-		func(value string, previousValues []string) (bool, []input.Info) {
+		func(value string, previousValues []string) (error, []input.Info) {
 			if value == "" {
-				return false, []input.Info{{Text: fmt.Sprintf("%s is not %s long (e.g. %s)",
+				return newErrValidate(fmt.Sprintf("%s is not %s long (e.g. %s)",
 					underline("owner code"),
 					bold("3 letters"),
-					underline(ownerDecodeUpdater.GenerateRandomCodes(1)[0]))}}
+					underline(ownerDecodeUpdater.GenerateRandomCodes(1)[0]))), nil
 			}
 			found, owner := ownerDecodeUpdater.Decode(value)
 			if !found {
-				return false, []input.Info{{Text: fmt.Sprintf("%s is not %s (e.g. %s)",
+				return newErrValidate(fmt.Sprintf("%s is not %s (e.g. %s)",
 					underline(value),
 					bold("registered"),
-					underline(ownerDecodeUpdater.GenerateRandomCodes(1)[0]))}}
+					underline(ownerDecodeUpdater.GenerateRandomCodes(1)[0]))), nil
 
 			}
-			return true, []input.Info{{Text: owner.Company},
+			return nil, []input.Info{{Text: owner.Company},
 				{Text: owner.City},
 				{Text: owner.Country}}
 		})
@@ -275,20 +292,20 @@ func newEquipCatInput(equipCatDecoder data.EquipCatDecoder) input.Input {
 	equipCat := input.NewInput(
 		1,
 		regexp.MustCompile(`[A-Za-z]`).FindStringIndex,
-		func(value string, previousValues []string) (bool, []input.Info) {
+		func(value string, previousValues []string) (error, []input.Info) {
 			if value == "" {
-				return false, []input.Info{{Text: fmt.Sprintf("%s is not %s",
+				return newErrValidate(fmt.Sprintf("%s is not %s",
 					underline("equipment category id"),
-					equipCatIDsAsList(equipCatDecoder))}}
+					equipCatIDsAsList(equipCatDecoder))), nil
 			}
 
 			found, cat := equipCatDecoder.Decode(value)
 			if !found {
-				return false, []input.Info{{Text: fmt.Sprintf("%s is not %s",
+				return newErrValidate(fmt.Sprintf("%s is not %s",
 					underline("equipment category id"),
-					equipCatIDsAsList(equipCatDecoder))}}
+					equipCatIDsAsList(equipCatDecoder))), nil
 			}
-			return true, []input.Info{{Text: cat.Info}}
+			return nil, []input.Info{{Text: cat.Info}}
 		})
 	equipCat.SetToUpper()
 	return equipCat
@@ -316,13 +333,13 @@ func newSerialNumInput() input.Input {
 	return input.NewInput(
 		6,
 		regexp.MustCompile(`\d{6}`).FindStringIndex,
-		func(value string, previousValues []string) (bool, []input.Info) {
+		func(value string, previousValues []string) (error, []input.Info) {
 			if value == "" {
-				return false, []input.Info{{Text: fmt.Sprintf("%s is not %s long",
+				return newErrValidate(fmt.Sprintf("%s is not %s long",
 					underline("serial number"),
-					bold("6 numbers"))}}
+					bold("6 numbers"))), nil
 			}
-			return true, nil
+			return nil, nil
 		})
 }
 
@@ -330,31 +347,30 @@ func newCheckDigitInput() input.Input {
 	return input.NewInput(
 		1,
 		regexp.MustCompile(`\d`).FindStringIndex,
-		func(value string, previousValues []string) (bool, []input.Info) {
+		func(value string, previousValues []string) (error, []input.Info) {
 			if len(strings.Join(previousValues[0:3], "")) != 10 {
-				return false, []input.Info{{Text: fmt.Sprintf("%s is not calculable",
-					underline("check digit"))}}
+				return newErrValidate(fmt.Sprintf("%s is not calculable",
+					underline("check digit"))), nil
 			}
 
 			checkDigit := cont.CalcCheckDigit(previousValues[2], previousValues[1], previousValues[0])
 
 			number, err := strconv.Atoi(value)
 			if err != nil {
-				return false, appendCheckDigit10Info(checkDigit,
-					[]input.Info{{Text: fmt.Sprintf("%s must be a %s (calculated: %s)",
-						underline("check digit"),
-						bold("number"),
-						green(checkDigit))}})
+				return newErrValidate(fmt.Sprintf("%s must be a %s (calculated: %s)",
+					underline("check digit"),
+					bold("number"),
+					green(checkDigit))), appendCheckDigit10Info(checkDigit, nil)
 			}
 
 			if number != checkDigit%10 {
-				return false, appendCheckDigit10Info(checkDigit, []input.Info{{Text: fmt.Sprintf(
+				return newErrValidate(fmt.Sprintf(
 					"calculated %s is %s",
 					underline("check digit"),
-					green(checkDigit%10))}})
+					green(checkDigit%10))), appendCheckDigit10Info(checkDigit, nil)
 			}
 
-			return true, appendCheckDigit10Info(checkDigit, nil)
+			return nil, appendCheckDigit10Info(checkDigit, nil)
 		})
 }
 
@@ -375,21 +391,21 @@ func newLengthInput(lengthDecoder data.LengthDecoder) input.Input {
 	length := input.NewInput(
 		1,
 		regexp.MustCompile(`[A-Za-z\d]`).FindStringIndex,
-		func(value string, previousValues []string) (bool, []input.Info) {
+		func(value string, previousValues []string) (error, []input.Info) {
 			if value == "" {
-				return false, []input.Info{{Text: fmt.Sprintf("%s is not a %s or a %s",
+				return newErrValidate(fmt.Sprintf("%s is not a %s or a %s",
 					underline("length code"),
 					bold("valid number"),
-					bold("valid character"))}}
+					bold("valid character"))), nil
 			}
 
 			found, length := lengthDecoder.Decode(value)
 			if !found {
-				return false, []input.Info{{Text: fmt.Sprintf("%s is not %s",
+				return newErrValidate(fmt.Sprintf("%s is not %s",
 					underline("length code"),
-					bold("valid"))}}
+					bold("valid"))), nil
 			}
-			return true, []input.Info{{Text: fmt.Sprintf("length: %s", length.Length)}}
+			return nil, []input.Info{{Text: fmt.Sprintf("length: %s", length.Length)}}
 		})
 	length.SetToUpper()
 	return length
@@ -399,21 +415,21 @@ func newHeightWidthInput(heightWidthDecoder data.HeightWidthDecoder) input.Input
 	heightWidth := input.NewInput(
 		1,
 		regexp.MustCompile(`[A-Za-z\d]`).FindStringIndex,
-		func(value string, previousValues []string) (b bool, infos []input.Info) {
+		func(value string, previousValues []string) (error, []input.Info) {
 			if value == "" {
-				return false, []input.Info{{Text: fmt.Sprintf("%s is not a %s or a %s",
+				return newErrValidate(fmt.Sprintf("%s is not a %s or a %s",
 					underline("height and width code"),
 					bold("valid number"),
-					bold("valid character"))}}
+					bold("valid character"))), nil
 			}
 
 			found, heightWidth := heightWidthDecoder.Decode(value)
 			if !found {
-				return false, []input.Info{{Text: fmt.Sprintf("%s is not %s",
+				return newErrValidate(fmt.Sprintf("%s is not %s",
 					underline("height and width code"),
-					bold("valid"))}}
+					bold("valid"))), nil
 			}
-			return true, []input.Info{
+			return nil, []input.Info{
 				{Text: fmt.Sprintf("height: %s", heightWidth.Height)},
 				{Text: fmt.Sprintf("width:  %s", heightWidth.Width)}}
 		})
@@ -425,24 +441,23 @@ func newTypeAndGroupInput(typeDecoder data.TypeDecoder) input.Input {
 	typeAndGroup := input.NewInput(
 		2,
 		regexp.MustCompile(`[A-Za-z\d]{2}`).FindStringIndex,
-		func(value string, previousValues []string) (b bool, infos []input.Info) {
+		func(value string, previousValues []string) (error, []input.Info) {
 			if value == "" {
-				return false, []input.Info{{Text: fmt.Sprintf("%s is not a %s or a %s",
+				return newErrValidate(fmt.Sprintf("%s is not a %s or a %s",
 					underline("type code"),
 					bold("valid number"),
-					bold("valid character"))}}
+					bold("valid character"))), nil
 			}
 
 			found, typeAndGroup := typeDecoder.Decode(value)
 			if !found {
-				return false, []input.Info{{Text: fmt.Sprintf("%s is not %s",
+				return newErrValidate(fmt.Sprintf("%s is not %s",
 					underline("type code"),
-					bold("valid"))}}
+					bold("valid"))), nil
 			}
-			return true, []input.Info{
+			return nil, []input.Info{
 				{Text: fmt.Sprintf("type:  %s", typeAndGroup.TypeInfo)},
 				{Text: fmt.Sprintf("group: %s", typeAndGroup.GroupInfo)}}
-
 		})
 	typeAndGroup.SetToUpper()
 	return typeAndGroup

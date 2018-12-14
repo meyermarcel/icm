@@ -81,9 +81,12 @@ func (fp *FancyPrinter) Print() error {
 		}
 		b.WriteString(sep)
 
-		if input.infos != nil {
+		if input.err != nil || input.infos != nil {
 			posTxt := posTxt{
 				pos: pos + input.runeCount/2,
+			}
+			if input.err != nil {
+				posTxt.addLines(input.err.Error())
 			}
 			for _, info := range input.infos {
 				posTxt.addLines(info.Text)
@@ -92,7 +95,7 @@ func (fp *FancyPrinter) Print() error {
 		}
 		pos += input.runeCount + utf8.RuneCountInString(sep)
 	}
-	b.WriteString(fmtCheckMark(fp.inputs[len(fp.inputs)-1].valid))
+	b.WriteString(fmtCheckMark(fp.inputs[len(fp.inputs)-1].err == nil))
 	b.WriteString(fmt.Sprintln())
 	b.WriteString(fmtTextsWithArrows(texts...))
 	b.WriteString(fmt.Sprintln())
@@ -102,7 +105,7 @@ func (fp *FancyPrinter) Print() error {
 }
 
 func fmtValue(input Input) string {
-	if input.valid {
+	if input.err == nil {
 		return green(input.value)
 	}
 	if input.isValidFmt() {

@@ -14,6 +14,7 @@
 package input
 
 import (
+	"errors"
 	"testing"
 )
 
@@ -24,8 +25,8 @@ func TestInputHasCorrectValue(t *testing.T) {
 		matchIndex: func(in string) []int {
 			return []int{0, 1}
 		},
-		validate: func(value string, previousValues []string) (b bool, infos []Info) {
-			return true, []Info{{Text: "match 1"}}
+		validate: func(value string, previousValues []string) (error, []Info) {
+			return nil, []Info{{Text: "match 1"}}
 		},
 	}
 	match2 := Input{
@@ -34,23 +35,32 @@ func TestInputHasCorrectValue(t *testing.T) {
 		matchIndex: func(in string) []int {
 			return []int{0, 2}
 		},
-		validate: func(value string, previousValues []string) (b bool, infos []Info) {
-			return false, []Info{{Text: "match 2"}}
+		validate: func(value string, previousValues []string) (error, []Info) {
+			return nil, []Info{{Text: "match 2"}}
+		},
+	}
+	validFmtButInvalidMatch := Input{
+		runeCount: 1,
+		matchIndex: func(in string) []int {
+			return []int{0, 1}
+		},
+		validate: func(value string, previousValues []string) (error, []Info) {
+			return errors.New(""), nil
 		},
 	}
 	noMatch := Input{
 		matchIndex: func(in string) []int {
 			return nil
 		},
-		validate: func(value string, previousValues []string) (b bool, infos []Info) {
-			return false, nil
+		validate: func(value string, previousValues []string) (error, []Info) {
+			return errors.New(""), nil
 		},
 	}
 
 	type wantedInput struct {
 		value          string
 		previousValues []string
-		valid          bool
+		err            bool
 		infoTexts      []string
 	}
 
@@ -59,6 +69,7 @@ func TestInputHasCorrectValue(t *testing.T) {
 		inputOrders  [][]Input
 		in           string
 		wantedInputs []wantedInput
+		wantErr      bool
 	}{
 		{
 			"Match single value",
@@ -70,10 +81,11 @@ func TestInputHasCorrectValue(t *testing.T) {
 				{
 					"a",
 					nil,
-					true,
+					false,
 					[]string{"match 1"},
 				},
 			},
+			false,
 		},
 		{
 			"Match multiple values",
@@ -85,7 +97,7 @@ func TestInputHasCorrectValue(t *testing.T) {
 				{
 					"a",
 					nil,
-					true,
+					false,
 					[]string{"match 1"},
 				},
 				{
@@ -95,6 +107,7 @@ func TestInputHasCorrectValue(t *testing.T) {
 					[]string{"match 2"},
 				},
 			},
+			false,
 		},
 		{
 			"Use first best match",
@@ -108,10 +121,11 @@ func TestInputHasCorrectValue(t *testing.T) {
 				{
 					"a",
 					nil,
-					true,
+					false,
 					[]string{"match 1"},
 				},
 			},
+			false,
 		},
 		{
 			"First match is default",
@@ -124,13 +138,13 @@ func TestInputHasCorrectValue(t *testing.T) {
 				{
 					"a",
 					nil,
-					true,
+					false,
 					[]string{"match 1"},
 				},
 				{
 					"",
 					[]string{"a"},
-					false,
+					true,
 					nil,
 				},
 				{
@@ -140,6 +154,24 @@ func TestInputHasCorrectValue(t *testing.T) {
 					[]string{"match 2"},
 				},
 			},
+			true,
+		},
+		{
+			"Match but invalid",
+			[][]Input{
+				{noMatch},
+				{validFmtButInvalidMatch},
+			},
+			"a",
+			[]wantedInput{
+				{
+					"a",
+					nil,
+					true,
+					nil,
+				},
+			},
+			true,
 		},
 	}
 	for _, tt := range tests {
@@ -147,9 +179,12 @@ func TestInputHasCorrectValue(t *testing.T) {
 			v := &Validator{
 				tt.inputOrders,
 			}
-			inputs := v.Validate(tt.in)
+			inputs, err := v.Validate(tt.in)
 			if len(inputs) != len(tt.wantedInputs) {
 				t.Errorf("inputs len %v, want %v", len(inputs), len(tt.wantedInputs))
+			}
+			if (err == nil) == tt.wantErr {
+				t.Errorf("got = %v, wantErr is %v", err, tt.wantErr)
 			}
 			for i, input := range inputs {
 				if input.value != tt.wantedInputs[i].value {
@@ -165,8 +200,8 @@ func TestInputHasCorrectValue(t *testing.T) {
 						}
 					}
 				}
-				if input.valid != tt.wantedInputs[i].valid {
-					t.Errorf("valid is %v, want %v", input.valid, tt.wantedInputs[i].valid)
+				if (input.err != nil) != tt.wantedInputs[i].err {
+					t.Errorf("err is %v, want %v", input.err != nil, tt.wantedInputs[i].err)
 				}
 				if len(input.infos) != len(tt.wantedInputs[i].infoTexts) {
 					t.Errorf("input infos len %v, want %v", len(input.infos), len(tt.wantedInputs[i].infoTexts))

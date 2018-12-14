@@ -248,7 +248,7 @@ func Test_validateCmd(t *testing.T) {
 			"Validate input with pattern container-number",
 			[]string{" abc "},
 			[]cfgOverride{{configs.Pattern, containerNumber}},
-			false,
+			true,
 			`
   ABC _ ______ _  ✘
    ↑  ↑    ↑   ↑
@@ -282,7 +282,7 @@ func Test_validateCmd(t *testing.T) {
 			"Validate input with pattern owner-equipment-category",
 			[]string{" abc "},
 			[]cfgOverride{{configs.Pattern, ownerEquipmentCategory}},
-			false,
+			true,
 			`
   ABC _  ✘
    ↑  ↑
@@ -298,7 +298,7 @@ func Test_validateCmd(t *testing.T) {
 			"Validate input with pattern size-type",
 			[]string{" abc "},
 			[]cfgOverride{{configs.Pattern, sizeType}},
-			false,
+			true,
 			`
   AB __  ✘
   ↑↑  ↑

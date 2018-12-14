@@ -18,6 +18,8 @@ import (
 	"bytes"
 	"reflect"
 	"testing"
+
+	"github.com/pkg/errors"
 )
 
 func TestFancyPrinterFactory_Build(t *testing.T) {
@@ -62,7 +64,6 @@ func TestFancyPrinter_Print(t *testing.T) {
 			fields{
 				inputs: []Input{
 					{
-						valid: true,
 						value: "a",
 						infos: []Info{{Text: ""}},
 					},
@@ -82,9 +83,8 @@ a  ✔
 				inputs: []Input{
 					{
 						runeCount: 1,
-						valid:     false,
+						err:       errors.New(""),
 						value:     "a",
-						infos:     []Info{{Text: ""}},
 					},
 				},
 			},
@@ -102,21 +102,18 @@ a  ✘
 				inputs: []Input{
 					{
 						runeCount: 1,
-						valid:     false,
+						err:       errors.New(""),
 						value:     "a",
-						infos:     []Info{{Text: ""}},
 					},
 					{
 						runeCount: 2,
-						valid:     false,
+						err:       errors.New(""),
 						value:     "bc",
-						infos:     []Info{{Text: ""}},
 					},
 					{
 						runeCount: 3,
-						valid:     false,
+						err:       errors.New(""),
 						value:     "def",
-						infos:     []Info{{Text: ""}},
 					},
 				},
 			},
@@ -138,16 +135,15 @@ a bc def  ✘
 				inputs: []Input{
 					{
 						runeCount: 0,
-						valid:     true,
 						value:     "a",
 						infos:     []Info{{Text: ""}},
 					},
 				},
-				indent: " ",
+				indent: "+",
 			},
 			false,
 			`
- a  ✔
++a  ✔
  ↑
  └─ 
 
@@ -159,7 +155,6 @@ a bc def  ✘
 				inputs: []Input{
 					{
 						runeCount: 4,
-						valid:     true,
 						value:     "abcd",
 						infos:     []Info{{Text: ""}},
 					},
@@ -179,15 +174,13 @@ abcd  ✔
 				inputs: []Input{
 					{
 						runeCount: 1,
-						valid:     false,
+						err:       errors.New(""),
 						value:     "a",
-						infos:     []Info{{Text: ""}},
 					},
 					{
 						runeCount: 2,
-						valid:     false,
+						err:       errors.New(""),
 						value:     "bc",
-						infos:     []Info{{Text: ""}},
 					},
 				},
 				separators: []string{" * ", " - "},
@@ -207,15 +200,13 @@ a * bc  ✘
 				inputs: []Input{
 					{
 						runeCount: 1,
-						valid:     false,
+						err:       errors.New(""),
 						value:     "a",
-						infos:     []Info{{Text: ""}},
 					},
 					{
 						runeCount: 2,
-						valid:     false,
+						err:       errors.New(""),
 						value:     "bc",
-						infos:     []Info{{Text: ""}},
 					},
 				},
 			},
@@ -235,9 +226,8 @@ a bc  ✘
 				inputs: []Input{
 					{
 						runeCount: 1,
-						valid:     false,
+						err:       errors.New(""),
 						value:     "",
-						infos:     []Info{{Text: ""}},
 					},
 				},
 			},
@@ -255,17 +245,35 @@ _  ✘
 				inputs: []Input{
 					{
 						runeCount: 1,
-						valid:     false,
-						value:     "",
-						infos:     []Info{{Text: "text"}},
+						value:     "a",
+						infos:     []Info{{Text: "info text"}},
 					},
 				},
 			},
 			false,
 			`
-_  ✘
+a  ✔
 ↑
-└─ text
+└─ info text
+
+`,
+		},
+		{
+			"Print error",
+			fields{
+				inputs: []Input{
+					{
+						runeCount: 1,
+						err:       errors.New("error text"),
+						value:     "a",
+					},
+				},
+			},
+			false,
+			`
+a  ✘
+↑
+└─ error text
 
 `,
 		},
@@ -275,9 +283,9 @@ _  ✘
 				inputs: []Input{
 					{
 						runeCount: 1,
-						valid:     false,
+						err:       errors.New("error line"),
 						value:     "",
-						infos:     []Info{{Text: "line 1"}, {Text: "line 2"}},
+						infos:     []Info{{Text: "info line"}},
 					},
 				},
 			},
@@ -285,8 +293,8 @@ _  ✘
 			`
 _  ✘
 ↑
-└─ line 1
-   line 2
+└─ error line
+   info line
 
 `,
 		},
@@ -296,13 +304,11 @@ _  ✘
 				inputs: []Input{
 					{
 						runeCount: 1,
-						valid:     true,
 						value:     "a",
 						infos:     []Info{{Text: "line 1"}, {Text: "line 2"}},
 					},
 					{
 						runeCount: 1,
-						valid:     true,
 						value:     "b",
 						infos:     []Info{{Text: "line 3"}, {Text: "line 4"}},
 					},
@@ -325,23 +331,20 @@ a b  ✔
 			fields{
 				inputs: []Input{
 					{
-						runeCount: 1,
-						value:     "a",
+						value: "a",
 					},
 					{
-						runeCount: 1,
-						value:     "b",
+						value: "b",
 					},
 					{
-						runeCount: 1,
-						value:     "c",
+						value: "c",
 					},
 				},
 				separators: []string{"---", "‧‧‧"},
 			},
 			false,
 			`
-a---b‧‧‧c  ✘
+a---b‧‧‧c  ✔
 
 `,
 		},

@@ -113,6 +113,7 @@ func Execute(version string) {
 		ownerURL)
 
 	err = rootCmd.Execute()
+	checkCmdErr(err)
 	checkErr(stderr, err)
 }
 
@@ -145,6 +146,13 @@ func initDir(path string) string {
 		_ = os.Mkdir(path, os.ModeDir|0700)
 	}
 	return path
+}
+
+func checkCmdErr(err error) {
+	switch err.(type) {
+	case *errValidate:
+		os.Exit(1)
+	}
 }
 
 func writeErr(writer io.Writer, err error) {

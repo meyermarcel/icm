@@ -31,8 +31,9 @@ func NewValidator(inputOrders [][]Input) *Validator {
 
 // Validate validates multiple input patterns starting with first pattern in slice.
 // If pattern matches this pattern is returned. If no pattern matches, first pattern is returned.
-func (v *Validator) Validate(in string) []Input {
+func (v *Validator) Validate(in string) ([]Input, error) {
 
+	var defaultErr error
 	defaultInputs := v.inputOrders[0]
 
 	previousValues := make([]string, 0)
@@ -57,28 +58,35 @@ func (v *Validator) Validate(in string) []Input {
 
 			if orderIdx == 0 {
 				order[inputIdx].validateValue()
+				if defaultErr == nil {
+					defaultErr = order[inputIdx].err
+				}
 			}
 			allValidFmt = allValidFmt && order[inputIdx].isValidFmt()
 		}
 		if allValidFmt {
+			var err error
 			for inputIdx := range order {
 				order[inputIdx].validateValue()
+				if err == nil {
+					err = order[inputIdx].err
+				}
 			}
-			return order
+			return order, err
 		}
 	}
-	return defaultInputs
+	return defaultInputs, defaultErr
 }
 
 // Input is a structured part of an input string.
 type Input struct {
 	runeCount      int
 	matchIndex     func(in string) []int
-	validate       func(value string, previousValues []string) (bool, []Info)
+	validate       func(value string, previousValues []string) (error, []Info)
 	toUpper        bool
 	value          string
 	previousValues []string
-	valid          bool
+	err            error
 	infos          []Info
 }
 
@@ -90,12 +98,12 @@ func (i *Input) SetToUpper() {
 // NewInput returns a new Input.
 func NewInput(runeCount int,
 	matchIndex func(in string) []int,
-	validate func(value string, previousValues []string) (bool, []Info)) Input {
+	validate func(value string, previousValues []string) (error, []Info)) Input {
 	return Input{runeCount: runeCount, matchIndex: matchIndex, validate: validate}
 }
 
 func (i *Input) validateValue() {
-	i.valid, i.infos = i.validate(i.value, i.previousValues)
+	i.err, i.infos = i.validate(i.value, i.previousValues)
 }
 
 func (i *Input) isValidFmt() bool {
