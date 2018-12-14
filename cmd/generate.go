@@ -43,10 +43,6 @@ Equipment category ID 'U' is used for every container number.
 
   ` + appName + ` generate --` + configs.SepOE + ` '' --` + configs.SepSC + ` ''`,
 		Args: cobra.NoArgs,
-		PreRun: func(cmd *cobra.Command, args []string) {
-			err := viper.BindPFlags(cmd.Flags())
-			writeErr(writerErr, err)
-		},
 		RunE: func(cmd *cobra.Command, args []string) error {
 
 			count := viper.GetInt(configs.Count)
@@ -75,5 +71,9 @@ Equipment category ID 'U' is used for every container number.
 		"ABCU(*)1234560  (*) separates equipment category id and serial number")
 	generateCmd.Flags().String(configs.SepSC, configs.SepSCDefVal,
 		"ABCU123456(*)0  (*) separates serial number and check digit")
+
+	err := viper.BindPFlags(generateCmd.Flags())
+	writeErr(writerErr, err)
+
 	return generateCmd
 }
