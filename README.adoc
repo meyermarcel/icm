@@ -13,14 +13,6 @@ image:demo.gif[Demo of icm]
 
 `brew install meyermarcel/tap/icm`
 
-=== Linux
-
-Documentation will be added.
-
-=== Windows
-
-Documentation will be added.
-
 == Contributing
 
 . Fork it
