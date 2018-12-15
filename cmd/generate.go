@@ -26,6 +26,9 @@ import (
 )
 
 func newGenerateCmd(writer, writerErr io.Writer, viper *viper.Viper, ownerDecoder data.OwnerDecoder) *cobra.Command {
+
+	var count int
+
 	generateCmd := &cobra.Command{
 		Use:   "generate",
 		Short: "Generate a random container number",
@@ -39,13 +42,12 @@ Equipment category ID 'U' is used for every container number.
 ` + sepHelp,
 		Example: `  ` + appName + ` generate
 
-  ` + appName + ` generate --` + configs.Count + ` 5000
+  ` + appName + ` generate --count 5000
 
   ` + appName + ` generate --` + configs.SepOE + ` '' --` + configs.SepSC + ` ''`,
 		Args: cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 
-			count := viper.GetInt(configs.Count)
 			generator, err := cont.NewRandomUniqueGenerator(count, ownerDecoder.GenerateRandomCodes(count))
 			if err != nil {
 				return err
@@ -63,7 +65,6 @@ Equipment category ID 'U' is used for every container number.
 			return nil
 		},
 	}
-	generateCmd.Flags().IntP(configs.Count, "c", configs.CountDefVal, "count of container numbers")
 
 	generateCmd.Flags().String(configs.SepOE, configs.SepOEDefVal,
 		"ABC(*)U1234560  (*) separates owner code and equipment category id")
@@ -74,6 +75,8 @@ Equipment category ID 'U' is used for every container number.
 
 	err := viper.BindPFlags(generateCmd.Flags())
 	writeErr(writerErr, err)
+
+	generateCmd.Flags().IntVarP(&count, "count", "c", 1, "count of container numbers")
 
 	return generateCmd
 }

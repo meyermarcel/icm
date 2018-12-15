@@ -13,8 +13,6 @@
 
 package configs
 
-import "fmt"
-
 // Name of the config files and keys for configuration and flags.
 const (
 	Name           = "config"
@@ -31,8 +29,6 @@ const (
 	SepSTDefVal    = " "
 	Pattern        = "pattern"
 	PatternDefVal  = "auto"
-	Count          = "count"
-	CountDefVal    = 1
 )
 
 // Cfg returns default config.
@@ -64,8 +60,5 @@ func Cfg() []byte {
 # owner-equipment-category = matches a three letter owner code with equipment category ID
 #                size-type = matches length, width+height and type code
 ` + Pattern + `: ` + PatternDefVal + `
-
-# Count of container numbers for generation
-` + Count + `: ` + fmt.Sprintf("%d", CountDefVal) + `
 `)
 }
