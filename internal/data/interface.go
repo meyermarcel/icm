@@ -27,7 +27,7 @@ type OwnerDecodeUpdater interface {
 type OwnerDecoder interface {
 	Decode(code string) (bool, cont.Owner)
 
-	GenerateRandomCodes(count int) []string
+	GetAllOwnerCodes() []string
 }
 
 // OwnerUpdater updates owners of an implemented source.

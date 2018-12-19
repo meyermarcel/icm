@@ -52,6 +52,16 @@ func NewSizeDecoder(path string) (data.LengthDecoder, data.HeightWidthDecoder, e
 	if err := json.Unmarshal(b, &size); err != nil {
 		return nil, nil, err
 	}
+	for lengthCode := range size.Length {
+		if err := cont.IsLengthCode(lengthCode); err != nil {
+			return nil, nil, err
+		}
+	}
+	for heightWidthCode := range size.HeightWidth {
+		if err := cont.IsHeightWidthCode(heightWidthCode); err != nil {
+			return nil, nil, err
+		}
+	}
 	return &lengthDecoder{size.Length}, &heightWidthDecoder{size.HeightWidth}, nil
 }
 

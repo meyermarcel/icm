@@ -17,69 +17,218 @@ import (
 	"errors"
 	"fmt"
 	"math/rand"
+	"strings"
 	"time"
 )
 
-// RandomUniqueGenerator holds state for generating random unique container numbers.
-// Use NewRandomUniqueGenerator for initialization.
-type RandomUniqueGenerator struct {
-	codes       []string
-	lenCodes    int
-	randOffset  int
-	ownerOffset int
-	serialNumIt int
+// GeneratorBuilder is the struct for the builder.
+// Use NewUniqueGeneratorBuilder to create a new one.
+type GeneratorBuilder struct {
+	codes            []string
+	count            int
+	start            int
+	end              int
+	exclCheckDigit10 bool
 }
 
-// NewRandomUniqueGenerator returns a new random unique container number generator.
+// NewUniqueGeneratorBuilder returns a new random unique container number generator.
 // If possible maximum unique container numbers are exceeded, count is less than 1 or
 // no owner codes are passed then nil and error is returned.
-func NewRandomUniqueGenerator(count int, randomCodes []string) (*RandomUniqueGenerator, error) {
-
-	lenCodes := len(randomCodes)
-
-	if count > lenCodes*909091 {
-		return nil, fmt.Errorf("%d exceeds limit of %d (%d owners * 909091 serial numbers)",
-			count, lenCodes*909091, lenCodes)
+func NewUniqueGeneratorBuilder() *GeneratorBuilder {
+	return &GeneratorBuilder{
+		count: 1,
+		start: -1,
+		end:   -1,
 	}
+}
 
-	if count < 1 {
-		return nil, fmt.Errorf("%d is lower than minimum count 1", count)
-	}
+// OwnerCodes sets the owner codes for generation.
+func (gb *GeneratorBuilder) OwnerCodes(codes []string) *GeneratorBuilder {
+	gb.codes = codes
+	return gb
+}
+
+// Count sets the count of container number.
+func (gb *GeneratorBuilder) Count(count int) *GeneratorBuilder {
+	gb.count = count
+	return gb
+}
+
+// Start sets the start of serial number range.
+func (gb *GeneratorBuilder) Start(start int) *GeneratorBuilder {
+	gb.start = start
+	return gb
+}
+
+// End sets the end of serial number range.
+func (gb *GeneratorBuilder) End(end int) *GeneratorBuilder {
+	gb.end = end
+	return gb
+}
+
+// ExcludeCheckDigit10 sets the exclusion of container numbers with check digit 10.
+func (gb *GeneratorBuilder) ExcludeCheckDigit10(exclude bool) *GeneratorBuilder {
+	gb.exclCheckDigit10 = exclude
+	return gb
+}
+
+// Build returns a new UniqueGenerator if all requirements met.
+// Valid combinations a
+func (gb *GeneratorBuilder) Build() (*UniqueGenerator, error) {
+
+	lenCodes := len(gb.codes)
 
 	if lenCodes < 1 {
-		return nil, errors.New("cannot generate container numbers without owner ownerCodes")
+		return nil, errors.New("cannot generate container numbers without owner codes")
 	}
 
-	return &RandomUniqueGenerator{
-		codes:      randomCodes,
-		lenCodes:   lenCodes,
-		randOffset: rand.Int(),
+	serialNums := 1000000
+
+	if gb.exclCheckDigit10 {
+		serialNums = 909091
+	}
+
+	if gb.count > lenCodes*serialNums {
+		return nil, fmt.Errorf("count %d exceeds limit of %d (%d owners * %d serial numbers)",
+			gb.count, lenCodes*serialNums, lenCodes, serialNums)
+	}
+
+	var serialNumIt serialNumIt
+	var count int
+
+	if gb.start > -1 && gb.end > -1 {
+		serialNumIt = newSeqSerialNumIt(gb.start)
+		if gb.start <= gb.end {
+			count = gb.end + 1 - gb.start
+		} else {
+			count = gb.end + 1000000 + 1 - gb.start
+		}
+	}
+
+	if gb.start > -1 && gb.end == -1 {
+		serialNumIt = newSeqSerialNumIt(gb.start)
+		count = gb.count
+	}
+
+	if gb.end > -1 && gb.start == -1 {
+		serialNumIt = newSeqSerialNumIt(gb.end + 1 - gb.count)
+		count = gb.count
+	}
+
+	if gb.start == -1 && gb.end == -1 {
+		if gb.count < 1 {
+			return nil, fmt.Errorf("count %d is lower than minimum count 1", gb.count)
+		}
+		serialNumIt = newRandSerialNumIt()
+		count = gb.count
+	}
+
+	rand.Shuffle(lenCodes, func(i, j int) {
+		gb.codes[i], gb.codes[j] = strings.ToUpper(gb.codes[j]), strings.ToUpper(gb.codes[i])
+	})
+
+	return &UniqueGenerator{
+		codes:            gb.codes,
+		lenCodes:         lenCodes,
+		serialNumIt:      serialNumIt,
+		count:            count,
+		exclCheckDigit10: gb.exclCheckDigit10,
 	}, nil
 }
 
-// Generate generates a random container number. Container number is unique if Generate is not called more
-// than passed count in constructor.
-func (g *RandomUniqueGenerator) Generate() Number {
-
-	serialNum := fmt.Sprintf("%06d", permSerialNum((permSerialNum(g.serialNumIt)+g.randOffset)%1000000))
-	code := g.codes[(g.serialNumIt+g.ownerOffset)%g.lenCodes]
-	checkDigit := CalcCheckDigit(code, "U", serialNum)
-
-	if g.serialNumIt < 1000000 {
-		g.serialNumIt++
-	} else {
-		g.serialNumIt = 0
-		g.ownerOffset++
-	}
-
-	if checkDigit == 10 {
-		return g.Generate()
-	}
-	return NewNum(code, "U", serialNum, checkDigit)
+// UniqueGenerator holds state for generating random unique container numbers.
+// Use NewUniqueGeneratorBuilder for initialization.
+type UniqueGenerator struct {
+	codes            []string
+	lenCodes         int
+	ownerOffset      int
+	serialNumIt      serialNumIt
+	count            int
+	contNum          Number
+	generatedCount   int
+	exclCheckDigit10 bool
 }
 
-func init() {
-	rand.Seed(time.Now().UnixNano())
+// Generate advances the serial number iterator to the next serial number,
+// which will then be available through the ContNum method. It returns false
+// when the generation stops by reaching the count of generated container numbers.
+func (g *UniqueGenerator) Generate() bool {
+	serialNum := fmt.Sprintf("%06d", g.serialNumIt.num())
+	code := g.codes[(g.serialNumIt.num()+g.ownerOffset)%g.lenCodes]
+	checkDigit := CalcCheckDigit(code, "U", serialNum)
+
+	if g.serialNumIt.isLast() {
+		g.ownerOffset++
+	}
+	g.serialNumIt.increment()
+
+	if g.exclCheckDigit10 && checkDigit == 10 {
+		return g.Generate()
+	}
+	g.contNum = newNum(code, "U", serialNum, checkDigit%10)
+	g.generatedCount++
+	return g.generatedCount <= g.count
+}
+
+// ContNum returns generated container number.
+func (g *UniqueGenerator) ContNum() Number {
+	return g.contNum
+}
+
+type serialNumIt interface {
+	num() int
+
+	increment()
+
+	isLast() bool
+}
+
+type randSerialNumIt struct {
+	randOffset int
+	it         int
+}
+
+func newRandSerialNumIt() serialNumIt {
+	return &randSerialNumIt{
+		randOffset: rand.Int(),
+	}
+}
+
+func (r *randSerialNumIt) num() int {
+	return permSerialNum((permSerialNum(r.it) + r.randOffset) % 1000000)
+}
+
+func (r *randSerialNumIt) increment() {
+	r.it++
+}
+
+func (r *randSerialNumIt) isLast() bool {
+	return r.it+1%1000000 == 1000000
+}
+
+type seqSerialNumIt struct {
+	start int
+	it    int
+}
+
+func newSeqSerialNumIt(start int) serialNumIt {
+	start = (start + 1000000) % 1000000
+	return &seqSerialNumIt{
+		start: start,
+		it:    start,
+	}
+}
+
+func (i *seqSerialNumIt) num() int {
+	return i.it
+}
+
+func (i *seqSerialNumIt) increment() {
+	i.it = (i.it + 1) % 1000000
+}
+
+func (i *seqSerialNumIt) isLast() bool {
+	return (i.it+1)%1000000 == i.start
 }
 
 // See http://preshing.com/20121224/how-to-generate-a-sequence-of-unique-random-integers
@@ -96,4 +245,8 @@ func permSerialNum(x int) int {
 		return residue
 	}
 	return prime - residue
+}
+
+func init() {
+	rand.Seed(time.Now().UnixNano())
 }

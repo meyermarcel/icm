@@ -17,6 +17,7 @@ import (
 	"fmt"
 	"io"
 	"path/filepath"
+	"strconv"
 
 	"github.com/meyermarcel/icm/configs"
 	"github.com/meyermarcel/icm/internal/cont"
@@ -25,9 +26,86 @@ import (
 	"github.com/spf13/viper"
 )
 
+type ownerValue struct {
+	value string
+}
+
+func (o *ownerValue) String() string {
+	return o.value
+}
+
+func (o *ownerValue) Set(value string) error {
+	if err := cont.IsOwnerCode(value); err != nil {
+		return err
+	}
+	o.value = value
+	return nil
+}
+
+func (*ownerValue) Type() string {
+	return "owner code"
+}
+
+type rangeStart struct {
+	value int
+}
+
+func (r *rangeStart) String() string {
+	return strconv.Itoa(r.value)
+}
+
+func (r *rangeStart) Set(value string) error {
+	start, err := toRangeInt(value)
+	if err != nil {
+		return err
+	}
+	r.value = start
+	return nil
+}
+
+func (*rangeStart) Type() string {
+	return "int"
+}
+
+func toRangeInt(value string) (int, error) {
+	start, err := strconv.Atoi(value)
+	if err != nil {
+		return 0, err
+	}
+	if start < 0 || start > 999999 {
+		return 0, fmt.Errorf("%d is not in range from 0 to 999999", start)
+	}
+	return start, nil
+}
+
+type rangeEnd struct {
+	value int
+}
+
+func (r *rangeEnd) String() string {
+	return strconv.Itoa(r.value)
+}
+
+func (r *rangeEnd) Set(value string) error {
+	end, err := toRangeInt(value)
+	if err != nil {
+		return err
+	}
+	r.value = end
+	return nil
+}
+
+func (*rangeEnd) Type() string {
+	return "int"
+}
+
 func newGenerateCmd(writer, writerErr io.Writer, viper *viper.Viper, ownerDecoder data.OwnerDecoder) *cobra.Command {
 
 	var count int
+	var rangeStartValue = rangeStart{}
+	var rangeEndValue = rangeEnd{}
+	var ownerValue = ownerValue{}
+	var excludeCheckDigit10 bool
 
 	generateCmd := &cobra.Command{
 		Use:   "generate",
@@ -48,12 +126,30 @@ Equipment category ID 'U' is used for every container number.
 		Args: cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 
-			generator, err := cont.NewRandomUniqueGenerator(count, ownerDecoder.GenerateRandomCodes(count))
+			builder := cont.NewUniqueGeneratorBuilder().
+				Count(count).
+				ExcludeCheckDigit10(excludeCheckDigit10)
+
+			if cmd.Flags().Changed("owner") {
+				builder.OwnerCodes([]string{ownerValue.value})
+			} else {
+				builder.OwnerCodes(ownerDecoder.GetAllOwnerCodes())
+			}
+
+			if cmd.Flags().Changed("start") {
+				builder.Start(rangeStartValue.value)
+			}
+
+			if cmd.Flags().Changed("end") {
+				builder.End(rangeEndValue.value)
+			}
+
+			generator, err := builder.Build()
 			if err != nil {
 				return err
 			}
-			for i := 0; i < count; i++ {
-				contNumber := generator.Generate()
+			for generator.Generate() {
+				contNumber := generator.ContNum()
 				_, err := io.WriteString(writer,
 					fmt.Sprintf("%s%s%s%s%s%s%d\n",
 						contNumber.OwnerCode(), viper.GetString(configs.SepOE),
@@ -77,6 +173,10 @@ Equipment category ID 'U' is used for every container number.
 	writeErr(writerErr, err)
 
 	generateCmd.Flags().IntVarP(&count, "count", "c", 1, "count of container numbers")
+	generateCmd.Flags().VarP(&rangeStartValue, "start", "s", "start of serial number range")
+	generateCmd.Flags().VarP(&rangeEndValue, "end", "e", "end of serial number range")
+	generateCmd.Flags().Var(&ownerValue, "owner", "custom owner code")
+	generateCmd.Flags().BoolVar(&excludeCheckDigit10, "exclude-check-digit-10", false, "exclude check digit 10")
 
 	return generateCmd
 }

@@ -60,6 +60,11 @@ func NewTypeDecoder(path string) (data.TypeDecoder, error) {
 	if err := json.Unmarshal(b, &typeAndGroup.groups); err != nil {
 		return nil, err
 	}
+	for typeCode := range typeAndGroup.types {
+		if err := cont.IsTypeCode(typeCode); err != nil {
+			return nil, err
+		}
+	}
 	return typeAndGroup, nil
 }
 

@@ -13,6 +13,8 @@
 
 package cont
 
+import "fmt"
+
 // HeightWidth describes width and height of first code in specified standard size code.
 type HeightWidth struct {
 	Width  string
@@ -40,4 +42,26 @@ type Group struct {
 type TypeAndGroup struct {
 	Type
 	Group
+}
+
+// IsLengthCode checks for correct format
+func IsLengthCode(code string) error {
+	return isOneUpperAlphanumericChar(code)
+}
+
+// IsHeightWidthCode checks if string is one upper case alphanumeric character.
+func IsHeightWidthCode(code string) error {
+	return isOneUpperAlphanumericChar(code)
+}
+
+// IsTypeCode checks if string is two upper case alphanumeric characters.
+func IsTypeCode(code string) error {
+	if len(code) != 2 {
+		return NewErrContValidate(fmt.Sprintf("%s is not 2 characters long", code))
+	}
+	if !isUpperAlphanumeric(code) {
+		return NewErrContValidate(
+			fmt.Sprintf("%s is not 2 upper case alphanumeric characters", code))
+	}
+	return nil
 }

@@ -46,6 +46,11 @@ func NewEquipCatDecoder(path string) (data.EquipCatDecoder, error) {
 	if err := json.Unmarshal(b, &equipCat.categories); err != nil {
 		return nil, err
 	}
+	for ID := range equipCat.categories {
+		if err := cont.IsEquipCatID(ID); err != nil {
+			return nil, err
+		}
+	}
 	return equipCat, err
 }
 

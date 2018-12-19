@@ -16,7 +16,6 @@ package file
 import (
 	"bytes"
 	"encoding/json"
-	"math/rand"
 	"os"
 	"path/filepath"
 
@@ -52,6 +51,11 @@ func NewOwnerDecoderUpdater(path string) (data.OwnerDecodeUpdater, error) {
 	if err := json.Unmarshal(b, &ownersFile.owners); err != nil {
 		return nil, err
 	}
+	for ownerCode := range ownersFile.owners {
+		if err := cont.IsOwnerCode(ownerCode); err != nil {
+			return nil, err
+		}
+	}
 	return ownersFile, nil
 }
 
@@ -73,19 +77,12 @@ func (of *ownerDecoderUpdater) Decode(code string) (bool, cont.Owner) {
 	return false, cont.Owner{}
 }
 
-// GenerateRandomCodes returns a count of owner codes.
-func (of *ownerDecoderUpdater) GenerateRandomCodes(count int) []string {
+// GetAllOwnerCodes returns a count of owner codes.
+func (of *ownerDecoderUpdater) GetAllOwnerCodes() []string {
 	var codes []string
-
-	for code := range of.owners {
-		if len(codes) >= count {
-			break
-		}
-		codes = append(codes, code)
+	for _, owner := range of.owners {
+		codes = append(codes, owner.Code)
 	}
-	rand.Shuffle(len(codes), func(i, j int) {
-		codes[i], codes[j] = codes[j], codes[i]
-	})
 	return codes
 }
 

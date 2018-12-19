@@ -87,7 +87,7 @@ func (dummyOwnerDecoder) Decode(code string) (bool, cont.Owner) {
 type dummyOwnerUpdater struct {
 }
 
-func (dummyOwnerUpdater) GenerateRandomCodes(count int) []string {
+func (dummyOwnerUpdater) GetAllOwnerCodes() []string {
 	return []string{"RAN"}
 }
 

@@ -270,14 +270,14 @@ func newOwnerInput(ownerDecodeUpdater data.OwnerDecodeUpdater) input.Input {
 				return newErrValidate(fmt.Sprintf("%s is not %s long (e.g. %s)",
 					underline("owner code"),
 					bold("3 letters"),
-					underline(ownerDecodeUpdater.GenerateRandomCodes(1)[0]))), nil
+					underline(ownerDecodeUpdater.GetAllOwnerCodes()[0]))), nil
 			}
 			found, owner := ownerDecodeUpdater.Decode(value)
 			if !found {
 				return newErrValidate(fmt.Sprintf("%s is not %s (e.g. %s)",
 					underline(value),
 					bold("registered"),
-					underline(ownerDecodeUpdater.GenerateRandomCodes(1)[0]))), nil
+					underline(ownerDecodeUpdater.GetAllOwnerCodes()[0]))), nil
 
 			}
 			return nil, []input.Info{{Text: owner.Company},

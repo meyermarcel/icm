@@ -41,9 +41,7 @@ func (cn Number) CheckDigit() int {
 	return cn.checkDigit
 }
 
-// NewNum creates new container number with check digit.
-// To have a correct check digit calculate it before.
-func NewNum(ownerCode string,
+func newNum(ownerCode string,
 	equipCatID string,
 	serialNumber string,
 	checkDigit int) Number {
