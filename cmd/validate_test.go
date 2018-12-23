@@ -19,8 +19,6 @@ import (
 
 	"github.com/meyermarcel/icm/configs"
 	"github.com/spf13/viper"
-
-	"github.com/meyermarcel/icm/internal/cont"
 )
 
 func Test_singleLine(t *testing.T) {
@@ -61,86 +59,6 @@ func Test_singleLine(t *testing.T) {
 				t.Errorf("isSingleLine() = %v, want %v", got, tt.want)
 			}
 		})
-	}
-}
-
-type dummyOwnerDecodeUpdater struct {
-	dummyOwnerDecoder
-	dummyOwnerUpdater
-}
-
-type dummyOwnerDecoder struct {
-}
-
-func (dummyOwnerDecoder) Decode(code string) (bool, cont.Owner) {
-	if code != "ABC" {
-		return false, cont.Owner{}
-	}
-	return true, cont.Owner{
-		Code:    "ABC",
-		Company: "some-company",
-		City:    "some-city",
-		Country: "some-country",
-	}
-}
-
-type dummyOwnerUpdater struct {
-}
-
-func (dummyOwnerUpdater) GetAllOwnerCodes() []string {
-	return []string{"RAN"}
-}
-
-func (dummyOwnerUpdater) Update(newOwners map[string]cont.Owner) error {
-	panic("implement me")
-}
-
-type dummyEquipCatDecoder struct {
-}
-
-func (dummyEquipCatDecoder) Decode(ID string) (bool, cont.EquipCat) {
-	return true, cont.EquipCat{
-		Value: ID,
-		Info:  "some-equip-cat-ID",
-	}
-}
-
-func (dummyEquipCatDecoder) AllCatIDs() []string {
-	return []string{"U"}
-}
-
-type dummyLengthDecoder struct {
-}
-
-func (dummyLengthDecoder) Decode(code string) (bool, cont.Length) {
-	return true, cont.Length{
-		Length: "some-length",
-	}
-}
-
-type dummyHeightWidthDecoder struct {
-}
-
-func (dummyHeightWidthDecoder) Decode(code string) (bool, cont.HeightWidth) {
-	return true, cont.HeightWidth{
-		Width:  "some-width",
-		Height: "some-height",
-	}
-}
-
-type dummyTypeDecoder struct {
-}
-
-func (dummyTypeDecoder) Decode(code string) (bool, cont.TypeAndGroup) {
-	return true, cont.TypeAndGroup{
-		Type: cont.Type{
-			TypeCode: code,
-			TypeInfo: "some-type",
-		},
-		Group: cont.Group{
-			GroupCode: code,
-			GroupInfo: "some-group",
-		},
 	}
 }
 
@@ -376,8 +294,8 @@ func Test_validateCmd(t *testing.T) {
 				},
 			}
 			viperCfg := viper.New()
-			for _, option := range tt.cfgOverrides {
-				viperCfg.Set(option.name, option.value)
+			for _, override := range tt.cfgOverrides {
+				viperCfg.Set(override.name, override.value)
 			}
 			cmd := newValidateCmd(writer, writerErr, viperCfg, d)
 			_ = cmd.PreRunE(cmd, nil)
