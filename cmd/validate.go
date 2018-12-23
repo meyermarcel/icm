@@ -128,6 +128,10 @@ func newValidateCmd(writer, writerErr io.Writer, viperCfg *viper.Viper, decoders
   
   ` + appName + ` validate --` + configs.Pattern + ` ` + containerNumber + ` 'ABCU 123456'`,
 		Args: cobra.ExactArgs(1),
+		// https://github.com/spf13/viper/issues/233
+		PreRunE: func(cmd *cobra.Command, args []string) error {
+			return viperCfg.BindPFlags(cmd.Flags())
+		},
 		RunE: func(cmd *cobra.Command, args []string) error {
 
 			reader := strings.NewReader(args[0])
@@ -187,9 +191,6 @@ func newValidateCmd(writer, writerErr io.Writer, viperCfg *viper.Viper, decoders
 		"ABCU1234560 (*)  20G1  (*) separates check digit and size")
 	validateCmd.Flags().String(configs.SepST, configs.SepSTDefVal,
 		"ABCU1234560   20(*)G1  (*) separates size and type")
-	err := viperCfg.BindPFlags(validateCmd.Flags())
-	writeErr(writerErr, err)
-
 	return validateCmd
 }
 

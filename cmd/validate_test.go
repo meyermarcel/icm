@@ -380,6 +380,7 @@ func Test_validateCmd(t *testing.T) {
 				viperCfg.Set(option.name, option.value)
 			}
 			cmd := newValidateCmd(writer, writerErr, viperCfg, d)
+			_ = cmd.PreRunE(cmd, nil)
 			if got := cmd.RunE(nil, tt.args); (got == nil) == tt.wantErr {
 				t.Errorf("got = %v, wantErr is %v", got, tt.wantErr)
 			}

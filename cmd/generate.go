@@ -46,64 +46,35 @@ func (*ownerValue) Type() string {
 	return "owner code"
 }
 
-type rangeStart struct {
+type serialNumValue struct {
 	value int
 }
 
-func (r *rangeStart) String() string {
+func (r *serialNumValue) String() string {
 	return strconv.Itoa(r.value)
 }
 
-func (r *rangeStart) Set(value string) error {
-	start, err := toRangeInt(value)
+func (r *serialNumValue) Set(value string) error {
+	serialNum, err := strconv.Atoi(value)
 	if err != nil {
 		return err
 	}
-	r.value = start
+	if serialNum < 0 || serialNum > 999999 {
+		return fmt.Errorf("%d is not in range from 0 to 999999", serialNum)
+	}
+	r.value = serialNum
 	return nil
 }
 
-func (*rangeStart) Type() string {
-	return "int"
-}
-
-func toRangeInt(value string) (int, error) {
-	start, err := strconv.Atoi(value)
-	if err != nil {
-		return 0, err
-	}
-	if start < 0 || start > 999999 {
-		return 0, fmt.Errorf("%d is not in range from 0 to 999999", start)
-	}
-	return start, nil
-}
-
-type rangeEnd struct {
-	value int
-}
-
-func (r *rangeEnd) String() string {
-	return strconv.Itoa(r.value)
-}
-
-func (r *rangeEnd) Set(value string) error {
-	end, err := toRangeInt(value)
-	if err != nil {
-		return err
-	}
-	r.value = end
-	return nil
-}
-
-func (*rangeEnd) Type() string {
+func (*serialNumValue) Type() string {
 	return "int"
 }
 
 func newGenerateCmd(writer, writerErr io.Writer, viper *viper.Viper, ownerDecoder data.OwnerDecoder) *cobra.Command {
 
 	var count int
-	var rangeStartValue = rangeStart{}
-	var rangeEndValue = rangeEnd{}
+	var startValue = serialNumValue{}
+	var endValue = serialNumValue{}
 	var ownerValue = ownerValue{}
 	var excludeCheckDigit10 bool
 
@@ -124,6 +95,16 @@ Equipment category ID 'U' is used for every container number.
 
   ` + appName + ` generate --` + configs.SepOE + ` '' --` + configs.SepSC + ` ''`,
 		Args: cobra.NoArgs,
+		// https://github.com/spf13/viper/issues/233
+		PreRunE: func(cmd *cobra.Command, args []string) error {
+			if err := viper.BindPFlag(configs.SepOE, cmd.Flags().Lookup(configs.SepOE)); err != nil {
+				return err
+			}
+			if err := viper.BindPFlag(configs.SepES, cmd.Flags().Lookup(configs.SepES)); err != nil {
+				return err
+			}
+			return viper.BindPFlag(configs.SepSC, cmd.Flags().Lookup(configs.SepSC))
+		},
 		RunE: func(cmd *cobra.Command, args []string) error {
 
 			builder := cont.NewUniqueGeneratorBuilder().
@@ -137,11 +118,11 @@ Equipment category ID 'U' is used for every container number.
 			}
 
 			if cmd.Flags().Changed("start") {
-				builder.Start(rangeStartValue.value)
+				builder.Start(startValue.value)
 			}
 
 			if cmd.Flags().Changed("end") {
-				builder.End(rangeEndValue.value)
+				builder.End(endValue.value)
 			}
 
 			generator, err := builder.Build()
@@ -169,12 +150,9 @@ Equipment category ID 'U' is used for every container number.
 	generateCmd.Flags().String(configs.SepSC, configs.SepSCDefVal,
 		"ABCU123456(*)0  (*) separates serial number and check digit")
 
-	err := viper.BindPFlags(generateCmd.Flags())
-	writeErr(writerErr, err)
-
 	generateCmd.Flags().IntVarP(&count, "count", "c", 1, "count of container numbers")
-	generateCmd.Flags().VarP(&rangeStartValue, "start", "s", "start of serial number range")
-	generateCmd.Flags().VarP(&rangeEndValue, "end", "e", "end of serial number range")
+	generateCmd.Flags().VarP(&startValue, "start", "s", "start of serial number range")
+	generateCmd.Flags().VarP(&endValue, "end", "e", "end of serial number range")
 	generateCmd.Flags().Var(&ownerValue, "owner", "custom owner code")
 	generateCmd.Flags().BoolVar(&excludeCheckDigit10, "exclude-check-digit-10", false, "exclude check digit 10")
 
