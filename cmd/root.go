@@ -139,10 +139,10 @@ func newRootCmd(
 		SilenceErrors: true,
 	}
 
-	rootCmd.AddCommand(newCompletionCmd(writer, rootCmd))
 	rootCmd.AddCommand(newGenerateCmd(writer, writerErr, viper, decoders.ownerDecodeUpdater))
 	rootCmd.AddCommand(newValidateCmd(writer, viper, decoders))
 	rootCmd.AddCommand(newUpdateOwnerCmd(decoders.ownerDecodeUpdater, timestampUpdater, ownerURL))
+	rootCmd.AddCommand(newMiscCmd(writer, rootCmd))
 
 	return rootCmd
 }

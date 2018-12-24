@@ -30,6 +30,7 @@ archive:
   - LICENSE
   - README.adoc
   - docs/gif/demo.gif
+  - build/man/man1/*
 
 brew:
   github:
@@ -41,12 +42,15 @@ brew:
   install: |
     bin.install "icm"
     # Install bash completion
-    output = Utils.popen_read("#{bin}/icm completion bash")
+    output = Utils.popen_read("#{bin}/icm misc bash-completion")
     (bash_completion/"icm").write output
 
     # Install zsh completion
-    output = Utils.popen_read("#{bin}/icm completion zsh")
+    output = Utils.popen_read("#{bin}/icm misc zsh-completion")
     (zsh_completion/"_icm").write output
+
+    # Install man pages
+    man1.install Dir["build/man/man1/*.1"]
 
   test: |
     system "#{bin}/icm --version"
