@@ -39,7 +39,7 @@ image:demo.gif[Demo of icm]
 
 . Create new pull request
 
-== Local development
+== Development
 
 . Requirements
 * https://golang.org/doc/install[Golang 1.11.x]
