@@ -283,7 +283,6 @@ func Test_validateCmd(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			writer := &bytes.Buffer{}
-			writerErr := &bytes.Buffer{}
 			d := decoders{
 				ownerDecodeUpdater: &dummyOwnerDecodeUpdater{},
 				equipCatDecoder:    &dummyEquipCatDecoder{},
@@ -297,7 +296,7 @@ func Test_validateCmd(t *testing.T) {
 			for _, override := range tt.cfgOverrides {
 				viperCfg.Set(override.name, override.value)
 			}
-			cmd := newValidateCmd(writer, writerErr, viperCfg, d)
+			cmd := newValidateCmd(writer, viperCfg, d)
 			_ = cmd.PreRunE(cmd, nil)
 			if got := cmd.RunE(nil, tt.args); (got == nil) == tt.wantErr {
 				t.Errorf("got = %v, wantErr is %v", got, tt.wantErr)

@@ -111,7 +111,7 @@ func (p *patternValue) newPattern(value string) newPattern {
 
 var pValue = newPatternValue()
 
-func newValidateCmd(writer, writerErr io.Writer, viperCfg *viper.Viper, decoders decoders) *cobra.Command {
+func newValidateCmd(writer io.Writer, viperCfg *viper.Viper, decoders decoders) *cobra.Command {
 	validateCmd := &cobra.Command{
 		Use:   "validate",
 		Short: "Validate intermodal container markings",
