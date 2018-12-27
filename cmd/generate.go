@@ -143,18 +143,20 @@ Equipment category ID 'U' is used for every container number.
 		},
 	}
 
-	generateCmd.Flags().String(configs.SepOE, configs.SepOEDefVal,
-		"ABC(*)U1234560  (*) separates owner code and equipment category id")
-	generateCmd.Flags().String(configs.SepES, configs.SepESDefVal,
-		"ABCU(*)1234560  (*) separates equipment category id and serial number")
-	generateCmd.Flags().String(configs.SepSC, configs.SepSCDefVal,
-		"ABCU123456(*)0  (*) separates serial number and check digit")
+	generateCmd.Flags().SortFlags = false
 
 	generateCmd.Flags().IntVarP(&count, "count", "c", 1, "count of container numbers")
 	generateCmd.Flags().VarP(&startValue, "start", "s", "start of serial number range")
 	generateCmd.Flags().VarP(&endValue, "end", "e", "end of serial number range")
 	generateCmd.Flags().Var(&ownerValue, "owner", "custom owner code")
 	generateCmd.Flags().BoolVar(&excludeCheckDigit10, "exclude-check-digit-10", false, "exclude check digit 10")
+
+	generateCmd.Flags().String(configs.SepOE, configs.SepOEDefVal,
+		"ABC(*)U1234560  (*) separates owner code and equipment category id")
+	generateCmd.Flags().String(configs.SepES, configs.SepESDefVal,
+		"ABCU(*)1234560  (*) separates equipment category id and serial number")
+	generateCmd.Flags().String(configs.SepSC, configs.SepSCDefVal,
+		"ABCU123456(*)0  (*) separates serial number and check digit")
 
 	return generateCmd
 }
