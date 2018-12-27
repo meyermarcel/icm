@@ -80,20 +80,28 @@ func newGenerateCmd(writer, writerErr io.Writer, viper *viper.Viper, ownerDecode
 
 	generateCmd := &cobra.Command{
 		Use:   "generate",
-		Short: "Generate a random container number",
-		Long: `Owners specified in
+		Short: "Generate unique container numbers",
+		Long: `Generated container are numbers unique. Owners specified in
 
-  ` + filepath.Join("$HOME", appDir) + `
+  ` + filepath.Join("$HOME", appDir, "data", "owner.json") + `
 
-are used. Container numbers with check digit 10 are excluded.
-Equipment category ID 'U' is used for every container number.
+are used. Equipment category ID 'U' is used for every container number.
+For a custom owner code use the --owner-code flag. For a custom serial
+number use the --start and --end flags and optionally the --count flag.
+Using only the --count flag generates pseudo random serial numbers.
 
 ` + sepHelp,
 		Example: `  ` + appName + ` generate
 
   ` + appName + ` generate --count 5000
 
-  ` + appName + ` generate --` + configs.SepOE + ` '' --` + configs.SepSC + ` ''`,
+  ` + appName + ` generate --owner-code ABC
+
+  ` + appName + ` generate --start 0 --end 10
+
+  ` + appName + ` generate --start 50 --count 10
+
+  ` + appName + ` generate --count 20 --exclude-check-digit-10`,
 		Args: cobra.NoArgs,
 		// https://github.com/spf13/viper/issues/233
 		PreRunE: func(cmd *cobra.Command, args []string) error {
