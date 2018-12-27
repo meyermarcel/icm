@@ -43,7 +43,7 @@ func (o *ownerValue) Set(value string) error {
 }
 
 func (*ownerValue) Type() string {
-	return "owner code"
+	return "string"
 }
 
 type serialNumValue struct {
