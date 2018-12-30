@@ -2,6 +2,9 @@
 build/
 dist/
 
+# Generated manual pages
+man-pages/
+
 # Test binary, build with `go test -c`
 *.test
 

@@ -1,6 +1,8 @@
 PACKAGES := $(shell go list ./... | grep -v /vendor)
 BIN_DIR := $(GOPATH)/bin
 BUILD_DIR := build
+# man-pages is also defined in goreleaser.yml
+MAN_DIR := man-pages
 BINARY := icm
 
 .PHONY: all
@@ -29,7 +31,7 @@ build: lint
 
 .PHONY: man
 man: build
-	$(shell $(BIN_DIR)/$(BINARY) misc man $(BUILD_DIR)/man/man1)
+	$(shell $(BIN_DIR)/$(BINARY) misc man $(MAN_DIR)/man1)
 
 .PHONY: install
 install:

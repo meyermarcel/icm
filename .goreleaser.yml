@@ -1,3 +1,7 @@
+before:
+  hooks:
+  - make
+
 builds:
 - flags:
   - -tags
@@ -30,7 +34,8 @@ archive:
   - LICENSE
   - README.adoc
   - docs/gif/demo.gif
-  - build/man/man1/*
+    # man-pages is also defined in Makefile
+  - man-pages/man1/*
 
 brew:
   github:
@@ -49,8 +54,8 @@ brew:
     output = Utils.popen_read("#{bin}/icm misc zsh-completion")
     (zsh_completion/"_icm").write output
 
-    # Install man pages
-    man1.install Dir["build/man/man1/*.1"]
+    # man-pages is also defined in Makefile
+    man1.install Dir["man-pages/man1/*.1"]
 
   test: |
     system "#{bin}/icm --version"
