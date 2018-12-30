@@ -31,7 +31,7 @@ build: lint
 
 .PHONY: man
 man: build
-	$(shell $(BIN_DIR)/$(BINARY) misc man $(MAN_DIR)/man1)
+	$(shell $(BUILD_DIR)/$(BINARY) misc man $(MAN_DIR)/man1)
 
 .PHONY: install
 install:
