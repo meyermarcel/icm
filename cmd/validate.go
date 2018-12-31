@@ -16,6 +16,7 @@ package cmd
 import (
 	"bufio"
 	"bytes"
+	"encoding/csv"
 	"fmt"
 	"io"
 	"regexp"
@@ -111,7 +112,7 @@ func (p *patternValue) newPattern(value string) newPattern {
 
 var pValue = newPatternValue()
 
-func newValidateCmd(writer io.Writer, viperCfg *viper.Viper, decoders decoders) *cobra.Command {
+func newValidateCmd(stdin io.Reader, writer io.Writer, viperCfg *viper.Viper, decoders decoders) *cobra.Command {
 	validateCmd := &cobra.Command{
 		Use:   "validate",
 		Short: "Validate intermodal container markings",
@@ -127,30 +128,34 @@ func newValidateCmd(writer io.Writer, viperCfg *viper.Viper, decoders decoders) 
   ` + appName + ` validate --` + configs.SepOE + ` '' --` + configs.SepSC + ` '' 'ABCU 1234560'
   
   ` + appName + ` validate --` + configs.Pattern + ` ` + containerNumber + ` 'ABCU 123456'`,
-		Args: cobra.ExactArgs(1),
+		Args: cobra.MaximumNArgs(6),
 		// https://github.com/spf13/viper/issues/233
 		PreRunE: func(cmd *cobra.Command, args []string) error {
 			return viperCfg.BindPFlags(cmd.Flags())
 		},
 		RunE: func(cmd *cobra.Command, args []string) error {
 
-			reader := strings.NewReader(args[0])
-			bufReader := bufio.NewReader(reader)
-			peek, err := bufReader.Peek(bufReader.Buffered())
-			if err != nil {
-				return err
+			var reader io.Reader
+			if len(args) != 0 {
+				reader = strings.NewReader(strings.Join(args, " "))
+			} else {
+				reader = stdin
 			}
+
+			bufReader := bufio.NewReader(reader)
+			peek, _ := bufReader.Peek(bufReader.Size())
+
 			patternStr := viperCfg.GetString(configs.Pattern)
-			pattern := pValue.newPattern(patternStr)(decoders)
-			validator := input.NewValidator(pattern)
+			inputPatterns := pValue.newPattern(patternStr)(decoders)
+			inputs := input.NewMatcher(inputPatterns).Match(strings.Split(string(peek), "\n")[0])
 
 			var inputErr error
 
 			if isSingleLine(string(peek)) {
 				buf := new(bytes.Buffer)
-				_, _ = buf.ReadFrom(reader)
-				var inputs []input.Input
-				inputs, inputErr = validator.Validate(buf.String())
+				_, _ = buf.ReadFrom(bufReader)
+
+				inputs, inputErr = input.NewValidator(inputs).Validate(buf.String())
 				fancyPrinter := input.NewFancyPrinter(writer, inputs)
 				fancyPrinter.SetIndent("  ")
 
@@ -174,6 +179,21 @@ func newValidateCmd(writer io.Writer, viperCfg *viper.Viper, decoders decoders) 
 				err := fancyPrinter.Print()
 				if err != nil {
 					return err
+				}
+			} else {
+				scanner := bufio.NewScanner(bufReader)
+
+				csvWriter := csv.NewWriter(writer)
+				csvWriter.Comma = ';'
+				csvPrinter := input.NewCSVPrinter(csvWriter, true)
+
+				for scanner.Scan() {
+					inputs, inputErr = input.NewValidator(inputs).Validate(scanner.Text())
+					csvPrinter.SetRecord(inputs)
+					err := csvPrinter.Print()
+					if err != nil {
+						return err
+					}
 				}
 			}
 			return inputErr
@@ -266,24 +286,41 @@ func newOwnerInput(ownerDecodeUpdater data.OwnerDecodeUpdater) input.Input {
 	owner := input.NewInput(
 		3,
 		regexp.MustCompile(`[A-Za-z]{3}`).FindStringIndex,
-		func(value string, previousValues []string) (error, []input.Info) {
+		func(value string, previousValues []string) (error, []input.Info, []input.Datum) {
+			ownerCodeDatum := input.NewDatum("owner-code")
+			ownerCompanyDatum := input.NewDatum("company")
+			ownerCityDatum := input.NewDatum("city")
+			ownerCountryDatum := input.NewDatum("country")
+
 			if value == "" {
 				return newErrValidate(fmt.Sprintf("%s is not %s long (e.g. %s)",
-					underline("owner code"),
-					bold("3 letters"),
-					underline(ownerDecodeUpdater.GetAllOwnerCodes()[0]))), nil
+						underline("owner code"),
+						bold("3 letters"),
+						underline(ownerDecodeUpdater.GetAllOwnerCodes()[0]))),
+					nil,
+					[]input.Datum{ownerCodeDatum, ownerCompanyDatum, ownerCityDatum, ownerCountryDatum}
 			}
 			found, owner := ownerDecodeUpdater.Decode(value)
 			if !found {
 				return newErrValidate(fmt.Sprintf("%s is not %s (e.g. %s)",
-					underline(value),
-					bold("registered"),
-					underline(ownerDecodeUpdater.GetAllOwnerCodes()[0]))), nil
+						underline(value),
+						bold("registered"),
+						underline(ownerDecodeUpdater.GetAllOwnerCodes()[0]))),
+					nil,
+					[]input.Datum{ownerCodeDatum, ownerCompanyDatum, ownerCityDatum, ownerCountryDatum}
 
 			}
-			return nil, []input.Info{{Text: owner.Company},
-				{Text: owner.City},
-				{Text: owner.Country}}
+			return nil,
+				[]input.Info{{Text: owner.Company},
+					{Text: owner.City},
+					{Text: owner.Country},
+				},
+				[]input.Datum{
+					ownerCodeDatum.WithValue(owner.Code),
+					ownerCompanyDatum.WithValue(owner.Company),
+					ownerCityDatum.WithValue(owner.City),
+					ownerCountryDatum.WithValue(owner.Country),
+				}
 		})
 	owner.SetToUpper()
 	return owner
@@ -293,20 +330,27 @@ func newEquipCatInput(equipCatDecoder data.EquipCatDecoder) input.Input {
 	equipCat := input.NewInput(
 		1,
 		regexp.MustCompile(`[A-Za-z]`).FindStringIndex,
-		func(value string, previousValues []string) (error, []input.Info) {
+		func(value string, previousValues []string) (error, []input.Info, []input.Datum) {
+			equipCatDatum := input.NewDatum("equipment-category")
 			if value == "" {
 				return newErrValidate(fmt.Sprintf("%s is not %s",
-					underline("equipment category id"),
-					equipCatIDsAsList(equipCatDecoder))), nil
+						underline("equipment category id"),
+						equipCatIDsAsList(equipCatDecoder))),
+					nil,
+					[]input.Datum{equipCatDatum}
 			}
 
 			found, cat := equipCatDecoder.Decode(value)
 			if !found {
 				return newErrValidate(fmt.Sprintf("%s is not %s",
-					underline("equipment category id"),
-					equipCatIDsAsList(equipCatDecoder))), nil
+						underline("equipment category id"),
+						equipCatIDsAsList(equipCatDecoder))),
+					nil,
+					[]input.Datum{equipCatDatum}
 			}
-			return nil, []input.Info{{Text: cat.Info}}
+			return nil,
+				[]input.Info{{Text: cat.Info}},
+				[]input.Datum{equipCatDatum.WithValue(cat.Info)}
 		})
 	equipCat.SetToUpper()
 	return equipCat
@@ -334,13 +378,15 @@ func newSerialNumInput() input.Input {
 	return input.NewInput(
 		6,
 		regexp.MustCompile(`\d{6}`).FindStringIndex,
-		func(value string, previousValues []string) (error, []input.Info) {
+		func(value string, previousValues []string) (error, []input.Info, []input.Datum) {
 			if value == "" {
 				return newErrValidate(fmt.Sprintf("%s is not %s long",
-					underline("serial number"),
-					bold("6 numbers"))), nil
+						underline("serial number"),
+						bold("6 numbers"))),
+					nil,
+					nil
 			}
-			return nil, nil
+			return nil, nil, nil
 		})
 }
 
@@ -348,10 +394,13 @@ func newCheckDigitInput() input.Input {
 	return input.NewInput(
 		1,
 		regexp.MustCompile(`\d`).FindStringIndex,
-		func(value string, previousValues []string) (error, []input.Info) {
+		func(value string, previousValues []string) (error, []input.Info, []input.Datum) {
+			checkDigitDatum := input.NewDatum("check-digit")
 			if len(strings.Join(previousValues[0:3], "")) != 10 {
 				return newErrValidate(fmt.Sprintf("%s is not calculable",
-					underline("check digit"))), nil
+						underline("check digit"))),
+					nil,
+					[]input.Datum{checkDigitDatum}
 			}
 
 			checkDigit := cont.CalcCheckDigit(previousValues[2], previousValues[1], previousValues[0])
@@ -359,19 +408,23 @@ func newCheckDigitInput() input.Input {
 			number, err := strconv.Atoi(value)
 			if err != nil {
 				return newErrValidate(fmt.Sprintf("%s must be a %s (calculated: %s)",
-					underline("check digit"),
-					bold("number"),
-					green(checkDigit))), appendCheckDigit10Info(checkDigit, nil)
+						underline("check digit"),
+						bold("number"),
+						green(checkDigit))), appendCheckDigit10Info(checkDigit, nil),
+					[]input.Datum{checkDigitDatum.WithValue(strconv.Itoa(checkDigit))}
 			}
 
 			if number != checkDigit%10 {
 				return newErrValidate(fmt.Sprintf(
-					"calculated %s is %s",
-					underline("check digit"),
-					green(checkDigit%10))), appendCheckDigit10Info(checkDigit, nil)
+						"calculated %s is %s",
+						underline("check digit"),
+						green(checkDigit%10))), appendCheckDigit10Info(checkDigit, nil),
+					[]input.Datum{checkDigitDatum.WithValue(strconv.Itoa(checkDigit))}
 			}
 
-			return nil, appendCheckDigit10Info(checkDigit, nil)
+			return nil,
+				appendCheckDigit10Info(checkDigit, nil),
+				[]input.Datum{checkDigitDatum.WithValue(strconv.Itoa(checkDigit))}
 		})
 }
 
@@ -389,76 +442,110 @@ func appendCheckDigit10Info(checkDigit int, infos []input.Info) []input.Info {
 }
 
 func newLengthInput(lengthDecoder data.LengthDecoder) input.Input {
+
 	length := input.NewInput(
 		1,
 		regexp.MustCompile(`[A-Za-z\d]`).FindStringIndex,
-		func(value string, previousValues []string) (error, []input.Info) {
+		func(value string, previousValues []string) (error, []input.Info, []input.Datum) {
+			lengthDatum := input.NewDatum("length")
 			if value == "" {
 				return newErrValidate(fmt.Sprintf("%s is not a %s or a %s",
-					underline("length code"),
-					bold("valid number"),
-					bold("valid character"))), nil
+						underline("length code"),
+						bold("valid number"),
+						bold("valid character"))),
+					nil,
+					[]input.Datum{lengthDatum}
 			}
 
 			found, length := lengthDecoder.Decode(value)
 			if !found {
 				return newErrValidate(fmt.Sprintf("%s is not %s",
-					underline("length code"),
-					bold("valid"))), nil
+						underline("length code"),
+						bold("valid"))),
+					nil,
+					[]input.Datum{lengthDatum}
 			}
-			return nil, []input.Info{{Text: fmt.Sprintf("length: %s", length.Length)}}
+			return nil,
+				[]input.Info{{Text: fmt.Sprintf("length: %s", length.Length)}},
+				[]input.Datum{lengthDatum.WithValue(length.Length)}
 		})
 	length.SetToUpper()
 	return length
 }
 
 func newHeightWidthInput(heightWidthDecoder data.HeightWidthDecoder) input.Input {
+
 	heightWidth := input.NewInput(
 		1,
 		regexp.MustCompile(`[A-Za-z\d]`).FindStringIndex,
-		func(value string, previousValues []string) (error, []input.Info) {
+		func(value string, previousValues []string) (error, []input.Info, []input.Datum) {
+			heightDatum := input.NewDatum("height")
+			widthDatum := input.NewDatum("width")
 			if value == "" {
 				return newErrValidate(fmt.Sprintf("%s is not a %s or a %s",
-					underline("height and width code"),
-					bold("valid number"),
-					bold("valid character"))), nil
+						underline("height and width code"),
+						bold("valid number"),
+						bold("valid character"))),
+					nil,
+					[]input.Datum{heightDatum, widthDatum}
 			}
 
 			found, heightWidth := heightWidthDecoder.Decode(value)
 			if !found {
 				return newErrValidate(fmt.Sprintf("%s is not %s",
-					underline("height and width code"),
-					bold("valid"))), nil
+						underline("height and width code"),
+						bold("valid"))),
+					nil,
+					[]input.Datum{heightDatum, widthDatum}
 			}
-			return nil, []input.Info{
-				{Text: fmt.Sprintf("height: %s", heightWidth.Height)},
-				{Text: fmt.Sprintf("width:  %s", heightWidth.Width)}}
+			return nil,
+				[]input.Info{
+					{Text: fmt.Sprintf("height: %s", heightWidth.Height)},
+					{Text: fmt.Sprintf("width:  %s", heightWidth.Width)},
+				},
+				[]input.Datum{
+					heightDatum.WithValue(heightWidth.Height),
+					widthDatum.WithValue(heightWidth.Width),
+				}
 		})
 	heightWidth.SetToUpper()
 	return heightWidth
 }
 
 func newTypeAndGroupInput(typeDecoder data.TypeDecoder) input.Input {
+
 	typeAndGroup := input.NewInput(
 		2,
 		regexp.MustCompile(`[A-Za-z\d]{2}`).FindStringIndex,
-		func(value string, previousValues []string) (error, []input.Info) {
+		func(value string, previousValues []string) (error, []input.Info, []input.Datum) {
+			typeDatum := input.NewDatum("type")
+			groupDatum := input.NewDatum("group")
 			if value == "" {
 				return newErrValidate(fmt.Sprintf("%s is not a %s or a %s",
-					underline("type code"),
-					bold("valid number"),
-					bold("valid character"))), nil
+						underline("type code"),
+						bold("valid number"),
+						bold("valid character"))),
+					nil,
+					[]input.Datum{typeDatum, groupDatum}
 			}
 
 			found, typeAndGroup := typeDecoder.Decode(value)
 			if !found {
 				return newErrValidate(fmt.Sprintf("%s is not %s",
-					underline("type code"),
-					bold("valid"))), nil
+						underline("type code"),
+						bold("valid"))),
+					nil,
+					[]input.Datum{typeDatum, groupDatum}
 			}
-			return nil, []input.Info{
-				{Text: fmt.Sprintf("type:  %s", typeAndGroup.TypeInfo)},
-				{Text: fmt.Sprintf("group: %s", typeAndGroup.GroupInfo)}}
+			return nil,
+				[]input.Info{
+					{Text: fmt.Sprintf("type:  %s", typeAndGroup.TypeInfo)},
+					{Text: fmt.Sprintf("group: %s", typeAndGroup.GroupInfo)},
+				},
+				[]input.Datum{
+					typeDatum.WithValue(typeAndGroup.TypeInfo),
+					groupDatum.WithValue(typeAndGroup.GroupInfo),
+				}
 		})
 	typeAndGroup.SetToUpper()
 	return typeAndGroup

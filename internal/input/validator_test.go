@@ -25,8 +25,8 @@ func TestInputHasCorrectValue(t *testing.T) {
 		matchIndex: func(in string) []int {
 			return []int{0, 1}
 		},
-		validate: func(value string, previousValues []string) (error, []Info) {
-			return nil, []Info{{Text: "match 1"}}
+		validate: func(value string, previousValues []string) (error, []Info, []Datum) {
+			return nil, []Info{{Text: "match 1"}}, nil
 		},
 	}
 	match2 := Input{
@@ -35,8 +35,8 @@ func TestInputHasCorrectValue(t *testing.T) {
 		matchIndex: func(in string) []int {
 			return []int{0, 2}
 		},
-		validate: func(value string, previousValues []string) (error, []Info) {
-			return nil, []Info{{Text: "match 2"}}
+		validate: func(value string, previousValues []string) (error, []Info, []Datum) {
+			return nil, []Info{{Text: "match 2"}}, nil
 		},
 	}
 	validFmtButInvalidMatch := Input{
@@ -44,16 +44,8 @@ func TestInputHasCorrectValue(t *testing.T) {
 		matchIndex: func(in string) []int {
 			return []int{0, 1}
 		},
-		validate: func(value string, previousValues []string) (error, []Info) {
-			return errors.New(""), nil
-		},
-	}
-	noMatch := Input{
-		matchIndex: func(in string) []int {
-			return nil
-		},
-		validate: func(value string, previousValues []string) (error, []Info) {
-			return errors.New(""), nil
+		validate: func(value string, previousValues []string) (error, []Info, []Datum) {
+			return errors.New(""), nil, nil
 		},
 	}
 
@@ -66,16 +58,14 @@ func TestInputHasCorrectValue(t *testing.T) {
 
 	tests := []struct {
 		name         string
-		inputOrders  [][]Input
+		inputs       []Input
 		in           string
 		wantedInputs []wantedInput
 		wantErr      bool
 	}{
 		{
 			"Match single value",
-			[][]Input{
-				{match1},
-			},
+			[]Input{match1},
 			"a",
 			[]wantedInput{
 				{
@@ -89,9 +79,7 @@ func TestInputHasCorrectValue(t *testing.T) {
 		},
 		{
 			"Match multiple values",
-			[][]Input{
-				{match1, match2},
-			},
+			[]Input{match1, match2},
 			"abcd",
 			[]wantedInput{
 				{
@@ -108,60 +96,10 @@ func TestInputHasCorrectValue(t *testing.T) {
 				},
 			},
 			false,
-		},
-		{
-			"Use first best match",
-			[][]Input{
-				{noMatch, match1},
-				{match1},
-				{match2},
-			},
-			"abcd",
-			[]wantedInput{
-				{
-					"a",
-					nil,
-					false,
-					[]string{"match 1"},
-				},
-			},
-			false,
-		},
-		{
-			"First match is default",
-			[][]Input{
-				{match1, noMatch, match2},
-				{noMatch},
-			},
-			"abcd",
-			[]wantedInput{
-				{
-					"a",
-					nil,
-					false,
-					[]string{"match 1"},
-				},
-				{
-					"",
-					[]string{"a"},
-					true,
-					nil,
-				},
-				{
-					"BC",
-					[]string{"", "a"},
-					false,
-					[]string{"match 2"},
-				},
-			},
-			true,
 		},
 		{
 			"Match but invalid",
-			[][]Input{
-				{noMatch},
-				{validFmtButInvalidMatch},
-			},
+			[]Input{validFmtButInvalidMatch},
 			"a",
 			[]wantedInput{
 				{
@@ -177,7 +115,7 @@ func TestInputHasCorrectValue(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			v := &Validator{
-				tt.inputOrders,
+				tt.inputs,
 			}
 			inputs, err := v.Validate(tt.in)
 			if len(inputs) != len(tt.wantedInputs) {

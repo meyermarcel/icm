@@ -140,7 +140,7 @@ func newRootCmd(
 	}
 
 	rootCmd.AddCommand(newGenerateCmd(writer, writerErr, viper, decoders.ownerDecodeUpdater))
-	rootCmd.AddCommand(newValidateCmd(writer, viper, decoders))
+	rootCmd.AddCommand(newValidateCmd(os.Stdin, writer, viper, decoders))
 	rootCmd.AddCommand(newUpdateOwnerCmd(decoders.ownerDecodeUpdater, timestampUpdater, ownerURL))
 	rootCmd.AddCommand(newMiscCmd(writer, rootCmd))
 

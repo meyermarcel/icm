@@ -296,7 +296,7 @@ func Test_validateCmd(t *testing.T) {
 			for _, override := range tt.cfgOverrides {
 				viperCfg.Set(override.name, override.value)
 			}
-			cmd := newValidateCmd(writer, viperCfg, d)
+			cmd := newValidateCmd(nil, writer, viperCfg, d)
 			_ = cmd.PreRunE(cmd, nil)
 			if got := cmd.RunE(nil, tt.args); (got == nil) == tt.wantErr {
 				t.Errorf("got = %v, wantErr is %v", got, tt.wantErr)

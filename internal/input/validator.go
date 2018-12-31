@@ -21,73 +21,54 @@ import (
 // Validator validates multiple input patterns.
 // Use NewValidator for instantiation.
 type Validator struct {
-	inputOrders [][]Input
+	inputs []Input
 }
 
 // NewValidator returns a new Validator.
-func NewValidator(inputOrders [][]Input) *Validator {
-	return &Validator{inputOrders: inputOrders}
+func NewValidator(inputs []Input) *Validator {
+	return &Validator{inputs: inputs}
 }
 
 // Validate validates multiple input patterns starting with first pattern in slice.
 // If pattern matches this pattern is returned. If no pattern matches, first pattern is returned.
 func (v *Validator) Validate(in string) ([]Input, error) {
 
-	var defaultErr error
-	defaultInputs := v.inputOrders[0]
-
 	previousValues := make([]string, 0)
-	for orderIdx, order := range v.inputOrders {
-		inTemp := in
-		previousValues = nil
-		allValidFmt := true
-		for inputIdx, input := range order {
-			order[inputIdx].previousValues = previousValues
+	var err error
+	for inputIdx, input := range v.inputs {
+		v.inputs[inputIdx].previousValues = previousValues
 
-			matchIndex := input.matchIndex(inTemp)
-			if matchIndex != nil {
-				matchPart := inTemp[matchIndex[0]:matchIndex[1]]
-				if order[inputIdx].toUpper {
-					matchPart = strings.ToUpper(matchPart)
-				}
-				order[inputIdx].value = matchPart
-				inTemp = inTemp[matchIndex[1]:]
+		matchIndex := input.matchIndex(in)
+		if matchIndex != nil {
+			matchPart := in[matchIndex[0]:matchIndex[1]]
+			if v.inputs[inputIdx].toUpper {
+				matchPart = strings.ToUpper(matchPart)
 			}
-
-			previousValues = append([]string{order[inputIdx].value}, previousValues...)
-
-			if orderIdx == 0 {
-				order[inputIdx].validateValue()
-				if defaultErr == nil {
-					defaultErr = order[inputIdx].err
-				}
-			}
-			allValidFmt = allValidFmt && order[inputIdx].isValidFmt()
+			v.inputs[inputIdx].value = matchPart
+			in = in[matchIndex[1]:]
 		}
-		if allValidFmt {
-			var err error
-			for inputIdx := range order {
-				order[inputIdx].validateValue()
-				if err == nil {
-					err = order[inputIdx].err
-				}
-			}
-			return order, err
+
+		previousValues = append([]string{v.inputs[inputIdx].value}, previousValues...)
+		v.inputs[inputIdx].validateValue()
+
+		if err == nil {
+			err = v.inputs[inputIdx].err
 		}
 	}
-	return defaultInputs, defaultErr
+	return v.inputs, err
 }
 
 // Input is a structured part of an input string.
 type Input struct {
 	runeCount      int
 	matchIndex     func(in string) []int
-	validate       func(value string, previousValues []string) (error, []Info)
+	validate       func(value string, previousValues []string) (error, []Info, []Datum)
 	toUpper        bool
 	value          string
 	previousValues []string
 	err            error
 	infos          []Info
+	data           []Datum
 }
 
 // SetToUpper converts the matched value to upper case.
@@ -98,12 +79,12 @@ func (i *Input) SetToUpper() {
 // NewInput returns a new Input.
 func NewInput(runeCount int,
 	matchIndex func(in string) []int,
-	validate func(value string, previousValues []string) (error, []Info)) Input {
+	validate func(value string, previousValues []string) (error, []Info, []Datum)) Input {
 	return Input{runeCount: runeCount, matchIndex: matchIndex, validate: validate}
 }
 
 func (i *Input) validateValue() {
-	i.err, i.infos = i.validate(i.value, i.previousValues)
+	i.err, i.infos, i.data = i.validate(i.value, i.previousValues)
 }
 
 func (i *Input) isValidFmt() bool {
