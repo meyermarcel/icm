@@ -185,7 +185,8 @@ func newValidateCmd(stdin io.Reader, writer io.Writer, viperCfg *viper.Viper, de
 
 				csvWriter := csv.NewWriter(writer)
 				csvWriter.Comma = ';'
-				csvPrinter := input.NewCSVPrinter(csvWriter, true)
+				fmt.Println(viperCfg.GetBool(configs.NoHeader))
+				csvPrinter := input.NewCSVPrinter(csvWriter, viperCfg.GetBool(configs.NoHeader))
 
 				for scanner.Scan() {
 					inputs, inputErr = input.NewValidator(inputs).Validate(scanner.Text())
@@ -211,6 +212,8 @@ func newValidateCmd(stdin io.Reader, writer io.Writer, viperCfg *viper.Viper, de
 		"ABCU1234560 (*)  20G1  (*) separates check digit and size")
 	validateCmd.Flags().String(configs.SepST, configs.SepSTDefVal,
 		"ABCU1234560   20(*)G1  (*) separates size and type")
+	validateCmd.Flags().Bool(configs.NoHeader, configs.NoHeaderDefVal,
+		"omits header of CSV output")
 	return validateCmd
 }
 

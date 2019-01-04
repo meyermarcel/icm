@@ -21,14 +21,14 @@ import (
 
 func TestCSVPrinter_Print(t *testing.T) {
 	tests := []struct {
-		name        string
-		printHeader bool
-		inputs      []Input
-		wantWriter  string
+		name       string
+		noHeader   bool
+		inputs     []Input
+		wantWriter string
 	}{
 		{
-			name:        "Print CSV with header",
-			printHeader: true,
+			name:     "Print CSV with header",
+			noHeader: false,
 			inputs: []Input{
 				{
 					data: []Datum{
@@ -43,8 +43,8 @@ value-1,value-2,value-3
 `,
 		},
 		{
-			name:        "Print CSV without header",
-			printHeader: false,
+			name:     "Print CSV without header",
+			noHeader: true,
 			inputs: []Input{
 				{
 					data: []Datum{
@@ -62,7 +62,7 @@ value-1,value-2,value-3
 			writer := &bytes.Buffer{}
 
 			csvWriter := csv.NewWriter(writer)
-			csvPrinter := NewCSVPrinter(csvWriter, tt.printHeader)
+			csvPrinter := NewCSVPrinter(csvWriter, tt.noHeader)
 			csvPrinter.SetRecord(tt.inputs)
 			_ = csvPrinter.Print()
 

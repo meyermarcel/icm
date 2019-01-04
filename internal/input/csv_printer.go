@@ -40,14 +40,14 @@ type CSVPrinter struct {
 	headers       []string
 	record        []string
 	headerPrinted bool
-	printHeader   bool
+	noHeader      bool
 }
 
 // NewCSVPrinter creates a new CSVPrinter.
-func NewCSVPrinter(csvWriter *csv.Writer, printHeader bool) *CSVPrinter {
+func NewCSVPrinter(csvWriter *csv.Writer, noHeader bool) *CSVPrinter {
 	return &CSVPrinter{
-		csvWriter:   csvWriter,
-		printHeader: printHeader,
+		csvWriter: csvWriter,
+		noHeader:  noHeader,
 	}
 }
 
@@ -64,10 +64,10 @@ func (cp *CSVPrinter) SetRecord(inputs []Input) {
 }
 
 // Print writes set record to passed writer.
-// No header is printed if printHeader is set to false.
+// No header is printed if noHeader is set to false.
 // Print returns an error if writing to writer fails.
 func (cp *CSVPrinter) Print() error {
-	if cp.printHeader && !cp.headerPrinted {
+	if !cp.noHeader && !cp.headerPrinted {
 		err := cp.csvWriter.Write(cp.headers)
 		if err != nil {
 			return err
