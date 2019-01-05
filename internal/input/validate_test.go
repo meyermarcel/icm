@@ -114,10 +114,7 @@ func TestInputHasCorrectValue(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			v := &Validator{
-				tt.inputs,
-			}
-			inputs, err := v.Validate(tt.in)
+			inputs, err := Validate(tt.in, tt.inputs)
 			if len(inputs) != len(tt.wantedInputs) {
 				t.Errorf("inputs len %v, want %v", len(inputs), len(tt.wantedInputs))
 			}

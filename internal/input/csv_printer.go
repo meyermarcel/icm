@@ -51,8 +51,11 @@ func NewCSVPrinter(csvWriter *csv.Writer, noHeader bool) *CSVPrinter {
 	}
 }
 
-// SetRecord sets the record that will be printed by Print.
-func (cp *CSVPrinter) SetRecord(inputs []Input) {
+// Print writes set record to passed writer.
+// No header is printed if noHeader is set to false.
+// Print returns an error if writing to writer fails.
+func (cp *CSVPrinter) Print(inputs []Input) error {
+
 	cp.headers = nil
 	cp.record = nil
 	for _, input := range inputs {
@@ -61,12 +64,7 @@ func (cp *CSVPrinter) SetRecord(inputs []Input) {
 			cp.record = append(cp.record, datum.Value)
 		}
 	}
-}
 
-// Print writes set record to passed writer.
-// No header is printed if noHeader is set to false.
-// Print returns an error if writing to writer fails.
-func (cp *CSVPrinter) Print() error {
 	if !cp.noHeader && !cp.headerPrinted {
 		err := cp.csvWriter.Write(cp.headers)
 		if err != nil {

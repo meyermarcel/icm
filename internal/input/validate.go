@@ -18,44 +18,32 @@ import (
 	"unicode/utf8"
 )
 
-// Validator validates multiple input patterns.
-// Use NewValidator for instantiation.
-type Validator struct {
-	inputs []Input
-}
-
-// NewValidator returns a new Validator.
-func NewValidator(inputs []Input) *Validator {
-	return &Validator{inputs: inputs}
-}
-
-// Validate validates multiple input patterns starting with first pattern in slice.
-// If pattern matches this pattern is returned. If no pattern matches, first pattern is returned.
-func (v *Validator) Validate(in string) ([]Input, error) {
+// Validate validates inputs. Each input is validated and values are assigned.
+func Validate(in string, inputs []Input) ([]Input, error) {
 
 	previousValues := make([]string, 0)
 	var err error
-	for inputIdx, input := range v.inputs {
-		v.inputs[inputIdx].previousValues = previousValues
+	for inputIdx, input := range inputs {
+		inputs[inputIdx].previousValues = previousValues
 
 		matchIndex := input.matchIndex(in)
 		if matchIndex != nil {
 			matchPart := in[matchIndex[0]:matchIndex[1]]
-			if v.inputs[inputIdx].toUpper {
+			if inputs[inputIdx].toUpper {
 				matchPart = strings.ToUpper(matchPart)
 			}
-			v.inputs[inputIdx].value = matchPart
+			inputs[inputIdx].value = matchPart
 			in = in[matchIndex[1]:]
 		}
 
-		previousValues = append([]string{v.inputs[inputIdx].value}, previousValues...)
-		v.inputs[inputIdx].validateValue()
+		previousValues = append([]string{inputs[inputIdx].value}, previousValues...)
+		inputs[inputIdx].validateValue()
 
 		if err == nil {
-			err = v.inputs[inputIdx].err
+			err = inputs[inputIdx].err
 		}
 	}
-	return v.inputs, err
+	return inputs, err
 }
 
 // Input is a structured part of an input string.

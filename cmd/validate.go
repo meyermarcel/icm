@@ -15,7 +15,6 @@ package cmd
 
 import (
 	"bufio"
-	"bytes"
 	"encoding/csv"
 	"fmt"
 	"io"
@@ -25,13 +24,20 @@ import (
 	"strings"
 
 	"github.com/fatih/color"
+
 	"github.com/meyermarcel/icm/configs"
 	"github.com/meyermarcel/icm/internal/cont"
 	"github.com/meyermarcel/icm/internal/data"
 	"github.com/meyermarcel/icm/internal/input"
 	"github.com/spf13/cobra"
-	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
+)
+
+var (
+	yellow    = color.New(color.FgYellow).SprintFunc()
+	green     = color.New(color.FgGreen).SprintFunc()
+	bold      = color.New(color.Bold).SprintFunc()
+	underline = color.New(color.Underline).SprintFunc()
 )
 
 type errValidate struct {
@@ -39,9 +45,7 @@ type errValidate struct {
 }
 
 func newErrValidate(message string) error {
-	return &errValidate{
-		message: message,
-	}
+	return &errValidate{message: message}
 }
 
 func (e *errValidate) Error() string {
@@ -62,15 +66,7 @@ const patternModesInfo string = `                    ` + auto + ` = matches auto
 ` + ownerEquipmentCategory + ` = matches a three letter owner code with equipment category ID
                ` + sizeType + ` = matches length, width+height and type code`
 
-var (
-	yellow    = color.New(color.FgYellow).SprintFunc()
-	green     = color.New(color.FgGreen).SprintFunc()
-	bold      = color.New(color.Bold).SprintFunc()
-	underline = color.New(color.Underline).SprintFunc()
-)
-
 type patternValue struct {
-	pflag.Flag
 	value    string
 	patterns map[string]newPattern
 }
@@ -112,6 +108,57 @@ func (p *patternValue) newPattern(value string) newPattern {
 
 var pValue = newPatternValue()
 
+const (
+	outputAuto  = "auto"
+	outputFancy = "fancy"
+	outputCSV   = "csv"
+)
+
+type outputValue struct {
+	value    string
+	printers map[string]newPrinter
+}
+
+func newOutputValue() *outputValue {
+	return &outputValue{
+		value: configs.OutputDefVal,
+		printers: map[string]newPrinter{
+			outputAuto:  newAutoPrinter,
+			outputFancy: newFancyPrinter,
+			outputCSV:   newCSVPrinter,
+		},
+	}
+}
+
+type newPrinter func(writer io.Writer, viperCfg *viper.Viper, isSingleLine bool) input.Printer
+
+func (o *outputValue) String() string {
+	return o.value
+}
+
+func (o *outputValue) Set(value string) error {
+	if printer := o.printers[value]; printer == nil {
+		return fmt.Errorf("%s is not \n%s", value, outputModesInfo)
+	}
+	o.value = value
+	return nil
+}
+
+func (o *outputValue) Type() string {
+	return "string"
+}
+
+const outputModesInfo string = ` ` + outputAuto + ` = for a single line '` + outputFancy +
+	`' and for multiple lines '` + outputCSV + `' output 
+  ` + outputCSV + ` = machine readable CSV output
+` + outputFancy + ` = human readable fancy output`
+
+func (o *outputValue) newPrinter(value string) newPrinter {
+	return o.printers[value]
+}
+
+var oValue = newOutputValue()
+
 func newValidateCmd(stdin io.Reader, writer io.Writer, viperCfg *viper.Viper, decoders decoders) *cobra.Command {
 	validateCmd := &cobra.Command{
 		Use:   "validate",
@@ -144,57 +191,23 @@ func newValidateCmd(stdin io.Reader, writer io.Writer, viperCfg *viper.Viper, de
 
 			bufReader := bufio.NewReader(reader)
 			peek, _ := bufReader.Peek(bufReader.Size())
+			isSingleLine := isSingleLine(string(peek))
 
-			patternStr := viperCfg.GetString(configs.Pattern)
-			inputPatterns := pValue.newPattern(patternStr)(decoders)
+			printer := oValue.newPrinter(viperCfg.GetString(configs.Output))(writer, viperCfg, isSingleLine)
+
+			inputPatterns := pValue.newPattern(viperCfg.GetString(configs.Pattern))(decoders)
+
 			inputs := input.NewMatcher(inputPatterns).Match(strings.Split(string(peek), "\n")[0])
 
 			var inputErr error
 
-			if isSingleLine(string(peek)) {
-				buf := new(bytes.Buffer)
-				_, _ = buf.ReadFrom(bufReader)
+			scanner := bufio.NewScanner(bufReader)
 
-				inputs, inputErr = input.NewValidator(inputs).Validate(buf.String())
-				fancyPrinter := input.NewFancyPrinter(writer, inputs)
-				fancyPrinter.SetIndent("  ")
-
-				// only size-type has 3 inputs
-				if len(inputs) == 3 {
-					fancyPrinter.SetSeparators(
-						"",
-						viperCfg.GetString(configs.SepST),
-					)
-				} else {
-					fancyPrinter.SetSeparators(
-						viperCfg.GetString(configs.SepOE),
-						viperCfg.GetString(configs.SepES),
-						viperCfg.GetString(configs.SepSC),
-						viperCfg.GetString(configs.SepCS),
-						"",
-						viperCfg.GetString(configs.SepST),
-					)
-				}
-
-				err := fancyPrinter.Print()
+			for scanner.Scan() {
+				inputs, inputErr = input.Validate(scanner.Text(), inputs)
+				err := printer.Print(inputs)
 				if err != nil {
 					return err
-				}
-			} else {
-				scanner := bufio.NewScanner(bufReader)
-
-				csvWriter := csv.NewWriter(writer)
-				csvWriter.Comma = ';'
-				fmt.Println(viperCfg.GetBool(configs.NoHeader))
-				csvPrinter := input.NewCSVPrinter(csvWriter, viperCfg.GetBool(configs.NoHeader))
-
-				for scanner.Scan() {
-					inputs, inputErr = input.NewValidator(inputs).Validate(scanner.Text())
-					csvPrinter.SetRecord(inputs)
-					err := csvPrinter.Print()
-					if err != nil {
-						return err
-					}
 				}
 			}
 			return inputErr
@@ -202,6 +215,8 @@ func newValidateCmd(stdin io.Reader, writer io.Writer, viperCfg *viper.Viper, de
 	}
 	validateCmd.Flags().VarP(pValue, configs.Pattern, "p",
 		fmt.Sprintf("sets pattern matching mode to\n%s\n", patternModesInfo))
+	validateCmd.Flags().Var(oValue, configs.Output,
+		fmt.Sprintf("sets output to\n%s\n", outputModesInfo))
 	validateCmd.Flags().String(configs.SepOE, configs.SepOEDefVal,
 		"ABC(*)U1234560   20G1  (*) separates owner code and equipment category id")
 	validateCmd.Flags().String(configs.SepES, configs.SepESDefVal,
@@ -227,6 +242,44 @@ func isSingleLine(s string) bool {
 		}
 	}
 	return true
+}
+
+func newAutoPrinter(writer io.Writer, viperCfg *viper.Viper, isSingleLine bool) input.Printer {
+	if isSingleLine {
+		return newFancyPrinter(writer, viperCfg, isSingleLine)
+	}
+	return newCSVPrinter(writer, viperCfg, isSingleLine)
+
+}
+
+func newFancyPrinter(writer io.Writer, viperCfg *viper.Viper, isSingleLine bool) input.Printer {
+	fancyPrinter := input.NewFancyPrinter(writer)
+	fancyPrinter.SetIndent("  ")
+	fancyPrinter.SetSeparatorsFunc(func(inputs []input.Input) {
+		// only size-type has 3 inputs
+		if len(inputs) == 3 {
+			fancyPrinter.SetSeparators(
+				"",
+				viperCfg.GetString(configs.SepST),
+			)
+		} else {
+			fancyPrinter.SetSeparators(
+				viperCfg.GetString(configs.SepOE),
+				viperCfg.GetString(configs.SepES),
+				viperCfg.GetString(configs.SepSC),
+				viperCfg.GetString(configs.SepCS),
+				"",
+				viperCfg.GetString(configs.SepST),
+			)
+		}
+	})
+	return fancyPrinter
+}
+
+func newCSVPrinter(writer io.Writer, viperCfg *viper.Viper, isSingleLine bool) input.Printer {
+	csvWriter := csv.NewWriter(writer)
+	csvWriter.Comma = ';'
+	return input.NewCSVPrinter(csvWriter, viperCfg.GetBool(configs.NoHeader))
 }
 
 func newAutoPattern(decoders decoders) [][]input.Input {

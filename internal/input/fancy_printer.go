@@ -30,17 +30,16 @@ var (
 
 // FancyPrinter prints inputs in a fancy manner. Use NewFancyPrinterFactory to instantiate one.
 type FancyPrinter struct {
-	writer     io.Writer
-	inputs     []Input
-	indent     string
-	separators []string
+	writer         io.Writer
+	indent         string
+	separators     []string
+	separatorsFunc func(inputs []Input)
 }
 
 // NewFancyPrinter creates a FancyPrinter.
-func NewFancyPrinter(writer io.Writer, inputs []Input) *FancyPrinter {
+func NewFancyPrinter(writer io.Writer) *FancyPrinter {
 	return &FancyPrinter{
 		writer: writer,
-		inputs: inputs,
 	}
 }
 
@@ -51,13 +50,22 @@ func (fp *FancyPrinter) SetIndent(indent string) *FancyPrinter {
 }
 
 // SetSeparators sets the separators between inputs. Default separator is ' '.
-func (fp *FancyPrinter) SetSeparators(separators ...string) *FancyPrinter {
+func (fp *FancyPrinter) SetSeparators(separators ...string) {
 	fp.separators = separators
-	return fp
+}
+
+// SetSeparatorsFunc sets a function that can set the separators depending on inputs.
+func (fp *FancyPrinter) SetSeparatorsFunc(separatorsFunc func(inputs []Input)) {
+	fp.separatorsFunc = separatorsFunc
 }
 
 // Print writes formatted inputs to writer.
-func (fp *FancyPrinter) Print() error {
+func (fp *FancyPrinter) Print(inputs []Input) error {
+
+	if fp.separatorsFunc != nil {
+		fp.separatorsFunc(inputs)
+	}
+
 	b := strings.Builder{}
 	b.WriteString(fmt.Sprintln())
 
@@ -66,15 +74,15 @@ func (fp *FancyPrinter) Print() error {
 
 	texts := make([]posTxt, 0)
 
-	for idx, input := range fp.inputs {
+	for idx, input := range inputs {
 
 		b.WriteString(fmtValue(input))
 
 		sep := " "
 		switch {
-		case idx == len(fp.inputs)-1:
+		case idx == len(inputs)-1:
 			sep = ""
-		case idx > len(fp.inputs)-1:
+		case idx > len(inputs)-1:
 			sep = " "
 		case idx < len(fp.separators):
 			sep = fp.separators[idx]
@@ -95,7 +103,7 @@ func (fp *FancyPrinter) Print() error {
 		}
 		pos += input.runeCount + utf8.RuneCountInString(sep)
 	}
-	b.WriteString(fmtCheckMark(fp.inputs[len(fp.inputs)-1].err == nil))
+	b.WriteString(fmtCheckMark(inputs[len(inputs)-1].err == nil))
 	b.WriteString(fmt.Sprintln())
 	b.WriteString(fmtTextsWithArrows(texts...))
 	b.WriteString(fmt.Sprintln())

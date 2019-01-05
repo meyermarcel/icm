@@ -63,8 +63,7 @@ value-1,value-2,value-3
 
 			csvWriter := csv.NewWriter(writer)
 			csvPrinter := NewCSVPrinter(csvWriter, tt.noHeader)
-			csvPrinter.SetRecord(tt.inputs)
-			_ = csvPrinter.Print()
+			_ = csvPrinter.Print(tt.inputs)
 
 			csvWriter.Flush()
 

@@ -23,6 +23,8 @@ const (
 	PatternDefVal  = "auto"
 	NoHeader       = "no-header"
 	NoHeaderDefVal = false
+	Output         = "output"
+	OutputDefVal   = "auto"
 	SepOE          = "sep-owner-equip"
 	SepOEDefVal    = " "
 	SepES          = "sep-equip-serial"
@@ -44,6 +46,12 @@ func Cfg() []byte {
 # owner-equipment-category = matches a three letter owner code with equipment category ID
 #                size-type = matches length, width+height and type code
 ` + Pattern + `: ` + PatternDefVal + `
+
+# Output mode
+#  auto = for a single line 'fancy' and for multiple lines 'csv' output 
+#   csv = machine readable CSV output
+# fancy = human readable fancy output
+` + Output + `: ` + OutputDefVal + `
 
 # No header for CSV output
 ` + NoHeader + `: ` + fmt.Sprintf("%t", NoHeaderDefVal) + `
@@ -67,6 +75,5 @@ func Cfg() []byte {
 ` + SepSC + `: '` + SepSCDefVal + `'
 ` + SepCS + `:   '` + SepCSDefVal + ` '
 ` + SepST + `:    '` + SepSTDefVal + `'
-
 `)
 }

@@ -25,18 +25,16 @@ import (
 func TestFancyPrinterFactory_Build(t *testing.T) {
 	t.Run("Test constructor", func(t *testing.T) {
 		writer := bufio.NewWriter(nil)
-		inputs := make([]Input, 0)
 		separators := []string{"sep1", "sep2"}
 		indent := "indent"
 
 		printer := &FancyPrinter{
 			writer:     writer,
-			inputs:     inputs,
 			indent:     indent,
 			separators: separators,
 		}
 
-		got := NewFancyPrinter(writer, inputs)
+		got := NewFancyPrinter(writer)
 		got.SetSeparators(separators...)
 		got.SetIndent(indent)
 
@@ -48,7 +46,6 @@ func TestFancyPrinterFactory_Build(t *testing.T) {
 
 func TestFancyPrinter_Print(t *testing.T) {
 	type fields struct {
-		inputs     []Input
 		indent     string
 		separators []string
 	}
@@ -56,17 +53,17 @@ func TestFancyPrinter_Print(t *testing.T) {
 	tests := []struct {
 		name       string
 		fields     fields
+		inputs     []Input
 		wantErr    bool
 		wantWriter string
 	}{
 		{
 			"Print one valid element",
-			fields{
-				inputs: []Input{
-					{
-						value: "a",
-						infos: []Info{{Text: ""}},
-					},
+			fields{},
+			[]Input{
+				{
+					value: "a",
+					infos: []Info{{Text: ""}},
 				},
 			},
 			false,
@@ -79,13 +76,12 @@ a  ✔
 		},
 		{
 			"Print one invalid element",
-			fields{
-				inputs: []Input{
-					{
-						runeCount: 1,
-						err:       errors.New(""),
-						value:     "a",
-					},
+			fields{},
+			[]Input{
+				{
+					runeCount: 1,
+					err:       errors.New(""),
+					value:     "a",
 				},
 			},
 			false,
@@ -98,23 +94,22 @@ a  ✘
 		},
 		{
 			"Print multiple invalid elements",
-			fields{
-				inputs: []Input{
-					{
-						runeCount: 1,
-						err:       errors.New(""),
-						value:     "a",
-					},
-					{
-						runeCount: 2,
-						err:       errors.New(""),
-						value:     "bc",
-					},
-					{
-						runeCount: 3,
-						err:       errors.New(""),
-						value:     "def",
-					},
+			fields{},
+			[]Input{
+				{
+					runeCount: 1,
+					err:       errors.New(""),
+					value:     "a",
+				},
+				{
+					runeCount: 2,
+					err:       errors.New(""),
+					value:     "bc",
+				},
+				{
+					runeCount: 3,
+					err:       errors.New(""),
+					value:     "def",
 				},
 			},
 			false,
@@ -132,14 +127,14 @@ a bc def  ✘
 		{
 			"Print element with indent",
 			fields{
-				inputs: []Input{
-					{
-						runeCount: 0,
-						value:     "a",
-						infos:     []Info{{Text: ""}},
-					},
-				},
 				indent: "+",
+			},
+			[]Input{
+				{
+					runeCount: 0,
+					value:     "a",
+					infos:     []Info{{Text: ""}},
+				},
 			},
 			false,
 			`
@@ -151,13 +146,12 @@ a bc def  ✘
 		},
 		{
 			"Print 4 character long element",
-			fields{
-				inputs: []Input{
-					{
-						runeCount: 4,
-						value:     "abcd",
-						infos:     []Info{{Text: ""}},
-					},
+			fields{},
+			[]Input{
+				{
+					runeCount: 4,
+					value:     "abcd",
+					infos:     []Info{{Text: ""}},
 				},
 			},
 			false,
@@ -171,19 +165,19 @@ abcd  ✔
 		{
 			"Print multiple elements with more separators than inputs",
 			fields{
-				inputs: []Input{
-					{
-						runeCount: 1,
-						err:       errors.New(""),
-						value:     "a",
-					},
-					{
-						runeCount: 2,
-						err:       errors.New(""),
-						value:     "bc",
-					},
-				},
 				separators: []string{" * ", " - "},
+			},
+			[]Input{
+				{
+					runeCount: 1,
+					err:       errors.New(""),
+					value:     "a",
+				},
+				{
+					runeCount: 2,
+					err:       errors.New(""),
+					value:     "bc",
+				},
 			},
 			false,
 			`
@@ -196,18 +190,17 @@ a * bc  ✘
 `,
 		}, {
 			"Print multiple elements with no separators",
-			fields{
-				inputs: []Input{
-					{
-						runeCount: 1,
-						err:       errors.New(""),
-						value:     "a",
-					},
-					{
-						runeCount: 2,
-						err:       errors.New(""),
-						value:     "bc",
-					},
+			fields{},
+			[]Input{
+				{
+					runeCount: 1,
+					err:       errors.New(""),
+					value:     "a",
+				},
+				{
+					runeCount: 2,
+					err:       errors.New(""),
+					value:     "bc",
 				},
 			},
 			false,
@@ -222,13 +215,12 @@ a bc  ✘
 		},
 		{
 			"Print one invalid element without value",
-			fields{
-				inputs: []Input{
-					{
-						runeCount: 1,
-						err:       errors.New(""),
-						value:     "",
-					},
+			fields{},
+			[]Input{
+				{
+					runeCount: 1,
+					err:       errors.New(""),
+					value:     "",
 				},
 			},
 			false,
@@ -241,13 +233,12 @@ _  ✘
 		},
 		{
 			"Print info",
-			fields{
-				inputs: []Input{
-					{
-						runeCount: 1,
-						value:     "a",
-						infos:     []Info{{Text: "info text"}},
-					},
+			fields{},
+			[]Input{
+				{
+					runeCount: 1,
+					value:     "a",
+					infos:     []Info{{Text: "info text"}},
 				},
 			},
 			false,
@@ -260,13 +251,12 @@ a  ✔
 		},
 		{
 			"Print error",
-			fields{
-				inputs: []Input{
-					{
-						runeCount: 1,
-						err:       errors.New("error text"),
-						value:     "a",
-					},
+			fields{},
+			[]Input{
+				{
+					runeCount: 1,
+					err:       errors.New("error text"),
+					value:     "a",
 				},
 			},
 			false,
@@ -279,14 +269,13 @@ a  ✘
 		},
 		{
 			"Print info with multiples lines",
-			fields{
-				inputs: []Input{
-					{
-						runeCount: 1,
-						err:       errors.New("error line"),
-						value:     "",
-						infos:     []Info{{Text: "info line"}},
-					},
+			fields{},
+			[]Input{
+				{
+					runeCount: 1,
+					err:       errors.New("error line"),
+					value:     "",
+					infos:     []Info{{Text: "info line"}},
 				},
 			},
 			false,
@@ -300,18 +289,17 @@ _  ✘
 		},
 		{
 			"Print multiple infos with multiples lines",
-			fields{
-				inputs: []Input{
-					{
-						runeCount: 1,
-						value:     "a",
-						infos:     []Info{{Text: "line 1"}, {Text: "line 2"}},
-					},
-					{
-						runeCount: 1,
-						value:     "b",
-						infos:     []Info{{Text: "line 3"}, {Text: "line 4"}},
-					},
+			fields{},
+			[]Input{
+				{
+					runeCount: 1,
+					value:     "a",
+					infos:     []Info{{Text: "line 1"}, {Text: "line 2"}},
+				},
+				{
+					runeCount: 1,
+					value:     "b",
+					infos:     []Info{{Text: "line 3"}, {Text: "line 4"}},
 				},
 			},
 			false,
@@ -329,18 +317,18 @@ a b  ✔
 		{
 			"Print separators",
 			fields{
-				inputs: []Input{
-					{
-						value: "a",
-					},
-					{
-						value: "b",
-					},
-					{
-						value: "c",
-					},
-				},
 				separators: []string{"---", "‧‧‧"},
+			},
+			[]Input{
+				{
+					value: "a",
+				},
+				{
+					value: "b",
+				},
+				{
+					value: "c",
+				},
 			},
 			false,
 			`
@@ -354,11 +342,10 @@ a---b‧‧‧c  ✔
 			writer := &bytes.Buffer{}
 			fp := &FancyPrinter{
 				writer:     writer,
-				inputs:     tt.fields.inputs,
 				indent:     tt.fields.indent,
 				separators: tt.fields.separators,
 			}
-			if err := fp.Print(); (err != nil) != tt.wantErr {
+			if err := fp.Print(tt.inputs); (err != nil) != tt.wantErr {
 				t.Errorf("FancyPrinter.Print() error = %v, wantErr %v", err, tt.wantErr)
 			}
 			if gotWriter := writer.String(); gotWriter != tt.wantWriter {
