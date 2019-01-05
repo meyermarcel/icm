@@ -19,19 +19,19 @@ import (
 
 // Datum represents a datum that is be used by CSVPrinter.
 type Datum struct {
-	Header string
-	Value  string
+	header string
+	value  string
 }
 
 // NewDatum returns a new Datum.
 func NewDatum(header string) Datum {
-	return Datum{Header: header}
+	return Datum{header: header}
 }
 
 // WithValue sets value and returns Datum.
-func (d *Datum) WithValue(value string) Datum {
-	d.Value = value
-	return *d
+func (d Datum) WithValue(value string) Datum {
+	d.value = value
+	return d
 }
 
 // CSVPrinter prints the set record. Use SetRecord to set a record.
@@ -60,8 +60,8 @@ func (cp *CSVPrinter) Print(inputs []Input) error {
 	cp.record = nil
 	for _, input := range inputs {
 		for _, datum := range input.data {
-			cp.headers = append(cp.headers, datum.Header)
-			cp.record = append(cp.record, datum.Value)
+			cp.headers = append(cp.headers, datum.header)
+			cp.record = append(cp.record, datum.value)
 		}
 	}
 

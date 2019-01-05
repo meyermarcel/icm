@@ -387,13 +387,14 @@ func newEquipCatInput(equipCatDecoder data.EquipCatDecoder) input.Input {
 		1,
 		regexp.MustCompile(`[A-Za-z]`).FindStringIndex,
 		func(value string, previousValues []string) (error, []input.Info, []input.Datum) {
+			equipCatIDDatum := input.NewDatum("equipment-category-id").WithValue(value)
 			equipCatDatum := input.NewDatum("equipment-category")
 			if value == "" {
 				return newErrValidate(fmt.Sprintf("%s is not %s",
 						underline("equipment category id"),
 						equipCatIDsAsList(equipCatDecoder))),
 					nil,
-					[]input.Datum{equipCatDatum}
+					[]input.Datum{equipCatIDDatum, equipCatDatum}
 			}
 
 			found, cat := equipCatDecoder.Decode(value)
@@ -402,11 +403,11 @@ func newEquipCatInput(equipCatDecoder data.EquipCatDecoder) input.Input {
 						underline("equipment category id"),
 						equipCatIDsAsList(equipCatDecoder))),
 					nil,
-					[]input.Datum{equipCatDatum}
+					[]input.Datum{equipCatIDDatum, equipCatDatum}
 			}
 			return nil,
 				[]input.Info{{Text: cat.Info}},
-				[]input.Datum{equipCatDatum.WithValue(cat.Info)}
+				[]input.Datum{equipCatIDDatum, equipCatDatum.WithValue(cat.Info)}
 		})
 	equipCat.SetToUpper()
 	return equipCat
@@ -451,12 +452,13 @@ func newCheckDigitInput() input.Input {
 		1,
 		regexp.MustCompile(`\d`).FindStringIndex,
 		func(value string, previousValues []string) (error, []input.Info, []input.Datum) {
-			checkDigitDatum := input.NewDatum("check-digit")
+			checkDigitDatum := input.NewDatum("check-digit").WithValue(value)
+			calcCheckDigitDatum := input.NewDatum("calculated-check-digit")
 			if len(strings.Join(previousValues[0:3], "")) != 10 {
 				return newErrValidate(fmt.Sprintf("%s is not calculable",
 						underline("check digit"))),
 					nil,
-					[]input.Datum{checkDigitDatum}
+					[]input.Datum{checkDigitDatum, calcCheckDigitDatum}
 			}
 
 			checkDigit := cont.CalcCheckDigit(previousValues[2], previousValues[1], previousValues[0])
@@ -467,7 +469,7 @@ func newCheckDigitInput() input.Input {
 						underline("check digit"),
 						bold("number"),
 						green(checkDigit))), appendCheckDigit10Info(checkDigit, nil),
-					[]input.Datum{checkDigitDatum.WithValue(strconv.Itoa(checkDigit))}
+					[]input.Datum{checkDigitDatum, calcCheckDigitDatum.WithValue(strconv.Itoa(checkDigit))}
 			}
 
 			if number != checkDigit%10 {
@@ -475,12 +477,12 @@ func newCheckDigitInput() input.Input {
 						"calculated %s is %s",
 						underline("check digit"),
 						green(checkDigit%10))), appendCheckDigit10Info(checkDigit, nil),
-					[]input.Datum{checkDigitDatum.WithValue(strconv.Itoa(checkDigit))}
+					[]input.Datum{checkDigitDatum, calcCheckDigitDatum.WithValue(strconv.Itoa(checkDigit))}
 			}
 
 			return nil,
 				appendCheckDigit10Info(checkDigit, nil),
-				[]input.Datum{checkDigitDatum.WithValue(strconv.Itoa(checkDigit))}
+				[]input.Datum{calcCheckDigitDatum.WithValue(strconv.Itoa(checkDigit))}
 		})
 }
 
@@ -503,14 +505,15 @@ func newLengthInput(lengthDecoder data.LengthDecoder) input.Input {
 		1,
 		regexp.MustCompile(`[A-Za-z\d]`).FindStringIndex,
 		func(value string, previousValues []string) (error, []input.Info, []input.Datum) {
-			lengthDatum := input.NewDatum("length")
+			lengthDatum := input.NewDatum("length").WithValue(value)
+			lengthDescDatum := input.NewDatum("length-description")
 			if value == "" {
 				return newErrValidate(fmt.Sprintf("%s is not a %s or a %s",
 						underline("length code"),
 						bold("valid number"),
 						bold("valid character"))),
 					nil,
-					[]input.Datum{lengthDatum}
+					[]input.Datum{lengthDatum, lengthDescDatum}
 			}
 
 			found, length := lengthDecoder.Decode(value)
@@ -519,11 +522,11 @@ func newLengthInput(lengthDecoder data.LengthDecoder) input.Input {
 						underline("length code"),
 						bold("valid"))),
 					nil,
-					[]input.Datum{lengthDatum}
+					[]input.Datum{lengthDatum, lengthDescDatum}
 			}
 			return nil,
 				[]input.Info{{Text: fmt.Sprintf("length: %s", length.Length)}},
-				[]input.Datum{lengthDatum.WithValue(length.Length)}
+				[]input.Datum{lengthDatum, lengthDescDatum.WithValue(length.Length)}
 		})
 	length.SetToUpper()
 	return length
@@ -535,15 +538,16 @@ func newHeightWidthInput(heightWidthDecoder data.HeightWidthDecoder) input.Input
 		1,
 		regexp.MustCompile(`[A-Za-z\d]`).FindStringIndex,
 		func(value string, previousValues []string) (error, []input.Info, []input.Datum) {
-			heightDatum := input.NewDatum("height")
-			widthDatum := input.NewDatum("width")
+			heightWidthDatum := input.NewDatum("height-width").WithValue(value)
+			heightDescDatum := input.NewDatum("height-description")
+			widthDescDatum := input.NewDatum("width-description")
 			if value == "" {
 				return newErrValidate(fmt.Sprintf("%s is not a %s or a %s",
 						underline("height and width code"),
 						bold("valid number"),
 						bold("valid character"))),
 					nil,
-					[]input.Datum{heightDatum, widthDatum}
+					[]input.Datum{heightWidthDatum, heightDescDatum, widthDescDatum}
 			}
 
 			found, heightWidth := heightWidthDecoder.Decode(value)
@@ -552,7 +556,7 @@ func newHeightWidthInput(heightWidthDecoder data.HeightWidthDecoder) input.Input
 						underline("height and width code"),
 						bold("valid"))),
 					nil,
-					[]input.Datum{heightDatum, widthDatum}
+					[]input.Datum{heightWidthDatum, heightDescDatum, widthDescDatum}
 			}
 			return nil,
 				[]input.Info{
@@ -560,8 +564,9 @@ func newHeightWidthInput(heightWidthDecoder data.HeightWidthDecoder) input.Input
 					{Text: fmt.Sprintf("width:  %s", heightWidth.Width)},
 				},
 				[]input.Datum{
-					heightDatum.WithValue(heightWidth.Height),
-					widthDatum.WithValue(heightWidth.Width),
+					heightWidthDatum,
+					heightDescDatum.WithValue(heightWidth.Height),
+					widthDescDatum.WithValue(heightWidth.Width),
 				}
 		})
 	heightWidth.SetToUpper()
@@ -574,15 +579,16 @@ func newTypeAndGroupInput(typeDecoder data.TypeDecoder) input.Input {
 		2,
 		regexp.MustCompile(`[A-Za-z\d]{2}`).FindStringIndex,
 		func(value string, previousValues []string) (error, []input.Info, []input.Datum) {
-			typeDatum := input.NewDatum("type")
-			groupDatum := input.NewDatum("group")
+			typeDatum := input.NewDatum("type").WithValue(value)
+			typeDescDatum := input.NewDatum("type-description")
+			groupDescDatum := input.NewDatum("group-description")
 			if value == "" {
 				return newErrValidate(fmt.Sprintf("%s is not a %s or a %s",
 						underline("type code"),
 						bold("valid number"),
 						bold("valid character"))),
 					nil,
-					[]input.Datum{typeDatum, groupDatum}
+					[]input.Datum{typeDatum, typeDescDatum, groupDescDatum}
 			}
 
 			found, typeAndGroup := typeDecoder.Decode(value)
@@ -591,7 +597,7 @@ func newTypeAndGroupInput(typeDecoder data.TypeDecoder) input.Input {
 						underline("type code"),
 						bold("valid"))),
 					nil,
-					[]input.Datum{typeDatum, groupDatum}
+					[]input.Datum{typeDatum, typeDescDatum, groupDescDatum}
 			}
 			return nil,
 				[]input.Info{
@@ -599,8 +605,9 @@ func newTypeAndGroupInput(typeDecoder data.TypeDecoder) input.Input {
 					{Text: fmt.Sprintf("group: %s", typeAndGroup.GroupInfo)},
 				},
 				[]input.Datum{
-					typeDatum.WithValue(typeAndGroup.TypeInfo),
-					groupDatum.WithValue(typeAndGroup.GroupInfo),
+					typeDatum,
+					typeDescDatum.WithValue(typeAndGroup.TypeInfo),
+					groupDescDatum.WithValue(typeAndGroup.GroupInfo),
 				}
 		})
 	typeAndGroup.SetToUpper()

@@ -32,9 +32,9 @@ func TestCSVPrinter_Print(t *testing.T) {
 			inputs: []Input{
 				{
 					data: []Datum{
-						{Header: "header-1", Value: "value-1"},
-						{Header: "header-2", Value: "value-2"},
-						{Header: "header-3", Value: "value-3"},
+						{header: "header-1", value: "value-1"},
+						{header: "header-2", value: "value-2"},
+						{header: "header-3", value: "value-3"},
 					},
 				},
 			},
@@ -48,8 +48,8 @@ value-1,value-2,value-3
 			inputs: []Input{
 				{
 					data: []Datum{
-						{Header: "header-1", Value: "value-1"},
-						{Header: "header-2", Value: "value-2"},
+						{header: "header-1", value: "value-1"},
+						{header: "header-2", value: "value-2"},
 					},
 				},
 			},
