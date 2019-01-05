@@ -20,6 +20,8 @@ import (
 	"io/ioutil"
 	"os"
 
+	"github.com/fatih/color"
+	"github.com/mattn/go-isatty"
 	"github.com/meyermarcel/icm/internal/data"
 
 	"github.com/meyermarcel/icm/configs"
@@ -137,6 +139,15 @@ func newRootCmd(
 		Long:          "Validate or generate intermodal container markings.",
 		SilenceUsage:  true,
 		SilenceErrors: true,
+		PersistentPreRun: func(cmd *cobra.Command, args []string) {
+			if isatty.IsTerminal(os.Stdout.Fd()) {
+				color.NoColor = false
+			} else if isatty.IsCygwinTerminal(os.Stdout.Fd()) {
+				color.NoColor = true
+			} else {
+				color.NoColor = true
+			}
+		},
 	}
 
 	rootCmd.AddCommand(newGenerateCmd(writer, writerErr, viper, decoders.ownerDecodeUpdater))

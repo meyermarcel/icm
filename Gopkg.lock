@@ -226,6 +226,7 @@
   input-imports = [
     "github.com/PuerkitoBio/goquery",
     "github.com/fatih/color",
+    "github.com/mattn/go-isatty",
     "github.com/pkg/errors",
     "github.com/spf13/cobra",
     "github.com/spf13/cobra/doc",
