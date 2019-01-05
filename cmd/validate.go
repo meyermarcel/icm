@@ -505,7 +505,7 @@ func newLengthInput(lengthDecoder data.LengthDecoder) input.Input {
 		1,
 		regexp.MustCompile(`[A-Za-z\d]`).FindStringIndex,
 		func(value string, previousValues []string) (error, []input.Info, []input.Datum) {
-			lengthDatum := input.NewDatum("length").WithValue(value)
+			lengthDatum := input.NewDatum("length-code").WithValue(value)
 			lengthDescDatum := input.NewDatum("length-description")
 			if value == "" {
 				return newErrValidate(fmt.Sprintf("%s is not a %s or a %s",
@@ -538,7 +538,7 @@ func newHeightWidthInput(heightWidthDecoder data.HeightWidthDecoder) input.Input
 		1,
 		regexp.MustCompile(`[A-Za-z\d]`).FindStringIndex,
 		func(value string, previousValues []string) (error, []input.Info, []input.Datum) {
-			heightWidthDatum := input.NewDatum("height-width").WithValue(value)
+			heightWidthDatum := input.NewDatum("height-width-code").WithValue(value)
 			heightDescDatum := input.NewDatum("height-description")
 			widthDescDatum := input.NewDatum("width-description")
 			if value == "" {
@@ -579,7 +579,7 @@ func newTypeAndGroupInput(typeDecoder data.TypeDecoder) input.Input {
 		2,
 		regexp.MustCompile(`[A-Za-z\d]{2}`).FindStringIndex,
 		func(value string, previousValues []string) (error, []input.Info, []input.Datum) {
-			typeDatum := input.NewDatum("type").WithValue(value)
+			typeDatum := input.NewDatum("type-code").WithValue(value)
 			typeDescDatum := input.NewDatum("type-description")
 			groupDescDatum := input.NewDatum("group-description")
 			if value == "" {
