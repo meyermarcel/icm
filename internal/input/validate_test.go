@@ -20,33 +20,39 @@ import (
 
 func TestInputHasCorrectValue(t *testing.T) {
 
-	match1 := Input{
-		runeCount: 1,
-		matchIndex: func(in string) []int {
-			return []int{0, 1}
-		},
-		validate: func(value string, previousValues []string) (error, []Info, []Datum) {
-			return nil, []Info{{Text: "match 1"}}, nil
-		},
+	match1 := func() Input {
+		return Input{
+			runeCount: 1,
+			matchIndex: func(in string) []int {
+				return []int{0, 1}
+			},
+			validate: func(value string, previousValues []string) (error, []Info, []Datum) {
+				return nil, []Info{{Text: "match 1"}}, nil
+			},
+		}
 	}
-	match2 := Input{
-		runeCount: 2,
-		toUpper:   true,
-		matchIndex: func(in string) []int {
-			return []int{0, 2}
-		},
-		validate: func(value string, previousValues []string) (error, []Info, []Datum) {
-			return nil, []Info{{Text: "match 2"}}, nil
-		},
+	match2 := func() Input {
+		return Input{
+			runeCount: 2,
+			toUpper:   true,
+			matchIndex: func(in string) []int {
+				return []int{0, 2}
+			},
+			validate: func(value string, previousValues []string) (error, []Info, []Datum) {
+				return nil, []Info{{Text: "match 2"}}, nil
+			},
+		}
 	}
-	validFmtButInvalidMatch := Input{
-		runeCount: 1,
-		matchIndex: func(in string) []int {
-			return []int{0, 1}
-		},
-		validate: func(value string, previousValues []string) (error, []Info, []Datum) {
-			return errors.New(""), nil, nil
-		},
+	validFmtButInvalidMatch := func() Input {
+		return Input{
+			runeCount: 1,
+			matchIndex: func(in string) []int {
+				return []int{0, 1}
+			},
+			validate: func(value string, previousValues []string) (error, []Info, []Datum) {
+				return errors.New(""), nil, nil
+			},
+		}
 	}
 
 	type wantedInput struct {
@@ -58,14 +64,14 @@ func TestInputHasCorrectValue(t *testing.T) {
 
 	tests := []struct {
 		name         string
-		inputs       []Input
+		newInputs    []func() Input
 		in           string
 		wantedInputs []wantedInput
 		wantErr      bool
 	}{
 		{
 			"Match single value",
-			[]Input{match1},
+			[]func() Input{match1},
 			"a",
 			[]wantedInput{
 				{
@@ -79,7 +85,7 @@ func TestInputHasCorrectValue(t *testing.T) {
 		},
 		{
 			"Match multiple values",
-			[]Input{match1, match2},
+			[]func() Input{match1, match2},
 			"abcd",
 			[]wantedInput{
 				{
@@ -99,7 +105,7 @@ func TestInputHasCorrectValue(t *testing.T) {
 		},
 		{
 			"Match but invalid",
-			[]Input{validFmtButInvalidMatch},
+			[]func() Input{validFmtButInvalidMatch},
 			"a",
 			[]wantedInput{
 				{
@@ -114,7 +120,7 @@ func TestInputHasCorrectValue(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			inputs, err := Validate(tt.in, tt.inputs)
+			inputs, err := Validate(tt.in, tt.newInputs)
 			if len(inputs) != len(tt.wantedInputs) {
 				t.Errorf("inputs len %v, want %v", len(inputs), len(tt.wantedInputs))
 			}

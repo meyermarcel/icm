@@ -68,7 +68,7 @@ const patternModesInfo string = `                    ` + auto + ` = matches auto
 
 type patternValue struct {
 	value    string
-	patterns map[string]newPattern
+	patterns map[string]func(decoders decoders) [][]func() input.Input
 }
 
 func (p *patternValue) String() string {
@@ -90,7 +90,7 @@ func (*patternValue) Type() string {
 func newPatternValue() *patternValue {
 	return &patternValue{
 		value: configs.PatternDefVal,
-		patterns: map[string]newPattern{
+		patterns: map[string]func(decoders decoders) [][]func() input.Input{
 			auto:                   newAutoPattern,
 			containerNumber:        newContNumPattern,
 			owner:                  newOwnerPattern,
@@ -100,9 +100,7 @@ func newPatternValue() *patternValue {
 	}
 }
 
-type newPattern func(decoders decoders) [][]input.Input
-
-func (p *patternValue) newPattern(value string) newPattern {
+func (p *patternValue) newPatterns(value string) func(decoders decoders) [][]func() input.Input {
 	return p.patterns[value]
 }
 
@@ -195,16 +193,17 @@ func newValidateCmd(stdin io.Reader, writer io.Writer, viperCfg *viper.Viper, de
 
 			printer := oValue.newPrinter(viperCfg.GetString(configs.Output))(writer, viperCfg, isSingleLine)
 
-			inputPatterns := pValue.newPattern(viperCfg.GetString(configs.Pattern))(decoders)
+			newPatterns := pValue.newPatterns(viperCfg.GetString(configs.Pattern))(decoders)
 
-			inputs := input.NewMatcher(inputPatterns).Match(strings.Split(string(peek), "\n")[0])
-
-			var inputErr error
+			newInputs := input.Match(strings.Split(string(peek), "\n")[0], newPatterns)
 
 			scanner := bufio.NewScanner(bufReader)
 
+			var inputErr error
+			var inputs []input.Input
+
 			for scanner.Scan() {
-				inputs, inputErr = input.Validate(scanner.Text(), inputs)
+				inputs, inputErr = input.Validate(scanner.Text(), newInputs)
 				err := printer.Print(inputs)
 				if err != nil {
 					return err
@@ -282,7 +281,7 @@ func newCSVPrinter(writer io.Writer, viperCfg *viper.Viper, isSingleLine bool) i
 	return input.NewCSVPrinter(csvWriter, viperCfg.GetBool(configs.NoHeader))
 }
 
-func newAutoPattern(decoders decoders) [][]input.Input {
+func newAutoPattern(decoders decoders) [][]func() input.Input {
 	owner := newOwnerInput(decoders.ownerDecodeUpdater)
 	equipCat := newEquipCatInput(decoders.equipCatDecoder)
 	serialNum := newSerialNumInput()
@@ -291,7 +290,7 @@ func newAutoPattern(decoders decoders) [][]input.Input {
 	heightWidth := newHeightWidthInput(decoders.heightWidthDecoder)
 	typeAndGroup := newTypeAndGroupInput(decoders.typeDecoder)
 
-	return [][]input.Input{
+	return [][]func() input.Input{
 		{owner, equipCat, serialNum, checkDigit, length, heightWidth, typeAndGroup},
 		{owner, equipCat, serialNum, checkDigit},
 		{owner, equipCat},
@@ -300,45 +299,36 @@ func newAutoPattern(decoders decoders) [][]input.Input {
 	}
 }
 
-func newContNumPattern(decoders decoders) [][]input.Input {
+func newContNumPattern(decoders decoders) [][]func() input.Input {
 	owner := newOwnerInput(decoders.ownerDecodeUpdater)
 	equipCat := newEquipCatInput(decoders.equipCatDecoder)
 	serialNum := newSerialNumInput()
 	checkDigit := newCheckDigitInput()
 
-	return [][]input.Input{
-		{owner, equipCat, serialNum, checkDigit},
-	}
+	return [][]func() input.Input{{owner, equipCat, serialNum, checkDigit}}
 }
 
-func newOwnerPattern(decoders decoders) [][]input.Input {
+func newOwnerPattern(decoders decoders) [][]func() input.Input {
 	owner := newOwnerInput(decoders.ownerDecodeUpdater)
-
-	return [][]input.Input{
-		{owner},
-	}
+	return [][]func() input.Input{{owner}}
 }
 
-func newOwnerEquipCatPattern(decoders decoders) [][]input.Input {
+func newOwnerEquipCatPattern(decoders decoders) [][]func() input.Input {
 	owner := newOwnerInput(decoders.ownerDecodeUpdater)
 	equipCat := newEquipCatInput(decoders.equipCatDecoder)
 
-	return [][]input.Input{
-		{owner, equipCat},
-	}
+	return [][]func() input.Input{{owner, equipCat}}
 }
 
-func newSizeTypePattern(decoders decoders) [][]input.Input {
+func newSizeTypePattern(decoders decoders) [][]func() input.Input {
 	length := newLengthInput(decoders.lengthDecoder)
 	heightWidth := newHeightWidthInput(decoders.heightWidthDecoder)
 	typeAndGroup := newTypeAndGroupInput(decoders.typeDecoder)
 
-	return [][]input.Input{
-		{length, heightWidth, typeAndGroup},
-	}
+	return [][]func() input.Input{{length, heightWidth, typeAndGroup}}
 }
 
-func newOwnerInput(ownerDecodeUpdater data.OwnerDecodeUpdater) input.Input {
+func newOwnerInput(ownerDecodeUpdater data.OwnerDecodeUpdater) func() input.Input {
 	owner := input.NewInput(
 		3,
 		regexp.MustCompile(`[A-Za-z]{3}`).FindStringIndex,
@@ -379,10 +369,10 @@ func newOwnerInput(ownerDecodeUpdater data.OwnerDecodeUpdater) input.Input {
 				}
 		})
 	owner.SetToUpper()
-	return owner
+	return func() input.Input { return owner }
 }
 
-func newEquipCatInput(equipCatDecoder data.EquipCatDecoder) input.Input {
+func newEquipCatInput(equipCatDecoder data.EquipCatDecoder) func() input.Input {
 	equipCat := input.NewInput(
 		1,
 		regexp.MustCompile(`[A-Za-z]`).FindStringIndex,
@@ -410,7 +400,7 @@ func newEquipCatInput(equipCatDecoder data.EquipCatDecoder) input.Input {
 				[]input.Datum{equipCatIDDatum, equipCatDatum.WithValue(cat.Info)}
 		})
 	equipCat.SetToUpper()
-	return equipCat
+	return func() input.Input { return equipCat }
 }
 
 func equipCatIDsAsList(equipCatDecoder data.EquipCatDecoder) string {
@@ -431,59 +421,63 @@ func equipCatIDsAsList(equipCatDecoder data.EquipCatDecoder) string {
 	return b.String()
 }
 
-func newSerialNumInput() input.Input {
-	return input.NewInput(
-		6,
-		regexp.MustCompile(`\d{6}`).FindStringIndex,
-		func(value string, previousValues []string) (error, []input.Info, []input.Datum) {
-			if value == "" {
-				return newErrValidate(fmt.Sprintf("%s is not %s long",
-						underline("serial number"),
-						bold("6 numbers"))),
-					nil,
-					nil
-			}
-			return nil, nil, nil
-		})
+func newSerialNumInput() func() input.Input {
+	return func() input.Input {
+		return input.NewInput(
+			6,
+			regexp.MustCompile(`\d{6}`).FindStringIndex,
+			func(value string, previousValues []string) (error, []input.Info, []input.Datum) {
+				if value == "" {
+					return newErrValidate(fmt.Sprintf("%s is not %s long",
+							underline("serial number"),
+							bold("6 numbers"))),
+						nil,
+						nil
+				}
+				return nil, nil, nil
+			})
+	}
 }
 
-func newCheckDigitInput() input.Input {
-	return input.NewInput(
-		1,
-		regexp.MustCompile(`\d`).FindStringIndex,
-		func(value string, previousValues []string) (error, []input.Info, []input.Datum) {
-			checkDigitDatum := input.NewDatum("check-digit").WithValue(value)
-			calcCheckDigitDatum := input.NewDatum("calculated-check-digit")
-			if len(strings.Join(previousValues[0:3], "")) != 10 {
-				return newErrValidate(fmt.Sprintf("%s is not calculable",
-						underline("check digit"))),
-					nil,
-					[]input.Datum{checkDigitDatum, calcCheckDigitDatum}
-			}
+func newCheckDigitInput() func() input.Input {
+	return func() input.Input {
+		return input.NewInput(
+			1,
+			regexp.MustCompile(`\d`).FindStringIndex,
+			func(value string, previousValues []string) (error, []input.Info, []input.Datum) {
+				checkDigitDatum := input.NewDatum("check-digit").WithValue(value)
+				calcCheckDigitDatum := input.NewDatum("calculated-check-digit")
+				if len(strings.Join(previousValues[0:3], "")) != 10 {
+					return newErrValidate(fmt.Sprintf("%s is not calculable",
+							underline("check digit"))),
+						nil,
+						[]input.Datum{checkDigitDatum, calcCheckDigitDatum}
+				}
 
-			checkDigit := cont.CalcCheckDigit(previousValues[2], previousValues[1], previousValues[0])
+				checkDigit := cont.CalcCheckDigit(previousValues[2], previousValues[1], previousValues[0])
 
-			number, err := strconv.Atoi(value)
-			if err != nil {
-				return newErrValidate(fmt.Sprintf("%s must be a %s (calculated: %s)",
-						underline("check digit"),
-						bold("number"),
-						green(checkDigit))), appendCheckDigit10Info(checkDigit, nil),
-					[]input.Datum{checkDigitDatum, calcCheckDigitDatum.WithValue(strconv.Itoa(checkDigit))}
-			}
+				number, err := strconv.Atoi(value)
+				if err != nil {
+					return newErrValidate(fmt.Sprintf("%s must be a %s (calculated: %s)",
+							underline("check digit"),
+							bold("number"),
+							green(checkDigit))), appendCheckDigit10Info(checkDigit, nil),
+						[]input.Datum{checkDigitDatum, calcCheckDigitDatum.WithValue(strconv.Itoa(checkDigit))}
+				}
 
-			if number != checkDigit%10 {
-				return newErrValidate(fmt.Sprintf(
-						"calculated %s is %s",
-						underline("check digit"),
-						green(checkDigit%10))), appendCheckDigit10Info(checkDigit, nil),
-					[]input.Datum{checkDigitDatum, calcCheckDigitDatum.WithValue(strconv.Itoa(checkDigit))}
-			}
+				if number != checkDigit%10 {
+					return newErrValidate(fmt.Sprintf(
+							"calculated %s is %s",
+							underline("check digit"),
+							green(checkDigit%10))), appendCheckDigit10Info(checkDigit, nil),
+						[]input.Datum{checkDigitDatum, calcCheckDigitDatum.WithValue(strconv.Itoa(checkDigit))}
+				}
 
-			return nil,
-				appendCheckDigit10Info(checkDigit, nil),
-				[]input.Datum{calcCheckDigitDatum.WithValue(strconv.Itoa(checkDigit))}
-		})
+				return nil,
+					appendCheckDigit10Info(checkDigit, nil),
+					[]input.Datum{calcCheckDigitDatum.WithValue(strconv.Itoa(checkDigit))}
+			})
+	}
 }
 
 func appendCheckDigit10Info(checkDigit int, infos []input.Info) []input.Info {
@@ -499,7 +493,7 @@ func appendCheckDigit10Info(checkDigit int, infos []input.Info) []input.Info {
 	return infos
 }
 
-func newLengthInput(lengthDecoder data.LengthDecoder) input.Input {
+func newLengthInput(lengthDecoder data.LengthDecoder) func() input.Input {
 
 	length := input.NewInput(
 		1,
@@ -529,10 +523,10 @@ func newLengthInput(lengthDecoder data.LengthDecoder) input.Input {
 				[]input.Datum{lengthDatum, lengthDescDatum.WithValue(length.Length)}
 		})
 	length.SetToUpper()
-	return length
+	return func() input.Input { return length }
 }
 
-func newHeightWidthInput(heightWidthDecoder data.HeightWidthDecoder) input.Input {
+func newHeightWidthInput(heightWidthDecoder data.HeightWidthDecoder) func() input.Input {
 
 	heightWidth := input.NewInput(
 		1,
@@ -570,10 +564,10 @@ func newHeightWidthInput(heightWidthDecoder data.HeightWidthDecoder) input.Input
 				}
 		})
 	heightWidth.SetToUpper()
-	return heightWidth
+	return func() input.Input { return heightWidth }
 }
 
-func newTypeAndGroupInput(typeDecoder data.TypeDecoder) input.Input {
+func newTypeAndGroupInput(typeDecoder data.TypeDecoder) func() input.Input {
 
 	typeAndGroup := input.NewInput(
 		2,
@@ -611,5 +605,5 @@ func newTypeAndGroupInput(typeDecoder data.TypeDecoder) input.Input {
 				}
 		})
 	typeAndGroup.SetToUpper()
-	return typeAndGroup
+	return func() input.Input { return typeAndGroup }
 }

@@ -19,28 +19,32 @@ import (
 )
 
 // Validate validates inputs. Each input is validated and values are assigned.
-func Validate(in string, inputs []Input) ([]Input, error) {
+func Validate(in string, newInputs []func() Input) ([]Input, error) {
 
 	previousValues := make([]string, 0)
+	inputs := make([]Input, 0)
 	var err error
-	for inputIdx, input := range inputs {
-		inputs[inputIdx].previousValues = previousValues
+	for _, newInput := range newInputs {
+		input := newInput()
+		input.previousValues = previousValues
 
 		matchIndex := input.matchIndex(in)
 		if matchIndex != nil {
 			matchPart := in[matchIndex[0]:matchIndex[1]]
-			if inputs[inputIdx].toUpper {
+			if input.toUpper {
 				matchPart = strings.ToUpper(matchPart)
 			}
-			inputs[inputIdx].value = matchPart
+			input.value = matchPart
 			in = in[matchIndex[1]:]
 		}
 
-		previousValues = append([]string{inputs[inputIdx].value}, previousValues...)
-		inputs[inputIdx].validateValue()
+		previousValues = append([]string{input.value}, previousValues...)
+		input.validateValue()
+
+		inputs = append(inputs, input)
 
 		if err == nil {
-			err = inputs[inputIdx].err
+			err = input.err
 		}
 	}
 	return inputs, err

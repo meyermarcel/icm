@@ -19,33 +19,39 @@ import (
 
 func TestMatcher_Match(t *testing.T) {
 
-	match1 := Input{
-		runeCount: 1,
-		matchIndex: func(in string) []int {
-			return []int{0, 1}
-		},
+	match1 := func() Input {
+		return Input{
+			runeCount: 1,
+			matchIndex: func(in string) []int {
+				return []int{0, 1}
+			},
+		}
 	}
-	match2 := Input{
-		runeCount: 2,
-		matchIndex: func(in string) []int {
-			return []int{0, 2}
-		},
+	match2 := func() Input {
+		return Input{
+			runeCount: 2,
+			matchIndex: func(in string) []int {
+				return []int{0, 2}
+			},
+		}
 	}
-	noMatch := Input{
-		matchIndex: func(in string) []int {
-			return nil
-		},
+	noMatch := func() Input {
+		return Input{
+			matchIndex: func(in string) []int {
+				return nil
+			},
+		}
 	}
 
 	tests := []struct {
 		name          string
-		inputPatterns [][]Input
+		inputPatterns [][]func() Input
 		in            string
 		wantedLen     int
 	}{
 		{
 			"Use first pattern",
-			[][]Input{
+			[][]func() Input{
 				{match1},
 				{match1, match2},
 			},
@@ -54,7 +60,7 @@ func TestMatcher_Match(t *testing.T) {
 		},
 		{
 			"Use first pattern as default",
-			[][]Input{
+			[][]func() Input{
 				{noMatch},
 				{match2, noMatch},
 			},
@@ -63,7 +69,7 @@ func TestMatcher_Match(t *testing.T) {
 		},
 		{
 			"Use first best match",
-			[][]Input{
+			[][]func() Input{
 				{noMatch},
 				{match1, noMatch},
 				{match1, match1, match1},
@@ -74,7 +80,7 @@ func TestMatcher_Match(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if patternIdx := NewMatcher(tt.inputPatterns).Match(tt.in); len(patternIdx) != tt.wantedLen {
+			if patternIdx := Match(tt.in, tt.inputPatterns); len(patternIdx) != tt.wantedLen {
 				t.Errorf("Match() = %v, want length %v", patternIdx, tt.wantedLen)
 			}
 		})

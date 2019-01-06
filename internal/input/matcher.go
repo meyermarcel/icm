@@ -13,36 +13,24 @@
 
 package input
 
-// Matcher .
-type Matcher struct {
-	inputPatterns [][]Input
-}
-
-// NewMatcher returns a new Matcher.
-func NewMatcher(inputPatterns [][]Input) *Matcher {
-	return &Matcher{
-		inputPatterns: inputPatterns,
-	}
-}
-
 // Match returns pattern if all values are valid formatted. If no pattern
 // meets the requirement the first pattern is returned.
-func (m *Matcher) Match(in string) []Input {
-	for _, pattern := range m.inputPatterns {
+func Match(in string, newPatterns [][]func() Input) []func() Input {
+	for _, newInputs := range newPatterns {
 		inTemp := in
 		allValidFmt := true
-		for inputIdx, input := range pattern {
+		for _, newInput := range newInputs {
+			input := newInput()
 			matchIndex := input.matchIndex(inTemp)
 			if matchIndex != nil {
-				pattern[inputIdx].value = inTemp[matchIndex[0]:matchIndex[1]]
+				input.value = inTemp[matchIndex[0]:matchIndex[1]]
 				inTemp = inTemp[matchIndex[1]:]
 			}
-			allValidFmt = allValidFmt && pattern[inputIdx].isValidFmt()
-			pattern[inputIdx].value = ""
+			allValidFmt = allValidFmt && input.isValidFmt()
 		}
 		if allValidFmt {
-			return pattern
+			return newInputs
 		}
 	}
-	return m.inputPatterns[0]
+	return newPatterns[0]
 }
