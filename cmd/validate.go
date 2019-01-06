@@ -447,35 +447,83 @@ func newCheckDigitInput() func() input.Input {
 			func(value string, previousValues []string) (error, []input.Info, []input.Datum) {
 				checkDigitDatum := input.NewDatum("check-digit").WithValue(value)
 				calcCheckDigitDatum := input.NewDatum("calculated-check-digit")
+				validCheckDigit := input.NewDatum("valid-check-digit")
+				possibleTranspositionError := input.NewDatum("possible-transposition-error")
 				if len(strings.Join(previousValues[0:3], "")) != 10 {
 					return newErrValidate(fmt.Sprintf("%s is not calculable",
 							underline("check digit"))),
 						nil,
-						[]input.Datum{checkDigitDatum, calcCheckDigitDatum}
+						[]input.Datum{
+							checkDigitDatum,
+							calcCheckDigitDatum,
+							validCheckDigit.WithValue(fmt.Sprintf("%t", false)),
+							possibleTranspositionError,
+						}
 				}
 
 				checkDigit := cont.CalcCheckDigit(previousValues[2], previousValues[1], previousValues[0])
+
+				infos := appendCheckDigit10Info(checkDigit, nil)
 
 				number, err := strconv.Atoi(value)
 				if err != nil {
 					return newErrValidate(fmt.Sprintf("%s must be a %s (calculated: %s)",
 							underline("check digit"),
 							bold("number"),
-							green(checkDigit))), appendCheckDigit10Info(checkDigit, nil),
-						[]input.Datum{checkDigitDatum, calcCheckDigitDatum.WithValue(strconv.Itoa(checkDigit))}
+							green(checkDigit))),
+						infos,
+						[]input.Datum{
+							checkDigitDatum,
+							calcCheckDigitDatum.WithValue(strconv.Itoa(checkDigit)),
+							validCheckDigit.WithValue(fmt.Sprintf("%t", false)),
+							possibleTranspositionError,
+						}
 				}
 
 				if number != checkDigit%10 {
 					return newErrValidate(fmt.Sprintf(
 							"calculated %s is %s",
 							underline("check digit"),
-							green(checkDigit%10))), appendCheckDigit10Info(checkDigit, nil),
-						[]input.Datum{checkDigitDatum, calcCheckDigitDatum.WithValue(strconv.Itoa(checkDigit))}
+							green(checkDigit%10))),
+						infos,
+						[]input.Datum{
+							checkDigitDatum,
+							calcCheckDigitDatum.WithValue(strconv.Itoa(checkDigit)),
+							validCheckDigit.WithValue(fmt.Sprintf("%t", number == checkDigit%10)),
+							possibleTranspositionError,
+						}
+				}
+
+				transposedContNums := cont.CheckTransposition(previousValues[2], previousValues[1], previousValues[0])
+
+				if len(transposedContNums) != 0 {
+					infos = append(infos, input.Info{Text: "Possible transposition errors:"})
+					builder := strings.Builder{}
+					for idx, contNum := range transposedContNums {
+						infos = append(infos, input.Info{Text: fmt.Sprintf("  %s", contNum)})
+						builder.WriteString(contNum.String())
+						if idx < len(transposedContNums)-1 {
+							builder.WriteString(", ")
+						}
+					}
+					return nil,
+						infos,
+						[]input.Datum{
+							checkDigitDatum,
+							calcCheckDigitDatum.WithValue(strconv.Itoa(checkDigit)),
+							validCheckDigit.WithValue(fmt.Sprintf("%t", number == checkDigit%10)),
+							possibleTranspositionError.WithValue(builder.String()),
+						}
 				}
 
 				return nil,
-					appendCheckDigit10Info(checkDigit, nil),
-					[]input.Datum{calcCheckDigitDatum.WithValue(strconv.Itoa(checkDigit))}
+					infos,
+					[]input.Datum{
+						checkDigitDatum,
+						calcCheckDigitDatum.WithValue(strconv.Itoa(checkDigit)),
+						validCheckDigit.WithValue(fmt.Sprintf("%t", number == checkDigit%10)),
+						possibleTranspositionError,
+					}
 			})
 	}
 }

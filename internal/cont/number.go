@@ -13,32 +13,30 @@
 
 package cont
 
+import (
+	"fmt"
+)
+
 // Number is a container number with needed properties to conform to the specified standard.
 type Number struct {
-	ownerCode    string
-	equipCatID   string
-	serialNumber string
-	checkDigit   int
+	ownerCode           string
+	equipCatID          string
+	serialNumber        string
+	checkDigit          int
+	sepOE, sepES, sepSC string
 }
 
-// OwnerCode returns the owner code of container number.
-func (cn Number) OwnerCode() string {
-	return cn.ownerCode
+// SetSeparators sets separator for formatting for Stringer interface.
+func (cn *Number) SetSeparators(sepOE, sepES, sepSC string) {
+	cn.sepOE, cn.sepES, cn.sepSC = sepOE, sepES, sepSC
 }
 
-// EquipCatID returns the equipment category ID of container number.
-func (cn Number) EquipCatID() string {
-	return cn.equipCatID
-}
-
-// SerialNumber returns the serial number of container number.
-func (cn Number) SerialNumber() string {
-	return cn.serialNumber
-}
-
-// CheckDigit returns the check digit of container number.
-func (cn Number) CheckDigit() int {
-	return cn.checkDigit
+func (cn Number) String() string {
+	return fmt.Sprintf("%s%s%s%s%s%s%d",
+		cn.ownerCode, cn.sepOE,
+		cn.equipCatID, cn.sepES,
+		cn.serialNumber, cn.sepSC,
+		cn.checkDigit)
 }
 
 func newNum(ownerCode string,
@@ -46,8 +44,13 @@ func newNum(ownerCode string,
 	serialNumber string,
 	checkDigit int) Number {
 
-	return Number{ownerCode: ownerCode,
+	return Number{
+		ownerCode:    ownerCode,
 		equipCatID:   equipCatID,
 		serialNumber: serialNumber,
-		checkDigit:   checkDigit}
+		checkDigit:   checkDigit,
+		sepOE:        " ",
+		sepES:        " ",
+		sepSC:        " ",
+	}
 }

@@ -139,12 +139,12 @@ Using only the --count flag generates pseudo random serial numbers.
 			}
 			for generator.Generate() {
 				contNumber := generator.ContNum()
-				_, err := io.WriteString(writer,
-					fmt.Sprintf("%s%s%s%s%s%s%d\n",
-						contNumber.OwnerCode(), viper.GetString(configs.SepOE),
-						contNumber.EquipCatID(), viper.GetString(configs.SepES),
-						contNumber.SerialNumber(), viper.GetString(configs.SepSC),
-						contNumber.CheckDigit()))
+				contNumber.SetSeparators(
+					viper.GetString(configs.SepOE),
+					viper.GetString(configs.SepES),
+					viper.GetString(configs.SepSC),
+				)
+				_, err := io.WriteString(writer, fmt.Sprintf("%s\n", contNumber))
 				writeErr(writerErr, err)
 			}
 			return nil
