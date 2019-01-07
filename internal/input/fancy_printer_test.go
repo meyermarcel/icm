@@ -349,7 +349,7 @@ a---b‧‧‧c  ✔
 				t.Errorf("FancyPrinter.Print() error = %v, wantErr %v", err, tt.wantErr)
 			}
 			if gotWriter := writer.String(); gotWriter != tt.wantWriter {
-				t.Errorf("NewFancyPrinterFactory() = %v, want %v", gotWriter, tt.wantWriter)
+				t.Errorf("FancyPrinter.Print() = %v, want %v", gotWriter, tt.wantWriter)
 			}
 		})
 	}
