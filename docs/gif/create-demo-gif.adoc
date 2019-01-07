@@ -7,7 +7,7 @@ This works for bash and macOS.
 * https://github.com/icetee/pv
 * ImageMagick
 
-. Use 80x30 terminal size
+. Use 80x20 terminal size
 
 . Start recording
 +

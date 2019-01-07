@@ -92,17 +92,14 @@ number use the --start and --end flags and optionally the --count flag.
 Using only the --count flag generates pseudo random serial numbers.
 
 ` + sepHelp,
-		Example: `  ` + appName + ` generate
-
-  ` + appName + ` generate --count 5000
-
-  ` + appName + ` generate --owner-code ABC
-
-  ` + appName + ` generate --start 0 --end 10
-
-  ` + appName + ` generate --start 50 --count 10
-
-  ` + appName + ` generate --count 20 --exclude-check-digit-10`,
+		Example: `  icm generate
+  icm generate --count 10
+  icm generate --count 10 --sep-owner-equip '' --sep-serial-check '-'
+  icm generate --count 10 --exclude-check-digit-10
+  icm generate --count 10 --exclude-transposition-errors
+  icm generate --count 10 --start 100500
+  icm generate --start 100500 --end 100600
+  icm generate --start 100500 --end 100600 --owner ABC`,
 		Args: cobra.NoArgs,
 		// https://github.com/spf13/viper/issues/233
 		PreRunE: func(cmd *cobra.Command, args []string) error {

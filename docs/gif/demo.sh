@@ -12,19 +12,19 @@ rm -f ~/.icm/data/equipment-category-id.json
 cp new_owner.json ~/.icm/data/owner.json
 
 clear
-pe "icm validate ' btc u_123123-3'"
+pe "icm validate btc u_123123-3"
 echo -n "$DEMO_PROMPT"
 wait
 clear
-pe "icm validate ' btc'"
+pe "icm validate btc"
 echo -n "$DEMO_PROMPT"
 wait
 clear
-pe "icm validate '20N1'"
+pe "icm validate 20R0"
 echo -n "$DEMO_PROMPT"
 wait
 clear
-pe "icm validate 'btc u_123123-3 22g1'"
+pe "icm validate btc u_123123-3 22r0"
 echo -n "$DEMO_PROMPT"
 wait
 clear
@@ -32,18 +32,18 @@ pe "icm generate -c 4"
 echo -n "$DEMO_PROMPT"
 wait
 clear
-pe "icm validate 'btc x 1231232'"
+pe "icm validate btc x 1231232"
 echo -n "$DEMO_PROMPT"
 wait
 clear
-pe "# Add new equipment category ID in config"
+pe "# Add new equipment category ID in data"
 pe "cat ~/.icm/data/equipment-category-id.json"
 pe "diff ~/.icm/data/equipment-category-id.json new_equipment-category-id.json"
 pe "cp new_equipment-category-id.json ~/.icm/data/equipment-category-id.json"
 echo -n "$DEMO_PROMPT"
 wait
 clear
-pe "icm validate 'btc x 1231232'"
+pe "icm validate btc x 1231232"
 echo -n "$DEMO_PROMPT"
 wait
 

@@ -7,11 +7,53 @@ image:https://travis-ci.org/meyermarcel/icm.svg?branch=master["Build Status", li
 
 image:demo.gif[Demo of icm]
 
+== Usage
+
+----
+icm --help
+----
+
+=== Generate
+
+----
+icm generate --help
+icm generate
+icm generate --count 10
+icm generate --count 10 --sep-owner-equip '' --sep-serial-check '-'
+icm generate --count 10 --exclude-check-digit-10
+icm generate --count 10 --exclude-transposition-errors
+icm generate --count 10 --start 100500
+icm generate --start 100500 --end 100600
+icm generate --start 100500 --end 100600 --owner ABC
+----
+
+=== Validate
+
+----
+icm validate --help
+icm validate ABC
+icm validate ABC --pattern container-number
+icm validate ABC U
+icm validate --sep-owner-equip '' --sep-serial-check '-' ABC U 123456 0
+icm validate ABC U 123456 0 20G1
+icm validate 20G1
+icm generate | icm validate
+icm generate --count 10 | icm validate
+icm generate --count 10 | icm validate --output fancy
+----
+
 == Installation
 
 === macOS
 
 `brew install meyermarcel/tap/icm`
+
+=== Linux & Windows
+
+Download your binary in the https://github.com/meyermarcel/icm/releases[Releases] section.
+
+Pull requests for Scoop and Snapcraft are welcomed
+(https://goreleaser.com/customization[Goreleaser Doc]).
 
 == Contributing
 

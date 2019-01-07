@@ -27,8 +27,8 @@ import (
 func newMiscCmd(writer io.Writer, rootCmd *cobra.Command) *cobra.Command {
 	miscCmd := &cobra.Command{
 		Use:   "misc",
-		Short: "Generate scripts completion for shells",
-		Long:  "Generate scripts completion for shells.",
+		Short: "Miscellaneous generation commands for man page and bash, zsh completions",
+		Long:  "Miscellaneous generation commands for man page and bash, zsh completions.",
 	}
 
 	bashCmd := &cobra.Command{
@@ -57,7 +57,7 @@ func newMiscCmd(writer io.Writer, rootCmd *cobra.Command) *cobra.Command {
 		Use:     "man",
 		Short:   "Generate man pages",
 		Long:    "Generate man pages.",
-		Example: "  " + appName + "misc man <path>",
+		Example: "  icm misc man . && cat *.1",
 		Args:    cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			path := args[0]
