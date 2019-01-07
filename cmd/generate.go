@@ -77,6 +77,7 @@ func newGenerateCmd(writer, writerErr io.Writer, viper *viper.Viper, ownerDecode
 	var endValue = serialNumValue{}
 	var ownerValue = ownerValue{}
 	var excludeCheckDigit10 bool
+	var excludeTranspositionErr bool
 
 	generateCmd := &cobra.Command{
 		Use:   "generate",
@@ -117,7 +118,8 @@ Using only the --count flag generates pseudo random serial numbers.
 
 			builder := cont.NewUniqueGeneratorBuilder().
 				Count(count).
-				ExcludeCheckDigit10(excludeCheckDigit10)
+				ExcludeCheckDigit10(excludeCheckDigit10).
+				ExcludeTranspositionErr(excludeTranspositionErr)
 
 			if cmd.Flags().Changed("owner") {
 				builder.OwnerCodes([]string{ownerValue.value})
@@ -158,6 +160,8 @@ Using only the --count flag generates pseudo random serial numbers.
 	generateCmd.Flags().VarP(&endValue, "end", "e", "end of serial number range")
 	generateCmd.Flags().Var(&ownerValue, "owner", "custom owner code")
 	generateCmd.Flags().BoolVar(&excludeCheckDigit10, "exclude-check-digit-10", false, "exclude check digit 10")
+	generateCmd.Flags().BoolVar(&excludeTranspositionErr, "exclude-transposition-errors", false,
+		"exclude possible transposition errors")
 
 	generateCmd.Flags().String(configs.SepOE, configs.SepOEDefVal,
 		"ABC(*)U1234560  (*) separates owner code and equipment category id")

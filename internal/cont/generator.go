@@ -24,11 +24,12 @@ import (
 // GeneratorBuilder is the struct for the builder.
 // Use NewUniqueGeneratorBuilder to create a new one.
 type GeneratorBuilder struct {
-	codes            []string
-	count            int
-	start            int
-	end              int
-	exclCheckDigit10 bool
+	codes                []string
+	count                int
+	start                int
+	end                  int
+	exclCheckDigit10     bool
+	exclTranspositionErr bool
 }
 
 // NewUniqueGeneratorBuilder returns a new random unique container number generator.
@@ -69,6 +70,12 @@ func (gb *GeneratorBuilder) End(end int) *GeneratorBuilder {
 // ExcludeCheckDigit10 sets the exclusion of container numbers with check digit 10.
 func (gb *GeneratorBuilder) ExcludeCheckDigit10(exclude bool) *GeneratorBuilder {
 	gb.exclCheckDigit10 = exclude
+	return gb
+}
+
+// ExcludeTranspositionErr sets the exclusion of container numbers with possible transposition errors.
+func (gb *GeneratorBuilder) ExcludeTranspositionErr(exclude bool) *GeneratorBuilder {
+	gb.exclTranspositionErr = exclude
 	return gb
 }
 
@@ -128,33 +135,35 @@ func (gb *GeneratorBuilder) Build() (*UniqueGenerator, error) {
 	})
 
 	return &UniqueGenerator{
-		codes:            gb.codes,
-		lenCodes:         lenCodes,
-		serialNumIt:      serialNumIt,
-		count:            count,
-		exclCheckDigit10: gb.exclCheckDigit10,
+		codes:                gb.codes,
+		lenCodes:             lenCodes,
+		serialNumIt:          serialNumIt,
+		count:                count,
+		exclCheckDigit10:     gb.exclCheckDigit10,
+		exclTranspositionErr: gb.exclTranspositionErr,
 	}, nil
 }
 
 // UniqueGenerator holds state for generating random unique container numbers.
 // Use NewUniqueGeneratorBuilder for initialization.
 type UniqueGenerator struct {
-	codes            []string
-	lenCodes         int
-	ownerOffset      int
-	serialNumIt      serialNumIt
-	count            int
-	contNum          Number
-	generatedCount   int
-	exclCheckDigit10 bool
+	codes                []string
+	lenCodes             int
+	ownerOffset          int
+	serialNumIt          serialNumIt
+	count                int
+	contNum              Number
+	generatedCount       int
+	exclCheckDigit10     bool
+	exclTranspositionErr bool
 }
 
 // Generate advances the serial number iterator to the next serial number,
 // which will then be available through the ContNum method. It returns false
 // when the generation stops by reaching the count of generated container numbers.
 func (g *UniqueGenerator) Generate() bool {
-	serialNum := fmt.Sprintf("%06d", g.serialNumIt.num())
 	code := g.codes[(g.serialNumIt.num()+g.ownerOffset)%g.lenCodes]
+	serialNum := fmt.Sprintf("%06d", g.serialNumIt.num())
 	checkDigit := CalcCheckDigit(code, "U", serialNum)
 
 	if g.serialNumIt.isLast() {
@@ -163,6 +172,9 @@ func (g *UniqueGenerator) Generate() bool {
 	g.serialNumIt.increment()
 
 	if g.exclCheckDigit10 && checkDigit == 10 {
+		return g.Generate()
+	}
+	if g.exclTranspositionErr && len(CheckTransposition(code, "U", serialNum)) > 0 {
 		return g.Generate()
 	}
 	g.contNum = newNum(code, "U", serialNum, checkDigit%10)

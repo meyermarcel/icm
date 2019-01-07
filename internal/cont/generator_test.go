@@ -146,11 +146,12 @@ func TestGeneratorBuilder(t *testing.T) {
 
 func TestUniqueGenerator(t *testing.T) {
 	type fields struct {
-		codes            []string
-		count            int
-		rangeStart       int
-		rangeEnd         int
-		exclCheckDigit10 bool
+		codes                   []string
+		count                   int
+		rangeStart              int
+		rangeEnd                int
+		exclCheckDigit10        bool
+		exclTranspositionErrors bool
 	}
 	tests := []struct {
 		name         string
@@ -222,6 +223,18 @@ func TestUniqueGenerator(t *testing.T) {
 			true,
 			6,
 		},
+		{
+			"Generate 1 unique container numbers with sequential serial numbers and exclude possible transposition errors",
+			fields{
+				codes:                   []string{"WSL"},
+				rangeStart:              801743,
+				rangeEnd:                -1,
+				count:                   1,
+				exclTranspositionErrors: true,
+			},
+			false,
+			1,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -231,7 +244,8 @@ func TestUniqueGenerator(t *testing.T) {
 				Count(tt.fields.count).
 				Start(tt.fields.rangeStart).
 				End(tt.fields.rangeEnd).
-				ExcludeCheckDigit10(tt.fields.exclCheckDigit10)
+				ExcludeCheckDigit10(tt.fields.exclCheckDigit10).
+				ExcludeTranspositionErr(tt.fields.exclTranspositionErrors)
 			g, _ := gb.Build()
 
 			lastNum := g.serialNumIt.num() - 1
