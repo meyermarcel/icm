@@ -427,14 +427,15 @@ func newSerialNumInput() func() input.Input {
 			6,
 			regexp.MustCompile(`\d{6}`).FindStringIndex,
 			func(value string, previousValues []string) (error, []input.Info, []input.Datum) {
+				serialNumData := input.NewDatum("serial-number")
 				if value == "" {
 					return newErrValidate(fmt.Sprintf("%s is not %s long",
 							underline("serial number"),
 							bold("6 numbers"))),
 						nil,
-						nil
+						[]input.Datum{serialNumData}
 				}
-				return nil, nil, nil
+				return nil, nil, []input.Datum{serialNumData.WithValue(value)}
 			})
 	}
 }
