@@ -1,0 +1,8 @@
+pattern: auto
+no-header: false
+output: auto
+sep-owner-equip: ' '
+sep-equip-serial: ' '
+sep-serial-check: ' '
+sep-check-size: '   '
+sep-size-type: ' '
