@@ -33,7 +33,6 @@ archive:
   files:
   - LICENSE
   - README.adoc
-  - docs/gif/demo.gif
     # man-pages is also defined in Makefile
   - man-pages/man1/*
 
