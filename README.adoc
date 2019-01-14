@@ -93,6 +93,20 @@ Pull requests for Scoop and Snapcraft are welcomed
 +
 `make`
 
+== Release
+
+. Create version tag according to https://semver.org[SemVer]
++
+----
+git tag "x.y.z"
+----
+
+. Push tag and let Travis CI and Goreleaser do the work
++
+----
+git push --tags
+----
+
 == License
 
 icm is released under the Apache 2.0 license. See https://github.com/meyermarcel/icm/blob/master/LICENSE[LICENSE]
