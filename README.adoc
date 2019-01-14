@@ -55,6 +55,16 @@ Download your binary in the https://github.com/meyermarcel/icm/releases[Releases
 Pull requests for Scoop and Snapcraft are welcomed
 (https://goreleaser.com/customization[Goreleaser Doc]).
 
+==== Bash/zsh completions and manual pages
+
+Installation on macOS by Homebrew installs automatically tab completions and manual pages.
+
+----
+icm misc bash-completion
+icm misc zsh-completion
+icm misc man <path-to-directory>
+----
+
 == Contributing
 
 . Fork it
