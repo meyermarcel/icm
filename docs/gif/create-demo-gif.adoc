@@ -1,13 +1,32 @@
 = Create demo gif
 
-This works for bash and macOS.
+This works with
+
+ImageMagick 7.0.8-23
+
+bash 5.0.0
+
+iTerm2 3.2.6
+
+macOS 10.14.2
+
 
 . Install requirements
 * https://github.com/icholy/ttygif
 * https://github.com/icetee/pv
 * ImageMagick
 
-. Use 80x20 terminal size
+. Use 80x25 terminal size
+
+. iTerm adjustments
+
+.. Change font size to 10pt to
++
+`iTerm -> Preferences -> Profiles -> Text`
+
+.. Disable current job name in window title
++
+`iTerm -> Preferences -> Appearance -> Show current job name`
 
 . Start recording
 +
@@ -21,15 +40,24 @@ This works for bash and macOS.
 +
 kbd:[Ctrl + D]
 
-. Convert ttyplay file to gif
+. Execzte ttygif and abort command while generating gif
 +
-`ttygif demo`
+`ttygif demo` + kbd:[Ctrl + C]
 
-. Trim gif
+. Copy aborted command in bash script
 +
-Open gif with macOS Preview and delete unwanted frames.
-Saving operation takes time!
+----
+echo '#!/bin/sh' > /tmp/convert.sh
+chmod +x /tmp/convert.sh
+# Copy convert command
+pbpaste >> /tmp/convert.sh
+----
 
-. Optimize gif with ImageMagick and remove old gif
+. Remove unwanted frames in arguments
+
+. Execute script
+`/tmp/convert.sh`
+
+. Copy gif to here
 +
-`convert tty.gif -coalesce -layers OptimizeFrame demo.gif && rm tty.gif`
+`cp /tmp/tty.gif ./demo.gif`
