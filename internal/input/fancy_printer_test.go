@@ -108,16 +108,14 @@ a  ✘
 				},
 				{
 					runeCount: 3,
-					err:       errors.New(""),
+					err:       nil,
 					value:     "def",
 				},
 			},
 			false,
 			`
 a bc def  ✘
-↑  ↑  ↑
-│  │  └─ 
-│  │
+↑  ↑
 │  └─ 
 │
 └─ 

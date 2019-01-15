@@ -74,6 +74,7 @@ func (fp *FancyPrinter) Print(inputs []Input) error {
 
 	texts := make([]posTxt, 0)
 
+	valid := true
 	for idx, input := range inputs {
 
 		b.WriteString(fmtValue(input))
@@ -102,8 +103,10 @@ func (fp *FancyPrinter) Print(inputs []Input) error {
 			texts = append(texts, posTxt)
 		}
 		pos += input.runeCount + utf8.RuneCountInString(sep)
+
+		valid = valid && input.err == nil
 	}
-	b.WriteString(fmtCheckMark(inputs[len(inputs)-1].err == nil))
+	b.WriteString(fmtCheckMark(valid))
 	b.WriteString(fmt.Sprintln())
 	b.WriteString(fmtTextsWithArrows(texts...))
 	b.WriteString(fmt.Sprintln())
