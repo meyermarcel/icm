@@ -10,17 +10,16 @@ iTerm2 3.2.6
 
 macOS 10.14.2
 
-
 . Install requirements
 * https://github.com/icholy/ttygif
 * https://github.com/icetee/pv
 * ImageMagick
 
-. Use 80x25 terminal size
-
 . iTerm adjustments
 
-.. Change font size to 10pt to
+.. Use 80x25 terminal size
+
+.. Change font size to 10pt
 +
 `iTerm -> Preferences -> Profiles -> Text`
 
@@ -40,7 +39,7 @@ macOS 10.14.2
 +
 kbd:[Ctrl + D]
 
-. Execzte ttygif and abort command while generating gif
+. Execute ttygif and abort command while generating gif
 +
 `ttygif demo` + kbd:[Ctrl + C]
 
@@ -56,6 +55,7 @@ pbpaste >> /tmp/convert.sh
 . Remove unwanted frames in arguments
 
 . Execute script
++
 `/tmp/convert.sh`
 
 . Copy gif to here
