@@ -150,6 +150,12 @@ func newRootCmd(
 		},
 	}
 
+	rootCmd.SetHelpTemplate(`{{with (or .Long .Short)}}{{. | trimTrailingWhitespaces}}
+
+{{end}}{{if or .Runnable .HasSubCommands}}{{.UsageString}}{{end}}
+Visit github.com/meyermarcel/icm for more docs, issues, pull requests and feedback.
+`)
+
 	rootCmd.AddCommand(newGenerateCmd(writer, writerErr, viper, decoders.ownerDecodeUpdater))
 	rootCmd.AddCommand(newValidateCmd(os.Stdin, writer, viper, decoders))
 	rootCmd.AddCommand(newUpdateOwnerCmd(decoders.ownerDecodeUpdater, timestampUpdater, ownerURL))
