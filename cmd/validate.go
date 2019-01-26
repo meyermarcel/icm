@@ -222,15 +222,15 @@ func newValidateCmd(stdin io.Reader, writer io.Writer, viperCfg *viper.Viper, de
 	validateCmd.Flags().Bool(configs.NoHeader, configs.NoHeaderDefVal,
 		"omits header of CSV output")
 	validateCmd.Flags().String(configs.SepOE, configs.SepOEDefVal,
-		"ABC(*)U1234560   20G1  (*) separates owner code and equipment category id")
+		"ABC(x)U1234560   20G1  (x) separates owner code and equipment category id")
 	validateCmd.Flags().String(configs.SepES, configs.SepESDefVal,
-		"ABCU(*)1234560   20G1  (*) separates equipment category id and serial number")
+		"ABCU(x)1234560   20G1  (x) separates equipment category id and serial number")
 	validateCmd.Flags().String(configs.SepSC, configs.SepSCDefVal,
-		"ABCU123456(*)0   20G1  (*) separates serial number and check digit")
+		"ABCU123456(x)0   20G1  (x) separates serial number and check digit")
 	validateCmd.Flags().String(configs.SepCS, configs.SepCSDefVal,
-		"ABCU1234560 (*)  20G1  (*) separates check digit and size")
+		"ABCU1234560 (x)  20G1  (x) separates check digit and size")
 	validateCmd.Flags().String(configs.SepST, configs.SepSTDefVal,
-		"ABCU1234560   20(*)G1  (*) separates size and type")
+		"ABCU1234560   20(x)G1  (x) separates size and type")
 	return validateCmd
 }
 

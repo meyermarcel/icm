@@ -161,11 +161,11 @@ Using only the --count flag generates pseudo random serial numbers.
 		"exclude possible transposition errors")
 
 	generateCmd.Flags().String(configs.SepOE, configs.SepOEDefVal,
-		"ABC(*)U1234560  (*) separates owner code and equipment category id")
+		"ABC(x)U1234560  (x) separates owner code and equipment category id")
 	generateCmd.Flags().String(configs.SepES, configs.SepESDefVal,
-		"ABCU(*)1234560  (*) separates equipment category id and serial number")
+		"ABCU(x)1234560  (x) separates equipment category id and serial number")
 	generateCmd.Flags().String(configs.SepSC, configs.SepSCDefVal,
-		"ABCU123456(*)0  (*) separates serial number and check digit")
+		"ABCU123456(x)0  (x) separates serial number and check digit")
 
 	return generateCmd
 }
