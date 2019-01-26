@@ -60,7 +60,7 @@ const (
 	sizeType               = "size-type"
 )
 
-const patternModesInfo string = `                    ` + auto + ` = matches automatically a pattern
+const patternsInfo string = `                    ` + auto + ` = matches automatically a pattern
         ` + containerNumber + ` = matches a container number
                    ` + owner + ` = matches a three letter owner code
 ` + ownerEquipmentCategory + ` = matches a three letter owner code with equipment category ID
@@ -77,14 +77,14 @@ func (p *patternValue) String() string {
 
 func (p *patternValue) Set(value string) error {
 	if pattern := p.patterns[value]; pattern == nil {
-		return fmt.Errorf("%s is not \n%s", value, patternModesInfo)
+		return fmt.Errorf("%s is not \n%s", value, patternsInfo)
 	}
 	p.value = value
 	return nil
 }
 
 func (*patternValue) Type() string {
-	return "mode"
+	return "string"
 }
 
 func newPatternValue() *patternValue {
@@ -136,7 +136,7 @@ func (o *outputValue) String() string {
 
 func (o *outputValue) Set(value string) error {
 	if printer := o.printers[value]; printer == nil {
-		return fmt.Errorf("%s is not \n%s", value, outputModesInfo)
+		return fmt.Errorf("%s is not \n%s", value, outputsInfo)
 	}
 	o.value = value
 	return nil
@@ -146,7 +146,7 @@ func (o *outputValue) Type() string {
 	return "string"
 }
 
-const outputModesInfo string = ` ` + outputAuto + ` = for a single line '` + outputFancy +
+const outputsInfo string = ` ` + outputAuto + ` = for a single line '` + outputFancy +
 	`' and for multiple lines '` + outputCSV + `' output 
   ` + outputCSV + ` = machine readable CSV output
 ` + outputFancy + ` = human readable fancy output`
@@ -212,10 +212,15 @@ func newValidateCmd(stdin io.Reader, writer io.Writer, viperCfg *viper.Viper, de
 			return inputErr
 		},
 	}
+
+	validateCmd.Flags().SortFlags = false
+
 	validateCmd.Flags().VarP(pValue, configs.Pattern, "p",
-		fmt.Sprintf("sets pattern matching mode to\n%s\n", patternModesInfo))
+		fmt.Sprintf("sets pattern matching to\n%s\n", patternsInfo))
 	validateCmd.Flags().Var(oValue, configs.Output,
-		fmt.Sprintf("sets output to\n%s\n", outputModesInfo))
+		fmt.Sprintf("sets output to\n%s\n", outputsInfo))
+	validateCmd.Flags().Bool(configs.NoHeader, configs.NoHeaderDefVal,
+		"omits header of CSV output")
 	validateCmd.Flags().String(configs.SepOE, configs.SepOEDefVal,
 		"ABC(*)U1234560   20G1  (*) separates owner code and equipment category id")
 	validateCmd.Flags().String(configs.SepES, configs.SepESDefVal,
@@ -226,8 +231,6 @@ func newValidateCmd(stdin io.Reader, writer io.Writer, viperCfg *viper.Viper, de
 		"ABCU1234560 (*)  20G1  (*) separates check digit and size")
 	validateCmd.Flags().String(configs.SepST, configs.SepSTDefVal,
 		"ABCU1234560   20(*)G1  (*) separates size and type")
-	validateCmd.Flags().Bool(configs.NoHeader, configs.NoHeaderDefVal,
-		"omits header of CSV output")
 	return validateCmd
 }
 
