@@ -164,15 +164,15 @@ func newValidateCmd(stdin io.Reader, writer io.Writer, viperCfg *viper.Viper, de
 		Long: `Validate intermodal container markings.
 
 ` + sepHelp,
-		Example: `  icm validate ABC
-  icm validate ABC --pattern container-number
-  icm validate ABC U
-  icm validate --sep-owner-equip '' --sep-serial-check '-' ABC U 123456 0
-  icm validate ABC U 123456 0 20G1
-  icm validate 20G1
-  icm generate | icm validate
-  icm generate --count 10 | icm validate
-  icm generate --count 10 | icm validate --output fancy`,
+		Example: `icm validate ABC
+icm validate ABC --pattern container-number
+icm validate ABC U
+icm validate --sep-owner-equip '' --sep-serial-check '-' ABC U 123456 0
+icm validate ABC U 123456 0 20G1
+icm validate 20G1
+icm generate | icm validate
+icm generate --count 10 | icm validate
+icm generate --count 10 | icm validate --output fancy`,
 		Args: cobra.MaximumNArgs(6),
 		// https://github.com/spf13/viper/issues/233
 		PreRunE: func(cmd *cobra.Command, args []string) error {

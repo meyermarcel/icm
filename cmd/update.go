@@ -37,7 +37,7 @@ Following information is available:
   Company
   City
   Country`,
-		Example: `  ` + appName + ` update`,
+		Example: "icm update",
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return update(ownerUpdater, timestampUpdater, ownerURL)

@@ -32,7 +32,8 @@ archive:
     format: zip
   files:
   - LICENSE
-  - README.adoc
+  - README.md
+  - docs/*.md
     # man-pages is also defined in Makefile
   - man-pages/man1/*
 

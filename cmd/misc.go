@@ -27,25 +27,27 @@ import (
 func newMiscCmd(writer io.Writer, rootCmd *cobra.Command) *cobra.Command {
 	miscCmd := &cobra.Command{
 		Use:   "misc",
-		Short: "Miscellaneous generation commands for man page and bash, zsh completions",
-		Long:  "Miscellaneous generation commands for man page and bash, zsh completions.",
+		Short: "Miscellaneous generation commands for man pages, markdown and bash/zsh completions",
+		Long:  "Miscellaneous generation commands for man pages, markdown and bash/zsh completions.",
 	}
 
 	bashCmd := &cobra.Command{
-		Use:   "bash-completion",
-		Short: "Generate bash completion scripts",
-		Long:  "Generate bash completion scripts.",
-		Args:  cobra.NoArgs,
+		Use:     "bash-completion",
+		Short:   "Generate bash completion scripts",
+		Long:    "Generate bash completion scripts.",
+		Example: "icm misc bash-completion",
+		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return rootCmd.GenBashCompletion(writer)
 		},
 	}
 
 	zshCmd := &cobra.Command{
-		Use:   "zsh-completion",
-		Short: "Generate zsh completion scripts",
-		Long:  "Generate zsh completion scripts.",
-		Args:  cobra.NoArgs,
+		Use:     "zsh-completion",
+		Short:   "Generate zsh completion scripts",
+		Long:    "Generate zsh completion scripts.",
+		Example: "icm misc zsh-completion",
+		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return rootCmd.GenZshCompletion(writer)
 		},
@@ -57,7 +59,7 @@ func newMiscCmd(writer io.Writer, rootCmd *cobra.Command) *cobra.Command {
 		Use:     "man",
 		Short:   "Generate man pages",
 		Long:    "Generate man pages.",
-		Example: "  icm misc man . && cat *.1",
+		Example: "icm misc man . && cat *.1",
 		Args:    cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			path := args[0]
@@ -88,9 +90,21 @@ func newMiscCmd(writer io.Writer, rootCmd *cobra.Command) *cobra.Command {
 		},
 	}
 
+	mdCmd := &cobra.Command{
+		Use:     "markdown",
+		Short:   "Generate markdown",
+		Long:    "Generate markdown.",
+		Example: "icm misc markdown docs/",
+		Args:    cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return doc.GenMarkdownTree(rootCmd, args[0])
+		},
+	}
+
 	miscCmd.AddCommand(bashCmd)
 	miscCmd.AddCommand(zshCmd)
 	miscCmd.AddCommand(manCmd)
+	miscCmd.AddCommand(mdCmd)
 
 	return miscCmd
 }
