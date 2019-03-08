@@ -24,7 +24,7 @@ test: clean
 
 .PHONY: lint
 lint: test
-	gometalinter --disable-all --enable=vet --enable=golint --enable=gotype --enable=goimports --vendor ./...
+	golangci-lint run --enable golint --enable goimports
 
 .PHONY: build
 build: lint

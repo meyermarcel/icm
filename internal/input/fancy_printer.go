@@ -229,9 +229,9 @@ func fmtCheckMark(valid bool) string {
 	b.WriteString("  ")
 
 	if !valid {
-		b.WriteString(fmt.Sprintf("%s", red("✘")))
+		b.WriteString(red("✘"))
 		return b.String()
 	}
-	b.WriteString(fmt.Sprintf("%s", green("✔")))
+	b.WriteString(green("✔"))
 	return b.String()
 }
