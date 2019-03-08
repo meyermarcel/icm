@@ -133,12 +133,13 @@ func newRootCmd(
 	timestampUpdater data.TimestampUpdater,
 	ownerURL string) *cobra.Command {
 	rootCmd := &cobra.Command{
-		Version:       version,
-		Use:           appName,
-		Short:         "Validate or generate intermodal container markings",
-		Long:          "Validate or generate intermodal container markings.",
-		SilenceUsage:  true,
-		SilenceErrors: true,
+		Version:           version,
+		Use:               appName,
+		Short:             "Validate or generate intermodal container markings",
+		Long:              "Validate or generate intermodal container markings.",
+		SilenceUsage:      true,
+		SilenceErrors:     true,
+		DisableAutoGenTag: true,
 		PersistentPreRun: func(cmd *cobra.Command, args []string) {
 			if isatty.IsTerminal(os.Stdout.Fd()) {
 				color.NoColor = false
