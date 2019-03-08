@@ -28,7 +28,7 @@ lint: test
 
 .PHONY: build
 build: lint
-	export CGO_ENABLED=0; go build -tags osusergo -o $(BUILD_DIR)/$(BINARY)
+	export CGO_ENABLED=0; go build -o $(BUILD_DIR)/$(BINARY)
 
 .PHONY: man
 man: build

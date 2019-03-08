@@ -28,8 +28,6 @@ import (
 
 	"path/filepath"
 
-	"os/user"
-
 	"github.com/meyermarcel/icm/internal/file"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -66,10 +64,10 @@ Edit default configuration:
 func Execute(version string) {
 	stderr := os.Stderr
 
-	current, err := user.Current()
+	homeDir, err := os.UserHomeDir()
 	checkErr(stderr, err)
 
-	appDirPath := initDir(filepath.Join(current.HomeDir, appDir))
+	appDirPath := initDir(filepath.Join(homeDir, appDir))
 
 	pathToCfg := filepath.Join(appDirPath, configs.NameWithYmlExt)
 	if _, err := os.Stat(pathToCfg); os.IsNotExist(err) {
