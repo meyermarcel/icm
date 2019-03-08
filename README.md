@@ -1,6 +1,7 @@
+[![Build Status](https://travis-ci.org/meyermarcel/icm.svg "Build Status")](https://travis-ci.org/meyermarcel/icm)
+
 # Validate or generate intermodal container markings
 
-[![Build Status](https://travis-ci.org/meyermarcel/icm.svg "Build Status")](https://travis-ci.org/meyermarcel/icm)
 ![Demo](docs/gif/demo.gif)
 
 ## Documentation
