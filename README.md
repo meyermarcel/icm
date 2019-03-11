@@ -68,7 +68,7 @@ Pull requests to publish automatically to Scoop and Snapcraft in [Goreleaser](ht
     make
     ```
 
-## Release
+## Releasing
 
 1. Create version tag according to [SemVer](https://semver.org)
     ```
