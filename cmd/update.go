@@ -37,9 +37,9 @@ Following information is available:
   Company
   City
   Country`,
-		Example: `# Add new owners and preserves all existing owners
+		Example: `# Add new owners and preserve all existing owners
 icm update
-# Delete all owners and inserts most recent owners
+# Delete all owners and add most current owners
 echo '{}' > $HOME/.icm/data/owner.json && icm update`,
 		Args: cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
