@@ -161,18 +161,31 @@ func newValidateCmd(stdin io.Reader, writer io.Writer, viperCfg *viper.Viper, de
 	validateCmd := &cobra.Command{
 		Use:   "validate",
 		Short: "Validate intermodal container markings",
-		Long: `Validate intermodal container markings.
+		Long: `Validate intermodal container markings with single or multi line input.
+
+For single line input a human readable output is used.
+
+For multi line input CSV output is used. For example this is useful to scan
+data sets for possible transposition errors. It is also possible to generate
+CSV data sets of random container numbers.
 
 ` + sepHelp,
 		Example: `icm validate ABC
+# Validate with pattern 'container-number' instead of pattern 'auto'
 icm validate ABC --pattern container-number
 icm validate ABC U
+# Validate and use custom format for output
 icm validate --sep-owner-equip '' --sep-serial-check '-' ABC U 123456 0
-icm validate ABC U 123456 0 20G1
+# Validate a type
 icm validate 20G1
+# Validate a container number with a type
+icm validate ABC U 123456 0 20G1
+# Validate a random container number
 icm generate | icm validate
 icm generate --count 10 | icm validate
-icm generate --count 10 | icm validate --output fancy`,
+icm generate --count 10 | icm validate --output fancy
+# Generate CSV data set
+icm generate --count 1000000 | icm validate`,
 		Args: cobra.MaximumNArgs(6),
 		// https://github.com/spf13/viper/issues/233
 		PreRunE: func(cmd *cobra.Command, args []string) error {

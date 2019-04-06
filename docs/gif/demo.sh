@@ -16,10 +16,10 @@ echo -n "$"
 pe "icm generate"
 echo -n "$"
 wait
-pe "icm generate --count 3"
+pe "icm generate --count 2"
 echo -n "$"
 wait
-pe "icm generate --count 3 --exclude-transposition-errors"
+pe "icm generate --count 2 --exclude-transposition-errors"
 echo -n "$"
 wait
 clear

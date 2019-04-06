@@ -37,8 +37,11 @@ Following information is available:
   Company
   City
   Country`,
-		Example: "icm update",
-		Args:    cobra.NoArgs,
+		Example: `# Add new owners and preserves all existing owners
+icm update
+# Delete all owners and inserts most recent owners
+echo '{}' > $HOME/.icm/data/owner.json && icm update`,
+		Args: cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return update(ownerUpdater, timestampUpdater, ownerURL)
 		},

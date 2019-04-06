@@ -55,7 +55,7 @@ var sepHelp = `Configuration for separators is generated first time you
 execute a command that requires the configuration.
 
 Flags for output formatting can overridden with a config file.
-Edit default configuration:
+Edit default configuration for customization:
 
   ` + filepath.Join("$HOME", appDir, configs.NameWithYmlExt)
 

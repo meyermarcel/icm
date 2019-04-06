@@ -2,13 +2,13 @@
 
 This works with
 
-ImageMagick 7.0.8-23
+ImageMagick 7.0.8-35
 
-bash 5.0.0
+bash 5.0.3
 
-iTerm2 3.2.6
+iTerm2 3.2.8
 
-macOS 10.14.2
+macOS 10.14.4
 
 . Install requirements
 * https://github.com/icholy/ttygif
@@ -50,6 +50,12 @@ echo '#!/bin/sh' > /tmp/convert.sh
 chmod +x /tmp/convert.sh
 # Copy convert command
 pbpaste >> /tmp/convert.sh
+----
++
+If convert command does not work, try adding debug flags:
++
+----
+convert -debug "Cache,Blob" ...
 ----
 
 . Remove unwanted frames in arguments

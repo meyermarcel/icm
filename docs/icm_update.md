@@ -19,7 +19,10 @@ icm update [flags]
 ### Examples
 
 ```
+# Add new owners and preserves all existing owners
 icm update
+# Delete all owners and inserts most recent owners
+echo '{}' > $HOME/.icm/data/owner.json && icm update
 ```
 
 ### Options
