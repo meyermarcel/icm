@@ -1065,6 +1065,12 @@ const ownerJSON = `{
     "city": "Shah Alam",
     "country": "Malaysia"
   },
+  "ATL": {
+    "code": "ATL",
+    "company": "ALBATROSS TANK LEASING B.V.",
+    "city": "Moerdijk",
+    "country": "Netherlands"
+  },
   "ATO": {
     "code": "ATO",
     "company": "ARKEMA",
@@ -1430,6 +1436,12 @@ const ownerJSON = `{
     "company": "EUROTAINER SA",
     "city": "Rotterdam",
     "country": "Netherlands"
+  },
+  "BEG": {
+    "code": "BEG",
+    "company": "BEC GMBH",
+    "city": "Pfullingen",
+    "country": "Germany"
   },
   "BEL": {
     "code": "BEL",
@@ -2553,6 +2565,12 @@ const ownerJSON = `{
     "city": "SAN JOSE",
     "country": "Costa Rica"
   },
+  "CGA": {
+    "code": "CGA",
+    "company": "CUSTOMISED GAS AUSTRALIA GROUP PTY LTD",
+    "city": "RIVERSTONE",
+    "country": "Australia"
+  },
   "CGB": {
     "code": "CGB",
     "company": "COREGAS PTY LTD",
@@ -2690,6 +2708,12 @@ const ownerJSON = `{
     "company": "CHS CONTAINER HANDEL GMBH",
     "city": "BREMEN",
     "country": "Germany"
+  },
+  "CHT": {
+    "code": "CHT",
+    "company": "COHERENT BOX INTERNATIONAL CO., LTD",
+    "city": "Hong-Kong",
+    "country": "HK"
   },
   "CHV": {
     "code": "CHV",
@@ -3504,7 +3528,7 @@ const ownerJSON = `{
   "CVA": {
     "code": "CVA",
     "company": "TAYLOR-WHARTON AMERICA INC",
-    "city": "BAYTOWN,TX 77523",
+    "city": "BAYTOWN,TX",
     "country": "United States"
   },
   "CVV": {
@@ -3791,7 +3815,7 @@ const ownerJSON = `{
   },
   "DCO": {
     "code": "DCO",
-    "company": "DOW CORNING LIMITED",
+    "company": "DOW SILICONES UK LIMITED",
     "city": "BARRY CF63 2YL",
     "country": "United Kingdom"
   },
@@ -4172,12 +4196,6 @@ const ownerJSON = `{
     "company": "DUPONT",
     "city": "WILMINGTON, NC 19805",
     "country": "United States"
-  },
-  "DPD": {
-    "code": "DPD",
-    "company": "CHEMOURS",
-    "city": "DORDRECHT",
-    "country": "Netherlands"
   },
   "DPI": {
     "code": "DPI",
@@ -4578,8 +4596,8 @@ const ownerJSON = `{
   "EGH": {
     "code": "EGH",
     "company": "EVERGREEN MARINE (HONG KONG) LTD",
-    "city": "Taoyuan City",
-    "country": "Taiwan (China)"
+    "city": "Wan Chai",
+    "country": "HK"
   },
   "EGS": {
     "code": "EGS",
@@ -6642,7 +6660,7 @@ const ownerJSON = `{
   "HAC": {
     "code": "HAC",
     "company": "HAIAN TRANSPORT & STEVEDORING JSC",
-    "city": "Haiphong",
+    "city": "Hanoi",
     "country": "Viet Nam"
   },
   "HAF": {
@@ -6891,6 +6909,12 @@ const ownerJSON = `{
     "city": "FRECHEN",
     "country": "Germany"
   },
+  "HFD": {
+    "code": "HFD",
+    "company": "DO-FLUORIDE CHEMICALS CO.,LTD",
+    "city": "Jiaozuo",
+    "country": "China"
+  },
   "HFL": {
     "code": "HFL",
     "company": "PETRO-CANADA LUBRICANTS INC.",
@@ -6984,7 +7008,7 @@ const ownerJSON = `{
   "HIC": {
     "code": "HIC",
     "company": "HAESAERTS INTERMODAL NV",
-    "city": "BREENDONK",
+    "city": "ZWIJNDRECHT",
     "country": "Belgium"
   },
   "HIL": {
@@ -8175,6 +8199,12 @@ const ownerJSON = `{
     "city": "KOWLOON",
     "country": "HK"
   },
+  "JNJ": {
+    "code": "JNJ",
+    "company": "JINAN ENERGY CONSTRUCTION & DEVELOPMENT GROUP CO., LTD.",
+    "city": "Jinan",
+    "country": "China"
+  },
   "JOT": {
     "code": "JOT",
     "company": "JAPAN OIL TRANSPORTATION CO. LTD",
@@ -8595,12 +8625,6 @@ const ownerJSON = `{
     "city": "Kallo",
     "country": "Belgium"
   },
-  "KMS": {
-    "code": "KMS",
-    "company": "YANG MING MARINE TRANSPORT CORP.",
-    "city": "KEELUNG",
-    "country": "Taiwan, China"
-  },
   "KMT": {
     "code": "KMT",
     "company": "KOREA MARINE TRANSPORT CO / E. C. TEAM",
@@ -8618,6 +8642,12 @@ const ownerJSON = `{
     "company": "KANTO CORPORATION INC.",
     "city": "PORTLAND, OR 97203",
     "country": "United States"
+  },
+  "KOC": {
+    "code": "KOC",
+    "company": "KOREA OCEAN BUSINESS CORPORATION",
+    "city": "Busan",
+    "country": "Korea, Republic of"
   },
   "KOS": {
     "code": "KOS",
@@ -10299,6 +10329,12 @@ const ownerJSON = `{
     "city": "GENEVE",
     "country": "Switzerland"
   },
+  "MSN": {
+    "code": "MSN",
+    "company": "MSC- MEDITERRANEAN SHIPPING COMPANY S.A.",
+    "city": "GENEVE",
+    "country": "Switzerland"
+  },
   "MSO": {
     "code": "MSO",
     "company": "M/S CONTAINERS A/S",
@@ -10322,6 +10358,12 @@ const ownerJSON = `{
     "company": "MSSA",
     "city": "SAINT MARCEL",
     "country": "France"
+  },
+  "MST": {
+    "code": "MST",
+    "company": "MSC- MEDITERRANEAN SHIPPING COMPANY S.A.",
+    "city": "GENEVE",
+    "country": "Switzerland"
   },
   "MSU": {
     "code": "MSU",
@@ -10839,12 +10881,6 @@ const ownerJSON = `{
     "city": "OSLO",
     "country": "Norway"
   },
-  "NHJ": {
-    "code": "NHJ",
-    "company": "NOVO HORIZONTE JACAREPAGUA IMPORTACAO E EXPORTACAO LTDA",
-    "city": "RIO DE JANEIRO",
-    "country": "Brazil"
-  },
   "NID": {
     "code": "NID",
     "company": "NILE DUTCH AFRICA LINE",
@@ -11006,12 +11042,6 @@ const ownerJSON = `{
     "company": "CMA-CGM",
     "city": "MARSEILLE CEDEX 02",
     "country": "France"
-  },
-  "NOM": {
-    "code": "NOM",
-    "company": "SRT ROUND THE WORLD LTD",
-    "city": "RAMSEY, ISLE OF MAN, IM8 2LQ",
-    "country": "United Kingdom"
   },
   "NON": {
     "code": "NON",
@@ -11420,12 +11450,6 @@ const ownerJSON = `{
     "company": "ORPHAN GRAIN TRAIN INC.",
     "city": "NORFOLK, NE-68702",
     "country": "United States"
-  },
-  "OKC": {
-    "code": "OKC",
-    "company": "CAHAYA SAMUDERA SHIPPING PTE LTD",
-    "city": "Singapore",
-    "country": "Singapore"
   },
   "OKW": {
     "code": "OKW",
@@ -11949,12 +11973,6 @@ const ownerJSON = `{
     "city": "NANNING LIANGQING DISTRICT",
     "country": "China"
   },
-  "PGB": {
-    "code": "PGB",
-    "company": "PERGAN GMBH",
-    "city": "BOCHOLT",
-    "country": "Germany"
-  },
   "PGF": {
     "code": "PGF",
     "company": "PACIFIC GATES CONTAINER LINES LTD",
@@ -12441,12 +12459,6 @@ const ownerJSON = `{
     "city": "MO I RANA",
     "country": "Norway"
   },
-  "PTS": {
-    "code": "PTS",
-    "company": "XPO LOGISTICS",
-    "city": "DUBLIN, OH 43016",
-    "country": "United States"
-  },
   "PTV": {
     "code": "PTV",
     "company": "PISTON TANK CORPORATION",
@@ -12554,6 +12566,12 @@ const ownerJSON = `{
     "company": "PT. INDONESIA TSINGSHAN STAINLESS STEEL",
     "city": "JAKARTA",
     "country": "Indonesia"
+  },
+  "QTM": {
+    "code": "QTM",
+    "company": "QUANTUM FUEL SYSTEM LLC",
+    "city": "Lake Forest",
+    "country": "United States"
   },
   "RAC": {
     "code": "RAC",
@@ -13217,7 +13235,7 @@ const ownerJSON = `{
   },
   "RTV": {
     "code": "RTV",
-    "company": "ROOK TRADING BV",
+    "company": "DAISY RENTAL SERVICES BV",
     "city": "VLAARDINGEN",
     "country": "Netherlands"
   },
@@ -13574,6 +13592,12 @@ const ownerJSON = `{
     "company": "TREDI",
     "city": "Saint-Vulbas",
     "country": "France"
+  },
+  "SDL": {
+    "code": "SDL",
+    "company": "SODIMAC S.A.",
+    "city": "Santiago",
+    "country": "Chile"
   },
   "SDN": {
     "code": "SDN",
@@ -15249,6 +15273,12 @@ const ownerJSON = `{
     "city": "Shenzhen",
     "country": "China"
   },
+  "THK": {
+    "code": "THK",
+    "company": "TRANSPORT PETROCHEMICAL COMPANY LTD",
+    "city": "Moscow",
+    "country": "Russian Federation"
+  },
   "THP": {
     "code": "THP",
     "company": "ITALMATCH CHEMICALS S.P.A.",
@@ -15990,7 +16020,7 @@ const ownerJSON = `{
   "TUL": {
     "code": "TUL",
     "company": "CONTAINER SOLUTIONS S.A DE C.V",
-    "city": "MEXICO D.F",
+    "city": "MEXICO",
     "country": "Mexico"
   },
   "TUT": {
@@ -16016,6 +16046,12 @@ const ownerJSON = `{
     "company": "TRANSVISION SHIPPING PTE LTD",
     "city": "NAVI MUMBAI",
     "country": "India"
+  },
+  "TWA": {
+    "code": "TWA",
+    "company": "TAYLOR-WHARTON AMERICA INC",
+    "city": "BAYTOWN,TX",
+    "country": "United States"
   },
   "TWC": {
     "code": "TWC",
@@ -16598,12 +16634,6 @@ const ownerJSON = `{
     "company": "VREDEVELD INTERMODAL",
     "city": "HOOGERSMILDE",
     "country": "Netherlands"
-  },
-  "VRK": {
-    "code": "VRK",
-    "company": "ANDRADE & SANTOS LOCACAO DE MODULOS E IMPORTAÇÃO LTDA",
-    "city": "SANTOS",
-    "country": "Brazil"
   },
   "VRS": {
     "code": "VRS",
