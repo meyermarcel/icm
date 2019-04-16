@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/meyermarcel/icm.svg "Build Status")](https://travis-ci.org/meyermarcel/icm)
 
-# icm
+# icm (intermodal container markings)
 
 icm generates or validates single data or whole data sets of intermodal container markings according to [ISO 6346](https://en.wikipedia.org/wiki/ISO_6346).
 
