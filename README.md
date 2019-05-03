@@ -62,8 +62,10 @@ Pull requests to publish automatically to Scoop and Snapcraft in [Goreleaser](ht
 ## Development
 
 1. Requirements
-    * [Golang 1.12.x](https://golang.org/doc/install)
-    * [Go Dep 0.5.x](https://golang.github.io/dep/docs/installation.html)
+    * [Golang 1.12.x](https://golang.org/doc/install) with Go Modules enabled:
+        ```
+        export GO111MODULE=on
+        ```
     * [GolangCI-Lint 1.16.x](https://github.com/golangci/golangci-lint#install)
     * [GNU Make 4.2.x](https://www.gnu.org/software/make/)
 

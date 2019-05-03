@@ -1,4 +1,4 @@
-PACKAGES := $(shell go list ./... | grep -v /vendor)
+PACKAGES := $(shell go list ./...)
 BIN_DIR := $(GOPATH)/bin
 BUILD_DIR := build
 # man-pages is also defined in goreleaser.yml
@@ -7,14 +7,10 @@ DOCS_DIR := docs
 BINARY := icm
 
 .PHONY: all
-all: dep clean test lint build man markdown
-
-.PHONY: dep
-dep:
-	dep ensure -v
+all: clean test lint build man markdown
 
 .PHONY: clean
-clean: dep
+clean:
 	go clean -x -testcache
 	rm -rf $(BUILD_DIR)
 
@@ -44,4 +40,4 @@ install:
 
 .PHONY: fmt
 fmt:
-	goimports -w $(shell find . -type f -name '*.go' -not -path "./vendor/*")
+	goimports -w $(shell find . -type f -name '*.go')

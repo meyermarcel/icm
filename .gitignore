@@ -8,9 +8,6 @@ man-pages/
 # Test binary, build with `go test -c`
 *.test
 
-# Vendor folder
-vendor/
-
 # ttyrec files
 docs/gif/demo
 docs/gif/tty.gif
