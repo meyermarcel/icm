@@ -20,15 +20,16 @@ import (
 	"io/ioutil"
 	"os"
 
+	isatty "github.com/mattn/go-isatty"
+	"github.com/meyermarcel/icm/internal/data/file"
+
 	"github.com/fatih/color"
-	"github.com/mattn/go-isatty"
 	"github.com/meyermarcel/icm/internal/data"
 
 	"github.com/meyermarcel/icm/configs"
 
 	"path/filepath"
 
-	"github.com/meyermarcel/icm/internal/file"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
