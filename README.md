@@ -14,13 +14,13 @@ For detailed information and useful examples please read the [docs](docs/icm.md)
 
 ## Installation
 
-### macOS
+### macOS with [Homebrew](https://brew.sh)
 
 ```
 brew install meyermarcel/tap/icm
 ```
 
-### Windows
+### Windows with [Scoop](https://scoop.sh)
 
 ```
 scoop bucket add meyermarcel-bucket https://github.com/meyermarcel/scoop-bucket.git
