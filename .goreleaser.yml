@@ -40,7 +40,7 @@ brew:
     owner: meyermarcel
     name: homebrew-tap
   folder: Formula
-  description: "Validate or generate intermodal container markings."
+  description: "Generate or validate intermodal container markings."
   homepage: "https://github.com/meyermarcel/icm"
   install: |
     bin.install "icm"
@@ -57,3 +57,11 @@ brew:
 
   test: |
     system "#{bin}/icm --version"
+
+scoop:
+  bucket:
+    owner: meyermarcel
+    name: scoop-bucket
+  homepage: "https://github.com/meyermarcel/icm"
+  description: "Generate or validate intermodal container markings."
+  license: Apache-2.0

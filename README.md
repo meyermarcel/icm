@@ -20,13 +20,20 @@ For detailed information and useful examples please read the [docs](docs/icm.md)
 brew install meyermarcel/tap/icm
 ```
 
-### Linux & Windows
+### Windows
+
+```
+scoop bucket add meyermarcel-bucket https://github.com/meyermarcel/scoop-bucket.git
+scoop install icm
+```
+
+### Linux
 
 Download your binary in the [Releases](https://github.com/meyermarcel/icm/releases) section.
 
 See the [misc command](docs/icm_misc.md) for **bash/zsh completions** and **manual pages**.
 
-Pull requests to publish automatically to Scoop and Snapcraft in [Goreleaser](https://goreleaser.com/customization) are welcomed.
+Pull requests to publish automatically to Snapcraft in [Goreleaser](https://goreleaser.com/customization) are welcomed.
 
 ## Contributing
 
