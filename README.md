@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/meyermarcel/icm.svg "Build Status")](https://travis-ci.org/meyermarcel/icm)
+[![Build Status](https://travis-ci.org/meyermarcel/icm.svg "Build Status")](https://travis-ci.org/meyermarcel/icm) [![Go Report Card](https://goreportcard.com/badge/github.com/meyermarcel/icm)](https://goreportcard.com/report/github.com/meyermarcel/icm)
 
 # icm (intermodal container markings)
 
