@@ -73,7 +73,7 @@ Pull requests to publish automatically to Snapcraft in [Goreleaser](https://gore
         ```
         export GO111MODULE=on
         ```
-    * [GolangCI-Lint 1.16.x](https://github.com/golangci/golangci-lint#install)
+    * [GolangCI-Lint 1.17.x](https://github.com/golangci/golangci-lint#install)
     * [GNU Make 4.2.x](https://www.gnu.org/software/make/)
 
 1. To build project execute
