@@ -38,28 +38,29 @@ archives:
       # man-pages is also defined in Makefile
     - man-pages/man1/*
 
-brew:
-  github:
-    owner: meyermarcel
-    name: homebrew-tap
-  folder: Formula
-  description: "Generate or validate intermodal container markings."
-  homepage: "https://github.com/meyermarcel/icm"
-  install: |
-    bin.install "icm"
-    # Install bash completion
-    output = Utils.popen_read("#{bin}/icm misc bash-completion")
-    (bash_completion/"icm").write output
+brews:
+  -
+    github:
+      owner: meyermarcel
+      name: homebrew-tap
+    folder: Formula
+    description: "Generate or validate intermodal container markings."
+    homepage: "https://github.com/meyermarcel/icm"
+    install: |
+      bin.install "icm"
+      # Install bash completion
+      output = Utils.popen_read("#{bin}/icm misc bash-completion")
+      (bash_completion/"icm").write output
 
-    # Install zsh completion
-    output = Utils.popen_read("#{bin}/icm misc zsh-completion")
-    (zsh_completion/"_icm").write output
+      # Install zsh completion
+      output = Utils.popen_read("#{bin}/icm misc zsh-completion")
+      (zsh_completion/"_icm").write output
 
-    # man-pages is also defined in Makefile
-    man1.install Dir["man-pages/man1/*.1"]
+      # man-pages is also defined in Makefile
+      man1.install Dir["man-pages/man1/*.1"]
 
-  test: |
-    system "#{bin}/icm --version"
+    test: |
+      system "#{bin}/icm --version"
 
 scoop:
   bucket:
