@@ -15,12 +15,13 @@ package cmd
 
 import (
 	"fmt"
+	"io"
 	"net/http"
 
-	"github.com/PuerkitoBio/goquery"
 	"github.com/meyermarcel/icm/internal/cont"
 	"github.com/meyermarcel/icm/internal/data"
 	"github.com/spf13/cobra"
+	"golang.org/x/net/html"
 )
 
 func newUpdateOwnerCmd(
@@ -54,54 +55,99 @@ func update(ownerUpdater data.OwnerUpdater, timestampUpdater data.TimestampUpdat
 	if err := timestampUpdater.Update(); err != nil {
 		return err
 	}
-	owners, err := ownersRemote(ownerURL)
+
+	resp, err := http.Get(ownerURL)
 	if err != nil {
 		return err
 	}
+	if resp.StatusCode != 200 {
+		return fmt.Errorf("status code error: %d %s", resp.StatusCode, resp.Status)
+	}
+	owners, err := parseOwners(resp.Body)
+	if err != nil {
+		return err
+	}
+	resp.Body.Close()
+
 	if err := ownerUpdater.Update(owners); err != nil {
 		return err
 	}
 	return nil
 }
 
-func ownersRemote(url string) (map[string]cont.Owner, error) {
-
-	const query = "tr td[data-label=Code]"
-
-	owners := map[string]cont.Owner{}
-
-	document, err := getBody(url)
+func parseOwners(body io.Reader) (map[string]cont.Owner, error) {
+	doc, err := html.Parse(body)
 	if err != nil {
 		return nil, err
 	}
-	document.Find(query).Each(func(i int, s *goquery.Selection) {
-		code := s.Parent().Find("td[data-label=Code]").Text()
-		company := s.Parent().Find("td[data-label=Company]").Text()
-		city := s.Parent().Find("td[data-label=City]").Text()
-		country := s.Parent().Find("td[data-label=Country]").Text()
 
-		owners[code[0:3]] = cont.Owner{Code: code[0:3], Company: company, City: city, Country: country}
-	})
+	owners := map[string]cont.Owner{}
 
+	var getOwnerNode func(*html.Node) error
+	getOwnerNode = func(n *html.Node) error {
+		if n.Type == html.ElementNode && n.Data == "td" {
+
+			for _, a := range n.Attr {
+				if a.Key == "data-label" && a.Val == "Code" {
+
+					codeWithU := firstChildData(n)
+					if len(codeWithU) < 3 {
+						return fmt.Errorf("Parsing HTML failed of owner code failed because '%s' is too short", codeWithU)
+					}
+					code := codeWithU[0:3]
+					companyNode, err := afterNextSibling(n)
+					if err != nil {
+						return err
+					}
+					cityNode, err := afterNextSibling(companyNode)
+					if err != nil {
+						return err
+					}
+					countryNode, err := afterNextSibling(cityNode)
+					if err != nil {
+						return err
+					}
+					owners[code] = cont.Owner{Code: code,
+						Company: firstChildData(companyNode),
+						City:    firstChildData(cityNode),
+						Country: firstChildData(countryNode)}
+				}
+			}
+		}
+
+		for c := n.FirstChild; c != nil; c = c.NextSibling {
+			err := getOwnerNode(c)
+			if err != nil {
+				return err
+			}
+		}
+		return nil
+	}
+	err = getOwnerNode(doc)
+	if err != nil {
+		return nil, err
+	}
 	if len(owners) == 0 {
-		return nil, fmt.Errorf("could not find owners in document from url '%s' with query '%s'", url, query)
+		return nil, fmt.Errorf("Parsing HTML failed because no owner was parsed")
 	}
 	return owners, nil
 }
 
-func getBody(url string) (*goquery.Document, error) {
-	res, err := http.Get(url)
-	if err != nil {
-		return nil, err
+func afterNextSibling(n *html.Node) (*html.Node, error) {
+	var next *html.Node
+	if next = n.NextSibling; next != nil {
+		var afterNext *html.Node
+		if afterNext = next.NextSibling; afterNext != nil {
+			return afterNext, nil
+		}
 	}
-	defer res.Body.Close()
-	if res.StatusCode != 200 {
-		return nil, fmt.Errorf("status code error: %d %s", res.StatusCode, res.Status)
-	}
+	return nil, fmt.Errorf("Parsing HTML failed because no after next sibling of '%s'", n.Data)
+}
 
-	doc, err := goquery.NewDocumentFromReader(res.Body)
-	if err != nil {
-		return nil, err
+func firstChildData(n *html.Node) string {
+	var fc *html.Node
+	if fc = n.FirstChild; fc != nil {
+		return fc.Data
 	}
-	return doc, nil
+	return ""
 }
