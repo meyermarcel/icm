@@ -4,13 +4,11 @@
 
 icm generates or validates single data or whole data sets of intermodal container markings according to [ISO 6346](https://en.wikipedia.org/wiki/ISO_6346).
 
+See example commands for [generate](docs/icm_generate.md) and [validate](docs/icm_validate.md).
+
 ## Demo
 
 ![Demo](docs/gif/demo.gif)
-
-## Documentation
-
-For detailed information and useful examples please read the [docs](docs/icm.md).
 
 ## Installation
 
