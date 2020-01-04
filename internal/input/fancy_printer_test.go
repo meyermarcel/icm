@@ -16,10 +16,9 @@ package input
 import (
 	"bufio"
 	"bytes"
+	"errors"
 	"reflect"
 	"testing"
-
-	"github.com/pkg/errors"
 )
 
 func TestFancyPrinterFactory_Build(t *testing.T) {
