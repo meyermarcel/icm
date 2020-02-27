@@ -72,8 +72,8 @@ See the [misc command](docs/icm_misc.md) for **bash/zsh completions** and **manu
 ## Development
 
 1. Requirements
-    * [Golang 1.13.x](https://golang.org/doc/install)
-    * [GolangCI-Lint 1.22.x](https://github.com/golangci/golangci-lint#install)
+    * [Golang 1.14.x](https://golang.org/doc/install)
+    * [GolangCI-Lint 1.23.x](https://github.com/golangci/golangci-lint#install)
     * [GNU Make 4.2.x](https://www.gnu.org/software/make/)
 
 1. To build project execute
