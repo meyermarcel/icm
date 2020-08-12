@@ -67,7 +67,10 @@ func update(ownerUpdater data.OwnerUpdater, timestampUpdater data.TimestampUpdat
 	if err != nil {
 		return err
 	}
-	resp.Body.Close()
+
+	if err := resp.Body.Close(); err != nil {
+		return err
+	}
 
 	if err := ownerUpdater.Update(owners); err != nil {
 		return err
@@ -92,7 +95,7 @@ func parseOwners(body io.Reader) (map[string]cont.Owner, error) {
 
 					codeWithU := firstChildData(n)
 					if len(codeWithU) < 3 {
-						return fmt.Errorf("Parsing HTML failed of owner code failed because '%s' is too short", codeWithU)
+						return fmt.Errorf("parsing HTML failed of owner code failed because '%s' is too short", codeWithU)
 					}
 					code := codeWithU[0:3]
 					companyNode, err := afterNextSibling(n)
@@ -128,7 +131,7 @@ func parseOwners(body io.Reader) (map[string]cont.Owner, error) {
 		return nil, err
 	}
 	if len(owners) == 0 {
-		return nil, fmt.Errorf("Parsing HTML failed because no owner was parsed")
+		return nil, fmt.Errorf("parsing HTML failed because no owner was parsed")
 	}
 	return owners, nil
 }
@@ -141,7 +144,7 @@ func afterNextSibling(n *html.Node) (*html.Node, error) {
 			return afterNext, nil
 		}
 	}
-	return nil, fmt.Errorf("Parsing HTML failed because no after next sibling of '%s'", n.Data)
+	return nil, fmt.Errorf("parsing HTML failed because nothing after next sibling of '%s'", n.Data)
 }
 
 func firstChildData(n *html.Node) string {
