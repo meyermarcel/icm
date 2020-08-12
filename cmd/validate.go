@@ -18,12 +18,15 @@ import (
 	"encoding/csv"
 	"fmt"
 	"io"
+	"os"
 	"regexp"
 	"sort"
 	"strconv"
 	"strings"
 
-	"github.com/fatih/color"
+	"github.com/mattn/go-isatty"
+
+	"github.com/logrusorgru/aurora/v3"
 
 	"github.com/meyermarcel/icm/configs"
 	"github.com/meyermarcel/icm/internal/cont"
@@ -33,12 +36,11 @@ import (
 	"github.com/spf13/viper"
 )
 
-var (
-	yellow    = color.New(color.FgYellow).SprintFunc()
-	green     = color.New(color.FgGreen).SprintFunc()
-	bold      = color.New(color.Bold).SprintFunc()
-	underline = color.New(color.Underline).SprintFunc()
-)
+var au aurora.Aurora
+
+func init() {
+	au = aurora.NewAurora(isatty.IsTerminal(os.Stdout.Fd()))
+}
 
 type errValidate struct {
 	message string
@@ -158,6 +160,7 @@ func (o *outputValue) newPrinter(value string) newPrinter {
 var oValue = newOutputValue()
 
 func newValidateCmd(stdin io.Reader, writer io.Writer, viperCfg *viper.Viper, decoders decoders) *cobra.Command {
+	au = aurora.NewAurora(false)
 	validateCmd := &cobra.Command{
 		Use:   "validate",
 		Short: "Validate intermodal container markings",
@@ -356,18 +359,18 @@ func newOwnerInput(ownerDecodeUpdater data.OwnerDecodeUpdater) func() input.Inpu
 
 			if value == "" {
 				return newErrValidate(fmt.Sprintf("%s is not %s long (e.g. %s)",
-						underline("owner code"),
-						bold("3 letters"),
-						underline(ownerDecodeUpdater.GetAllOwnerCodes()[0]))),
+						au.Underline("owner code"),
+						au.Bold("3 letters"),
+						au.Underline(ownerDecodeUpdater.GetAllOwnerCodes()[0]))),
 					nil,
 					[]input.Datum{ownerCodeDatum, ownerCompanyDatum, ownerCityDatum, ownerCountryDatum}
 			}
 			found, owner := ownerDecodeUpdater.Decode(value)
 			if !found {
 				return newErrValidate(fmt.Sprintf("%s is not %s (e.g. %s)",
-						underline(value),
-						bold("registered"),
-						underline(ownerDecodeUpdater.GetAllOwnerCodes()[0]))),
+						au.Underline(value),
+						au.Bold("registered"),
+						au.Underline(ownerDecodeUpdater.GetAllOwnerCodes()[0]))),
 					nil,
 					[]input.Datum{ownerCodeDatum, ownerCompanyDatum, ownerCityDatum, ownerCountryDatum}
 
@@ -397,7 +400,7 @@ func newEquipCatInput(equipCatDecoder data.EquipCatDecoder) func() input.Input {
 			equipCatDatum := input.NewDatum("equipment-category")
 			if value == "" {
 				return newErrValidate(fmt.Sprintf("%s is not %s",
-						underline("equipment category id"),
+						au.Underline("equipment category id"),
 						equipCatIDsAsList(equipCatDecoder))),
 					nil,
 					[]input.Datum{equipCatIDDatum, equipCatDatum}
@@ -406,7 +409,7 @@ func newEquipCatInput(equipCatDecoder data.EquipCatDecoder) func() input.Input {
 			found, cat := equipCatDecoder.Decode(value)
 			if !found {
 				return newErrValidate(fmt.Sprintf("%s is not %s",
-						underline("equipment category id"),
+						au.Underline("equipment category id"),
 						equipCatIDsAsList(equipCatDecoder))),
 					nil,
 					[]input.Datum{equipCatIDDatum, equipCatDatum}
@@ -426,7 +429,7 @@ func equipCatIDsAsList(equipCatDecoder data.EquipCatDecoder) string {
 	iDs := equipCatDecoder.AllCatIDs()
 	sort.Strings(iDs)
 	for i, element := range iDs {
-		b.WriteString(green(element))
+		b.WriteString(fmt.Sprint(au.Green(element)))
 		if i < len(iDs)-2 {
 			b.WriteString(", ")
 		}
@@ -446,8 +449,8 @@ func newSerialNumInput() func() input.Input {
 				serialNumData := input.NewDatum("serial-number")
 				if value == "" {
 					return newErrValidate(fmt.Sprintf("%s is not %s long",
-							underline("serial number"),
-							bold("6 numbers"))),
+							au.Underline("serial number"),
+							au.Bold("6 numbers"))),
 						nil,
 						[]input.Datum{serialNumData}
 				}
@@ -468,7 +471,7 @@ func newCheckDigitInput() func() input.Input {
 				possibleTranspositionError := input.NewDatum("possible-transposition-error")
 				if len(strings.Join(previousValues[0:3], "")) != 10 {
 					return newErrValidate(fmt.Sprintf("%s is not calculable",
-							underline("check digit"))),
+							au.Underline("check digit"))),
 						nil,
 						[]input.Datum{
 							checkDigitDatum,
@@ -485,9 +488,9 @@ func newCheckDigitInput() func() input.Input {
 				number, err := strconv.Atoi(value)
 				if err != nil {
 					return newErrValidate(fmt.Sprintf("%s must be a %s (calculated: %s)",
-							underline("check digit"),
-							bold("number"),
-							green(checkDigit))),
+							au.Underline("check digit"),
+							au.Bold("number"),
+							au.Green(checkDigit))),
 						infos,
 						[]input.Datum{
 							checkDigitDatum,
@@ -500,8 +503,8 @@ func newCheckDigitInput() func() input.Input {
 				if number != checkDigit%10 {
 					return newErrValidate(fmt.Sprintf(
 							"calculated %s is %s",
-							underline("check digit"),
-							green(checkDigit%10))),
+							au.Underline("check digit"),
+							au.Green(checkDigit%10))),
 						infos,
 						[]input.Datum{
 							checkDigitDatum,
@@ -551,9 +554,9 @@ func appendCheckDigit10Info(checkDigit int, infos []input.Info) []input.Info {
 			infos = make([]input.Info, 0)
 		}
 		infos = append(infos, input.Info{
-			Text: fmt.Sprintf("It is not recommended to use a %s", underline("serial number"))})
+			Text: fmt.Sprintf("It is not recommended to use a %s", au.Underline("serial number"))})
 		infos = append(infos, input.Info{
-			Text: fmt.Sprintf("that generates %s %s (0).", underline("check digit"), yellow(10))})
+			Text: fmt.Sprintf("that generates %s %s (0).", au.Underline("check digit"), au.Yellow(10))})
 	}
 	return infos
 }
@@ -568,9 +571,9 @@ func newLengthInput(lengthDecoder data.LengthDecoder) func() input.Input {
 			lengthDescDatum := input.NewDatum("length-description")
 			if value == "" {
 				return newErrValidate(fmt.Sprintf("%s is not a %s or a %s",
-						underline("length code"),
-						bold("valid number"),
-						bold("valid character"))),
+						au.Underline("length code"),
+						au.Bold("valid number"),
+						au.Bold("valid character"))),
 					nil,
 					[]input.Datum{lengthDatum, lengthDescDatum}
 			}
@@ -578,8 +581,8 @@ func newLengthInput(lengthDecoder data.LengthDecoder) func() input.Input {
 			found, length := lengthDecoder.Decode(value)
 			if !found {
 				return newErrValidate(fmt.Sprintf("%s is not %s",
-						underline("length code"),
-						bold("valid"))),
+						au.Underline("length code"),
+						au.Bold("valid"))),
 					nil,
 					[]input.Datum{lengthDatum, lengthDescDatum}
 			}
@@ -602,9 +605,9 @@ func newHeightWidthInput(heightWidthDecoder data.HeightWidthDecoder) func() inpu
 			widthDescDatum := input.NewDatum("width-description")
 			if value == "" {
 				return newErrValidate(fmt.Sprintf("%s is not a %s or a %s",
-						underline("height and width code"),
-						bold("valid number"),
-						bold("valid character"))),
+						au.Underline("height and width code"),
+						au.Bold("valid number"),
+						au.Bold("valid character"))),
 					nil,
 					[]input.Datum{heightWidthDatum, heightDescDatum, widthDescDatum}
 			}
@@ -612,8 +615,8 @@ func newHeightWidthInput(heightWidthDecoder data.HeightWidthDecoder) func() inpu
 			found, heightWidth := heightWidthDecoder.Decode(value)
 			if !found {
 				return newErrValidate(fmt.Sprintf("%s is not %s",
-						underline("height and width code"),
-						bold("valid"))),
+						au.Underline("height and width code"),
+						au.Bold("valid"))),
 					nil,
 					[]input.Datum{heightWidthDatum, heightDescDatum, widthDescDatum}
 			}
@@ -643,9 +646,9 @@ func newTypeAndGroupInput(typeDecoder data.TypeDecoder) func() input.Input {
 			groupDescDatum := input.NewDatum("group-description")
 			if value == "" {
 				return newErrValidate(fmt.Sprintf("%s is not a %s or a %s",
-						underline("type code"),
-						bold("valid number"),
-						bold("valid character"))),
+						au.Underline("type code"),
+						au.Bold("valid number"),
+						au.Bold("valid character"))),
 					nil,
 					[]input.Datum{typeDatum, typeDescDatum, groupDescDatum}
 			}
@@ -653,8 +656,8 @@ func newTypeAndGroupInput(typeDecoder data.TypeDecoder) func() input.Input {
 			found, typeAndGroup := typeDecoder.Decode(value)
 			if !found {
 				return newErrValidate(fmt.Sprintf("%s is not %s",
-						underline("type code"),
-						bold("valid"))),
+						au.Underline("type code"),
+						au.Bold("valid"))),
 					nil,
 					[]input.Datum{typeDatum, typeDescDatum, groupDescDatum}
 			}

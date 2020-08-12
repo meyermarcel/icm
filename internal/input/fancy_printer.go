@@ -16,17 +16,21 @@ package input
 import (
 	"fmt"
 	"io"
+	"os"
 	"sort"
 	"strings"
 	"unicode/utf8"
 
-	"github.com/fatih/color"
+	"github.com/mattn/go-isatty"
+
+	"github.com/logrusorgru/aurora/v3"
 )
 
-var (
-	green = color.New(color.FgGreen).SprintFunc()
-	red   = color.New(color.FgRed).SprintFunc()
-)
+var au aurora.Aurora
+
+func init() {
+	au = aurora.NewAurora(isatty.IsTerminal(os.Stdout.Fd()))
+}
 
 // FancyPrinter prints inputs in a fancy manner. Use NewFancyPrinterFactory to instantiate one.
 type FancyPrinter struct {
@@ -117,12 +121,12 @@ func (fp *FancyPrinter) Print(inputs []Input) error {
 
 func fmtValue(input Input) string {
 	if input.err == nil {
-		return green(input.value)
+		return fmt.Sprint(au.Green(input.value))
 	}
 	if input.isValidFmt() {
-		return red(input.value)
+		return fmt.Sprint(au.Red(input.value))
 	}
-	return strings.Repeat(red("_"), input.runeCount)
+	return fmt.Sprint(au.Red(strings.Repeat("_", input.runeCount)))
 }
 
 type posTxt struct {
@@ -229,9 +233,9 @@ func fmtCheckMark(valid bool) string {
 	b.WriteString("  ")
 
 	if !valid {
-		b.WriteString(red("✘"))
+		b.WriteString(fmt.Sprint(au.Red("✘")))
 		return b.String()
 	}
-	b.WriteString(green("✔"))
+	b.WriteString(fmt.Sprint(au.Green("✔")))
 	return b.String()
 }

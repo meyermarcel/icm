@@ -20,10 +20,8 @@ import (
 	"io/ioutil"
 	"os"
 
-	isatty "github.com/mattn/go-isatty"
 	"github.com/meyermarcel/icm/internal/data/file"
 
-	"github.com/fatih/color"
 	"github.com/meyermarcel/icm/internal/data"
 
 	"github.com/meyermarcel/icm/configs"
@@ -139,15 +137,6 @@ func newRootCmd(
 		SilenceUsage:      true,
 		SilenceErrors:     true,
 		DisableAutoGenTag: true,
-		PersistentPreRun: func(cmd *cobra.Command, args []string) {
-			if isatty.IsTerminal(os.Stdout.Fd()) {
-				color.NoColor = false
-			} else if isatty.IsCygwinTerminal(os.Stdout.Fd()) {
-				color.NoColor = true
-			} else {
-				color.NoColor = true
-			}
-		},
 	}
 
 	rootCmd.SetHelpTemplate(`{{with (or .Long .Short)}}{{. | trimTrailingWhitespaces}}
