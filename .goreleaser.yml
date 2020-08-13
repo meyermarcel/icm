@@ -39,7 +39,7 @@ archives:
 
 brews:
   -
-    github:
+    tap:
       owner: meyermarcel
       name: homebrew-tap
     folder: Formula
