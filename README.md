@@ -89,7 +89,6 @@ See the [misc command](docs/icm_misc.md) for **bash/zsh completions** and **manu
     ```
 
 1. Push tag and let Travis CI and Goreleaser do the work
-+
     ```
     git push --tags
     ```
