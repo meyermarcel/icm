@@ -556,7 +556,7 @@ func appendCheckDigit10Info(checkDigit int, infos []input.Info) []input.Info {
 		infos = append(infos, input.Info{
 			Text: fmt.Sprintf("It is not recommended to use a %s", au.Underline("serial number"))})
 		infos = append(infos, input.Info{
-			Text: fmt.Sprintf("that generates %s %s (0).", au.Underline("check digit"), au.Yellow(10))})
+			Text: fmt.Sprintf("that generates %s %s (0).", au.Underline("check digit"), au.Yellow("10"))})
 	}
 	return infos
 }
