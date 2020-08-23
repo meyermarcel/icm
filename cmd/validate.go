@@ -270,7 +270,7 @@ func newAutoPrinter(writer io.Writer, viperCfg *viper.Viper, isSingleLine bool) 
 
 }
 
-func newFancyPrinter(writer io.Writer, viperCfg *viper.Viper, isSingleLine bool) input.Printer {
+func newFancyPrinter(writer io.Writer, viperCfg *viper.Viper, _ bool) input.Printer {
 	fancyPrinter := input.NewFancyPrinter(writer)
 	fancyPrinter.SetIndent("  ")
 	fancyPrinter.SetSeparatorsFunc(func(inputs []input.Input) {
@@ -294,7 +294,7 @@ func newFancyPrinter(writer io.Writer, viperCfg *viper.Viper, isSingleLine bool)
 	return fancyPrinter
 }
 
-func newCSVPrinter(writer io.Writer, viperCfg *viper.Viper, isSingleLine bool) input.Printer {
+func newCSVPrinter(writer io.Writer, viperCfg *viper.Viper, _ bool) input.Printer {
 	csvWriter := csv.NewWriter(writer)
 	csvWriter.Comma = ';'
 	return input.NewCSVPrinter(csvWriter, viperCfg.GetBool(configs.NoHeader))
