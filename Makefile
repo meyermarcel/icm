@@ -1,4 +1,3 @@
-PACKAGES := $(shell go list ./...)
 BIN_DIR := $(GOPATH)/bin
 BUILD_DIR := build
 # man-pages is also defined in goreleaser.yml
@@ -7,16 +6,11 @@ DOCS_DIR := docs
 BINARY := icm
 
 .PHONY: all
-all: clean test lint build man markdown
-
-.PHONY: clean
-clean:
-	go clean -x -testcache
-	rm -rf $(BUILD_DIR)
+all: test lint build man markdown
 
 .PHONY: test
-test: clean
-	go test $(PACKAGES)
+test:
+	go test ./...
 
 .PHONY: lint
 lint: test
@@ -35,8 +29,13 @@ markdown: build
 	$(shell $(BUILD_DIR)/$(BINARY) misc markdown $(DOCS_DIR))
 
 .PHONY: install
-install:
-	go build -o $(BIN_DIR)/$(BINARY)
+install: man markdown
+	cp $(BUILD_DIR)/$(BINARY) $(BIN_DIR)/$(BINARY)
+
+.PHONY: clean
+clean:
+	go clean -x -testcache
+	rm -rf $(BUILD_DIR)
 
 .PHONY: fmt
 fmt:
