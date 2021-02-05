@@ -490,7 +490,7 @@ func newCheckDigitInput() func() input.Input {
 					return newErrValidate(fmt.Sprintf("%s must be a %s (calculated: %s)",
 							au.Underline("check digit"),
 							au.Bold("number"),
-							au.Green(checkDigit))),
+							au.Green(strconv.Itoa(checkDigit)))),
 						infos,
 						[]input.Datum{
 							checkDigitDatum,
@@ -504,7 +504,7 @@ func newCheckDigitInput() func() input.Input {
 					return newErrValidate(fmt.Sprintf(
 							"calculated %s is %s",
 							au.Underline("check digit"),
-							au.Green(checkDigit%10))),
+							au.Green(strconv.Itoa(checkDigit%10)))),
 						infos,
 						[]input.Datum{
 							checkDigitDatum,

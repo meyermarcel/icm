@@ -279,6 +279,42 @@ func Test_validateCmd(t *testing.T) {
 
 `,
 		},
+		{
+			"Validate input with wrong check digit",
+			[]string{"abc u 123123 1"},
+			[]cfgOverride{{configs.Pattern, containerNumber}},
+			true,
+			`
+  ABC U 123123 1  ✘
+   ↑  ↑        ↑
+   │  │        └─ calculated check digit is 7
+   │  │
+   │  └─ some-equip-cat-ID
+   │
+   └─ some-company
+      some-city
+      some-country
+
+`,
+		},
+		{
+			"Validate input with wrong check digit",
+			[]string{"abc u 123123 a"},
+			[]cfgOverride{{configs.Pattern, containerNumber}},
+			true,
+			`
+  ABC U 123123 _  ✘
+   ↑  ↑        ↑
+   │  │        └─ check digit must be a number (calculated: 7)
+   │  │
+   │  └─ some-equip-cat-ID
+   │
+   └─ some-company
+      some-city
+      some-country
+
+`,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
