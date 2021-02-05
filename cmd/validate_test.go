@@ -280,7 +280,7 @@ func Test_validateCmd(t *testing.T) {
 `,
 		},
 		{
-			"Validate input with wrong check digit",
+			"Validate container-number with wrong check digit",
 			[]string{"abc u 123123 1"},
 			[]cfgOverride{{configs.Pattern, containerNumber}},
 			true,
@@ -298,7 +298,7 @@ func Test_validateCmd(t *testing.T) {
 `,
 		},
 		{
-			"Validate input with wrong check digit",
+			"Validate container-number with letter for check digit",
 			[]string{"abc u 123123 a"},
 			[]cfgOverride{{configs.Pattern, containerNumber}},
 			true,
