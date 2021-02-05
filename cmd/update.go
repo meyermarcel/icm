@@ -18,10 +18,11 @@ import (
 	"io"
 	"net/http"
 
+	"golang.org/x/net/html"
+
 	"github.com/meyermarcel/icm/internal/cont"
 	"github.com/meyermarcel/icm/internal/data"
 	"github.com/spf13/cobra"
-	"golang.org/x/net/html"
 )
 
 func newUpdateOwnerCmd(
