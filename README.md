@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/meyermarcel/icm.svg "Build Status")](https://travis-ci.org/meyermarcel/icm) [![Go Report Card](https://goreportcard.com/badge/github.com/meyermarcel/icm)](https://goreportcard.com/report/github.com/meyermarcel/icm)
+![Build Status](https://github.com/meyermarcel/icm/workflows/build/badge.svg) [![Go Report Card](https://goreportcard.com/badge/github.com/meyermarcel/icm)](https://goreportcard.com/report/github.com/meyermarcel/icm)
 
 # icm (intermodal container markings)
 
@@ -89,7 +89,7 @@ See the [misc command](docs/icm_misc.md) for **bash/zsh completions** and **manu
     git tag "x.y.z"
     ```
 
-1. Push tag and let Travis CI and Goreleaser do the work
+1. Push tag and let Github Actions and Goreleaser do the work
     ```
     git push --tags
     ```

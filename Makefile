@@ -6,30 +6,30 @@ DOCS_DIR := docs
 BINARY := icm
 
 .PHONY: all
-all: test lint build man markdown
+all: test lint build
 
 .PHONY: test
 test:
 	go test ./...
 
 .PHONY: lint
-lint: test
+lint:
 	golangci-lint run --enable golint --enable goimports
 
 .PHONY: build
-build: lint
+build:
 	export CGO_ENABLED=0; go build -o $(BUILD_DIR)/$(BINARY)
 
-.PHONY: man
-man: build
-	$(shell $(BUILD_DIR)/$(BINARY) misc man $(MAN_DIR)/man1)
 
-.PHONY: markdown
-markdown: build
+# Individual commands
+
+.PHONY: build-docs
+build-docs: build
+	$(shell $(BUILD_DIR)/$(BINARY) misc man $(MAN_DIR)/man1)
 	$(shell $(BUILD_DIR)/$(BINARY) misc markdown $(DOCS_DIR))
 
 .PHONY: install
-install: man markdown
+install: build
 	cp $(BUILD_DIR)/$(BINARY) $(BIN_DIR)/$(BINARY)
 
 .PHONY: clean
