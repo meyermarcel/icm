@@ -35,13 +35,10 @@ jobs:
         with:
           go-version: 1.15
       -
-        name: Create man pages and markdown
-        run: make build-docs
-      -
         name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v2
         with:
           version: latest
           args: release --rm-dist
         env:
-          GITHUB_TOKEN: ${{ secrets.PUBLIC_REPO_ACCESS }}
+          GITHUB_TOKEN: ${{ secrets.GORELEASER_GITHUB_TOKEN }}
