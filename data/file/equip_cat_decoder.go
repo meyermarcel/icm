@@ -18,9 +18,9 @@ import (
 	"io/ioutil"
 	"path/filepath"
 
-	"github.com/meyermarcel/icm/internal/data"
+	"github.com/meyermarcel/icm/data"
 
-	"github.com/meyermarcel/icm/internal/cont"
+	"github.com/meyermarcel/icm/cont"
 )
 
 const equipCatIDsFileName = "equipment-category-id.json"

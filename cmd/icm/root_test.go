@@ -11,9 +11,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package cmd
+package main
 
-import "github.com/meyermarcel/icm/internal/cont"
+import "github.com/meyermarcel/icm/cont"
 
 type dummyOwnerDecodeUpdater struct {
 	dummyOwnerDecoder

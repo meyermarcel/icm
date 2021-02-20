@@ -1,9 +1,7 @@
-# Build binaries
+# Build binaries by Makefile
 build/
+# Build binaries by Goreleaser
 dist/
-
-# Generated manual pages
-man-pages/
 
 # Test binary, build with `go test -c`
 *.test
@@ -12,3 +10,5 @@ man-pages/
 docs/gif/demo
 docs/gif/tty.gif
 docs/gif/.!*
+# Generated manual pages
+docs/man-pages/

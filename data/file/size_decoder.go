@@ -17,11 +17,11 @@ import (
 	"encoding/json"
 	"path/filepath"
 
-	"github.com/meyermarcel/icm/internal/data"
+	"github.com/meyermarcel/icm/data"
 
 	"io/ioutil"
 
-	"github.com/meyermarcel/icm/internal/cont"
+	"github.com/meyermarcel/icm/cont"
 )
 
 const sizeFileName = "size.json"

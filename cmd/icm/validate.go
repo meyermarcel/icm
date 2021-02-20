@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package cmd
+package main
 
 import (
 	"bufio"
@@ -29,9 +29,9 @@ import (
 	"github.com/logrusorgru/aurora/v3"
 
 	"github.com/meyermarcel/icm/configs"
-	"github.com/meyermarcel/icm/internal/cont"
-	"github.com/meyermarcel/icm/internal/data"
-	"github.com/meyermarcel/icm/internal/input"
+	"github.com/meyermarcel/icm/cont"
+	"github.com/meyermarcel/icm/data"
+	"github.com/meyermarcel/icm/input"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )

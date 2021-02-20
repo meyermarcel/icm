@@ -18,14 +18,14 @@ lint:
 
 .PHONY: build
 build:
-	export CGO_ENABLED=0; go build -o $(BUILD_DIR)/$(BINARY)
+	export CGO_ENABLED=0; go build -o $(BUILD_DIR)/$(BINARY) ./cmd/icm
 
 
 # Individual commands
 
 .PHONY: build-docs
 build-docs: build
-	$(shell $(BUILD_DIR)/$(BINARY) misc man $(MAN_DIR)/man1)
+	$(shell $(BUILD_DIR)/$(BINARY) misc man $(DOCS_DIR)/$(MAN_DIR)/man1)
 	$(shell $(BUILD_DIR)/$(BINARY) misc markdown $(DOCS_DIR))
 
 .PHONY: install

@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package cmd
+package main
 
 import (
 	"fmt"
@@ -20,8 +20,8 @@ import (
 
 	"golang.org/x/net/html"
 
-	"github.com/meyermarcel/icm/internal/cont"
-	"github.com/meyermarcel/icm/internal/data"
+	"github.com/meyermarcel/icm/cont"
+	"github.com/meyermarcel/icm/data"
 	"github.com/spf13/cobra"
 )
 

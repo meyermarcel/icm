@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package cmd
+package main
 
 import (
 	"bufio"
@@ -20,9 +20,9 @@ import (
 	"io/ioutil"
 	"os"
 
-	"github.com/meyermarcel/icm/internal/data/file"
+	"github.com/meyermarcel/icm/data/file"
 
-	"github.com/meyermarcel/icm/internal/data"
+	"github.com/meyermarcel/icm/data"
 
 	"github.com/meyermarcel/icm/configs"
 
@@ -58,9 +58,7 @@ Edit default configuration for customization:
 
   ` + filepath.Join("$HOME", appDir, configs.NameWithYmlExt)
 
-// Execute adds all child commands to the root command and sets flags appropriately.
-// This is called by main.main(). It only needs to happen once to the rootCmd.
-func Execute(version string) {
+func execute(version string) {
 	stderr := os.Stderr
 
 	homeDir, err := os.UserHomeDir()

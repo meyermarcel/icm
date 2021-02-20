@@ -19,7 +19,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/meyermarcel/icm/internal/data"
+	"github.com/meyermarcel/icm/data"
 
 	"io/ioutil"
 )

@@ -5,6 +5,7 @@ before:
 
 builds:
   -
+    main: ./cmd/icm/main.go
     env:
     - CGO_ENABLED=0
     goos:
@@ -45,7 +46,7 @@ archives:
     - README.md
     - docs/*.md
       # man-pages is also defined in Makefile
-    - man-pages/man1/*
+    - docs/man-pages/man1/*
 
 brews:
   -
@@ -66,7 +67,7 @@ brews:
       (zsh_completion/"_icm").write output
 
       # man-pages is also defined in Makefile
-      man1.install Dir["man-pages/man1/*.1"]
+      man1.install Dir["docs/man-pages/man1/*.1"]
 
     test: |
       system "#{bin}/icm --version"

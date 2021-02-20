@@ -14,7 +14,7 @@
 package data
 
 import (
-	"github.com/meyermarcel/icm/internal/cont"
+	"github.com/meyermarcel/icm/cont"
 )
 
 // OwnerDecodeUpdater is the interface that groups the Decode and Update methods.
