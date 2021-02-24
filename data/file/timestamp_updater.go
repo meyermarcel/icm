@@ -15,13 +15,12 @@ package file
 
 import (
 	"fmt"
+	"os"
 	"path/filepath"
 	"strings"
 	"time"
 
 	"github.com/meyermarcel/icm/data"
-
-	"io/ioutil"
 )
 
 const (
@@ -44,7 +43,7 @@ func NewTimestampUpdater(path string) (data.TimestampUpdater, error) {
 	if err := initFile(pathToFile, []byte(lastUpdate)); err != nil {
 		return nil, err
 	}
-	b, err := ioutil.ReadFile(pathToFile)
+	b, err := os.ReadFile(pathToFile)
 	if err != nil {
 		return nil, err
 	}
@@ -62,7 +61,7 @@ func (lu *timestampUpdater) Update() error {
 	now := time.Now()
 	afterTimeout := now.After(loaded.Add(timeout))
 	if afterTimeout {
-		err := ioutil.WriteFile(filepath.Join(lu.path, lastUpdateFileName), []byte(now.Format(dateFormat)+"\n"), 0644)
+		err := os.WriteFile(filepath.Join(lu.path, lastUpdateFileName), []byte(now.Format(dateFormat)+"\n"), 0644)
 		if err != nil {
 			return err
 		}

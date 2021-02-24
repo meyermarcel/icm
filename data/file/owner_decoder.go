@@ -21,8 +21,6 @@ import (
 
 	"github.com/meyermarcel/icm/data"
 
-	"io/ioutil"
-
 	"github.com/meyermarcel/icm/cont"
 )
 
@@ -44,7 +42,7 @@ func NewOwnerDecoderUpdater(path string) (data.OwnerDecodeUpdater, error) {
 	if err := initFile(filePath, []byte(ownerJSON)); err != nil {
 		return nil, err
 	}
-	b, err := ioutil.ReadFile(filePath)
+	b, err := os.ReadFile(filePath)
 	if err != nil {
 		return nil, err
 	}
@@ -96,7 +94,7 @@ func (of *ownerDecoderUpdater) Update(newOwners map[string]cont.Owner) error {
 	if err != nil {
 		return err
 	}
-	if err := ioutil.WriteFile(filepath.Join(of.path, ownerFileName), b, 0644); err != nil {
+	if err := os.WriteFile(filepath.Join(of.path, ownerFileName), b, 0644); err != nil {
 		return err
 	}
 	return nil
@@ -127,7 +125,7 @@ func toSerializableOwner(ownerToConvert cont.Owner) owner {
 
 func initFile(path string, content []byte) error {
 	if _, err := os.Stat(path); os.IsNotExist(err) {
-		if err := ioutil.WriteFile(path, content, 0644); err != nil {
+		if err := os.WriteFile(path, content, 0644); err != nil {
 			return err
 		}
 	}

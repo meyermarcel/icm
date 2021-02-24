@@ -15,7 +15,7 @@ package file
 
 import (
 	"encoding/json"
-	"io/ioutil"
+	"os"
 	"path/filepath"
 
 	"github.com/meyermarcel/icm/data"
@@ -41,7 +41,7 @@ func NewTypeDecoder(path string) (data.TypeDecoder, error) {
 	if err := initFile(pathToType, []byte(typeJSON)); err != nil {
 		return nil, err
 	}
-	b, err := ioutil.ReadFile(pathToType)
+	b, err := os.ReadFile(pathToType)
 	if err != nil {
 		return nil, err
 	}
@@ -53,7 +53,7 @@ func NewTypeDecoder(path string) (data.TypeDecoder, error) {
 	if err := initFile(pathToGroup, []byte(groupJSON)); err != nil {
 		return nil, err
 	}
-	b, err = ioutil.ReadFile(pathToGroup)
+	b, err = os.ReadFile(pathToGroup)
 	if err != nil {
 		return nil, err
 	}

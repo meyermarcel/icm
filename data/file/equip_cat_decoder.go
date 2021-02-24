@@ -15,7 +15,7 @@ package file
 
 import (
 	"encoding/json"
-	"io/ioutil"
+	"os"
 	"path/filepath"
 
 	"github.com/meyermarcel/icm/data"
@@ -39,7 +39,7 @@ func NewEquipCatDecoder(path string) (data.EquipCatDecoder, error) {
 	if err := initFile(pathToEquipCat, []byte(equipCatIDsJSON)); err != nil {
 		return nil, err
 	}
-	b, err := ioutil.ReadFile(pathToEquipCat)
+	b, err := os.ReadFile(pathToEquipCat)
 	if err != nil {
 		return nil, err
 	}

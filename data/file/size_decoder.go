@@ -15,11 +15,10 @@ package file
 
 import (
 	"encoding/json"
+	"os"
 	"path/filepath"
 
 	"github.com/meyermarcel/icm/data"
-
-	"io/ioutil"
 
 	"github.com/meyermarcel/icm/cont"
 )
@@ -43,7 +42,7 @@ func NewSizeDecoder(path string) (data.LengthDecoder, data.HeightWidthDecoder, e
 	if err := initFile(pathToSizes, []byte(lengthHeightWidthJSON)); err != nil {
 		return nil, nil, err
 	}
-	b, err := ioutil.ReadFile(pathToSizes)
+	b, err := os.ReadFile(pathToSizes)
 	if err != nil {
 		return nil, nil, err
 	}

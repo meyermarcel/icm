@@ -17,7 +17,6 @@ import (
 	"bufio"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
 
 	"github.com/meyermarcel/icm/data/file"
@@ -68,7 +67,7 @@ func execute(version string) {
 
 	pathToCfg := filepath.Join(appDirPath, configs.NameWithYmlExt)
 	if _, err := os.Stat(pathToCfg); os.IsNotExist(err) {
-		errWrite := ioutil.WriteFile(pathToCfg, configs.Cfg(), 0644)
+		errWrite := os.WriteFile(pathToCfg, configs.Cfg(), 0644)
 		checkErr(stderr, errWrite)
 	}
 	viperCfg := viper.New()
