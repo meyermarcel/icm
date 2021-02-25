@@ -1,11 +1,10 @@
 before:
   hooks:
-  - go mod download
   - make test build-docs
 
 builds:
   -
-    main: ./cmd/icm/main.go
+    main: ./cmd/icm
     env:
     - CGO_ENABLED=0
     goos:
