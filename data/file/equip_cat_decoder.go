@@ -18,25 +18,24 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/meyermarcel/icm/data"
+	// needed for package embed
+	_ "embed"
 
 	"github.com/meyermarcel/icm/cont"
+	"github.com/meyermarcel/icm/data"
 )
 
 const equipCatIDsFileName = "equipment-category-id.json"
-const equipCatIDsJSON = `{
-  "U": "freight container",
-  "J": "detachable freight container-related equipment",
-  "Z": "trailer and chassis"
-}
-`
+
+//go:embed equipment-category-id.json
+var equipCatIDsJSON []byte
 
 // NewEquipCatDecoder writes equipment category ID file to path if it not exists and
 // returns a struct that uses this file as a data source.
 func NewEquipCatDecoder(path string) (data.EquipCatDecoder, error) {
 	equipCat := &equipCatDecoder{}
 	pathToEquipCat := filepath.Join(path, equipCatIDsFileName)
-	if err := initFile(pathToEquipCat, []byte(equipCatIDsJSON)); err != nil {
+	if err := initFile(pathToEquipCat, equipCatIDsJSON); err != nil {
 		return nil, err
 	}
 	b, err := os.ReadFile(pathToEquipCat)

@@ -24,7 +24,7 @@ import (
 )
 
 const (
-	timeout            = time.Duration(5 * time.Minute)
+	timeout            = 5 * time.Minute
 	dateFormat         = "2006-01-02T15:04:05Z07:00"
 	lastUpdateFileName = "owner-last-update"
 	lastUpdate         = "2018-10-29T15:00:00Z" + "\n"
@@ -68,5 +68,5 @@ func (lu *timestampUpdater) Update() error {
 		return nil
 	}
 	return fmt.Errorf("timeout is set to %v to relieve server load, try in %v again",
-		timeout, -time.Duration(now.Sub(loaded)-timeout).Round(time.Second))
+		timeout, -(now.Sub(loaded) - timeout).Round(time.Second))
 }

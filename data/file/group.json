@@ -1,0 +1,13 @@
+{
+  "A": "Air/surface container",
+  "B": "Bulk container",
+  "G": "General purpose container",
+  "H": "Insulated container",
+  "N": "Pressurized and non-pressurized tank container (dry)",
+  "P": "Flat",
+  "R": "Thermal container",
+  "S": "Named cargo container",
+  "T": "Tank container",
+  "U": "Open-top/hardtop container",
+  "V": "Ventilated container"
+}

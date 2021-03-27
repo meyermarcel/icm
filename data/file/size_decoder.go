@@ -18,12 +18,17 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/meyermarcel/icm/data"
+	// needed for package embed
+	_ "embed"
 
 	"github.com/meyermarcel/icm/cont"
+	"github.com/meyermarcel/icm/data"
 )
 
 const sizeFileName = "size.json"
+
+//go:embed size.json
+var lengthHeightWidthJSON []byte
 
 type size struct {
 	Length      map[string]string      `json:"length"`
@@ -39,7 +44,7 @@ type heightWidth struct {
 // returns a struct that uses this file as a data source.
 func NewSizeDecoder(path string) (data.LengthDecoder, data.HeightWidthDecoder, error) {
 	pathToSizes := filepath.Join(path, sizeFileName)
-	if err := initFile(pathToSizes, []byte(lengthHeightWidthJSON)); err != nil {
+	if err := initFile(pathToSizes, lengthHeightWidthJSON); err != nil {
 		return nil, nil, err
 	}
 	b, err := os.ReadFile(pathToSizes)
@@ -87,88 +92,3 @@ func (hw *heightWidthDecoder) Decode(code string) (bool, cont.HeightWidth) {
 	}
 	return false, cont.HeightWidth{}
 }
-
-const lengthHeightWidthJSON = `{
-  "length": {
-    "1": "2991 mm",
-    "2": "6068 mm",
-    "3": "9125 mm",
-    "4": "12192 mm",
-    "A": "7150 mm",
-    "B": "7315 mm",
-    "C": "7430 mm",
-    "D": "7450 mm",
-    "E": "7820 mm",
-    "F": "8100 mm",
-    "G": "12500 mm",
-    "H": "13106 mm",
-    "K": "13600 mm",
-    "L": "13716 mm",
-    "M": "14630 mm",
-    "N": "14935 mm",
-    "P": "16154 mm"
-  },
-  "heightWidth": {
-    "0": {
-      "height": "2438 mm",
-      "width": "2436 mm"
-    },
-    "2": {
-      "height": "2591 mm",
-      "width": "2436 mm"
-    },
-    "4": {
-      "height": "2743 mm",
-      "width": "2436 mm"
-    },
-    "5": {
-      "height": "2895 mm",
-      "width": "2436 mm"
-    },
-    "6": {
-      "height": "> 2895 mm",
-      "width": "2436 mm"
-    },
-    "8": {
-      "height": "1295 mm",
-      "width": "2436 mm"
-    },
-    "9": {
-      "height": "< 1219 mm",
-      "width": "2436 mm"
-    },
-    "C": {
-      "height": "2591 mm",
-      "width": "> 2438 mm and ≤ 2500 mm"
-    },
-    "D": {
-      "height": "2743 mm",
-      "width": "> 2438 mm and ≤ 2500 mm"
-    },
-    "E": {
-      "height": "2895 mm",
-      "width": "> 2438 mm and ≤ 2500 mm"
-    },
-    "F": {
-      "height": "> 2895 mm",
-      "width": "> 2438 mm and ≤ 2500 mm"
-    },
-    "L": {
-      "height": "2591 mm",
-      "width": "> 2500 mm"
-    },
-    "M": {
-      "height": "2743 mm",
-      "width": "> 2500 mm"
-    },
-    "N": {
-      "height": "2895 mm",
-      "width": "> 2500 mm"
-    },
-    "P": {
-      "height": "> 2895 mm",
-      "width": "> 2500 mm"
-    }
-  }
-}
-`
