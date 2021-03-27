@@ -40,3 +40,7 @@ clean:
 .PHONY: fmt
 fmt:
 	goimports -w $(shell find . -type f -name '*.go')
+
+.PHONY: update-owners
+update-owners: build
+	echo '{}' > $(HOME)/.icm/data/owner.json && ./$(BUILD_DIR)/$(BINARY) update && cp $(HOME)/.icm/data/owner.json data/file/owner.json
