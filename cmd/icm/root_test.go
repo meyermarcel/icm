@@ -42,7 +42,7 @@ func (dummyOwnerUpdater) GetAllOwnerCodes() []string {
 	return []string{"RAN"}
 }
 
-func (dummyOwnerUpdater) Update(newOwners map[string]cont.Owner) error {
+func (dummyOwnerUpdater) Update(map[string]cont.Owner) error {
 	panic("implement me")
 }
 
@@ -63,7 +63,7 @@ func (dummyEquipCatDecoder) AllCatIDs() []string {
 type dummyLengthDecoder struct {
 }
 
-func (dummyLengthDecoder) Decode(code string) (bool, cont.Length) {
+func (dummyLengthDecoder) Decode(string) (bool, cont.Length) {
 	return true, "some-length"
 
 }
@@ -71,14 +71,14 @@ func (dummyLengthDecoder) Decode(code string) (bool, cont.Length) {
 type dummyHeightWidthDecoder struct {
 }
 
-func (dummyHeightWidthDecoder) Decode(code string) (bool, cont.Height, cont.Width) {
+func (dummyHeightWidthDecoder) Decode(string) (bool, cont.Height, cont.Width) {
 	return true, "some-height", "some-width"
 }
 
 type dummyTypeDecoder struct {
 }
 
-func (dummyTypeDecoder) Decode(code string) (bool, cont.TypeInfo, cont.GroupInfo) {
+func (dummyTypeDecoder) Decode(string) (bool, cont.TypeInfo, cont.GroupInfo) {
 	return true, "some-type", "some-group"
 
 }
