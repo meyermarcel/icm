@@ -6,7 +6,7 @@ Validate intermodal container markings
 
 Validate intermodal container markings with single or multi line input.
 
-For single line input a human readable output is used.
+For single line input a human-readable output is used.
 
 For multi line input CSV output is used. For example this is useful to scan
 data sets for possible transposition errors. It is also possible to generate
@@ -15,7 +15,7 @@ CSV data sets of random container numbers.
 Configuration for separators is generated first time you
 execute a command that requires the configuration.
 
-Flags for output formatting can overridden with a config file.
+Flags for output formatting can be overridden with a config file.
 Edit default configuration for customization:
 
   $HOME/.icm/config.yml

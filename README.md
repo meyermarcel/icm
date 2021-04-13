@@ -89,7 +89,7 @@ See the [misc command](docs/icm_misc.md) for **bash/zsh completions** and **manu
     git tag "x.y.z"
     ```
 
-1. Push tag and let Github Actions and Goreleaser do the work
+1. Push tag and let GitHub Actions and Goreleaser do the work
     ```
     git push --tags
     ```

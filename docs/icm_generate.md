@@ -20,7 +20,7 @@ Using only the --count flag generates pseudo random serial numbers.
 Configuration for separators is generated first time you
 execute a command that requires the configuration.
 
-Flags for output formatting can overridden with a config file.
+Flags for output formatting can be overridden with a config file.
 Edit default configuration for customization:
 
   $HOME/.icm/config.yml
