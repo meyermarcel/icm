@@ -15,34 +15,20 @@ package cont
 
 import "fmt"
 
-// HeightWidth describes width and height of first code in specified standard size code.
-type HeightWidth struct {
-	Width  string
-	Height string
-}
+// Width describes width of first code in the specified standard size code.
+type Width string
+
+// Height describes height of first code in the specified standard size code.
+type Height string
 
 // Length describes length of second code in the specified standard size code.
-type Length struct {
-	Length string
-}
+type Length string
 
-// Type has code and information about the specified standard type.
-type Type struct {
-	TypeCode string
-	TypeInfo string
-}
+// TypeInfo has information about the specified standard type.
+type TypeInfo string
 
-// Group has code and information about an specified type group.
-type Group struct {
-	GroupCode string
-	GroupInfo string
-}
-
-// TypeAndGroup encapsulates type and group.
-type TypeAndGroup struct {
-	Type
-	Group
-}
+// GroupInfo has information about the specified type group.
+type GroupInfo string
 
 // IsLengthCode checks for correct format
 func IsLengthCode(code string) error {

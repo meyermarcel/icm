@@ -49,12 +49,12 @@ type LengthDecoder interface {
 
 // HeightWidthDecoder decodes a code to height and width.
 type HeightWidthDecoder interface {
-	Decode(code string) (bool, cont.HeightWidth)
+	Decode(code string) (bool, cont.Height, cont.Width)
 }
 
-// TypeDecoder decodes a code to type and group.
+// TypeDecoder decodes a code to type and group information.
 type TypeDecoder interface {
-	Decode(code string) (bool, cont.TypeAndGroup)
+	Decode(code string) (bool, cont.TypeInfo, cont.GroupInfo)
 }
 
 // TimestampUpdater updates a timestamp with an implemented time.

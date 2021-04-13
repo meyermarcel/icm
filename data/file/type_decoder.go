@@ -75,21 +75,22 @@ func NewTypeDecoder(path string) (data.TypeDecoder, error) {
 	return typeAndGroup, nil
 }
 
-// Decode returns type and group for type code.
-func (tg *typeAndGroupDecoder) Decode(code string) (bool, cont.TypeAndGroup) {
-	typeAndGroup := cont.TypeAndGroup{}
+// Decode returns type and group information for the type code.
+func (tg *typeAndGroupDecoder) Decode(code string) (bool, cont.TypeInfo, cont.GroupInfo) {
 
-	typeInfo, exists := tg.types[code]
-	typeValue, typeFound := cont.Type{TypeCode: code, TypeInfo: typeInfo}, exists
+	typeInfoStr, typeFound := tg.types[code]
+	typeInfo := cont.TypeInfo(typeInfoStr)
 
-	info, exists := tg.groups[string(code[0])]
-	group, groupFound := cont.Group{GroupCode: code, GroupInfo: info}, exists
-
-	if !typeFound || !groupFound {
-		return false, typeAndGroup
+	if !typeFound {
+		return false, "", ""
 	}
 
-	typeAndGroup.Type = typeValue
-	typeAndGroup.Group = group
-	return true, typeAndGroup
+	groupInfoStr, groupFound := tg.groups[string(code[0])]
+	groupInfo := cont.GroupInfo(groupInfoStr)
+
+	if !groupFound {
+		return false, "", ""
+	}
+
+	return true, typeInfo, groupInfo
 }

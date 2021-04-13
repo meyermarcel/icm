@@ -64,33 +64,21 @@ type dummyLengthDecoder struct {
 }
 
 func (dummyLengthDecoder) Decode(code string) (bool, cont.Length) {
-	return true, cont.Length{
-		Length: "some-length",
-	}
+	return true, "some-length"
+
 }
 
 type dummyHeightWidthDecoder struct {
 }
 
-func (dummyHeightWidthDecoder) Decode(code string) (bool, cont.HeightWidth) {
-	return true, cont.HeightWidth{
-		Width:  "some-width",
-		Height: "some-height",
-	}
+func (dummyHeightWidthDecoder) Decode(code string) (bool, cont.Height, cont.Width) {
+	return true, "some-height", "some-width"
 }
 
 type dummyTypeDecoder struct {
 }
 
-func (dummyTypeDecoder) Decode(code string) (bool, cont.TypeAndGroup) {
-	return true, cont.TypeAndGroup{
-		Type: cont.Type{
-			TypeCode: code,
-			TypeInfo: "some-type",
-		},
-		Group: cont.Group{
-			GroupCode: code,
-			GroupInfo: "some-group",
-		},
-	}
+func (dummyTypeDecoder) Decode(code string) (bool, cont.TypeInfo, cont.GroupInfo) {
+	return true, "some-type", "some-group"
+
 }

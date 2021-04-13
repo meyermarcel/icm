@@ -76,9 +76,9 @@ type lengthDecoder struct {
 // Decode returns length for a given length code.
 func (l *lengthDecoder) Decode(code string) (bool, cont.Length) {
 	if val, ok := l.lengths[code]; ok {
-		return true, cont.Length{Length: val}
+		return true, cont.Length(val)
 	}
-	return false, cont.Length{}
+	return false, ""
 }
 
 type heightWidthDecoder struct {
@@ -86,9 +86,9 @@ type heightWidthDecoder struct {
 }
 
 // Decode returns height and width for given height and width code.
-func (hw *heightWidthDecoder) Decode(code string) (bool, cont.HeightWidth) {
+func (hw *heightWidthDecoder) Decode(code string) (bool, cont.Height, cont.Width) {
 	if val, ok := hw.heightWidths[code]; ok {
-		return true, cont.HeightWidth{Width: val.Width, Height: val.Height}
+		return true, cont.Height(val.Height), cont.Width(val.Width)
 	}
-	return false, cont.HeightWidth{}
+	return false, "", ""
 }

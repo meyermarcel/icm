@@ -587,8 +587,8 @@ func newLengthInput(lengthDecoder data.LengthDecoder) func() input.Input {
 					[]input.Datum{lengthDatum, lengthDescDatum}
 			}
 			return nil,
-				[]input.Info{{Text: fmt.Sprintf("length: %s", length.Length)}},
-				[]input.Datum{lengthDatum, lengthDescDatum.WithValue(length.Length)}
+				[]input.Info{{Text: fmt.Sprintf("length: %s", length)}},
+				[]input.Datum{lengthDatum, lengthDescDatum.WithValue(string(length))}
 		})
 	length.SetToUpper()
 	return func() input.Input { return length }
@@ -612,7 +612,7 @@ func newHeightWidthInput(heightWidthDecoder data.HeightWidthDecoder) func() inpu
 					[]input.Datum{heightWidthDatum, heightDescDatum, widthDescDatum}
 			}
 
-			found, heightWidth := heightWidthDecoder.Decode(value)
+			found, height, width := heightWidthDecoder.Decode(value)
 			if !found {
 				return newErrValidate(fmt.Sprintf("%s is not %s",
 						au.Underline("height and width code"),
@@ -622,13 +622,13 @@ func newHeightWidthInput(heightWidthDecoder data.HeightWidthDecoder) func() inpu
 			}
 			return nil,
 				[]input.Info{
-					{Text: fmt.Sprintf("height: %s", heightWidth.Height)},
-					{Text: fmt.Sprintf("width:  %s", heightWidth.Width)},
+					{Text: fmt.Sprintf("height: %s", height)},
+					{Text: fmt.Sprintf("width:  %s", width)},
 				},
 				[]input.Datum{
 					heightWidthDatum,
-					heightDescDatum.WithValue(heightWidth.Height),
-					widthDescDatum.WithValue(heightWidth.Width),
+					heightDescDatum.WithValue(string(height)),
+					widthDescDatum.WithValue(string(width)),
 				}
 		})
 	heightWidth.SetToUpper()
@@ -653,7 +653,7 @@ func newTypeAndGroupInput(typeDecoder data.TypeDecoder) func() input.Input {
 					[]input.Datum{typeDatum, typeDescDatum, groupDescDatum}
 			}
 
-			found, typeAndGroup := typeDecoder.Decode(value)
+			found, typeInfo, groupInfo := typeDecoder.Decode(value)
 			if !found {
 				return newErrValidate(fmt.Sprintf("%s is not %s",
 						au.Underline("type code"),
@@ -663,13 +663,13 @@ func newTypeAndGroupInput(typeDecoder data.TypeDecoder) func() input.Input {
 			}
 			return nil,
 				[]input.Info{
-					{Text: fmt.Sprintf("type:  %s", typeAndGroup.TypeInfo)},
-					{Text: fmt.Sprintf("group: %s", typeAndGroup.GroupInfo)},
+					{Text: fmt.Sprintf("type:  %s", typeInfo)},
+					{Text: fmt.Sprintf("group: %s", groupInfo)},
 				},
 				[]input.Datum{
 					typeDatum,
-					typeDescDatum.WithValue(typeAndGroup.TypeInfo),
-					groupDescDatum.WithValue(typeAndGroup.GroupInfo),
+					typeDescDatum.WithValue(string(typeInfo)),
+					groupDescDatum.WithValue(string(groupInfo)),
 				}
 		})
 	typeAndGroup.SetToUpper()
