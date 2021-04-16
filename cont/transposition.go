@@ -24,6 +24,10 @@ func CheckTransposition(ownerCode string, equipCatID string, serialNum string) [
 	contNums := make([]Number, 0)
 
 	checkDigit := CalcCheckDigit(ownerCode, equipCatID, serialNum) % 10
+	// Only container numbers with check digit 0, 10 or 3 are affected
+	if checkDigit != 3 && checkDigit != 0 {
+		return contNums
+	}
 	for pos := range serialNum {
 		if pos < 5 && serialNum[pos] != serialNum[pos+1] {
 			transposedSerialNum := fmt.Sprintf(
