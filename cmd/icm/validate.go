@@ -166,7 +166,7 @@ func newValidateCmd(stdin io.Reader, writer io.Writer, viperCfg *viper.Viper, de
 		Short: "Validate intermodal container markings",
 		Long: `Validate intermodal container markings with single or multi line input.
 
-For single line input a human readable output is used.
+For single line input a human-readable output is used.
 
 For multi line input CSV output is used. For example this is useful to scan
 data sets for possible transposition errors. It is also possible to generate
