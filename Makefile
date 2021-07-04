@@ -14,7 +14,7 @@ test:
 
 .PHONY: lint
 lint:
-	golangci-lint run --enable golint --enable goimports
+	golangci-lint run --enable revive --enable goimports
 
 .PHONY: build
 build:

@@ -99,10 +99,7 @@ func (of *ownerDecoderUpdater) Update(newOwners map[string]cont.Owner) error {
 	if err != nil {
 		return err
 	}
-	if err := os.WriteFile(filepath.Join(of.path, ownerFileName), b, 0644); err != nil {
-		return err
-	}
-	return nil
+	return os.WriteFile(filepath.Join(of.path, ownerFileName), b, 0644)
 }
 
 func marshalNoHTMLEsc(t interface{}) ([]byte, error) {

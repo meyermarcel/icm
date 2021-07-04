@@ -73,10 +73,7 @@ func update(ownerUpdater data.OwnerUpdater, timestampUpdater data.TimestampUpdat
 		return err
 	}
 
-	if err := ownerUpdater.Update(owners); err != nil {
-		return err
-	}
-	return nil
+	return ownerUpdater.Update(owners)
 }
 
 func parseOwners(body io.Reader) (map[string]cont.Owner, error) {
