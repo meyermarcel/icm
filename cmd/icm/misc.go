@@ -38,7 +38,7 @@ func newMiscCmd(writer io.Writer, rootCmd *cobra.Command) *cobra.Command {
 		Example: "icm misc bash-completion",
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return rootCmd.GenBashCompletion(writer)
+			return rootCmd.GenBashCompletionV2(writer, false)
 		},
 	}
 
