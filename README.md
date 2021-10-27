@@ -4,7 +4,7 @@
 
 icm generates or validates single data or whole data sets of intermodal container markings according to [ISO 6346](https://en.wikipedia.org/wiki/ISO_6346).
 
-See example commands for [generate](docs/icm_generate.md) and [validate](docs/icm_validate.md).
+See examples for [`generate` command](docs/icm_generate.md) and [`validate` command](docs/icm_validate.md).
 
 ## Demo
 
@@ -35,9 +35,9 @@ scoop install icm
 
 Download your binary in the [Releases](https://github.com/meyermarcel/icm/releases) section.
 
-See the [completion command](docs/icm_completion.md) for **bash**, **zsh**, **fish** and **powershell** completions.
+See the [`completion` command](docs/icm_completion.md) for **bash**, **zsh**, **fish** and **powershell** completions.
 
-See the [doc command](docs/icm_doc.md) for **manual pages** and **markdown**.
+See the [`doc` command](docs/icm_doc.md) for **manual pages** and **markdown**.
 
 ## Contribution
 
