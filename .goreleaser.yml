@@ -82,4 +82,4 @@ scoop:
     name: scoop-bucket
   homepage: "https://github.com/meyermarcel/icm"
   description: "Generate or validate intermodal container markings."
-  license: Apache-2.0
+  license: MIT

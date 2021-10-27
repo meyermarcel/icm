@@ -102,4 +102,4 @@ See the [doc command](docs/icm_doc.md) for **manual pages** and **markdown**.
 
 ## License
 
-icm is released under the Apache 2.0 license. See [LICENSE](https://github.com/meyermarcel/icm/blob/master/LICENSE)
+icm is released under the MIT license. See [LICENSE](https://github.com/meyermarcel/icm/blob/master/LICENSE)
