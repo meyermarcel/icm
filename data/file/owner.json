@@ -3,7 +3,13 @@
     "code": "AAA",
     "company": "ASIA CONTAINER LEASING CO LTD",
     "city": "WAN CHAI",
-    "country": "HK"
+    "country": "Hong Kong, China"
+  },
+  "AAB": {
+    "code": "AAB",
+    "company": "ALLTAINER VIETNAM CO, LTD",
+    "city": "LONG AN",
+    "country": "Vietnam"
   },
   "AAC": {
     "code": "AAC",
@@ -33,7 +39,13 @@
     "code": "AAM",
     "company": "ALBATROSS TANK-LEASING CO., LIMITED",
     "city": "HONG KONG",
-    "country": "HK"
+    "country": "Hong Kong, China"
+  },
+  "AAR": {
+    "code": "AAR",
+    "company": "AARCADIAN, LLC",
+    "city": "Denver",
+    "country": "United States"
   },
   "AAT": {
     "code": "AAT",
@@ -155,15 +167,27 @@
     "city": "Bhuj",
     "country": "India"
   },
+  "ADC": {
+    "code": "ADC",
+    "company": "ADECON SP. Z.O.O.",
+    "city": "Zelazkow",
+    "country": "Poland"
+  },
   "ADH": {
     "code": "ADH",
     "company": "ADHOC S.R.L",
     "city": "VENICE",
     "country": "Italy"
   },
+  "ADK": {
+    "code": "ADK",
+    "company": "ADOKIM KIMYA SANAYI VE TICARET A.S.",
+    "city": "Antalya",
+    "country": "Turkey"
+  },
   "ADL": {
     "code": "ADL",
-    "company": "QINGDAO IRFAN INTERNATIONAL LOGISTICS CO LTD",
+    "company": "IRFAN ENAD ABDULGHAFOOR KOBISI",
     "city": "Qingdao",
     "country": "China"
   },
@@ -229,7 +253,7 @@
   },
   "AEV": {
     "code": "AEV",
-    "company": "INNOLITH AG",
+    "company": "BLUEHORN AG",
     "city": "Basel",
     "country": "Switzerland"
   },
@@ -275,6 +299,18 @@
     "city": "MONOPOLI",
     "country": "Italy"
   },
+  "AFT": {
+    "code": "AFT",
+    "company": "ALBATROSS TANK LEASING B.V.",
+    "city": "Moerdijk",
+    "country": "Netherlands"
+  },
+  "AFV": {
+    "code": "AFV",
+    "company": "ALFONS FRERIKS LOGISTICS",
+    "city": "Veenwouden",
+    "country": "Netherlands"
+  },
   "AGA": {
     "code": "AGA",
     "company": "LINDE GAS BENELUX",
@@ -310,6 +346,12 @@
     "company": "AFRICA GLOBAL LOGISTICS",
     "city": "ROUBAIX",
     "country": "France"
+  },
+  "AGI": {
+    "code": "AGI",
+    "company": "GOLDEN SOMERSET ROCK LTD",
+    "city": "London",
+    "country": "United Kingdom"
   },
   "AGK": {
     "code": "AGK",
@@ -365,6 +407,12 @@
     "city": "Istanbul (Bahçelievler)",
     "country": "Turkey"
   },
+  "AHE": {
+    "code": "AHE",
+    "company": "AIRLIFE GASES PRIVATE LIMITED",
+    "city": "Pune, Maharastra",
+    "country": "India"
+  },
   "AHG": {
     "code": "AHG",
     "company": "AL GHAITH INDUSTRIES L.L.C",
@@ -376,6 +424,18 @@
     "company": "ABNORMAL LOAD ENGINEERING LIMITED",
     "city": "HIXON",
     "country": "United Kingdom"
+  },
+  "AHS": {
+    "code": "AHS",
+    "company": "APMSIDC",
+    "city": "Mangalagiri",
+    "country": "India"
+  },
+  "AIB": {
+    "code": "AIB",
+    "company": "AIRBUS SAS",
+    "city": "BLAGNAC",
+    "country": "France"
   },
   "AIC": {
     "code": "AIC",
@@ -471,7 +531,13 @@
     "code": "AKO",
     "company": "HONG KONG SPECIALITY GASES CO.LTD",
     "city": "CHEUNG SHAWAN, KLN",
-    "country": "HK"
+    "country": "Hong Kong, China"
+  },
+  "AKP": {
+    "code": "AKP",
+    "company": "LLC \"KOMTRANSSERVICE\"",
+    "city": "Novosibirsk",
+    "country": "Russian Federation"
   },
   "AKV": {
     "code": "AKV",
@@ -599,6 +665,18 @@
     "city": "JIANG SU PROVINCE",
     "country": "China"
   },
+  "ALX": {
+    "code": "ALX",
+    "company": "AIRLIFE GASES PRIVATE LIMITED",
+    "city": "Pune, Maharastra",
+    "country": "India"
+  },
+  "ALZ": {
+    "code": "ALZ",
+    "company": "AIR LIQUIDE NEW ZEALAND",
+    "city": "Auckland",
+    "country": "New Zealand"
+  },
   "AMA": {
     "code": "AMA",
     "company": "ALIANÇA EQUIQ. CONTÊINERES  MANAUS LTDA",
@@ -629,11 +707,23 @@
     "city": "Rocky View",
     "country": "Canada"
   },
+  "AMH": {
+    "code": "AMH",
+    "company": "AMITIS DENIZCILIK ULUSLARARASI LOJISTIIK MAKINE SANAYI VE TICARET LIMITED ŞIRKETI",
+    "city": "Ankara",
+    "country": "Turkey"
+  },
   "AMI": {
     "code": "AMI",
     "company": "AMLF LOGISTICS PVT LTD",
     "city": "NAVI MUMBAI",
     "country": "India"
+  },
+  "AMK": {
+    "code": "AMK",
+    "company": "LLC AMTEC",
+    "city": "Moscow",
+    "country": "Russian Federation"
   },
   "AMM": {
     "code": "AMM",
@@ -647,11 +737,17 @@
     "city": "Paimio",
     "country": "Finland"
   },
+  "AMP": {
+    "code": "AMP",
+    "company": "AVISA MARITIME PTE LTD",
+    "city": "Singapore",
+    "country": "Singapore"
+  },
   "AMS": {
     "code": "AMS",
     "company": "AMASIS SHIPPING COMPANY LIMITED",
     "city": "Ho Chi Minh",
-    "country": "Viet Nam"
+    "country": "Vietnam"
   },
   "AMT": {
     "code": "AMT",
@@ -721,7 +817,7 @@
   },
   "AOR": {
     "code": "AOR",
-    "company": "OEG ASIA PACIFIC PTE LTD",
+    "company": "OEG OFFSHORE PTE LTD",
     "city": "Singapore",
     "country": "Singapore"
   },
@@ -778,6 +874,12 @@
     "company": "ALTORFER POWER SYSTEMS, INC",
     "city": "BARTONVILLE, IL-61607",
     "country": "United States"
+  },
+  "APT": {
+    "code": "APT",
+    "company": "AIR PRODUCTS (SOUTH AFRICA)",
+    "city": "Kempton Park",
+    "country": "South Africa"
   },
   "APV": {
     "code": "APV",
@@ -853,7 +955,7 @@
   },
   "ARR": {
     "code": "ARR",
-    "company": "NIPPON GASES OFFSHORE TANKS LIMITED",
+    "company": "NIPPON GASES OFFSHORE LIMITED",
     "city": "ABERDEEN AB12 3LG",
     "country": "United Kingdom"
   },
@@ -887,6 +989,12 @@
     "city": "GOTHENBURG",
     "country": "Sweden"
   },
+  "ASI": {
+    "code": "ASI",
+    "company": "CCIS FRANCE",
+    "city": "MARSEILLE",
+    "country": "France"
+  },
   "ASL": {
     "code": "ASL",
     "company": "ALLIGATOR SHIPPING COMPANY LLC",
@@ -909,12 +1017,12 @@
     "code": "ASO",
     "company": "ATLANTIC SHIPPING LINE LIMITED",
     "city": "BRITISH VIRGIN ISLAND",
-    "country": "British Indian Ocean Territory"
+    "country": "Virgin Islands, British"
   },
   "ASP": {
     "code": "ASP",
-    "company": "TANK MANAGEMENT A/S",
-    "city": "OSLO",
+    "company": "NORDBØ HOLDING AS",
+    "city": "Oslo",
     "country": "Norway"
   },
   "ASR": {
@@ -1073,6 +1181,12 @@
     "city": "SILVER BOW, MT 59750",
     "country": "United States"
   },
+  "AWE": {
+    "code": "AWE",
+    "company": "AWE PLC",
+    "city": "Reading",
+    "country": "United Kingdom"
+  },
   "AWI": {
     "code": "AWI",
     "company": "ALFRED-WEGENER-INSTITUT HELMHOLTZ-ZENTRUM FUR POLAR",
@@ -1114,6 +1228,12 @@
     "company": "TEXTAINER EQUIPMENT MANAGEMENT LTD",
     "city": "HAMILTON, HM HX",
     "country": "Bermuda"
+  },
+  "AYM": {
+    "code": "AYM",
+    "company": "LLC \"AYAMTRANSSERVICE\"",
+    "city": "Yakutsk, Republic of Sakha (Yakutia)",
+    "country": "Russian Federation"
   },
   "AYT": {
     "code": "AYT",
@@ -1217,6 +1337,12 @@
     "city": "Llanera-Asturias",
     "country": "Spain"
   },
+  "BBE": {
+    "code": "BBE",
+    "company": "Shenzhen Olipower Energy & Automation Technology Co., Ltd.",
+    "city": "SHENZHEN",
+    "country": "China"
+  },
   "BBR": {
     "code": "BBR",
     "company": "ITAKA TRANS LLC",
@@ -1239,7 +1365,7 @@
     "code": "BBU",
     "company": "BSL CONTAINERS LIMITED",
     "city": "KOWLOON",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "BBX": {
     "code": "BBX",
@@ -1331,12 +1457,6 @@
     "city": "BOSTON, MA 02199",
     "country": "United States"
   },
-  "BEC": {
-    "code": "BEC",
-    "company": "EUROTAINER SA",
-    "city": "Rotterdam",
-    "country": "Netherlands"
-  },
   "BEG": {
     "code": "BEG",
     "company": "BEC GMBH",
@@ -1371,7 +1491,7 @@
     "code": "BES",
     "company": "BESTCHEM GROUP HOLDINGS CO.,LIMITED",
     "city": "WAN CHAI",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "BEX": {
     "code": "BEX",
@@ -1499,6 +1619,12 @@
     "city": "DUERRENAESCH",
     "country": "Switzerland"
   },
+  "BIJ": {
+    "code": "BIJ",
+    "company": "SREETRANS LOGISTICS INDIA PVT LTD",
+    "city": "Mumbai",
+    "country": "India"
+  },
   "BIR": {
     "code": "BIR",
     "company": "BUKARA",
@@ -1565,6 +1691,12 @@
     "city": "PAPENDRECHT",
     "country": "Netherlands"
   },
+  "BLD": {
+    "code": "BLD",
+    "company": "BLUERED BV",
+    "city": "Waddinxveen",
+    "country": "Netherlands"
+  },
   "BLE": {
     "code": "BLE",
     "company": "BELINKA PERKEMIJA  D.O.O.",
@@ -1588,6 +1720,12 @@
     "company": "BULKHAUL LTD",
     "city": "MIDDLESBROUGH CLEVELAND",
     "country": "United Kingdom"
+  },
+  "BLL": {
+    "code": "BLL",
+    "company": "BLUE LINES TRANSPORT SRL",
+    "city": "salerno",
+    "country": "Italy"
   },
   "BLP": {
     "code": "BLP",
@@ -1687,7 +1825,7 @@
   },
   "BOC": {
     "code": "BOC",
-    "company": "LINDE GAS NA LLC",
+    "company": "LINDE GAS & EQUIPMENT INC",
     "city": "Bridgewater, NJ 08807",
     "country": "United States"
   },
@@ -1771,9 +1909,9 @@
   },
   "BRB": {
     "code": "BRB",
-    "company": "SASOL GERMANY GMBH",
-    "city": "BRUNSBUETTEL",
-    "country": "Germany"
+    "company": "NOURYON FUNCTIONAL CHEMICALS",
+    "city": "Rotterdam",
+    "country": "Netherlands"
   },
   "BRC": {
     "code": "BRC",
@@ -1851,7 +1989,7 @@
     "code": "BSA",
     "company": "BLUE SKY LOGITRADE LIMITED",
     "city": "DES VOEUX ROAD WEST",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "BSB": {
     "code": "BSB",
@@ -1861,9 +1999,9 @@
   },
   "BSC": {
     "code": "BSC",
-    "company": "BESTCONT LTD",
-    "city": "LONDON",
-    "country": "United Kingdom"
+    "company": "BESTCONT SA",
+    "city": "CRISSIER",
+    "country": "Switzerland"
   },
   "BSG": {
     "code": "BSG",
@@ -1887,7 +2025,7 @@
     "code": "BSL",
     "company": "BSL CONTAINERS LIMITED",
     "city": "KOWLOON",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "BSS": {
     "code": "BSS",
@@ -1900,6 +2038,12 @@
     "company": "BEST CONTAINERS",
     "city": "PURMEREND",
     "country": "Netherlands"
+  },
+  "BSU": {
+    "code": "BSU",
+    "company": "BEIRUT SHIPPING LLC",
+    "city": "DUBAI",
+    "country": "United Arab Emirates"
   },
   "BSX": {
     "code": "BSX",
@@ -1929,7 +2073,7 @@
     "code": "BTN",
     "company": "BRETON CONTAINERS LIMITED",
     "city": "HONG KONG",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "BTS": {
     "code": "BTS",
@@ -2027,6 +2171,12 @@
     "city": "WILHELMSHAVEN",
     "country": "Germany"
   },
+  "BWR": {
+    "code": "BWR",
+    "company": "ZHEJIANG BETTERWAY SUPPLY CHAIN MANAGEMENT CO., LTD",
+    "city": "Jinhua",
+    "country": "China"
+  },
   "BWT": {
     "code": "BWT",
     "company": "DAMEN GREEN SOLUTIONS B.V",
@@ -2123,6 +2273,12 @@
     "city": "BERGAMO",
     "country": "Italy"
   },
+  "CAG": {
+    "code": "CAG",
+    "company": "CARU GOLDGIE CONTAINERS CO., LTD.",
+    "city": "KOWLOON",
+    "country": "Hong Kong, China"
+  },
   "CAI": {
     "code": "CAI",
     "company": "CAI INTERNATIONAL",
@@ -2213,11 +2369,17 @@
     "city": "CHALFONT ST PETER",
     "country": "United Kingdom"
   },
+  "CBD": {
+    "code": "CBD",
+    "company": "CARBACID (CO2) LIMITED",
+    "city": "Nairobi",
+    "country": "Kenya"
+  },
   "CBH": {
     "code": "CBH",
     "company": "FLORENS ASSET MANAGEMENT COMPANY LIMITED",
     "city": "Hong Kong",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "CBK": {
     "code": "CBK",
@@ -2289,7 +2451,13 @@
     "code": "CCE",
     "company": "JUNTAI CONTAINER COMPANY LIMITED",
     "city": "Hong Kong",
-    "country": "HK"
+    "country": "Hong Kong, China"
+  },
+  "CCF": {
+    "code": "CCF",
+    "company": "CROCODILE CONTAINERS PTY LTD",
+    "city": "Archerfield",
+    "country": "Australia"
   },
   "CCG": {
     "code": "CCG",
@@ -2319,13 +2487,19 @@
     "code": "CCL",
     "company": "COSCO SHIPPING DEVELOPMENT (ASIA) CO.,LTD",
     "city": "Kwai Chung, New Territories",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "CCM": {
     "code": "CCM",
     "company": "MERCITALIA RAIL",
     "city": "Rome",
     "country": "Italy"
+  },
+  "CCN": {
+    "code": "CCN",
+    "company": "CHANG CHUN PETROCHEMICAL CO., LTD.",
+    "city": "Taipei",
+    "country": "Taiwan, China"
   },
   "CCO": {
     "code": "CCO",
@@ -2417,9 +2591,15 @@
     "city": "Montreal, H1Z 4M6",
     "country": "Canada"
   },
+  "CDY": {
+    "code": "CDY",
+    "company": "CHENGDU YUCHENG LOGISTICS CO.,LTD",
+    "city": "chengdu",
+    "country": "China"
+  },
   "CEA": {
     "code": "CEA",
-    "company": "ORANO TN INTERNATIONAL",
+    "company": "ORANO NPS",
     "city": "VALOGNES",
     "country": "France"
   },
@@ -2487,7 +2667,7 @@
     "code": "CEU",
     "company": "CHINA EASTERN CONTAINERS LIMITED",
     "city": "HONG KONG",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "CEX": {
     "code": "CEX",
@@ -2577,7 +2757,7 @@
     "code": "CGK",
     "company": "CGK INTERNATIONAL LIMITED",
     "city": "HONG KONG",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "CGL": {
     "code": "CGL",
@@ -2614,6 +2794,18 @@
     "company": "SAPIO PRODUZIONE IDROGENO OSSIGENO SRL",
     "city": "MONZA (MB)",
     "country": "Italy"
+  },
+  "CGV": {
+    "code": "CGV",
+    "company": "CRYOGAS-VYSOTSK LLC",
+    "city": "Saint-Petersburg",
+    "country": "Russian Federation"
+  },
+  "CGX": {
+    "code": "CGX",
+    "company": "CARGOBOX LLC",
+    "city": "Moscow",
+    "country": "Russian Federation"
   },
   "CHD": {
     "code": "CHD",
@@ -2679,7 +2871,7 @@
     "code": "CHT",
     "company": "COHERENT BOX INTERNATIONAL CO., LTD",
     "city": "Hong-Kong",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "CHV": {
     "code": "CHV",
@@ -2710,6 +2902,12 @@
     "company": "CIMC CONTAINERS HOLDING COMPANY LTD",
     "city": "GUANGDONG",
     "country": "China"
+  },
+  "CIE": {
+    "code": "CIE",
+    "company": "CEMINLOG",
+    "city": "Sète",
+    "country": "France"
   },
   "CIG": {
     "code": "CIG",
@@ -2757,13 +2955,13 @@
     "code": "CKC",
     "company": "SOLSINO LTD",
     "city": "HONG KONG",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "CKE": {
     "code": "CKE",
     "company": "CELERITY TANK LOGISTICS (CHINA) LTD",
     "city": "HONG KONG",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "CKF": {
     "code": "CKF",
@@ -3031,7 +3229,7 @@
   },
   "COG": {
     "code": "COG",
-    "company": "ORANO TN INTERNATIONAL",
+    "company": "ORANO NPS",
     "city": "VALOGNES",
     "country": "France"
   },
@@ -3105,7 +3303,7 @@
     "code": "CPB",
     "company": "CANONS PARK EQUIPMENT CO LTD",
     "city": "TST",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "CPC": {
     "code": "CPC",
@@ -3311,11 +3509,17 @@
     "city": "QUINCY MA-02169",
     "country": "United States"
   },
+  "CSK": {
+    "code": "CSK",
+    "company": "SHOUKANG MEDICAL SCIENCE AND TECHNOLOGY (SHANDONG) CO., LTD.",
+    "city": "JINAN",
+    "country": "China"
+  },
   "CSL": {
     "code": "CSL",
     "company": "COSCO SHIPPING DEVELOPMENT (ASIA) CO.,LTD",
     "city": "Kwai Chung, New Territories",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "CSM": {
     "code": "CSM",
@@ -3533,6 +3737,12 @@
     "city": "BRIDGETOWN BB11144",
     "country": "Barbados"
   },
+  "CUL": {
+    "code": "CUL",
+    "company": "CHINA UNITED LINES LTD",
+    "city": "SHANGHAI",
+    "country": "China"
+  },
   "CUN": {
     "code": "CUN",
     "company": "COMBIUNITS AS",
@@ -3544,6 +3754,12 @@
     "company": "TAYLOR-WHARTON AMERICA INC",
     "city": "BAYTOWN,TX",
     "country": "United States"
+  },
+  "CVC": {
+    "code": "CVC",
+    "company": "CLEVELAND CONTAINERS",
+    "city": "STOCKTON ON TEES",
+    "country": "United Kingdom"
   },
   "CVR": {
     "code": "CVR",
@@ -3557,11 +3773,17 @@
     "city": "CIKARANG, BEKASI",
     "country": "Indonesia"
   },
+  "CWC": {
+    "code": "CWC",
+    "company": "CARGOAGROCOM LLC",
+    "city": "Moscow",
+    "country": "Russian Federation"
+  },
   "CWF": {
     "code": "CWF",
     "company": "SITC COWIN SUPPLY CHAIN LIMITED",
     "city": "Causeway Bay",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "CWL": {
     "code": "CWL",
@@ -3587,6 +3809,12 @@
     "city": "Rowland Heights",
     "country": "United States"
   },
+  "CWX": {
+    "code": "CWX",
+    "company": "CONEXWEST",
+    "city": "San Francisco",
+    "country": "United States"
+  },
   "CXC": {
     "code": "CXC",
     "company": "MATSON NAVIGATION COMPANY, INC",
@@ -3603,7 +3831,7 @@
     "code": "CXH",
     "company": "CEX (HKG) LIMITED",
     "city": "CAUSEWAY BAY, HONG KONG",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "CXI": {
     "code": "CXI",
@@ -3677,6 +3905,12 @@
     "city": "ENNERY",
     "country": "France"
   },
+  "CYS": {
+    "code": "CYS",
+    "company": "CRYOGENIC INDUSTRIAL SERVICES PTY LTD",
+    "city": "Seaford",
+    "country": "Australia"
+  },
   "CYZ": {
     "code": "CYZ",
     "company": "CRRC YANGTZE CO., LTD.",
@@ -3699,7 +3933,7 @@
     "code": "CZT",
     "company": "NEW CENTRANS INTERNATIONAL MARINE SHIPPING CO., LIMITED",
     "city": "",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "CZZ": {
     "code": "CZZ",
@@ -3724,6 +3958,12 @@
     "company": "TANKTRAILER NEDERLAND",
     "city": "NUMANSDORP",
     "country": "Netherlands"
+  },
+  "DAH": {
+    "code": "DAH",
+    "company": "DAHNAY LOGISTICS PRIVATE LIMITED",
+    "city": "Chennai",
+    "country": "India"
   },
   "DAI": {
     "code": "DAI",
@@ -3808,6 +4048,12 @@
     "company": "CACI",
     "city": "RAMBOUILLET CEDEX",
     "country": "France"
+  },
+  "DCE": {
+    "code": "DCE",
+    "company": "M/S DCM CONTAINERS & ENGINEERING PVT LTD",
+    "city": "Faridabad",
+    "country": "India"
   },
   "DCH": {
     "code": "DCH",
@@ -3951,13 +4197,13 @@
     "code": "DFO",
     "company": "FLORENS ASSET MANAGEMENT COMPANY LIMITED",
     "city": "Hong Kong",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "DFS": {
     "code": "DFS",
     "company": "FLORENS ASSET MANAGEMENT COMPANY LIMITED",
     "city": "Hong Kong",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "DFV": {
     "code": "DFV",
@@ -3994,6 +4240,12 @@
     "company": "SHANGHAI DONG GUILIAN CONTAINER RENTAL CO.,LTD",
     "city": "Shanghai",
     "country": "China"
+  },
+  "DGZ": {
+    "code": "DGZ",
+    "company": "DAĞGAZ",
+    "city": "Alemdar Vergi Dairesi",
+    "country": "Turkey"
   },
   "DHB": {
     "code": "DHB",
@@ -4037,6 +4289,12 @@
     "city": "Singapore",
     "country": "Singapore"
   },
+  "DIB": {
+    "code": "DIB",
+    "company": "DESERT ISLE INC.",
+    "city": "Kapolei",
+    "country": "United States"
+  },
   "DID": {
     "code": "DID",
     "company": "BERTSCHI AG",
@@ -4066,6 +4324,12 @@
     "company": "DJ CONTAINERS BVBA SARL",
     "city": "ANTWERPEN",
     "country": "Belgium"
+  },
+  "DJD": {
+    "code": "DJD",
+    "company": "DALIAN DJD INTERNATIONAL LOGISTICS CO., LTD.",
+    "city": "Dalian",
+    "country": "China"
   },
   "DJI": {
     "code": "DJI",
@@ -4295,11 +4559,17 @@
     "city": "WOODCLIFF LAKE, N.J. 07677",
     "country": "United States"
   },
+  "DSC": {
+    "code": "DSC",
+    "company": "COAST CONTAINERS LTD",
+    "city": "New Westminster, B.C.,  V3L 5M4",
+    "country": "Canada"
+  },
   "DSL": {
     "code": "DSL",
     "company": "DANUBE SHIPPING SERVICE LIMITED",
     "city": "Hong Kong, Wan Chai",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "DSN": {
     "code": "DSN",
@@ -4329,7 +4599,7 @@
     "code": "DSZ",
     "company": "DRAGON GROUP",
     "city": "HONG KONG",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "DTC": {
     "code": "DTC",
@@ -4415,6 +4685,12 @@
     "city": "JEONBUK",
     "country": "Korea, Republic of"
   },
+  "DXB": {
+    "code": "DXB",
+    "company": "Dubox International ContainerTrading LLC",
+    "city": "Dubai",
+    "country": "United Arab Emirates"
+  },
   "DXI": {
     "code": "DXI",
     "company": "PT. DEXIN STEEL INDONESIA",
@@ -4426,6 +4702,12 @@
     "company": "DIOXITEK SA",
     "city": "BUENOS AIRES",
     "country": "Argentina"
+  },
+  "DYC": {
+    "code": "DYC",
+    "company": "DYCKERHOFF GMBH",
+    "city": "Wiesbaden",
+    "country": "Germany"
   },
   "DYL": {
     "code": "DYL",
@@ -4439,11 +4721,17 @@
     "city": "BOLESLAWIEC",
     "country": "Poland"
   },
+  "EAA": {
+    "code": "EAA",
+    "company": "SEAWAY TECHNOLOGIES GMBH",
+    "city": "Wolfurt",
+    "country": "Austria"
+  },
   "EAC": {
     "code": "EAC",
     "company": "EAG INTERNATIONAL CONTAINER LIMITED",
     "city": "HONG KONG",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "EAD": {
     "code": "EAD",
@@ -4485,12 +4773,18 @@
     "code": "EAR",
     "company": "EURO-ASIAN RUISHENG INDUSTRIAL CO,LIMITED",
     "city": "HONG KONG",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "EAS": {
     "code": "EAS",
     "company": "WATERFRONT CONTAINER LEASING CO INC.",
     "city": "SAN FRANCISCO, CA 94109",
+    "country": "United States"
+  },
+  "EAW": {
+    "code": "EAW",
+    "company": "EASYWAY INTERNATIONAL LLC",
+    "city": "GRETNA",
     "country": "United States"
   },
   "EAX": {
@@ -4619,6 +4913,12 @@
     "city": "Sanming",
     "country": "China"
   },
+  "EER": {
+    "code": "EER",
+    "company": "FERROVIAL ALGERIE",
+    "city": "ANNABA",
+    "country": "Algeria"
+  },
   "EET": {
     "code": "EET",
     "company": "ENERGO-TRANS",
@@ -4659,13 +4959,19 @@
     "code": "EGH",
     "company": "EVERGREEN MARINE (HONG KONG) LTD",
     "city": "Wan Chai",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "EGS": {
     "code": "EGS",
     "company": "EVERGREEN MARINE (SG) PTE LTD",
     "city": "Singapore",
     "country": "Singapore"
+  },
+  "EGT": {
+    "code": "EGT",
+    "company": "EVER-LOGISTICS INT FORWARDING LTD",
+    "city": "KL",
+    "country": "Hong Kong, China"
   },
   "EHP": {
     "code": "EHP",
@@ -4677,7 +4983,7 @@
     "code": "EHS",
     "company": "EHS TANK.CO.LIMITED",
     "city": "CENTRAL",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "EIA": {
     "code": "EIA",
@@ -4750,12 +5056,6 @@
     "company": "ELA CONTAINER GMBH",
     "city": "HAREN (EMS)",
     "country": "Germany"
-  },
-  "ELB": {
-    "code": "ELB",
-    "company": "ELBURG GLOBAL BV",
-    "city": "Huizen",
-    "country": "Netherlands"
   },
   "ELC": {
     "code": "ELC",
@@ -4949,6 +5249,12 @@
     "city": "Singapore",
     "country": "Singapore"
   },
+  "EOT": {
+    "code": "EOT",
+    "company": "EUROPE ONLINE TRADE PLC.",
+    "city": "SOFIA",
+    "country": "Bulgaria"
+  },
   "EPC": {
     "code": "EPC",
     "company": "EPC UK",
@@ -4972,6 +5278,12 @@
     "company": "SCANDIC CONTAINER OY",
     "city": "ESPOO",
     "country": "Finland"
+  },
+  "EPU": {
+    "code": "EPU",
+    "company": "EPU GLOBAL LOGISTICS CO., LIMITED",
+    "city": "SHANGHAI",
+    "country": "China"
   },
   "EQP": {
     "code": "EQP",
@@ -5003,6 +5315,12 @@
     "city": "PRUSZCZ GDANSKI",
     "country": "Poland"
   },
+  "ERL": {
+    "code": "ERL",
+    "company": "E3R LOGISTICS P LTD",
+    "city": "Chennai",
+    "country": "India"
+  },
   "ERM": {
     "code": "ERM",
     "company": "ERMONT SAS",
@@ -5031,13 +5349,19 @@
     "code": "ESD",
     "company": "EMIRATES SHIPPING (HONG KONG) LTD",
     "city": "WONG CHUK HANG",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "ESE": {
     "code": "ESE",
     "company": "ESSECO SRL",
     "city": "S.MARTINO TRECATE  NO",
     "country": "Italy"
+  },
+  "ESH": {
+    "code": "ESH",
+    "company": "ESHIPPING GLOBAL SUPPLY CHAIN MANAGEMENT (SHENZHEN) CO.,LTD.",
+    "city": "SHEN ZHEN",
+    "country": "China"
   },
   "ESL": {
     "code": "ESL",
@@ -5049,13 +5373,19 @@
     "code": "ESP",
     "company": "EMIRATES SHIPPING (HONG KONG) LTD",
     "city": "WONG CHUK HANG",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "ESS": {
     "code": "ESS",
     "company": "KAWASAKI KISEN KAISHA LTD - K LINE",
     "city": "TOKYO",
     "country": "Japan"
+  },
+  "EST": {
+    "code": "EST",
+    "company": "EASTCOMTRANS LIMITED LIABILITY PARTNERS",
+    "city": "Almaty",
+    "country": "Kazakhstan"
   },
   "ETB": {
     "code": "ETB",
@@ -5075,6 +5405,12 @@
     "city": "CARCAIXENT",
     "country": "Spain"
   },
+  "ETM": {
+    "code": "ETM",
+    "company": "TEMIS MAREK SKAJEWSKI",
+    "city": "Chojnice",
+    "country": "Poland"
+  },
   "ETN": {
     "code": "ETN",
     "company": "EUROTAINER SA",
@@ -5085,6 +5421,12 @@
     "code": "ETR",
     "company": "CJSC ELF FILLING",
     "city": "Elektrougli",
+    "country": "Russian Federation"
+  },
+  "ETS": {
+    "code": "ETS",
+    "company": "JSC \"EUROSIB SPB-TS\"",
+    "city": "Saint-Petersburg",
     "country": "Russian Federation"
   },
   "ETT": {
@@ -5210,7 +5552,7 @@
   "EYT": {
     "code": "EYT",
     "company": "HARBIN EYT TECH&TRADE SHARE CO., LTD",
-    "city": "HARBIN,",
+    "city": "Harbin",
     "country": "China"
   },
   "EZC": {
@@ -5289,13 +5631,13 @@
     "code": "FBI",
     "company": "FLORENS ASSET MANAGEMENT COMPANY LIMITED",
     "city": "Hong Kong",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "FBL": {
     "code": "FBL",
     "company": "FLORENS ASSET MANAGEMENT COMPANY LIMITED",
     "city": "Hong Kong",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "FBR": {
     "code": "FBR",
@@ -5331,13 +5673,13 @@
     "code": "FCG",
     "company": "FLORENS ASSET MANAGEMENT COMPANY LIMITED",
     "city": "Hong Kong",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "FCI": {
     "code": "FCI",
     "company": "FLORENS ASSET MANAGEMENT COMPANY LIMITED",
     "city": "Hong Kong",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "FCK": {
     "code": "FCK",
@@ -5349,7 +5691,7 @@
     "code": "FCL",
     "company": "FLORENS ASSET MANAGEMENT COMPANY LIMITED",
     "city": "Hong Kong",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "FCN": {
     "code": "FCN",
@@ -5367,7 +5709,7 @@
     "code": "FCX",
     "company": "FLORENS ASSET MANAGEMENT COMPANY LIMITED",
     "city": "Hong Kong",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "FDA": {
     "code": "FDA",
@@ -5399,6 +5741,12 @@
     "city": "CORAL GABLES, FL 33134",
     "country": "United States"
   },
+  "FDR": {
+    "code": "FDR",
+    "company": "FEEDER LOGISTICS DMCC",
+    "city": "Dubai",
+    "country": "United Arab Emirates"
+  },
   "FDX": {
     "code": "FDX",
     "company": "FEDEX FREIGHT INC",
@@ -5425,8 +5773,8 @@
   },
   "FER": {
     "code": "FER",
-    "company": "S.G.T. SRL",
-    "city": "FIORENZUOLA D'ARDA PC",
+    "company": "FERRARI EUGENIO SRL",
+    "city": "CASTEL SAN GIOVANNI",
     "country": "Italy"
   },
   "FES": {
@@ -5445,7 +5793,7 @@
     "code": "FFA",
     "company": "FLORENS ASSET MANAGEMENT COMPANY LIMITED",
     "city": "Hong Kong",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "FFC": {
     "code": "FFC",
@@ -5491,9 +5839,9 @@
   },
   "FGR": {
     "code": "FGR",
-    "company": "HOOVER FERGUSON UK LIMITED",
-    "city": "ABERDEEN",
-    "country": "United Kingdom"
+    "company": "OEG OFFSHORE PTE LTD",
+    "city": "Singapore",
+    "country": "Singapore"
   },
   "FGT": {
     "code": "FGT",
@@ -5559,7 +5907,7 @@
     "code": "FJK",
     "company": "FLORENS ASSET MANAGEMENT COMPANY LIMITED",
     "city": "Hong Kong",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "FJW": {
     "code": "FJW",
@@ -5615,6 +5963,12 @@
     "city": "HELSINKI",
     "country": "Finland"
   },
+  "FLS": {
+    "code": "FLS",
+    "company": "FLY  LOONG  CONTAINER  LIMITED",
+    "city": "HONG KONG",
+    "country": "Hong Kong, China"
+  },
   "FLT": {
     "code": "FLT",
     "company": "EIMSKIP ISLAND EHF",
@@ -5669,6 +6023,24 @@
     "city": "STOCKHOLM",
     "country": "Sweden"
   },
+  "FNB": {
+    "code": "FNB",
+    "company": "FLORENS ASSET MANAGEMENT COMPANY LIMITED",
+    "city": "Hong Kong",
+    "country": "Hong Kong, China"
+  },
+  "FNG": {
+    "code": "FNG",
+    "company": "FLORENS ASSET MANAGEMENT COMPANY LIMITED",
+    "city": "Hong Kong",
+    "country": "Hong Kong, China"
+  },
+  "FNT": {
+    "code": "FNT",
+    "company": "FLORENS ASSET MANAGEMENT COMPANY LIMITED",
+    "city": "Hong Kong",
+    "country": "Hong Kong, China"
+  },
   "FOD": {
     "code": "FOD",
     "company": "ALLIANCEUROPE",
@@ -5679,7 +6051,7 @@
     "code": "FOG",
     "company": "FIVE OCEANS LOGISTICS LTD",
     "city": "Hong Kong",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "FOH": {
     "code": "FOH",
@@ -5692,6 +6064,18 @@
     "company": "COMPACT CONTAINER SYSTEMS, LLC",
     "city": "BOCA RATON, FL-33432",
     "country": "United States"
+  },
+  "FOO": {
+    "code": "FOO",
+    "company": "FOODSPED GMBH",
+    "city": "Imst",
+    "country": "Austria"
+  },
+  "FOR": {
+    "code": "FOR",
+    "company": "TRANS DISTANCE LINE LTD",
+    "city": "HONG KONG",
+    "country": "Hong Kong, China"
   },
   "FOS": {
     "code": "FOS",
@@ -5729,6 +6113,12 @@
     "city": "Singapore",
     "country": "Singapore"
   },
+  "FQM": {
+    "code": "FQM",
+    "company": "MINERA PANAMA S.A.",
+    "city": "Panama City",
+    "country": "Panama"
+  },
   "FRC": {
     "code": "FRC",
     "company": "GCATAINER BV",
@@ -5747,11 +6137,17 @@
     "city": "Copenhagen",
     "country": "Denmark"
   },
+  "FRS": {
+    "code": "FRS",
+    "company": "FUJIAN REASON SAFETY TANK CONTAINER LOGISTICS CO., LTD.",
+    "city": "NINGDE",
+    "country": "China"
+  },
   "FSC": {
     "code": "FSC",
     "company": "FLORENS ASSET MANAGEMENT COMPANY LIMITED",
     "city": "Hong Kong",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "FSR": {
     "code": "FSR",
@@ -5771,6 +6167,12 @@
     "city": "DAVAO CITY",
     "country": "Philippines"
   },
+  "FSV": {
+    "code": "FSV",
+    "company": "LLC NADEZHDA",
+    "city": "Moscow",
+    "country": "Russian Federation"
+  },
   "FSZ": {
     "code": "FSZ",
     "company": "FUJIFILM ELECTRONIC MATERIALS (SUZHOU) CO.LTD",
@@ -5781,7 +6183,7 @@
     "code": "FTA",
     "company": "FLORENS ASSET MANAGEMENT COMPANY LIMITED",
     "city": "Hong Kong",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "FTC": {
     "code": "FTC",
@@ -5813,11 +6215,23 @@
     "city": "LA PORTE TX-77571",
     "country": "United States"
   },
+  "FTR": {
+    "code": "FTR",
+    "company": "FAST TRAIN OU",
+    "city": "Tallinn",
+    "country": "Estonia"
+  },
   "FTT": {
     "code": "FTT",
     "company": "FISCHINGER GMBH TANKSPEDITION + LOG",
     "city": "BOEHRINGEN",
     "country": "Germany"
+  },
+  "FTX": {
+    "code": "FTX",
+    "company": "FTX CONSULTING SERVICES, INC",
+    "city": "Miami Beach",
+    "country": "United States"
   },
   "FUD": {
     "code": "FUD",
@@ -5957,6 +6371,12 @@
     "city": "WOODCLIFF LAKE, N.J. 07677",
     "country": "United States"
   },
+  "GAQ": {
+    "code": "GAQ",
+    "company": "GASAL (Q.S.C)",
+    "city": "Doha",
+    "country": "Qatar"
+  },
   "GAR": {
     "code": "GAR",
     "company": "GARTNER KG - INTERNATIONALE TRANSPORTE",
@@ -6053,6 +6473,12 @@
     "city": "MILANO  MI",
     "country": "Italy"
   },
+  "GCI": {
+    "code": "GCI",
+    "company": "GLOBAL CONTAINER AND CHASSIS",
+    "city": "Wilmington",
+    "country": "United States"
+  },
   "GCM": {
     "code": "GCM",
     "company": "SHAANXI GREATROAD INDUSTRIAL CO LTD",
@@ -6099,7 +6525,7 @@
     "code": "GDS",
     "company": "GOLDEN SHIP LLC",
     "city": "Ho Chi Minh",
-    "country": "Viet Nam"
+    "country": "Vietnam"
   },
   "GEC": {
     "code": "GEC",
@@ -6185,6 +6611,12 @@
     "city": "Batna",
     "country": "Algeria"
   },
+  "GGB": {
+    "code": "GGB",
+    "company": "GLOBUS GROUP BV",
+    "city": "Rotterdam",
+    "country": "Netherlands"
+  },
   "GGC": {
     "code": "GGC",
     "company": "CARGOSHELL BV",
@@ -6219,7 +6651,7 @@
     "code": "GGR",
     "company": "GUANGGANG GASES (HONGKONG) COMPANY LTD",
     "city": "HONG KONG",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "GGS": {
     "code": "GGS",
@@ -6278,7 +6710,7 @@
   "GJS": {
     "code": "GJS",
     "company": "GUANGDONG PLACTICS EXCHANGE CO,LTD",
-    "city": "GUANGZHOU",
+    "city": "GUANGZHOU GUANGDONG",
     "country": "China"
   },
   "GKR": {
@@ -6341,10 +6773,22 @@
     "city": "GRAYS, WEST THURROCK",
     "country": "United Kingdom"
   },
+  "GLR": {
+    "code": "GLR",
+    "company": "SHOUZUN (SHANGHAI) TRADING CO LTD",
+    "city": "SHANGHAI",
+    "country": "China"
+  },
   "GLS": {
     "code": "GLS",
     "company": "GLOBAL SECURE SHIPPING, INC.",
     "city": "Old Town",
+    "country": "United States"
+  },
+  "GLT": {
+    "code": "GLT",
+    "company": "GLT TRADING LLC",
+    "city": "HOUSTON, TX",
     "country": "United States"
   },
   "GLU": {
@@ -6355,21 +6799,21 @@
   },
   "GMC": {
     "code": "GMC",
-    "company": "GEM CONTAINERS LIMITED",
-    "city": "London SW1Y 6LS",
-    "country": "United Kingdom"
+    "company": "PEACOCK CONTAINER PTE. LTD.",
+    "city": "SINGAPORE",
+    "country": "Singapore"
   },
   "GMD": {
     "code": "GMD",
     "company": "GEMADEPT CORPORATION",
     "city": "HO CHI MINH",
-    "country": "Viet Nam"
+    "country": "Vietnam"
   },
   "GMG": {
     "code": "GMG",
     "company": "GMT SHIPPING (HK) LTD",
     "city": "HONG-KONG",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "GML": {
     "code": "GML",
@@ -6387,7 +6831,13 @@
     "code": "GMO",
     "company": "GOLD STAR LINE LTD",
     "city": "Kowloon, Hong Kong",
-    "country": "HK"
+    "country": "Hong Kong, China"
+  },
+  "GMT": {
+    "code": "GMT",
+    "company": "GAZ METRO SOLUTIONS TRANSPORT",
+    "city": "BOUCHEVILLE",
+    "country": "Canada"
   },
   "GMX": {
     "code": "GMX",
@@ -6425,6 +6875,12 @@
     "city": "ROTTERDAM",
     "country": "Netherlands"
   },
+  "GNT": {
+    "code": "GNT",
+    "company": "GENESIS CHEMICAL TANK CONTAINERS LLC",
+    "city": "DUBAI",
+    "country": "United Arab Emirates"
+  },
   "GOA": {
     "code": "GOA",
     "company": "PHOENIX INTERNATIONAL SRL",
@@ -6460,6 +6916,12 @@
     "company": "MANAGEMENT CONTROL & MAINTENANCE S.A.",
     "city": "GENEVE",
     "country": "Switzerland"
+  },
+  "GPM": {
+    "code": "GPM",
+    "company": "LLC \"GAZPROMTRANS\"",
+    "city": "Moscow",
+    "country": "Russian Federation"
   },
   "GPV": {
     "code": "GPV",
@@ -6531,7 +6993,7 @@
     "code": "GRT",
     "company": "HULDA MARITIME INTERNATIONAL CONTAINER",
     "city": "KOWLOON",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "GRU": {
     "code": "GRU",
@@ -6579,7 +7041,7 @@
     "code": "GSL",
     "company": "GOLD STAR LINE LTD",
     "city": "Kowloon, Hong Kong",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "GSM": {
     "code": "GSM",
@@ -6599,6 +7061,12 @@
     "city": "WOODCLIFF LAKE, N.J. 07677",
     "country": "United States"
   },
+  "GSR": {
+    "code": "GSR",
+    "company": "GOLDEN SOMERSET ROCK LTD",
+    "city": "London",
+    "country": "United Kingdom"
+  },
   "GSS": {
     "code": "GSS",
     "company": "G2 OCEAN AS",
@@ -6616,6 +7084,12 @@
     "company": "GALLIKER TRANSPORT AG",
     "city": "ALTISHOFEN",
     "country": "Switzerland"
+  },
+  "GTH": {
+    "code": "GTH",
+    "company": "GETRON TRANSPORT B.V.",
+    "city": "Spijkenisse",
+    "country": "Netherlands"
   },
   "GTI": {
     "code": "GTI",
@@ -6699,13 +7173,13 @@
     "code": "GWI",
     "company": "GLORY WELL INDUSTRIES LIMITED",
     "city": "SAN PO KONG , KOWLOON",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "GWL": {
     "code": "GWL",
     "company": "GREENWAY LOGISTICS LIMITED",
     "city": "HONG KONG",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "GZE": {
     "code": "GZE",
@@ -6715,7 +7189,7 @@
   },
   "GZG": {
     "code": "GZG",
-    "company": "INFRASTRUCTURE AND PRODUCTION LLC",
+    "company": "INFRAPRO LLC",
     "city": "Moscow",
     "country": "Russian Federation"
   },
@@ -6729,7 +7203,7 @@
     "code": "HAC",
     "company": "HAIAN TRANSPORT & STEVEDORING JSC",
     "city": "Hanoi",
-    "country": "Viet Nam"
+    "country": "Vietnam"
   },
   "HAG": {
     "code": "HAG",
@@ -6797,11 +7271,17 @@
     "city": "MONTEVIDEO",
     "country": "Uruguay"
   },
+  "HAZ": {
+    "code": "HAZ",
+    "company": "\"HAZAR LOGISTIK\"",
+    "city": "Mary",
+    "country": "Turkmenistan"
+  },
   "HBB": {
     "code": "HBB",
     "company": "HABIBA INTERNATIONAL GROUP LIMITED",
     "city": "Kowloon, Hong Kong",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "HBG": {
     "code": "HBG",
@@ -6820,6 +7300,12 @@
     "company": "HALLIBURTON",
     "city": "Houston, TX 77032-3219",
     "country": "United States"
+  },
+  "HBO": {
+    "code": "HBO",
+    "company": "CANGZHOU HUIBANG ELECTRICAL & MECHANICAL PRODUCTS MAKING CO., LTD.",
+    "city": "Cangzhou, Hebei Province",
+    "country": "China"
   },
   "HBS": {
     "code": "HBS",
@@ -6917,6 +7403,12 @@
     "city": "SEOUL",
     "country": "Korea, Republic of"
   },
+  "HDI": {
+    "code": "HDI",
+    "company": "MCM INDUSTRIAL B.V.",
+    "city": "Roosendaal",
+    "country": "Netherlands"
+  },
   "HDM": {
     "code": "HDM",
     "company": "HMM CO., LTD.",
@@ -6991,7 +7483,7 @@
   },
   "HFD": {
     "code": "HFD",
-    "company": "DO-FLUORIDE CHEMICALS CO.,LTD",
+    "company": "DO-FLUORIDE NEW MATERIALS Co., Ltd.",
     "city": "Jiaozuo",
     "country": "China"
   },
@@ -7113,7 +7605,7 @@
     "code": "HJL",
     "company": "HONGJI (HK) CONTAINER DEVELLOPPEMENT LIMITED",
     "city": "WANCHAI",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "HJM": {
     "code": "HJM",
@@ -7124,7 +7616,7 @@
   "HKH": {
     "code": "HKH",
     "company": "HONG-KUANG HI TECH, CORP",
-    "city": "ZHUBEI CITY",
+    "city": "TAOYUAN CITY",
     "country": "Taiwan, China"
   },
   "HKN": {
@@ -7163,6 +7655,12 @@
     "city": "LENZBURG",
     "country": "Switzerland"
   },
+  "HLH": {
+    "code": "HLH",
+    "company": "HEUNG-A LINE CO LTD",
+    "city": "SEOUL",
+    "country": "Korea, Republic of"
+  },
   "HLM": {
     "code": "HLM",
     "company": "LANFER TRANSPORTE GMBH & CO. KG",
@@ -7179,7 +7677,7 @@
     "code": "HLT",
     "company": "TRANS DISTANCE LINE LTD",
     "city": "HONG KONG",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "HLX": {
     "code": "HLX",
@@ -7195,9 +7693,15 @@
   },
   "HMH": {
     "code": "HMH",
-    "company": "HOOVER FERGUSON UK LIMITED",
+    "company": "OEG OFFSHORE UK LIMITED.",
     "city": "HOUSTON, TX 77077",
     "country": "United States"
+  },
+  "HMJ": {
+    "code": "HMJ",
+    "company": "OASIS LEASING AND RENTAL PTE LTD",
+    "city": "Singapore",
+    "country": "Singapore"
   },
   "HMK": {
     "code": "HMK",
@@ -7270,6 +7774,12 @@
     "company": "HOLCIM (SCHWEIZ) AG",
     "city": "ZURICH",
     "country": "Switzerland"
+  },
+  "HON": {
+    "code": "HON",
+    "company": "HONTAS BOX SAS",
+    "city": "talence",
+    "country": "France"
   },
   "HOP": {
     "code": "HOP",
@@ -7450,6 +7960,18 @@
     "company": "HEALDWORKS INC",
     "city": "DEL NORTE, CO 81132",
     "country": "United States"
+  },
+  "HYD": {
+    "code": "HYD",
+    "company": "XINJIANG HONGYUNDA FREIGHT INTERNATIONAL CO., LTD.",
+    "city": "URUMQI",
+    "country": "China"
+  },
+  "HYJ": {
+    "code": "HYJ",
+    "company": "NINGBO HAIYANJIA CONTAINER CO. LTD",
+    "city": "Ningbo",
+    "country": "China"
   },
   "HZF": {
     "code": "HZF",
@@ -7654,6 +8176,12 @@
     "company": "INFINITI MARINE PTE LTD",
     "city": "Singapore",
     "country": "Singapore"
+  },
+  "IFS": {
+    "code": "IFS",
+    "company": "INTERFACE4SOLUTIONS",
+    "city": "GENT",
+    "country": "Belgium"
   },
   "IFT": {
     "code": "IFT",
@@ -7883,11 +8411,17 @@
     "city": "Mariupol",
     "country": "Ukraine"
   },
+  "IOC": {
+    "code": "IOC",
+    "company": "INDIAN OIL CORPORATION LTD.",
+    "city": "Mumbai",
+    "country": "India"
+  },
   "IOU": {
     "code": "IOU",
     "company": "TRANS DISTANCE LINE LTD",
     "city": "HONG KONG",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "IPF": {
     "code": "IPF",
@@ -8003,6 +8537,12 @@
     "city": "PANAMA CITY",
     "country": "Panama"
   },
+  "IST": {
+    "code": "IST",
+    "company": "1ST CONTAINERS UK LTD",
+    "city": "Rainham",
+    "country": "United Kingdom"
+  },
   "ITA": {
     "code": "ITA",
     "company": "HAPAG LLOYD A.G",
@@ -8080,6 +8620,12 @@
     "company": "HAPAG LLOYD A.G",
     "city": "HAMBURG",
     "country": "Germany"
+  },
+  "IVT": {
+    "code": "IVT",
+    "company": "INVICONT OU",
+    "city": "Tallinn",
+    "country": "Estonia"
   },
   "IWG": {
     "code": "IWG",
@@ -8186,8 +8732,14 @@
   "JCJ": {
     "code": "JCJ",
     "company": "CASHIHOR ENTERPRISE CO LTD",
-    "city": "KAOHSIUNG CITY",
+    "city": "KAOHSIUNG",
     "country": "Taiwan, China"
+  },
+  "JDL": {
+    "code": "JDL",
+    "company": "GUANGDONG HAIGANG CONTAINER SERVICE CO., LTD.",
+    "city": "guangzhou",
+    "country": "China"
   },
   "JDN": {
     "code": "JDN",
@@ -8265,7 +8817,7 @@
     "code": "JHT",
     "company": "JUHUA TRADING (HONG KONG) LIMITED",
     "city": "HONG KONG",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "JIS": {
     "code": "JIS",
@@ -8275,7 +8827,7 @@
   },
   "JJA": {
     "code": "JJA",
-    "company": "JINGJIANG ASIAN-PACIFIC LOGISTICS EQUIPMENT  CO.,LTD",
+    "company": "JINGJIANG ASIAN-PACIFIC LOGISTICS EQUIPMENT CO.,LTD.",
     "city": "Jingjiang",
     "country": "China"
   },
@@ -8291,17 +8843,29 @@
     "city": "Molina de segura",
     "country": "Spain"
   },
+  "JLD": {
+    "code": "JLD",
+    "company": "SAS DELISLE JEAN-LOUIS",
+    "city": "LA FERTE-GAUCHER",
+    "country": "France"
+  },
   "JLG": {
     "code": "JLG",
     "company": "JLG CONTAINER SERVICES CO., LIMITED",
     "city": "Hong Kong",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "JLI": {
     "code": "JLI",
     "company": "JOSEF LINDBERG SANDARNE AB",
     "city": "SANDARNE",
     "country": "Sweden"
+  },
+  "JMH": {
+    "code": "JMH",
+    "company": "OASIS LEASING AND RENTAL PTE LTD",
+    "city": "Singapore",
+    "country": "Singapore"
   },
   "JMK": {
     "code": "JMK",
@@ -8313,7 +8877,7 @@
     "code": "JNI",
     "company": "JNI CONSULTING LIMITED",
     "city": "KOWLOON",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "JNJ": {
     "code": "JNJ",
@@ -8326,6 +8890,12 @@
     "company": "JOBACHEM GMBH",
     "city": "Dassel",
     "country": "Germany"
+  },
+  "JOK": {
+    "code": "JOK",
+    "company": "CLW GROUP OY",
+    "city": "Oulu",
+    "country": "Finland"
   },
   "JON": {
     "code": "JON",
@@ -8357,6 +8927,12 @@
     "city": "Tokyo",
     "country": "Japan"
   },
+  "JSC": {
+    "code": "JSC",
+    "company": "JAKE STORAGE CONTAINERS LLC",
+    "city": "KEARNY",
+    "country": "United States"
+  },
   "JSD": {
     "code": "JSD",
     "company": "JUSDA ENERGY TECHNOLOGY (SHANGHAI) CO LTD",
@@ -8387,6 +8963,12 @@
     "city": "Singapore",
     "country": "Singapore"
   },
+  "JST": {
+    "code": "JST",
+    "company": "JINSHENG CONTAINER PTE. LTD.",
+    "city": "SINGAPORE",
+    "country": "Singapore"
+  },
   "JSV": {
     "code": "JSV",
     "company": "JSV LOGISTIC S.L.",
@@ -8397,7 +8979,7 @@
     "code": "JTA",
     "company": "JUNTAI CONTAINER COMPANY",
     "city": "Hongkong",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "JTD": {
     "code": "JTD",
@@ -8415,7 +8997,7 @@
     "code": "JTM",
     "company": "FLORENS ASSET MANAGEMENT COMPANY LIMITED",
     "city": "Hong Kong",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "JTS": {
     "code": "JTS",
@@ -8439,13 +9021,13 @@
     "code": "JXJ",
     "company": "GOLD STAR LINE LTD",
     "city": "Kowloon, Hong Kong",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "JXL": {
     "code": "JXL",
     "company": "GOLD STAR LINE LTD",
     "city": "Kowloon, Hong Kong",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "JYT": {
     "code": "JYT",
@@ -8476,6 +9058,12 @@
     "company": "NKG KALA HAMBURG GMBH",
     "city": "HAMBURG",
     "country": "Germany"
+  },
+  "KAP": {
+    "code": "KAP",
+    "company": "KOMATSU AMERICA CORP",
+    "city": "Peoria",
+    "country": "United States"
   },
   "KAS": {
     "code": "KAS",
@@ -8655,7 +9243,7 @@
     "code": "KKW",
     "company": "WEST OCEAN SHIPPING COMPANY LIMITED",
     "city": "CENTRAL",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "KLA": {
     "code": "KLA",
@@ -8795,6 +9383,18 @@
     "city": "Kobylnica",
     "country": "Poland"
   },
+  "KOO": {
+    "code": "KOO",
+    "company": "ООО \"SEAL\"",
+    "city": "Yekaterinburg",
+    "country": "Russian Federation"
+  },
+  "KOR": {
+    "code": "KOR",
+    "company": "CUBEX CONTAINERS",
+    "city": "Rolleston",
+    "country": "New Zealand"
+  },
   "KOS": {
     "code": "KOS",
     "company": "KING OCEAN SERVICES LTD",
@@ -8812,6 +9412,12 @@
     "company": "KIRLOSKAR PNEUMATIC CO. LTD. HADAPSAR, PUNE",
     "city": "PUNE 411013",
     "country": "India"
+  },
+  "KPE": {
+    "code": "KPE",
+    "company": "LLC TC CONTAINER TRANSPORTATION",
+    "city": "EKATERINBURG",
+    "country": "Russian Federation"
   },
   "KPK": {
     "code": "KPK",
@@ -8885,6 +9491,12 @@
     "city": "RIGA",
     "country": "Latvia"
   },
+  "KSB": {
+    "code": "KSB",
+    "company": "GUANGDONG BESTCON INTELLIGENT EQUIPMENT CO., LTD.",
+    "city": "Zhaoqing",
+    "country": "China"
+  },
   "KSF": {
     "code": "KSF",
     "company": "KING STAR FREIGHT PVT. LTD.",
@@ -8896,6 +9508,12 @@
     "company": "LLC KISLOROD PREMIUM",
     "city": "Blagoveshchensk, Amurskaya oblast'",
     "country": "Russian Federation"
+  },
+  "KSP": {
+    "code": "KSP",
+    "company": "KINGCON CONTAINER STORAGE INC",
+    "city": "Burlington",
+    "country": "Canada"
   },
   "KST": {
     "code": "KST",
@@ -8920,6 +9538,18 @@
     "company": "CONDACO & KTD-M GMBH",
     "city": "HAMBURG",
     "country": "Germany"
+  },
+  "KTE": {
+    "code": "KTE",
+    "company": "SHARK, S.A",
+    "city": "Braga",
+    "country": "Portugal"
+  },
+  "KTG": {
+    "code": "KTG",
+    "company": "LLP \"KAZTECHGAS\"",
+    "city": "Almaty",
+    "country": "Kazakhstan"
   },
   "KTI": {
     "code": "KTI",
@@ -8993,6 +9623,12 @@
     "city": "Kstovo",
     "country": "Russian Federation"
   },
+  "KVV": {
+    "code": "KVV",
+    "company": "ICT LTD",
+    "city": "Moscow",
+    "country": "Russian Federation"
+  },
   "KWC": {
     "code": "KWC",
     "company": "TEXTAINER EQUIPMENT MANAGEMENT LTD",
@@ -9033,6 +9669,12 @@
     "code": "KZE",
     "company": "KTZ EXPRESS JSC",
     "city": "Nur-Sultan",
+    "country": "Kazakhstan"
+  },
+  "KZL": {
+    "code": "KZL",
+    "company": "ТОО MAKLAUD",
+    "city": "Pavlodar",
     "country": "Kazakhstan"
   },
   "LAB": {
@@ -9137,6 +9779,12 @@
     "city": "SAINT PETERSBURG",
     "country": "Russian Federation"
   },
+  "LCO": {
+    "code": "LCO",
+    "company": "LOCOTRANSSPED SP. Z O.O.",
+    "city": "Poznan",
+    "country": "Poland"
+  },
   "LCR": {
     "code": "LCR",
     "company": "CARU CONTAINERS BV",
@@ -9155,12 +9803,6 @@
     "city": "NAVI MUMBAI",
     "country": "India"
   },
-  "LCX": {
-    "code": "LCX",
-    "company": "LOGIX CAPITAL LLC",
-    "city": "DORAL",
-    "country": "United States"
-  },
   "LCY": {
     "code": "LCY",
     "company": "LCY CHEMICAL CORP.",
@@ -9177,7 +9819,7 @@
     "code": "LDV",
     "company": "LINDE GAS VIETNAM LTD",
     "city": "Ba Ria Vung Tau Province",
-    "country": "Viet Nam"
+    "country": "Vietnam"
   },
   "LDZ": {
     "code": "LDZ",
@@ -9293,6 +9935,12 @@
     "city": "VILNIUS",
     "country": "Lithuania"
   },
+  "LGQ": {
+    "code": "LGQ",
+    "company": "LOGIQA SP Z O.O.",
+    "city": "Badkowo",
+    "country": "Poland"
+  },
   "LGS": {
     "code": "LGS",
     "company": "LINDE GAS SINGAPORE PTE LTD",
@@ -9315,7 +9963,7 @@
     "code": "LHE",
     "company": "BLUE SKY (HK) INTERNATIONAL TRADING LIMITED",
     "city": "Hong Kong",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "LHG": {
     "code": "LHG",
@@ -9334,6 +9982,18 @@
     "company": "INTERMODAL CONTAINER SERVICE",
     "city": "VILNIUS",
     "country": "Lithuania"
+  },
+  "LID": {
+    "code": "LID",
+    "company": "PT. LINDE INDONESIA",
+    "city": "Jakarta Utara",
+    "country": "Indonesia"
+  },
+  "LIL": {
+    "code": "LIL",
+    "company": "LLC \"UNIFLOT\"",
+    "city": "Томилино",
+    "country": "Russian Federation"
   },
   "LIN": {
     "code": "LIN",
@@ -9395,9 +10055,21 @@
     "city": "VALOGNES",
     "country": "France"
   },
+  "LMS": {
+    "code": "LMS",
+    "company": "CONTLOGISTICA, LDA",
+    "city": "Valença",
+    "country": "Portugal"
+  },
+  "LNB": {
+    "code": "LNB",
+    "company": "LNG BHARAT PVT LTD",
+    "city": "Rajahmundry",
+    "country": "India"
+  },
   "LND": {
     "code": "LND",
-    "company": "LINDE GAS NA LLC",
+    "company": "LINDE GAS & EQUIPMENT INC",
     "city": "Bridgewater, NJ 08807",
     "country": "United States"
   },
@@ -9445,7 +10117,7 @@
   },
   "LON": {
     "code": "LON",
-    "company": "LONZA LTD",
+    "company": "LONZA SOLUTIONS AG",
     "city": "BASEL",
     "country": "Switzerland"
   },
@@ -9490,6 +10162,12 @@
     "company": "LAUDE SMART INTERMODAL S.A.",
     "city": "TORUN",
     "country": "Poland"
+  },
+  "LPR": {
+    "code": "LPR",
+    "company": "CARGOLINEPRO LLC",
+    "city": "Moscow",
+    "country": "Russian Federation"
   },
   "LPX": {
     "code": "LPX",
@@ -9553,7 +10231,7 @@
   },
   "LSP": {
     "code": "LSP",
-    "company": "KUNSHAN ASIA UNION ELECTRONIC CHEMICAL CO LTD",
+    "company": "LIANSHI NEW MATERIAL CORP., LTD.",
     "city": "Kunshan",
     "country": "China"
   },
@@ -9683,6 +10361,12 @@
     "city": "LEVERKUSEN",
     "country": "Germany"
   },
+  "LYE": {
+    "code": "LYE",
+    "company": "HUBEI LINGYONG ELECTRONIC MATERIALS CO., LTD.",
+    "city": "Yunmeng County, Xiaogan City",
+    "country": "China"
+  },
   "LYG": {
     "code": "LYG",
     "company": "DONG FANG INTERNATIONAL CONTAINER (LIANYUNGANG) CO., LTD",
@@ -9712,6 +10396,12 @@
     "company": "LIANYUNGANG COSCO SHIPPING SPECIAL EQUIPMENT MANUFACTURING CO., LTD.",
     "city": "Lianyungang",
     "country": "China"
+  },
+  "MAA": {
+    "code": "MAA",
+    "company": "REFSTROYSERVICE",
+    "city": "St-Petersburg",
+    "country": "Russian Federation"
   },
   "MAC": {
     "code": "MAC",
@@ -9789,13 +10479,13 @@
     "code": "MBB",
     "company": "MULTIBOXX LIMITED",
     "city": "KOWLOON",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "MBD": {
     "code": "MBD",
     "company": "MULTIBOXX LIMITED",
     "city": "KOWLOON",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "MBF": {
     "code": "MBF",
@@ -9807,7 +10497,7 @@
     "code": "MBG",
     "company": "MULTIBOXX LIMITED",
     "city": "KOWLOON",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "MBI": {
     "code": "MBI",
@@ -9831,7 +10521,7 @@
     "code": "MBT",
     "company": "MULTIBOXX LIMITED",
     "city": "KOWLOON",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "MBW": {
     "code": "MBW",
@@ -9861,7 +10551,7 @@
     "code": "MCC",
     "company": "MAXON C&T CORPORATION LIMITED",
     "city": "Hong Kong",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "MCD": {
     "code": "MCD",
@@ -9953,6 +10643,12 @@
     "city": "Gothenburg",
     "country": "Sweden"
   },
+  "MCW": {
+    "code": "MCW",
+    "company": "MARINE CONTAINER TEST SERVICES LTD",
+    "city": "Widnes",
+    "country": "United Kingdom"
+  },
   "MCZ": {
     "code": "MCZ",
     "company": "MINISTRY OF DEFENCE OF THE CZECH REPUBLIC",
@@ -9991,7 +10687,7 @@
   },
   "MDO": {
     "code": "MDO",
-    "company": "QINGDAO MMD OFFSHORE  CO LTD",
+    "company": "Qingdao MMD Offshore Manufacture Co.,Ltd.",
     "city": "QINGDAO CITY,",
     "country": "China"
   },
@@ -9999,7 +10695,7 @@
     "code": "MDP",
     "company": "MODERN SHIPPING LINES CO LTD",
     "city": "New Territories",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "MDS": {
     "code": "MDS",
@@ -10193,6 +10889,12 @@
     "city": "Budapest",
     "country": "Hungary"
   },
+  "MHL": {
+    "code": "MHL",
+    "company": "MARKHOR SHIPPING LLC",
+    "city": "AEJEA",
+    "country": "United Arab Emirates"
+  },
   "MHV": {
     "code": "MHV",
     "company": "MAINPORT CONTAINER SERVICES B.V.",
@@ -10209,7 +10911,7 @@
     "code": "MIC",
     "company": "PAN PACIFIC INTL TRADING GROUP (HK) LTD",
     "city": "HONG KONG",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "MIE": {
     "code": "MIE",
@@ -10289,6 +10991,12 @@
     "city": "ISTANBUL",
     "country": "Turkey"
   },
+  "MKR": {
+    "code": "MKR",
+    "company": "LLC MAKRA LOGISTICS",
+    "city": "Bugachevo, Emelyanovo area, Krasnoyarsk",
+    "country": "Russian Federation"
+  },
   "MKT": {
     "code": "MKT",
     "company": "MK REFTRANS CO. LTD.",
@@ -10319,6 +11027,12 @@
     "city": "HAMILTON, HM HX",
     "country": "Bermuda"
   },
+  "MLF": {
+    "code": "MLF",
+    "company": "MARVEL LOGISTICS PTE LTD",
+    "city": "Singapore",
+    "country": "Singapore"
+  },
   "MLG": {
     "code": "MLG",
     "company": "MOLGAS ENERGIA, SAU",
@@ -10346,8 +11060,14 @@
   "MLM": {
     "code": "MLM",
     "company": "MOOSE TANK PARTS",
-    "city": "Westmaas",
+    "city": "‘s-Gravendeel",
     "country": "Netherlands"
+  },
+  "MLR": {
+    "code": "MLR",
+    "company": "LLC «REPETEK»",
+    "city": "Moscow",
+    "country": "Russian Federation"
   },
   "MLS": {
     "code": "MLS",
@@ -10378,6 +11098,18 @@
     "company": "CMA-CGM",
     "city": "MARSEILLE CEDEX 02",
     "country": "France"
+  },
+  "MME": {
+    "code": "MME",
+    "company": "MULTIMODAL EXPRESS  TRANSPORTATIONS GMBH",
+    "city": "BOCHUM",
+    "country": "Germany"
+  },
+  "MMG": {
+    "code": "MMG",
+    "company": "MMG ALUMINIUM AG",
+    "city": "Mayen",
+    "country": "Germany"
   },
   "MMJ": {
     "code": "MMJ",
@@ -10501,7 +11233,7 @@
   },
   "MOO": {
     "code": "MOO",
-    "company": "MODEX ENERGY RENTALS SINGAPORE PTE. LTD.",
+    "company": "OEG OFFSHORE PTE LTD",
     "city": "Singapore",
     "country": "Singapore"
   },
@@ -10552,6 +11284,12 @@
     "company": "MODULAR PONTOON SYSTEMS BV",
     "city": "AALST",
     "country": "Netherlands"
+  },
+  "MQX": {
+    "code": "MQX",
+    "company": "MQLOGISTICS INC",
+    "city": "Calexico, CA 92231",
+    "country": "United States"
   },
   "MRB": {
     "code": "MRB",
@@ -10661,6 +11399,12 @@
     "city": "Copenhagen",
     "country": "Denmark"
   },
+  "MSL": {
+    "code": "MSL",
+    "company": "MINSHENG SHIPPING CO.,LTD.",
+    "city": "Shanghai",
+    "country": "China"
+  },
   "MSM": {
     "code": "MSM",
     "company": "MSC- MEDITERRANEAN SHIPPING COMPANY S.A.",
@@ -10743,7 +11487,7 @@
     "code": "MTB",
     "company": "MULTIBOXX LIMITED",
     "city": "KOWLOON",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "MTC": {
     "code": "MTC",
@@ -10825,7 +11569,7 @@
   },
   "MTT": {
     "code": "MTT",
-    "company": "TATIANA TSIBIKOVA",
+    "company": "IP TSIBIKOVA TE",
     "city": "St Petersburg",
     "country": "Russian Federation"
   },
@@ -10973,6 +11717,18 @@
     "city": "LIMASSOL",
     "country": "Cyprus"
   },
+  "MZM": {
+    "code": "MZM",
+    "company": "MOGÁS S.A.",
+    "city": "Maputo",
+    "country": "Mozambique"
+  },
+  "MZW": {
+    "code": "MZW",
+    "company": "FOSHAN MEIZONG HOUSING TECHNOLOGY CO., LTD.",
+    "city": "Foshan City",
+    "country": "China"
+  },
   "NAB": {
     "code": "NAB",
     "company": "ECST CONTAINER SERVICES & TRADING GMBH",
@@ -11001,7 +11757,7 @@
     "code": "NAK",
     "company": "WEST OCEAN SHIPPING COMPANY LIMITED",
     "city": "CENTRAL",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "NAR": {
     "code": "NAR",
@@ -11033,6 +11789,12 @@
     "city": "JL GIESSEN",
     "country": "Netherlands"
   },
+  "NBS": {
+    "code": "NBS",
+    "company": "NAME BEST SUPPLY CHAIN MANAGEMENT (CHONGQING) CO.,LTD",
+    "city": "Chongqing",
+    "country": "China"
+  },
   "NBT": {
     "code": "NBT",
     "company": "NISSAN BUTSURYU CO LTD",
@@ -11055,7 +11817,7 @@
     "code": "NCL",
     "company": "CAREER (HK) CO., LIMITED",
     "city": "HONGKONG",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "NCS": {
     "code": "NCS",
@@ -11117,6 +11879,12 @@
     "city": "Galanta",
     "country": "Slovakia"
   },
+  "NEP": {
+    "code": "NEP",
+    "company": "NEPTUNE GLOBAL LOGISTICS PTE LTD",
+    "city": "",
+    "country": "Singapore"
+  },
   "NES": {
     "code": "NES",
     "company": "BOREALIS AB",
@@ -11146,6 +11914,12 @@
     "company": "NATIONAL FACTORY FOR PROCESSING AND TREATING MINERALS",
     "city": "Dammam",
     "country": "Saudi Arabia"
+  },
+  "NFD": {
+    "code": "NFD",
+    "company": "CHONGQING STORM INTERNATIONAL LOGISTICS CO., LTD.",
+    "city": "Chongqing",
+    "country": "China"
   },
   "NFL": {
     "code": "NFL",
@@ -11182,6 +11956,12 @@
     "company": "VALQUA NGC, INC.",
     "city": "HOUSTON, TX-77093",
     "country": "United States"
+  },
+  "NGE": {
+    "code": "NGE",
+    "company": "NIPPON GASES BELGIUM",
+    "city": "Schoten",
+    "country": "Belgium"
   },
   "NGT": {
     "code": "NGT",
@@ -11261,11 +12041,23 @@
     "city": "PIRAEUS",
     "country": "Greece"
   },
+  "NIT": {
+    "code": "NIT",
+    "company": "LLC NUNIT",
+    "city": "Village of Vyzyrka, Lymanskyi District",
+    "country": "Ukraine"
+  },
   "NJB": {
     "code": "NJB",
     "company": "CS EURASIA LEASING (SEA) PTE LTD",
     "city": "SINGAPORE",
     "country": "Singapore"
+  },
+  "NJC": {
+    "code": "NJC",
+    "company": "NINGBO JINSHI CONTAINERS CO., LTD.",
+    "city": "Ningbo",
+    "country": "China"
   },
   "NJF": {
     "code": "NJF",
@@ -11319,7 +12111,7 @@
     "code": "NLL",
     "company": "NOBLE CONTAINER LEASING LIMITED",
     "city": "JORDAN, KOWLOON",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "NLN": {
     "code": "NLN",
@@ -11425,8 +12217,8 @@
   },
   "NOR": {
     "code": "NOR",
-    "company": "TANK MANAGEMENT A/S",
-    "city": "OSLO",
+    "company": "NORDBØ HOLDING AS",
+    "city": "Oslo",
     "country": "Norway"
   },
   "NOS": {
@@ -11469,7 +12261,7 @@
     "code": "NPL",
     "company": "SAIGON NEWPORT ONE MEMBER LTD LIABILITY CORP",
     "city": "HO CHI MINH CITY",
-    "country": "Viet Nam"
+    "country": "Vietnam"
   },
   "NPO": {
     "code": "NPO",
@@ -11581,7 +12373,7 @@
   },
   "NST": {
     "code": "NST",
-    "company": "NEPAL SHIPPING AND MULTI MODEL TRANSPORT",
+    "company": "NEPAL SHIPPING AND MULTI MODAL TRANSPORT PVT LTD",
     "city": "KATHMANDU",
     "country": "Nepal"
   },
@@ -11590,6 +12382,12 @@
     "company": "NORDDEUTSCHE SEEKABELWERKE GMBH",
     "city": "Nordenham",
     "country": "Germany"
+  },
+  "NSY": {
+    "code": "NSY",
+    "company": "NEW SILK ROAD INTERMODAL (SICHUAN) CO.,LTD",
+    "city": "CHENGDU",
+    "country": "China"
   },
   "NTA": {
     "code": "NTA",
@@ -11603,6 +12401,12 @@
     "city": "NARVA",
     "country": "Estonia"
   },
+  "NTR": {
+    "code": "NTR",
+    "company": "ICOOL CHEMICAL CO., LTD.",
+    "city": "ningbo",
+    "country": "China"
+  },
   "NTT": {
     "code": "NTT",
     "company": "NANTONG TANK CONTAINER CO, LTD",
@@ -11614,6 +12418,12 @@
     "company": "NOVA GAS TECHNOLOGIES,INC",
     "city": "NORTH CHARLESTON,SC 29418",
     "country": "United States"
+  },
+  "NVJ": {
+    "code": "NVJ",
+    "company": "NOVA SUPPLY CHINA MANAGEMENT (SHENZHEN) CO., LTD.",
+    "city": "Shenzhen, Guangdong",
+    "country": "China"
   },
   "NVK": {
     "code": "NVK",
@@ -11638,6 +12448,18 @@
     "company": "NWM-EUROPE NV",
     "city": "EVERGEM",
     "country": "Belgium"
+  },
+  "NWR": {
+    "code": "NWR",
+    "company": "NEW WAY (H.K.) INTERNATIONAL LIMITED",
+    "city": "Shanghai",
+    "country": "China"
+  },
+  "NWS": {
+    "code": "NWS",
+    "company": "NEW WAY LINES CO.,LTD",
+    "city": "Ho Chi Minh",
+    "country": "Vietnam"
   },
   "NXS": {
     "code": "NXS",
@@ -11705,6 +12527,12 @@
     "city": "PARAMARIBO",
     "country": "Suriname"
   },
+  "OBH": {
+    "code": "OBH",
+    "company": "OBETECH PACIFIC SDN. BHD.",
+    "city": "KLANG (SELANGOR)",
+    "country": "Malaysia"
+  },
   "OBT": {
     "code": "OBT",
     "company": "JIANGSU O-BEST NEW MATERIALS CO LTD",
@@ -11721,7 +12549,7 @@
     "code": "OCB",
     "company": "OCEAN BLUE FINANCE GROUP LIMITED",
     "city": "WANHAI",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "OCC": {
     "code": "OCC",
@@ -11763,7 +12591,7 @@
     "code": "OCO",
     "company": "AONOCO LIMITED",
     "city": "Hong Kong",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "OCP": {
     "code": "OCP",
@@ -11867,11 +12695,23 @@
     "city": "SMEATON GRANGE",
     "country": "Australia"
   },
+  "OMH": {
+    "code": "OMH",
+    "company": "ECONOMTRADE LLC",
+    "city": "Yekaterinburg",
+    "country": "Russian Federation"
+  },
   "OMN": {
     "code": "OMN",
     "company": "AIR LIQUID ITALIA SERVICE SRL",
     "city": "MILANO MI",
     "country": "Italy"
+  },
+  "OMR": {
+    "code": "OMR",
+    "company": "1MROBOTICS LTD",
+    "city": "Tel Aviv",
+    "country": "Israel"
   },
   "OMS": {
     "code": "OMS",
@@ -11895,13 +12735,19 @@
     "code": "OOC",
     "company": "ORIENT OVERSEAS CONTAINER LINE LTD.",
     "city": "WANCHAI",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "OOL": {
     "code": "OOL",
     "company": "ORIENT OVERSEAS CONTAINER LINE LTD.",
     "city": "WANCHAI",
-    "country": "HK"
+    "country": "Hong Kong, China"
+  },
+  "OOT": {
+    "code": "OOT",
+    "company": "OTLO SHIPPING LINE",
+    "city": "DUBAI",
+    "country": "United Arab Emirates"
   },
   "OPD": {
     "code": "OPD",
@@ -12007,7 +12853,7 @@
   },
   "OSR": {
     "code": "OSR",
-    "company": "SIEMENS GAS AND POWER GMBH & CO. KG",
+    "company": "Siemens Energy Global GmbH & Co. KG.",
     "city": "NURNBERG",
     "country": "Germany"
   },
@@ -12097,7 +12943,7 @@
   },
   "OWM": {
     "code": "OWM",
-    "company": "OILWELL MIDDLE EAST FZE",
+    "company": "M/S. MAGNUM TECHNOLOGY CENTER",
     "city": "SHARJAH",
     "country": "United Arab Emirates"
   },
@@ -12159,13 +13005,13 @@
     "code": "PAS",
     "company": "PACIFIC LINES",
     "city": "Ho Chi Minh",
-    "country": "Viet Nam"
+    "country": "Vietnam"
   },
   "PAT": {
     "code": "PAT",
     "company": "PACIFICO CONTAINER LIMITED",
     "city": "Hong Kong",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "PAV": {
     "code": "PAV",
@@ -12281,6 +13127,12 @@
     "city": "KALLO (KIELDRECHT)",
     "country": "Belgium"
   },
+  "PEA": {
+    "code": "PEA",
+    "company": "PEAK INTERNATIONAL TRADE (TIANJIN) CO., LTD.",
+    "city": "Tianjin",
+    "country": "China"
+  },
   "PEB": {
     "code": "PEB",
     "company": "GREEN EVOLUTION ENVIRONMENTAL SERVICES LLC",
@@ -12329,11 +13181,23 @@
     "city": "BANGKOK",
     "country": "Thailand"
   },
+  "PFA": {
+    "code": "PFA",
+    "company": "PRO-FORMANCE INTERMODAL INC",
+    "city": "CALGARY",
+    "country": "Canada"
+  },
   "PFC": {
     "code": "PFC",
     "company": "PETIT FORESTIER CONTAINER",
     "city": "VILLEPINTE",
     "country": "France"
+  },
+  "PFI": {
+    "code": "PFI",
+    "company": "GLOBAL AVIATION SERVICES DBA PROFLO IND",
+    "city": "Alvada",
+    "country": "United States"
   },
   "PFL": {
     "code": "PFL",
@@ -12363,7 +13227,7 @@
     "code": "PGO",
     "company": "FIVE OCEANS LOGISTICS LTD",
     "city": "Hong Kong",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "PGT": {
     "code": "PGT",
@@ -12375,7 +13239,7 @@
     "code": "PGX",
     "company": "FLORENS ASSET MANAGEMENT COMPANY LIMITED",
     "city": "Hong Kong",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "PHE": {
     "code": "PHE",
@@ -12431,6 +13295,12 @@
     "city": "CAPE TOWN",
     "country": "South Africa"
   },
+  "PIG": {
+    "code": "PIG",
+    "company": "CUBATA GMBH & CO.KG",
+    "city": "Parchim",
+    "country": "Germany"
+  },
   "PIL": {
     "code": "PIL",
     "company": "PACIFIC INTERNATIONAL LINES (PTE) LTD",
@@ -12467,11 +13337,23 @@
     "city": "Warsaw",
     "country": "Poland"
   },
+  "PLA": {
+    "code": "PLA",
+    "company": "POLAR CONTAINER SPECIAL EQUIPMENT LIMITED",
+    "city": "Jiading District",
+    "country": "China"
+  },
   "PLC": {
     "code": "PLC",
     "company": "PLCS INTERNATIONAL",
     "city": "HOOGVLIET",
     "country": "Netherlands"
+  },
+  "PLF": {
+    "code": "PLF",
+    "company": "PETROLIFE AERO SDN BHD",
+    "city": "PETALING JAYA SELANGOR",
+    "country": "Malaysia"
   },
   "PLG": {
     "code": "PLG",
@@ -12679,7 +13561,7 @@
   },
   "PRG": {
     "code": "PRG",
-    "company": "PROGECO",
+    "company": "CCIS FRANCE",
     "city": "MARSEILLE",
     "country": "France"
   },
@@ -12764,7 +13646,7 @@
   "PSN": {
     "code": "PSN",
     "company": "PARSONS CONTAINERS LTD",
-    "city": "Stockton-on-Tees",
+    "city": "West End, Sedgefield",
     "country": "United Kingdom"
   },
   "PSO": {
@@ -12795,7 +13677,13 @@
     "code": "PSX",
     "company": "PSG CONTAINER CO LTD",
     "city": "WANCHAI",
-    "country": "HK"
+    "country": "Hong Kong, China"
+  },
+  "PTA": {
+    "code": "PTA",
+    "company": "INDUSTRIAL TRADE ALLIANCE LLC",
+    "city": "Moscow",
+    "country": "Russian Federation"
   },
   "PTB": {
     "code": "PTB",
@@ -12850,6 +13738,12 @@
     "company": "UNIT45 BV",
     "city": "ROTTERDAM",
     "country": "Netherlands"
+  },
+  "PWD": {
+    "code": "PWD",
+    "company": "PARTS SOLUTIONS INTERACTIVE WAREHOUSING",
+    "city": "ALBERTON",
+    "country": "South Africa"
   },
   "PXA": {
     "code": "PXA",
@@ -12945,7 +13839,7 @@
     "code": "QTC",
     "company": "QT CONTAINER LINE (HK) LIMITED",
     "city": "SHATIN",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "QTM": {
     "code": "QTM",
@@ -12959,6 +13853,12 @@
     "city": "London",
     "country": "United Kingdom"
   },
+  "QUL": {
+    "code": "QUL",
+    "company": "QUBE LOGISTICS (QLD) PTY LTD",
+    "city": "Wynnum",
+    "country": "Australia"
+  },
   "RAC": {
     "code": "RAC",
     "company": "HERMES LOGISTICA SA",
@@ -12968,7 +13868,7 @@
   "RAE": {
     "code": "RAE",
     "company": "REACH AMERICA  ESG, LTD.",
-    "city": "SAN JOSE, CA 95110",
+    "city": "Saratoga",
     "country": "United States"
   },
   "RAF": {
@@ -13004,7 +13904,7 @@
   "RAY": {
     "code": "RAY",
     "company": "KNOW HOW TRADING B.V.",
-    "city": "Willemstad",
+    "city": "Roosendaal",
     "country": "Netherlands"
   },
   "RBB": {
@@ -13227,7 +14127,19 @@
     "code": "RGH",
     "company": "RICH GLORY (HONG KONG) LIMITED",
     "city": "HONG KONG",
-    "country": "HK"
+    "country": "Hong Kong, China"
+  },
+  "RGK": {
+    "code": "RGK",
+    "company": "OOO \"ALFA-TRANS\"",
+    "city": "Zabaykalsk",
+    "country": "Russian Federation"
+  },
+  "RGS": {
+    "code": "RGS",
+    "company": "REGAS, LLC",
+    "city": "Saint-Petersburg",
+    "country": "Russian Federation"
   },
   "RGT": {
     "code": "RGT",
@@ -13331,6 +14243,12 @@
     "city": "BICESTER, OXFORDSHIRE OX26 6JP",
     "country": "United Kingdom"
   },
+  "RLG": {
+    "code": "RLG",
+    "company": "REAL LOGISTICS SP. Z O.O. SP.K.",
+    "city": "Wroclaw",
+    "country": "Poland"
+  },
   "RLS": {
     "code": "RLS",
     "company": "RR SHIPPING PRIVATE LIMITED",
@@ -13384,6 +14302,12 @@
     "company": "RNM TRANSPORTE QUIMICOS LDA",
     "city": "VILA NOVA FAMALICAO",
     "country": "Portugal"
+  },
+  "RNS": {
+    "code": "RNS",
+    "company": "GALLOZZI SHIPPING LTD SPA",
+    "city": "SA - SALERNO",
+    "country": "Italy"
   },
   "ROA": {
     "code": "ROA",
@@ -13583,6 +14507,12 @@
     "city": "BERGENKOEK",
     "country": "Netherlands"
   },
+  "RTR": {
+    "code": "RTR",
+    "company": "RÉVÉSZ TRANS KFT.",
+    "city": "Tiszaújváros",
+    "country": "Hungary"
+  },
   "RTS": {
     "code": "RTS",
     "company": "ROBERT KUKLA GMBH",
@@ -13606,6 +14536,12 @@
     "company": "RUBINO RS S.R.L.",
     "city": "MONOPOLI BA",
     "country": "Italy"
+  },
+  "RUM": {
+    "code": "RUM",
+    "company": "RUEBERG SPEDITION GMBH & CO. KG",
+    "city": "Menden",
+    "country": "Germany"
   },
   "RUN": {
     "code": "RUN",
@@ -13661,6 +14597,12 @@
     "city": "Aldan",
     "country": "Russian Federation"
   },
+  "RXC": {
+    "code": "RXC",
+    "company": "TIANJIN RONG XIN TECHNOLOGY CO., LTD.",
+    "city": "Tianjin",
+    "country": "China"
+  },
   "RXT": {
     "code": "RXT",
     "company": "YANGZHOU RIXIN TONGYUN LOGISTIC EQUIPMENT CO., LTD.",
@@ -13679,6 +14621,12 @@
     "city": "QINGDAO",
     "country": "China"
   },
+  "RYE": {
+    "code": "RYE",
+    "company": "RYE OCEAN CONTAINER CO., LTD",
+    "city": "Chengdu",
+    "country": "China"
+  },
   "RYL": {
     "code": "RYL",
     "company": "BEIJING RUI ZE HENG YI TECHNOLOGY PLC",
@@ -13689,6 +14637,18 @@
     "code": "RZD",
     "company": "PJSC TRANSCONTAINER",
     "city": "MOSCOW",
+    "country": "Russian Federation"
+  },
+  "RZK": {
+    "code": "RZK",
+    "company": "JIANGSU SINOPURE ELECTRONIC MATERIALS CO., LTD",
+    "city": "LIANYUNGANG, JIANGSU",
+    "country": "China"
+  },
+  "RZL": {
+    "code": "RZL",
+    "company": "JSC \"RZD LOGISTICS\"",
+    "city": "Moscow",
     "country": "Russian Federation"
   },
   "RZZ": {
@@ -13773,13 +14733,19 @@
     "code": "SAX",
     "company": "NOBLE CONTAINER LEASING LIMITED",
     "city": "JORDAN, KOWLOON",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "SAZ": {
     "code": "SAZ",
     "company": "SEVEN ASSET LTD",
     "city": "IPSWICH IP1 1XF",
     "country": "United Kingdom"
+  },
+  "SBC": {
+    "code": "SBC",
+    "company": "SAMI BITUMEN TECHNOLOGIES PTY. LTD.",
+    "city": "Winston Hills",
+    "country": "Australia"
   },
   "SBG": {
     "code": "SBG",
@@ -13853,11 +14819,23 @@
     "city": "Adelaide",
     "country": "Australia"
   },
+  "SCG": {
+    "code": "SCG",
+    "company": "WKS INDUSTRIAL GAS PTE LTD",
+    "city": "SINGAPORE",
+    "country": "Singapore"
+  },
   "SCH": {
     "code": "SCH",
     "company": "SYNTHESIS CHIMICA S.R.L.",
     "city": "CASTELLO D'AGOGNA PV",
     "country": "Italy"
+  },
+  "SCI": {
+    "code": "SCI",
+    "company": "SANDHYA ORGANIC CHEMICALS PVT LTD",
+    "city": "GURAJAT",
+    "country": "India"
   },
   "SCK": {
     "code": "SCK",
@@ -13913,6 +14891,12 @@
     "city": "Bydgoszcz",
     "country": "Poland"
   },
+  "SCW": {
+    "code": "SCW",
+    "company": "J. SCHWARZER GMBH & CO SERVICE KG",
+    "city": "Steinfeld",
+    "country": "Germany"
+  },
   "SCX": {
     "code": "SCX",
     "company": "SEACO SRL",
@@ -13942,12 +14926,6 @@
     "company": "PT. SERBA DINAMIK INDONESIA",
     "city": "JAKARTA",
     "country": "Indonesia"
-  },
-  "SDI": {
-    "code": "SDI",
-    "company": "TREDI",
-    "city": "Saint-Vulbas",
-    "country": "France"
   },
   "SDL": {
     "code": "SDL",
@@ -14045,6 +15023,12 @@
     "city": "BRIDGETOWN BB11144",
     "country": "Barbados"
   },
+  "SER": {
+    "code": "SER",
+    "company": "SUZHOU LINYANG CONTAINER SERVICE CO., LTD.",
+    "city": "Suzhou",
+    "country": "China"
+  },
   "SES": {
     "code": "SES",
     "company": "SPINNAKER EQUIPMENT SERVICES INC.",
@@ -14087,6 +15071,12 @@
     "city": "HANNOVER",
     "country": "Germany"
   },
+  "SFC": {
+    "code": "SFC",
+    "company": "SOFAST SHIPPING LIMITED",
+    "city": "Hong Kong",
+    "country": "Hong Kong, China"
+  },
   "SFE": {
     "code": "SFE",
     "company": "SF ENTERPRISES",
@@ -14104,6 +15094,12 @@
     "company": "SFI TRANSIT",
     "city": "Pointe aux sables",
     "country": "Mauritius"
+  },
+  "SFM": {
+    "code": "SFM",
+    "company": "SAIF MARITIME LLC",
+    "city": "DUBAI",
+    "country": "United Arab Emirates"
   },
   "SFR": {
     "code": "SFR",
@@ -14194,6 +15190,12 @@
     "company": "SERLUX",
     "city": "LUXEMBOURG",
     "country": "Luxembourg"
+  },
+  "SGU": {
+    "code": "SGU",
+    "company": "\"SONGER\" LTD",
+    "city": "Saint-Petersburg",
+    "country": "Russian Federation"
   },
   "SHC": {
     "code": "SHC",
@@ -14289,7 +15291,7 @@
     "code": "SIG",
     "company": "SINOAGE INTERNATIONAL LIMITED",
     "city": "TUNG CHOI",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "SII": {
     "code": "SII",
@@ -14343,7 +15345,13 @@
     "code": "SIT",
     "company": "SITC CONTAINER LINES CO LTD",
     "city": "WANCHAI",
-    "country": "HK"
+    "country": "Hong Kong, China"
+  },
+  "SJC": {
+    "code": "SJC",
+    "company": "SHANGHAI SHENGJI SPECIAL CONTAINER CO., LTD.",
+    "city": "Jiading District",
+    "country": "China"
   },
   "SJI": {
     "code": "SJI",
@@ -14356,6 +15364,12 @@
     "company": "SARJAK CONTAINER LINES PVT LTD",
     "city": "MUMBAI",
     "country": "India"
+  },
+  "SJP": {
+    "code": "SJP",
+    "company": "MODULAR TANKING SOLUTIONS MAURITIUS LTD",
+    "city": "PORT LOUIS",
+    "country": "Mauritius"
   },
   "SJR": {
     "code": "SJR",
@@ -14423,11 +15437,23 @@
     "city": "SEOUL",
     "country": "Korea, Republic of"
   },
+  "SKS": {
+    "code": "SKS",
+    "company": "SK SHIPPING LINE LLC",
+    "city": "Dubai",
+    "country": "United Arab Emirates"
+  },
   "SKY": {
     "code": "SKY",
     "company": "CAI INTERNATIONAL",
     "city": "SAN FRANCISCO, CA 94105",
     "country": "United States"
+  },
+  "SLA": {
+    "code": "SLA",
+    "company": "LIMITED LIABILITY COMPANY  \"SSLASIA\"",
+    "city": "Angarsk, Irkutsk region",
+    "country": "Russian Federation"
   },
   "SLB": {
     "code": "SLB",
@@ -14531,6 +15557,12 @@
     "city": "Newry",
     "country": "United Kingdom"
   },
+  "SMG": {
+    "code": "SMG",
+    "company": "LLC SMARTLOG",
+    "city": "Moscow",
+    "country": "Russian Federation"
+  },
   "SMH": {
     "code": "SMH",
     "company": "STAALDUINEN LOGISTICS",
@@ -14633,6 +15665,12 @@
     "city": "HAMILTON",
     "country": "Bermuda"
   },
+  "SNP": {
+    "code": "SNP",
+    "company": "SINPEX CONNECTION LOGISTICS LIMITED",
+    "city": "SHANGHAI",
+    "country": "China"
+  },
   "SNR": {
     "code": "SNR",
     "company": "PT SAMUDERA NAGA GLOBAL",
@@ -14656,6 +15694,12 @@
     "company": "SITA TRANSPORT BV",
     "city": "ALPHEN AAN DEN RIJN",
     "country": "Netherlands"
+  },
+  "SNV": {
+    "code": "SNV",
+    "company": "SASCO INTERNATIONAL SHIPPING CO.,LTD",
+    "city": "Moscow",
+    "country": "Russian Federation"
   },
   "SOB": {
     "code": "SOB",
@@ -14698,6 +15742,12 @@
     "company": "SOMAL",
     "city": "LE LAMENTIN CEDEX 2",
     "country": "France"
+  },
+  "SON": {
+    "code": "SON",
+    "company": "SOACI SN",
+    "city": "Abidjan",
+    "country": "Cote d'Ivoire"
   },
   "SOS": {
     "code": "SOS",
@@ -14783,6 +15833,12 @@
     "city": "GUJARAT",
     "country": "India"
   },
+  "SPR": {
+    "code": "SPR",
+    "company": "SUPREME BOX CO.,LTD",
+    "city": "WALNUT",
+    "country": "United States"
+  },
   "SPT": {
     "code": "SPT",
     "company": "SCHENK-PAPENDRECHT BV",
@@ -14849,6 +15905,12 @@
     "city": "NARNI SCALO (TR)",
     "country": "Italy"
   },
+  "SRW": {
+    "code": "SRW",
+    "company": "CHONGQING SEARAIL CARGO CO.,LTD.",
+    "city": "Chongqing",
+    "country": "China"
+  },
   "SSB": {
     "code": "SSB",
     "company": "SPECIALIST SERVICES LLC",
@@ -14885,6 +15947,12 @@
     "city": "SURGUT",
     "country": "Russian Federation"
   },
+  "SSH": {
+    "code": "SSH",
+    "company": "SHRUTI MARINE SERVICES",
+    "city": "NAVI MUMBAI",
+    "country": "India"
+  },
   "SSK": {
     "code": "SSK",
     "company": "LLC \"TLC SAKH-EX\"",
@@ -14915,10 +15983,22 @@
     "city": "DUBAI",
     "country": "United Arab Emirates"
   },
+  "SST": {
+    "code": "SST",
+    "company": "SILVERSEA",
+    "city": "Barcelona",
+    "country": "Spain"
+  },
   "SSX": {
     "code": "SSX",
     "company": "SAMSON SERVICE LLC",
     "city": "Saint-Petersburg",
+    "country": "Russian Federation"
+  },
+  "STA": {
+    "code": "STA",
+    "company": "JSC RCC",
+    "city": "Moscow",
     "country": "Russian Federation"
   },
   "STB": {
@@ -14932,6 +16012,12 @@
     "company": "FT MARINE SAS",
     "city": "FUVEAU",
     "country": "France"
+  },
+  "STE": {
+    "code": "STE",
+    "company": "STELKONT  LTD",
+    "city": "Saint-Petersburg",
+    "country": "Russian Federation"
   },
   "STF": {
     "code": "STF",
@@ -15034,6 +16120,12 @@
     "company": "SWISSTERMINAL AG",
     "city": "FRENKENDORF",
     "country": "Switzerland"
+  },
+  "SUL": {
+    "code": "SUL",
+    "company": "SHENZHEN UNITED LOGISTICS DEVELOPMENT CO., LTD.",
+    "city": "Shenzhen",
+    "country": "China"
   },
   "SUM": {
     "code": "SUM",
@@ -15191,6 +16283,12 @@
     "city": "WOODCLIFF LAKE, N.J. 07677",
     "country": "United States"
   },
+  "SZM": {
+    "code": "SZM",
+    "company": "LLC SK SZEM",
+    "city": "Moscow",
+    "country": "Russian Federation"
+  },
   "SZR": {
     "code": "SZR",
     "company": "LLC SYNTEZRAIL",
@@ -15341,6 +16439,12 @@
     "city": "LA HABANA",
     "country": "Cuba"
   },
+  "TCB": {
+    "code": "TCB",
+    "company": "TITAN CONTAINERS A/S",
+    "city": "TAASTRUP",
+    "country": "Denmark"
+  },
   "TCC": {
     "code": "TCC",
     "company": "TANK CONTAINER CLEANING SERVICES S.R.L.",
@@ -15459,7 +16563,7 @@
     "code": "TDL",
     "company": "TRANS DISTANCE LINE LTD",
     "city": "HONG KONG",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "TDR": {
     "code": "TDR",
@@ -15482,7 +16586,7 @@
   "TEC": {
     "code": "TEC",
     "company": "TECHNOLOGY INDUSTRIAL GASES PRODUCTION CO",
-    "city": "FAHEHEEL",
+    "city": "Eqaila",
     "country": "Kuwait"
   },
   "TED": {
@@ -15503,11 +16607,17 @@
     "city": "JAKARTA UTARA",
     "country": "Indonesia"
   },
+  "TEI": {
+    "code": "TEI",
+    "company": "BEIJING TRANS EURASIA INTERNATIONAL LOGISTICS LTD.",
+    "city": "Beijing",
+    "country": "China"
+  },
   "TEL": {
     "code": "TEL",
     "company": "TRANS EATON INTERNATIONAL ASSET MANAGEMENT COMPANY LIMITED",
     "city": "Hong Kong",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "TEM": {
     "code": "TEM",
@@ -15520,6 +16630,12 @@
     "company": "TEXTAINER EQUIPMENT MANAGEMENT LIMITED",
     "city": "SAN FRANCISCO, CA 94108",
     "country": "United States"
+  },
+  "TEP": {
+    "code": "TEP",
+    "company": "TRANSEXPEDITION POLSKA SP. Z O.O.",
+    "city": "Bialystok",
+    "country": "Poland"
   },
   "TER": {
     "code": "TER",
@@ -15629,6 +16745,12 @@
     "city": "ISTANBUL",
     "country": "Turkey"
   },
+  "TGM": {
+    "code": "TGM",
+    "company": "TIME GLOBAL SHIPPING LLC",
+    "city": "DUBAI",
+    "country": "United Arab Emirates"
+  },
   "TGP": {
     "code": "TGP",
     "company": "GENSETPOOL",
@@ -15701,6 +16823,12 @@
     "city": "Moscow",
     "country": "Russian Federation"
   },
+  "THN": {
+    "code": "THN",
+    "company": "CHENGDU TIANHAN SUPPLY CHAIN MANAGEMENT CO. LTD.",
+    "city": "Chengdu, Pilot Free Trde Zone",
+    "country": "China"
+  },
   "THP": {
     "code": "THP",
     "company": "ITALMATCH CHEMICALS S.P.A.",
@@ -15737,6 +16865,12 @@
     "city": "SANTA MARIA DI ZEVIO (VR)",
     "country": "Italy"
   },
+  "TID": {
+    "code": "TID",
+    "company": "TI2 LOGISTICS PTE LTD",
+    "city": "singapore",
+    "country": "Singapore"
+  },
   "TIF": {
     "code": "TIF",
     "company": "TRIFLEET LEASING HOLDING B.V.",
@@ -15747,7 +16881,7 @@
     "code": "TIH",
     "company": "TRADECORP INTERNATIONAL HONG KONG LIMITED",
     "city": "HONG KONG",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "TII": {
     "code": "TII",
@@ -15845,6 +16979,12 @@
     "city": "MOSCOW",
     "country": "Russian Federation"
   },
+  "TLB": {
+    "code": "TLB",
+    "company": "TOSOH LOGISTICS CORPORATION",
+    "city": "YAMAGUCHI",
+    "country": "Japan"
+  },
   "TLC": {
     "code": "TLC",
     "company": "UNIFEEDER A/S",
@@ -15863,6 +17003,12 @@
     "city": "ANKARA",
     "country": "Turkey"
   },
+  "TLG": {
+    "code": "TLG",
+    "company": "“TEGRA LOGISTICS” LLC",
+    "city": "Kyiv",
+    "country": "Ukraine"
+  },
   "TLI": {
     "code": "TLI",
     "company": "TRANSPORT LOGISTICS INTERNATIONAL, INC",
@@ -15874,6 +17020,12 @@
     "company": "TAL INTERNATIONAL",
     "city": "PURCHASE, NY 10577-2135",
     "country": "United States"
+  },
+  "TLM": {
+    "code": "TLM",
+    "company": "OJSC \"TURKMEN MILLI LOGISTIK\"",
+    "city": "Ashgabat",
+    "country": "Turkmenistan"
   },
   "TLN": {
     "code": "TLN",
@@ -15895,7 +17047,7 @@
   },
   "TLV": {
     "code": "TLV",
-    "company": "LLC «TIS-LOGISTIC»",
+    "company": "LLC «TIS LOGISTIC»",
     "city": "Vladivostok",
     "country": "Russian Federation"
   },
@@ -16039,7 +17191,7 @@
   },
   "TNP": {
     "code": "TNP",
-    "company": "ORANO TN INTERNATIONAL",
+    "company": "ORANO NPS",
     "city": "VALOGNES",
     "country": "France"
   },
@@ -16265,6 +17417,12 @@
     "city": "PURCHASE, NY 10577",
     "country": "United States"
   },
+  "TRZ": {
+    "code": "TRZ",
+    "company": "TRANSIT LLC",
+    "city": "VLADIVOSTOK",
+    "country": "Russian Federation"
+  },
   "TSA": {
     "code": "TSA",
     "company": "TRISTAR CONTAINER SERVICES (ASIA) PVT. LTD.",
@@ -16279,7 +17437,7 @@
   },
   "TSD": {
     "code": "TSD",
-    "company": "TATIANA TSIBIKOVA",
+    "company": "IP TSIBIKOVA TE",
     "city": "St Petersburg",
     "country": "Russian Federation"
   },
@@ -16287,7 +17445,7 @@
     "code": "TSE",
     "company": "TOP SPEED ENERGY OVERSEA CORP LIMITED",
     "city": "WANCHAI",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "TSF": {
     "code": "TSF",
@@ -16330,6 +17488,12 @@
     "company": "COOPERATIVA PARATORI GENOVA A R.L.",
     "city": "Genova",
     "country": "Italy"
+  },
+  "TSR": {
+    "code": "TSR",
+    "company": "TRANS SINERGIA",
+    "city": "Moscow",
+    "country": "Russian Federation"
   },
   "TSS": {
     "code": "TSS",
@@ -16441,9 +17605,15 @@
   },
   "TUL": {
     "code": "TUL",
-    "company": "CONTAINER SOLUTIONS S.A DE C.V",
-    "city": "MEXICO",
+    "company": "CONTAINER STORAGE AND IDEAS SA DE CV",
+    "city": "BOCA DEL RIO, VER.",
     "country": "Mexico"
+  },
+  "TUM": {
+    "code": "TUM",
+    "company": "OJSC \"TRANSPORT LOGISTICS CENTER TURKMENISTAN\"",
+    "city": "Ashgabat",
+    "country": "Turkmenistan"
   },
   "TUT": {
     "code": "TUT",
@@ -16479,7 +17649,7 @@
     "code": "TWC",
     "company": "THRU-WORLD COMPANY LIMITED",
     "city": "Hong Kong",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "TWM": {
     "code": "TWM",
@@ -16495,9 +17665,9 @@
   },
   "TWR": {
     "code": "TWR",
-    "company": "TANKWAY BV",
-    "city": "Zevenbergen",
-    "country": "Netherlands"
+    "company": "PEACOCK CONTAINER PTE. LTD.",
+    "city": "SINGAPORE",
+    "country": "Singapore"
   },
   "TWS": {
     "code": "TWS",
@@ -16534,6 +17704,12 @@
     "company": "TOKUYAMA CHEMICALS (ZHEJIANG) CO.,LTD",
     "city": "Jiaxing",
     "country": "China"
+  },
+  "TYM": {
+    "code": "TYM",
+    "company": "TECNICA Y MANUTENCION SL",
+    "city": "QUART DE POBLET (Valencia)",
+    "country": "Spain"
   },
   "TYR": {
     "code": "TYR",
@@ -16613,6 +17789,12 @@
     "city": "St. Petersburg",
     "country": "Russian Federation"
   },
+  "UCD": {
+    "code": "UCD",
+    "company": "UNIVERSAL INC CONTAINERS TRADING LLC",
+    "city": "Dubai",
+    "country": "United Arab Emirates"
+  },
   "UCL": {
     "code": "UCL",
     "company": "OCEAN AFRICA CONTAINER LINE (PTY) LTD",
@@ -16661,23 +17843,29 @@
     "city": "",
     "country": "Panama"
   },
-  "UGN": {
-    "code": "UGN",
-    "company": "UMDASCH GROUP NEWCON",
-    "city": "Amstetten",
-    "country": "Austria"
-  },
   "UGP": {
     "code": "UGP",
     "company": "ROZA MIRA LLC",
     "city": "Moscow",
     "country": "Russian Federation"
   },
+  "UHL": {
+    "code": "UHL",
+    "company": "UNIT HIRE LIMITED",
+    "city": "Stanford-Le-Hope",
+    "country": "United Kingdom"
+  },
   "UHM": {
     "code": "UHM",
     "company": "HIMMAGISTRAL LTD",
     "city": "UGREN",
     "country": "Russian Federation"
+  },
+  "UIF": {
+    "code": "UIF",
+    "company": "UNITEX INTERNATIONAL FORWARDING (HK) LTD",
+    "city": "Hong Kong",
+    "country": "Hong Kong, China"
   },
   "UKR": {
     "code": "UKR",
@@ -16751,6 +17939,12 @@
     "city": "HAMILTON",
     "country": "Bermuda"
   },
+  "UNS": {
+    "code": "UNS",
+    "company": "UNIOCEAN LINES",
+    "city": "UPMINSTER",
+    "country": "United Kingdom"
+  },
   "UNX": {
     "code": "UNX",
     "company": "UNITAS CONTAINERS LIMITED",
@@ -16759,7 +17953,7 @@
   },
   "UPA": {
     "code": "UPA",
-    "company": "KMG ULTRA PURE CHEMICALS LIMITED",
+    "company": "CMC MATERIALS UPC LTD",
     "city": "ALFRETON DE55 4DA",
     "country": "United Kingdom"
   },
@@ -16798,6 +17992,12 @@
     "company": "MILITARY SDDC",
     "city": "Scott AFB",
     "country": "United States"
+  },
+  "USL": {
+    "code": "USL",
+    "company": "UNIVERSAL STAR SHIPPING LINE LLC",
+    "city": "DUBAI",
+    "country": "United Arab Emirates"
   },
   "USM": {
     "code": "USM",
@@ -16875,7 +18075,7 @@
     "code": "VAN",
     "company": "VANHUB EQUIPMENT SERVICES LTD",
     "city": "KOWLOON",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "VAS": {
     "code": "VAS",
@@ -16930,6 +18130,12 @@
     "company": "VERHOEK INTERNATIONAAL TRANSPORT BV",
     "city": "GENEMUIDEN",
     "country": "Netherlands"
+  },
+  "VEN": {
+    "code": "VEN",
+    "company": "WELL FAST LINE",
+    "city": "JEBEL ALI",
+    "country": "United Arab Emirates"
   },
   "VER": {
     "code": "VER",
@@ -17021,6 +18227,12 @@
     "city": "Anchorage",
     "country": "United States"
   },
+  "VMB": {
+    "code": "VMB",
+    "company": "VERDEMOBIL BIOGAZ",
+    "city": "Montaigu-Vendée",
+    "country": "France"
+  },
   "VMG": {
     "code": "VMG",
     "company": "VAKARU MEDIENOS GRUPE",
@@ -17038,6 +18250,12 @@
     "company": "VTG RAIL EUROPE GMBH",
     "city": "Hamburg",
     "country": "Germany"
+  },
+  "VMT": {
+    "code": "VMT",
+    "company": "LLC \"VMT\"",
+    "city": "Saint-Petersburg",
+    "country": "Russian Federation"
   },
   "VMX": {
     "code": "VMX",
@@ -17123,6 +18341,12 @@
     "city": "Harsefeld",
     "country": "Germany"
   },
+  "VSK": {
+    "code": "VSK",
+    "company": "VERTEX CONTAINER LINE",
+    "city": "KARACHI",
+    "country": "Pakistan"
+  },
   "VSL": {
     "code": "VSL",
     "company": "VSKY INT'L CORP",
@@ -17137,7 +18361,7 @@
   },
   "VTC": {
     "code": "VTC",
-    "company": "VISBEEN B.V",
+    "company": "DAILY LOGISTICS GROUP B.V.",
     "city": "NIEUWE TONGE",
     "country": "Netherlands"
   },
@@ -17517,7 +18741,7 @@
     "code": "WOS",
     "company": "WEST OCEAN SHIPPING COMPANY LIMITED",
     "city": "CENTRAL",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "WPS": {
     "code": "WPS",
@@ -17541,7 +18765,7 @@
     "code": "WSD",
     "company": "WIDE SHINE DEVELOPMENT INC",
     "city": "HONG KONG",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "WSG": {
     "code": "WSG",
@@ -17579,6 +18803,12 @@
     "city": "OOSTROZEBEKE",
     "country": "Belgium"
   },
+  "WTF": {
+    "code": "WTF",
+    "company": "WESTERN TANK SERVICES PTY LTD",
+    "city": "Chullora",
+    "country": "Australia"
+  },
   "WTH": {
     "code": "WTH",
     "company": "WICE LOGISTICS PCL",
@@ -17602,6 +18832,12 @@
     "company": "WALLENIUS WILHELMSEN LOGISTICS AS",
     "city": "LYSAKER",
     "country": "Norway"
+  },
+  "WWW": {
+    "code": "WWW",
+    "company": "WELLFAST SHIPPING COMPANY LIMITED",
+    "city": "HONGKONG",
+    "country": "Hong Kong, China"
   },
   "WYY": {
     "code": "WYY",
@@ -17661,7 +18897,13 @@
     "code": "XHI",
     "company": "WEST OCEAN SHIPPING COMPANY LIMITED",
     "city": "CENTRAL",
-    "country": "HK"
+    "country": "Hong Kong, China"
+  },
+  "XII": {
+    "code": "XII",
+    "company": "FRACHTIMPEX LTD.",
+    "city": "BURGAS",
+    "country": "Bulgaria"
   },
   "XIN": {
     "code": "XIN",
@@ -17705,11 +18947,17 @@
     "city": "ZEEBRUGGE",
     "country": "Belgium"
   },
+  "XYE": {
+    "code": "XYE",
+    "company": "GOLDEN BRICKS SHIPPING PTE. LTD.",
+    "city": "Singapore",
+    "country": "Singapore"
+  },
   "XYL": {
     "code": "XYL",
     "company": "HONG KONG XIANGYU SUPERCHAIN ASSET MANAGEMENT CO LTD",
     "city": "Hong Kong",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "XYZ": {
     "code": "XYZ",
@@ -17728,6 +18976,18 @@
     "company": "YELLOWBOX FIREWORKS, LLC",
     "city": "Ann Arbor, MI 48103",
     "country": "United States"
+  },
+  "YCC": {
+    "code": "YCC",
+    "company": "DALIAN ZIQI CONTAINER MANUFACTURING CO., LTD.",
+    "city": "Dalian",
+    "country": "China"
+  },
+  "YCP": {
+    "code": "YCP",
+    "company": "JIANGSU YANCHENG PORT CONTAINER GROUP CO.,LTD",
+    "city": "YANCHENG",
+    "country": "China"
   },
   "YDS": {
     "code": "YDS",
@@ -17757,13 +19017,19 @@
     "code": "YFC",
     "company": "EVER FORTUNE LOGISTICS (HK) CO LTD",
     "city": "HUNG HOM-KOWLOON",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "YGL": {
     "code": "YGL",
     "company": "YEMEN GULF LINE LTD",
     "city": "London",
     "country": "United Kingdom"
+  },
+  "YHX": {
+    "code": "YHX",
+    "company": "YI HANG CONTAINER SERVICES LIMITED",
+    "city": "Hong kong",
+    "country": "Hong Kong, China"
   },
   "YIM": {
     "code": "YIM",
@@ -17799,7 +19065,7 @@
     "code": "YOL",
     "company": "ONIDA CONTAINER LEASING CO., LTD.",
     "city": "KOWLOON",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "YPR": {
     "code": "YPR",
@@ -17842,6 +19108,12 @@
     "company": "ZEBULUN CONTAINERS PTE LTD",
     "city": "Singapore",
     "country": "Singapore"
+  },
+  "ZBX": {
+    "code": "ZBX",
+    "company": "NAVLANDIS",
+    "city": "Picanya",
+    "country": "Spain"
   },
   "ZCL": {
     "code": "ZCL",
@@ -17973,7 +19245,7 @@
     "code": "ZMY",
     "company": "TIAN HAO WAREHOUSING AND TRANSPORTATION",
     "city": "Hong Kong",
-    "country": "HK"
+    "country": "Hong Kong, China"
   },
   "ZPL": {
     "code": "ZPL",
@@ -18022,6 +19294,12 @@
     "company": "NIJMAN/ZEETANK INT TANKTRANSPORTEN BV",
     "city": "Spijkenisse",
     "country": "Netherlands"
+  },
+  "ZTS": {
+    "code": "ZTS",
+    "company": "ZHONGTUO CONTAINER TECHNOLOGY CO., LTD",
+    "city": "Ningbo",
+    "country": "China"
   },
   "ZUZ": {
     "code": "ZUZ",
