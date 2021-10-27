@@ -8,37 +8,37 @@ on:
 jobs:
 
   golangcilint:
-    name: lint
     runs-on: ubuntu-latest
     steps:
-      -
-        name: Check out
+
+      - name: Check out
         uses: actions/checkout@v2
-      -
-        name: golangci-lint
+
+      - name: golangci-lint
         uses: golangci/golangci-lint-action@v2
         with:
           # Optional: version of golangci-lint to use in form of v1.2 or v1.2.3 or `latest` to use the latest version
           version: latest
 
   goreleaser:
+    needs: golangcilint
     runs-on: ubuntu-latest
     steps:
-      -
-        name: Checkout
+
+      - name: Checkout
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      -
-        name: Set up Go
+
+      - name: Set up Go
         uses: actions/setup-go@v2
         with:
           go-version: 1.17
-      -
-        name: Run GoReleaser
+
+      - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v2
         with:
           version: latest
           args: release --rm-dist
         env:
-          GITHUB_TOKEN: ${{ secrets.GORELEASER_GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
