@@ -38,7 +38,7 @@ Download your binary in the [Releases](https://github.com/meyermarcel/icm/releas
 See the [misc command](docs/icm_misc.md) for **bash/zsh completions** and **manual pages**.
 
 
-## Contributing
+## Contribution
 
 1. Fork it
 
@@ -82,7 +82,12 @@ See the [misc command](docs/icm_misc.md) for **bash/zsh completions** and **manu
     make
     ```
 
-## Releasing
+## Release
+
+1. Dry run with `goreleaser`
+    ```
+    goreleaser release --rm-dist --skip-validate --skip-publish
+    ```
 
 1. Create version tag according to [SemVer](https://semver.org)
     ```
