@@ -1,6 +1,6 @@
 before:
   hooks:
-  - make test build-docs
+  - make build-docs
 
 builds:
   -

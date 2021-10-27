@@ -20,18 +20,11 @@ jobs:
       - name: Check out
         uses: actions/checkout@v2
 
-      - name: Test and build
-        run: make test build
-
-  golangcilint:
-    runs-on: ubuntu-latest
-    steps:
-
-      - name: Check out
-        uses: actions/checkout@v2
-
       - name: Lint
         uses: golangci/golangci-lint-action@v2
         with:
           # Optional: version of golangci-lint to use in form of v1.2 or v1.2.3 or `latest` to use the latest version
           version: latest
+
+      - name: Test and build
+        run: make test build
