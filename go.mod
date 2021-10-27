@@ -4,10 +4,10 @@ go 1.17
 
 require (
 	github.com/logrusorgru/aurora/v3 v3.0.0
-	github.com/mattn/go-isatty v0.0.13
+	github.com/mattn/go-isatty v0.0.14
 	github.com/spf13/cobra v1.2.1
 	github.com/spf13/viper v1.8.1
-	golang.org/x/net v0.0.0-20210825183410-e898025ed96a
+	golang.org/x/net v0.0.0-20211020060615-d418f374d309
 )
 
 require (
@@ -25,7 +25,7 @@ require (
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/subosito/gotenv v1.2.0 // indirect
-	golang.org/x/sys v0.0.0-20210510120138-977fb7262007 // indirect
+	golang.org/x/sys v0.0.0-20210630005230-0f9fa26af87c // indirect
 	golang.org/x/text v0.3.6 // indirect
 	gopkg.in/ini.v1 v1.62.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
