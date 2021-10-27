@@ -15,7 +15,6 @@ package main
 
 import (
 	"fmt"
-	"io"
 	"os"
 	"path/filepath"
 
@@ -24,33 +23,11 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func newMiscCmd(writer io.Writer, rootCmd *cobra.Command) *cobra.Command {
-	miscCmd := &cobra.Command{
-		Use:   "misc",
-		Short: "Miscellaneous generation commands for man pages, markdown and bash/zsh completions",
-		Long:  "Miscellaneous generation commands for man pages, markdown and bash/zsh completions.",
-	}
-
-	bashCmd := &cobra.Command{
-		Use:     "bash-completion",
-		Short:   "Generate bash completion scripts",
-		Long:    "Generate bash completion scripts.",
-		Example: "icm misc bash-completion",
-		Args:    cobra.NoArgs,
-		RunE: func(cmd *cobra.Command, args []string) error {
-			return rootCmd.GenBashCompletionV2(writer, false)
-		},
-	}
-
-	zshCmd := &cobra.Command{
-		Use:     "zsh-completion",
-		Short:   "Generate zsh completion scripts",
-		Long:    "Generate zsh completion scripts.",
-		Example: "icm misc zsh-completion",
-		Args:    cobra.NoArgs,
-		RunE: func(cmd *cobra.Command, args []string) error {
-			return rootCmd.GenZshCompletion(writer)
-		},
+func newDocCmd(rootCmd *cobra.Command) *cobra.Command {
+	docCmd := &cobra.Command{
+		Use:   "doc",
+		Short: "Documentation commands for man pages and markdown generation",
+		Long:  "Documentation commands for man pages and markdown generation.",
 	}
 
 	// https://unix.stackexchange.com/questions/3586/what-do-the-numbers-in-a-man-page-mean
@@ -59,7 +36,7 @@ func newMiscCmd(writer io.Writer, rootCmd *cobra.Command) *cobra.Command {
 		Use:     "man",
 		Short:   "Generate man pages",
 		Long:    "Generate man pages.",
-		Example: "icm misc man . && cat *.1",
+		Example: "icm doc man . && cat *.1",
 		Args:    cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			path := args[0]
@@ -94,19 +71,17 @@ func newMiscCmd(writer io.Writer, rootCmd *cobra.Command) *cobra.Command {
 		Use:     "markdown",
 		Short:   "Generate markdown",
 		Long:    "Generate markdown.",
-		Example: "icm misc markdown docs/",
+		Example: "icm doc markdown docs/",
 		Args:    cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return doc.GenMarkdownTree(rootCmd, args[0])
 		},
 	}
 
-	miscCmd.AddCommand(bashCmd)
-	miscCmd.AddCommand(zshCmd)
-	miscCmd.AddCommand(manCmd)
-	miscCmd.AddCommand(mdCmd)
+	docCmd.AddCommand(manCmd)
+	docCmd.AddCommand(mdCmd)
 
-	return miscCmd
+	return docCmd
 }
 
 func writeMan(path, name string, cmd *cobra.Command) error {

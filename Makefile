@@ -25,8 +25,8 @@ build:
 
 .PHONY: build-docs
 build-docs: build
-	$(shell $(BUILD_DIR)/$(BINARY) misc man $(DOCS_DIR)/$(MAN_DIR)/man1)
-	$(shell $(BUILD_DIR)/$(BINARY) misc markdown $(DOCS_DIR))
+	$(shell $(BUILD_DIR)/$(BINARY) doc man $(DOCS_DIR)/$(MAN_DIR)/man1)
+	$(shell $(BUILD_DIR)/$(BINARY) doc markdown $(DOCS_DIR))
 
 .PHONY: install
 install: build

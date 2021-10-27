@@ -35,8 +35,9 @@ scoop install icm
 
 Download your binary in the [Releases](https://github.com/meyermarcel/icm/releases) section.
 
-See the [misc command](docs/icm_misc.md) for **bash/zsh completions** and **manual pages**.
+See the [completion command](docs/icm_completion.md) for **bash**, **zsh**, **fish** and **powershell** completions.
 
+See the [doc command](docs/icm_doc.md) for **manual pages** and **markdown**.
 
 ## Contribution
 

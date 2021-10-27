@@ -57,13 +57,18 @@ brews:
     homepage: "https://github.com/meyermarcel/icm"
     install: |
       bin.install "icm"
+
       # Install bash completion
-      output = Utils.popen_read("#{bin}/icm misc bash-completion")
-      (bash_completion/"icm").write output
+      bash_output = Utils.popen_read("#{bin}/icm completion bash")
+      (bash_completion/"icm").write bash_output
 
       # Install zsh completion
-      output = Utils.popen_read("#{bin}/icm misc zsh-completion")
-      (zsh_completion/"_icm").write output
+      zsh_output = Utils.popen_read("#{bin}/icm completion zsh")
+      (zsh_completion/"_icm").write zsh_output
+
+      # Install fish completion
+      fish_output = Utils.popen_read("#{bin}/icm completion fish")
+      (fish_completion/"icm.fish").write fish_output
 
       # man-pages is also defined in Makefile
       man1.install Dir["docs/man-pages/man1/*.1"]
