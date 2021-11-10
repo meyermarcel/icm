@@ -1,4 +1,4 @@
-![Build Status](https://github.com/meyermarcel/icm/workflows/build/badge.svg) [![Go Report Card](https://goreportcard.com/badge/github.com/meyermarcel/icm)](https://goreportcard.com/report/github.com/meyermarcel/icm)
+[![build](https://github.com/meyermarcel/icm/actions/workflows/build.yml/badge.svg)](https://github.com/meyermarcel/icm/actions/workflows/build.yml)  [![Go Report Card](https://goreportcard.com/badge/github.com/meyermarcel/icm)](https://goreportcard.com/report/github.com/meyermarcel/icm)
 
 # icm (intermodal container markings)
 
