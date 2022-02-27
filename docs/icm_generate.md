@@ -4,7 +4,7 @@ Generate unique container numbers
 
 ### Synopsis
 
-Generated container are numbers unique. Owners specified in
+Generated container numbers are unique. Owners specified in
 
   $HOME/.icm/data/owner.json
 
@@ -37,10 +37,9 @@ icm generate --count 10
 # Generate container numbers with custom format
 icm generate --count 10 --sep-owner-equip '' --sep-serial-check '-'
 # Generate container numbers without error-prone serial numbers
-icm generate --count 10 --exclude-check-digit-10
-icm generate --count 10 --exclude-transposition-errors
+icm generate --count 10 --exclude-check-digit-10 --exclude-transposition-errors
 # Generate container numbers within serial number range
-icm generate --count 10 --start 100500
+icm generate --start 100500 --count 10
 icm generate --start 100500 --end 100600
 icm generate --start 100500 --end 100600 --owner ABC
 # Generate CSV data set
