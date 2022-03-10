@@ -7,7 +7,7 @@ require (
 	github.com/mattn/go-isatty v0.0.14
 	github.com/spf13/cobra v1.3.0
 	github.com/spf13/viper v1.10.1
-	golang.org/x/net v0.0.0-20220121210141-e204ce36a2ba
+	golang.org/x/net v0.0.0-20220225172249-27dd8689420f
 )
 
 require (
