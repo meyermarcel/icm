@@ -10,7 +10,6 @@ import (
 	"github.com/meyermarcel/icm/cont"
 	"github.com/meyermarcel/icm/data"
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 )
 
 type ownerValue struct {
@@ -57,7 +56,7 @@ func (*serialNumValue) Type() string {
 	return "int"
 }
 
-func newGenerateCmd(writer, writerErr io.Writer, viper *viper.Viper, ownerDecoder data.OwnerDecoder) *cobra.Command {
+func newGenerateCmd(writer, writerErr io.Writer, config *configs.Config, ownerDecoder data.OwnerDecoder) *cobra.Command {
 
 	var count int
 	var startValue = serialNumValue{}
@@ -96,17 +95,9 @@ icm generate --start 100500 --end 100600 --owner ABC
 # Generate CSV data set
 icm generate --count 1000000 | icm validate`,
 		Args: cobra.NoArgs,
-		// https://github.com/spf13/viper/issues/233
-		PreRunE: func(cmd *cobra.Command, args []string) error {
-			if err := viper.BindPFlag(configs.SepOE, cmd.Flags().Lookup(configs.SepOE)); err != nil {
-				return err
-			}
-			if err := viper.BindPFlag(configs.SepES, cmd.Flags().Lookup(configs.SepES)); err != nil {
-				return err
-			}
-			return viper.BindPFlag(configs.SepSC, cmd.Flags().Lookup(configs.SepSC))
-		},
 		RunE: func(cmd *cobra.Command, args []string) error {
+
+			config.Overwrite(cmd.Flags())
 
 			builder := cont.NewUniqueGeneratorBuilder().
 				Count(count).
@@ -134,9 +125,9 @@ icm generate --count 1000000 | icm validate`,
 			for generator.Generate() {
 				contNumber := generator.ContNum()
 				contNumber.SetSeparators(
-					viper.GetString(configs.SepOE),
-					viper.GetString(configs.SepES),
-					viper.GetString(configs.SepSC),
+					config.SepOE(),
+					config.SepES(),
+					config.SepSC(),
 				)
 				_, err := io.WriteString(writer, fmt.Sprintf("%s\n", contNumber))
 				writeErr(writerErr, err)
@@ -155,11 +146,11 @@ icm generate --count 1000000 | icm validate`,
 	generateCmd.Flags().BoolVar(&excludeTranspositionErr, "exclude-transposition-errors", false,
 		"exclude possible transposition errors")
 
-	generateCmd.Flags().String(configs.SepOE, configs.SepOEDefVal,
+	generateCmd.Flags().String(configs.FlagNames.SepOE, configs.DefaultValues.SepOE,
 		"ABC(x)U1234560  (x) separates owner code and equipment category id")
-	generateCmd.Flags().String(configs.SepES, configs.SepESDefVal,
+	generateCmd.Flags().String(configs.FlagNames.SepES, configs.DefaultValues.SepES,
 		"ABCU(x)1234560  (x) separates equipment category id and serial number")
-	generateCmd.Flags().String(configs.SepSC, configs.SepSCDefVal,
+	generateCmd.Flags().String(configs.FlagNames.SepSC, configs.DefaultValues.SepSC,
 		"ABCU123456(x)0  (x) separates serial number and check digit")
 
 	return generateCmd
