@@ -6,12 +6,10 @@ import (
 	"testing"
 
 	"github.com/meyermarcel/icm/configs"
-
-	"github.com/spf13/viper"
 )
 
 func Test_generateCmd(t *testing.T) {
-	type cfgOverride struct {
+	type configOverride struct {
 		name  string
 		value string
 	}
@@ -20,11 +18,11 @@ func Test_generateCmd(t *testing.T) {
 		value string
 	}
 	tests := []struct {
-		name         string
-		cfgOverrides []cfgOverride
-		flags        []flag
-		wantErr      bool
-		wantWriter   string
+		name            string
+		configOverrides []configOverride
+		flags           []flag
+		wantErr         bool
+		wantWriter      string
 	}{
 		{
 			"Generate 1 random container number",
@@ -140,17 +138,17 @@ RAN U 000002 0
 		},
 		{
 			"Generate 1 random container number with custom separators",
-			[]cfgOverride{
+			[]configOverride{
 				{
-					name:  configs.SepOE,
+					name:  configs.FlagNames.SepOE,
 					value: "***",
 				},
 				{
-					name:  configs.SepES,
+					name:  configs.FlagNames.SepES,
 					value: "+++",
 				},
 				{
-					name:  configs.SepSC,
+					name:  configs.FlagNames.SepSC,
 					value: "‧‧‧",
 				},
 			},
@@ -164,15 +162,16 @@ RAN U 000002 0
 		t.Run(tt.name, func(t *testing.T) {
 			writer := &bytes.Buffer{}
 			writerErr := &bytes.Buffer{}
-			viperCfg := viper.New()
-			for _, override := range tt.cfgOverrides {
-				viperCfg.Set(override.name, override.value)
+
+			config, _ := configs.ReadConfig(configs.DefaultConfig())
+			for _, override := range tt.configOverrides {
+				config.Map[override.name] = override.value
 			}
-			cmd := newGenerateCmd(writer, writerErr, viperCfg, &dummyOwnerDecodeUpdater{})
+
+			cmd := newGenerateCmd(writer, writerErr, config, &dummyOwnerDecodeUpdater{})
 			for _, flag := range tt.flags {
 				_ = cmd.Flags().Set(flag.name, flag.value)
 			}
-			_ = cmd.PreRunE(cmd, nil)
 			rand.Seed(1)
 			if got := cmd.RunE(cmd, nil); (got == nil) == tt.wantErr {
 				t.Errorf("got = %v, wantErr is %v", got, tt.wantErr)

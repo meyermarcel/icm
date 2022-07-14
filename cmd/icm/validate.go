@@ -20,7 +20,6 @@ import (
 	"github.com/meyermarcel/icm/data"
 	"github.com/meyermarcel/icm/input"
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 )
 
 var au aurora.Aurora
@@ -78,7 +77,7 @@ func (*patternValue) Type() string {
 
 func newPatternValue() *patternValue {
 	return &patternValue{
-		value: configs.PatternDefVal,
+		value: configs.DefaultValues.Pattern,
 		patterns: map[string]func(decoders decoders) [][]func() input.Input{
 			auto:                   newAutoPattern,
 			containerNumber:        newContNumPattern,
@@ -108,7 +107,7 @@ type outputValue struct {
 
 func newOutputValue() *outputValue {
 	return &outputValue{
-		value: configs.OutputDefVal,
+		value: configs.DefaultValues.Output,
 		printers: map[string]newPrinter{
 			outputAuto:  newAutoPrinter,
 			outputFancy: newFancyPrinter,
@@ -117,7 +116,7 @@ func newOutputValue() *outputValue {
 	}
 }
 
-type newPrinter func(writer io.Writer, viperCfg *viper.Viper, isSingleLine bool) input.Printer
+type newPrinter func(writer io.Writer, config *configs.Config, isSingleLine bool) input.Printer
 
 func (o *outputValue) String() string {
 	return o.value
@@ -146,7 +145,7 @@ func (o *outputValue) newPrinter(value string) newPrinter {
 
 var oValue = newOutputValue()
 
-func newValidateCmd(stdin io.Reader, writer io.Writer, viperCfg *viper.Viper, decoders decoders) *cobra.Command {
+func newValidateCmd(stdin io.Reader, writer io.Writer, config *configs.Config, decoders decoders) *cobra.Command {
 	au = aurora.NewAurora(false)
 	validateCmd := &cobra.Command{
 		Use:   "validate",
@@ -177,11 +176,9 @@ icm generate --count 10 | icm validate --output fancy
 # Generate CSV data set
 icm generate --count 1000000 | icm validate`,
 		Args: cobra.MaximumNArgs(6),
-		// https://github.com/spf13/viper/issues/233
-		PreRunE: func(cmd *cobra.Command, args []string) error {
-			return viperCfg.BindPFlags(cmd.Flags())
-		},
 		RunE: func(cmd *cobra.Command, args []string) error {
+
+			config.Overwrite(cmd.Flags())
 
 			var reader io.Reader
 			if len(args) != 0 {
@@ -194,9 +191,9 @@ icm generate --count 1000000 | icm validate`,
 			peek, _ := bufReader.Peek(bufReader.Size())
 			isSingleLine := isSingleLine(string(peek))
 
-			printer := oValue.newPrinter(viperCfg.GetString(configs.Output))(writer, viperCfg, isSingleLine)
+			printer := oValue.newPrinter(config.Output())(writer, config, isSingleLine)
 
-			newPatterns := pValue.newPatterns(viperCfg.GetString(configs.Pattern))(decoders)
+			newPatterns := pValue.newPatterns(config.Pattern())(decoders)
 
 			newInputs := input.Match(strings.Split(string(peek), "\n")[0], newPatterns)
 
@@ -218,21 +215,21 @@ icm generate --count 1000000 | icm validate`,
 
 	validateCmd.Flags().SortFlags = false
 
-	validateCmd.Flags().VarP(pValue, configs.Pattern, "p",
+	validateCmd.Flags().VarP(pValue, configs.FlagNames.Pattern, "p",
 		fmt.Sprintf("sets pattern matching to\n%s\n", patternsInfo))
-	validateCmd.Flags().Var(oValue, configs.Output,
+	validateCmd.Flags().Var(oValue, configs.FlagNames.Output,
 		fmt.Sprintf("sets output to\n%s\n", outputsInfo))
-	validateCmd.Flags().Bool(configs.NoHeader, configs.NoHeaderDefVal,
+	validateCmd.Flags().Bool(configs.FlagNames.NoHeader, configs.DefaultValues.NoHeader,
 		"omits header of CSV output")
-	validateCmd.Flags().String(configs.SepOE, configs.SepOEDefVal,
+	validateCmd.Flags().String(configs.FlagNames.SepOE, configs.DefaultValues.SepOE,
 		"ABC(x)U1234560   20G1  (x) separates owner code and equipment category id")
-	validateCmd.Flags().String(configs.SepES, configs.SepESDefVal,
+	validateCmd.Flags().String(configs.FlagNames.SepES, configs.DefaultValues.SepES,
 		"ABCU(x)1234560   20G1  (x) separates equipment category id and serial number")
-	validateCmd.Flags().String(configs.SepSC, configs.SepSCDefVal,
+	validateCmd.Flags().String(configs.FlagNames.SepSC, configs.DefaultValues.SepSC,
 		"ABCU123456(x)0   20G1  (x) separates serial number and check digit")
-	validateCmd.Flags().String(configs.SepCS, configs.SepCSDefVal,
+	validateCmd.Flags().String(configs.FlagNames.SepCS, configs.DefaultValues.SepCS,
 		"ABCU1234560 (x)  20G1  (x) separates check digit and size")
-	validateCmd.Flags().String(configs.SepST, configs.SepSTDefVal,
+	validateCmd.Flags().String(configs.FlagNames.SepST, configs.DefaultValues.SepST,
 		"ABCU1234560   20(x)G1  (x) separates size and type")
 	return validateCmd
 }
@@ -249,15 +246,15 @@ func isSingleLine(s string) bool {
 	return true
 }
 
-func newAutoPrinter(writer io.Writer, viperCfg *viper.Viper, isSingleLine bool) input.Printer {
+func newAutoPrinter(writer io.Writer, config *configs.Config, isSingleLine bool) input.Printer {
 	if isSingleLine {
-		return newFancyPrinter(writer, viperCfg, isSingleLine)
+		return newFancyPrinter(writer, config, isSingleLine)
 	}
-	return newCSVPrinter(writer, viperCfg, isSingleLine)
+	return newCSVPrinter(writer, config, isSingleLine)
 
 }
 
-func newFancyPrinter(writer io.Writer, viperCfg *viper.Viper, _ bool) input.Printer {
+func newFancyPrinter(writer io.Writer, config *configs.Config, _ bool) input.Printer {
 	fancyPrinter := input.NewFancyPrinter(writer)
 	fancyPrinter.SetIndent("  ")
 	fancyPrinter.SetSeparatorsFunc(func(inputs []input.Input) {
@@ -265,26 +262,26 @@ func newFancyPrinter(writer io.Writer, viperCfg *viper.Viper, _ bool) input.Prin
 		if len(inputs) == 3 {
 			fancyPrinter.SetSeparators(
 				"",
-				viperCfg.GetString(configs.SepST),
+				config.SepST(),
 			)
 		} else {
 			fancyPrinter.SetSeparators(
-				viperCfg.GetString(configs.SepOE),
-				viperCfg.GetString(configs.SepES),
-				viperCfg.GetString(configs.SepSC),
-				viperCfg.GetString(configs.SepCS),
+				config.SepOE(),
+				config.SepES(),
+				config.SepSC(),
+				config.SepCS(),
 				"",
-				viperCfg.GetString(configs.SepST),
+				config.SepST(),
 			)
 		}
 	})
 	return fancyPrinter
 }
 
-func newCSVPrinter(writer io.Writer, viperCfg *viper.Viper, _ bool) input.Printer {
+func newCSVPrinter(writer io.Writer, config *configs.Config, _ bool) input.Printer {
 	csvWriter := csv.NewWriter(writer)
 	csvWriter.Comma = ';'
-	return input.NewCSVPrinter(csvWriter, viperCfg.GetBool(configs.NoHeader))
+	return input.NewCSVPrinter(csvWriter, config.NoHeader())
 }
 
 func newAutoPattern(decoders decoders) [][]func() input.Input {

@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	"github.com/meyermarcel/icm/configs"
-	"github.com/spf13/viper"
 )
 
 func Test_singleLine(t *testing.T) {
@@ -50,16 +49,16 @@ func Test_singleLine(t *testing.T) {
 }
 
 func Test_validateCmd(t *testing.T) {
-	type cfgOverride struct {
+	type configOverride struct {
 		name  string
 		value string
 	}
 	tests := []struct {
-		name         string
-		args         []string
-		cfgOverrides []cfgOverride
-		wantErr      bool
-		wantWriter   string
+		name            string
+		args            []string
+		configOverrides []configOverride
+		wantErr         bool
+		wantWriter      string
 	}{
 		{
 			"Validate owner, equipment category ID, serial number, check digit, size and type",
@@ -152,7 +151,7 @@ func Test_validateCmd(t *testing.T) {
 		{
 			"Validate input with pattern container-number",
 			[]string{" abc "},
-			[]cfgOverride{{configs.Pattern, containerNumber}},
+			[]configOverride{{configs.FlagNames.Pattern, containerNumber}},
 			true,
 			`
   ABC _ ______ _  ✘
@@ -172,7 +171,7 @@ func Test_validateCmd(t *testing.T) {
 		{
 			"Validate input with pattern owner",
 			[]string{" abc u "},
-			[]cfgOverride{{configs.Pattern, owner}},
+			[]configOverride{{configs.FlagNames.Pattern, owner}},
 			false,
 			`
   ABC  ✔
@@ -186,7 +185,7 @@ func Test_validateCmd(t *testing.T) {
 		{
 			"Validate input with pattern owner-equipment-category",
 			[]string{" abc "},
-			[]cfgOverride{{configs.Pattern, ownerEquipmentCategory}},
+			[]configOverride{{configs.FlagNames.Pattern, ownerEquipmentCategory}},
 			true,
 			`
   ABC _  ✘
@@ -202,7 +201,7 @@ func Test_validateCmd(t *testing.T) {
 		{
 			"Validate input with pattern size-type",
 			[]string{" abc "},
-			[]cfgOverride{{configs.Pattern, sizeType}},
+			[]configOverride{{configs.FlagNames.Pattern, sizeType}},
 			true,
 			`
   AB __  ✘
@@ -219,12 +218,12 @@ func Test_validateCmd(t *testing.T) {
 		{
 			"Validate input with custom separators",
 			[]string{" abc u 123456 0 20 g1  "},
-			[]cfgOverride{
-				{configs.SepOE, "***"},
-				{configs.SepES, "+++"},
-				{configs.SepSC, "‧‧‧"},
-				{configs.SepCS, ">>>"},
-				{configs.SepST, "---"},
+			[]configOverride{
+				{configs.FlagNames.SepOE, "***"},
+				{configs.FlagNames.SepES, "+++"},
+				{configs.FlagNames.SepSC, "‧‧‧"},
+				{configs.FlagNames.SepCS, ">>>"},
+				{configs.FlagNames.SepST, "---"},
 			},
 			false,
 			`
@@ -249,8 +248,8 @@ func Test_validateCmd(t *testing.T) {
 		{
 			"Validate sizetype input with custom separators",
 			[]string{" 20 g1 "},
-			[]cfgOverride{
-				{configs.SepST, "***"},
+			[]configOverride{
+				{configs.FlagNames.SepST, "***"},
 			},
 			false,
 			`
@@ -269,7 +268,7 @@ func Test_validateCmd(t *testing.T) {
 		{
 			"Validate container-number with wrong check digit",
 			[]string{"abc u 123123 1"},
-			[]cfgOverride{{configs.Pattern, containerNumber}},
+			[]configOverride{{configs.FlagNames.Pattern, containerNumber}},
 			true,
 			`
   ABC U 123123 1  ✘
@@ -287,7 +286,7 @@ func Test_validateCmd(t *testing.T) {
 		{
 			"Validate container-number with letter for check digit",
 			[]string{"abc u 123123 a"},
-			[]cfgOverride{{configs.Pattern, containerNumber}},
+			[]configOverride{{configs.FlagNames.Pattern, containerNumber}},
 			true,
 			`
   ABC U 123123 _  ✘
@@ -315,13 +314,15 @@ func Test_validateCmd(t *testing.T) {
 					&dummyTypeDecoder{},
 				},
 			}
-			viperCfg := viper.New()
-			for _, override := range tt.cfgOverrides {
-				viperCfg.Set(override.name, override.value)
+
+			config, _ := configs.ReadConfig(configs.DefaultConfig())
+			for _, override := range tt.configOverrides {
+				config.Map[override.name] = override.value
 			}
-			cmd := newValidateCmd(nil, writer, viperCfg, d)
-			_ = cmd.PreRunE(cmd, nil)
-			if got := cmd.RunE(nil, tt.args); (got == nil) == tt.wantErr {
+
+			cmd := newValidateCmd(nil, writer, config, d)
+
+			if got := cmd.RunE(cmd, tt.args); (got == nil) == tt.wantErr {
 				t.Errorf("got = %v, wantErr is %v", got, tt.wantErr)
 			}
 			if gotWriter := writer.String(); gotWriter != tt.wantWriter {

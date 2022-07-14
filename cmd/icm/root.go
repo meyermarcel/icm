@@ -15,7 +15,6 @@ import (
 	"path/filepath"
 
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 )
 
 type decoders struct {
@@ -42,7 +41,7 @@ execute a command that requires the configuration.
 Flags for output formatting can be overridden with a config file.
 Edit default configuration for customization:
 
-  ` + filepath.Join("$HOME", appDir, configs.NameWithYmlExt)
+  ` + filepath.Join("$HOME", appDir, configs.ConfigNameWithYmlExt)
 
 func execute(version string) {
 	stderr := os.Stderr
@@ -52,16 +51,16 @@ func execute(version string) {
 
 	appDirPath := initDir(filepath.Join(homeDir, appDir))
 
-	pathToCfg := filepath.Join(appDirPath, configs.NameWithYmlExt)
+	pathToCfg := filepath.Join(appDirPath, configs.ConfigNameWithYmlExt)
 	if _, err := os.Stat(pathToCfg); os.IsNotExist(err) {
-		errWrite := os.WriteFile(pathToCfg, configs.Cfg(), 0644)
+		errWrite := os.WriteFile(pathToCfg, configs.DefaultConfig(), 0644)
 		checkErr(stderr, errWrite)
 	}
-	viperCfg := viper.New()
-	viperCfg.AddConfigPath(appDirPath)
-	viperCfg.SetConfigName(configs.Name)
-	readErr := viperCfg.ReadInConfig()
-	checkErr(stderr, readErr)
+
+	cfgFile, err := os.ReadFile(pathToCfg)
+	checkErr(stderr, err)
+	config, err := configs.ReadConfig(cfgFile)
+	checkErr(stderr, err)
 
 	appDirDataPath := initDir(filepath.Join(appDirPath, "data"))
 
@@ -85,7 +84,7 @@ func execute(version string) {
 		version,
 		bufWriter,
 		stderr,
-		viperCfg,
+		config,
 		decoders{
 			ownerDecodeUpdater,
 			equipCatDecoder,
@@ -109,7 +108,7 @@ func execute(version string) {
 func newRootCmd(
 	version string,
 	writer, writerErr io.Writer,
-	viper *viper.Viper,
+	config *configs.Config,
 	decoders decoders,
 	timestampUpdater data.TimestampUpdater,
 	ownerURL string) *cobra.Command {
@@ -129,8 +128,8 @@ func newRootCmd(
 Visit github.com/meyermarcel/icm for more docs, issues, pull requests and feedback.
 `)
 
-	rootCmd.AddCommand(newGenerateCmd(writer, writerErr, viper, decoders.ownerDecodeUpdater))
-	rootCmd.AddCommand(newValidateCmd(os.Stdin, writer, viper, decoders))
+	rootCmd.AddCommand(newGenerateCmd(writer, writerErr, config, decoders.ownerDecodeUpdater))
+	rootCmd.AddCommand(newValidateCmd(os.Stdin, writer, config, decoders))
 	rootCmd.AddCommand(newUpdateOwnerCmd(decoders.ownerDecodeUpdater, timestampUpdater, ownerURL))
 	rootCmd.AddCommand(newDocCmd(rootCmd))
 
