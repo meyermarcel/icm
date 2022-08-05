@@ -4,7 +4,6 @@ before:
 
 builds:
   -
-    main: ./cmd/icm
     env:
     - CGO_ENABLED=0
     goos:

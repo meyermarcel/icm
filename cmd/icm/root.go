@@ -1,4 +1,4 @@
-package main
+package cmd
 
 import (
 	"bufio"
@@ -43,7 +43,7 @@ Edit default configuration for customization:
 
   ` + filepath.Join("$HOME", appDir, configs.ConfigNameWithYmlExt)
 
-func execute(version string) {
+func Execute(version string) {
 	stderr := os.Stderr
 
 	homeDir, err := os.UserHomeDir()

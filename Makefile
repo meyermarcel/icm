@@ -18,7 +18,7 @@ lint:
 
 .PHONY: build
 build:
-	export CGO_ENABLED=0; go build -o $(BUILD_DIR)/$(BINARY) ./cmd/icm
+	export CGO_ENABLED=0; go build -o $(BUILD_DIR)/$(BINARY)
 
 
 # Individual commands
