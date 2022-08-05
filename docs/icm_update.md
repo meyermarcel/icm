@@ -22,7 +22,7 @@ icm update [flags]
 # Add new owners and preserve all existing owners
 icm update
 # Delete all owners and add most current owners
-echo '{}' > $HOME/.icm/data/owner.json && icm update
+echo '' > $HOME/.icm/data/owner.csv && icm update
 ```
 
 ### Options

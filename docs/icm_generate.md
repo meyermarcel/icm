@@ -6,7 +6,7 @@ Generate unique container numbers
 
 Generated container numbers are unique. Owners specified in
 
-  $HOME/.icm/data/owner.json
+  $HOME/.icm/data/owner.csv
 
 are used. Owners can be updated by 'icm update --help' command.
 

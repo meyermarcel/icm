@@ -19,7 +19,7 @@ type OwnerDecoder interface {
 
 // OwnerUpdater updates owners of an implemented source.
 type OwnerUpdater interface {
-	Update(newOwners map[string]cont.Owner) error
+	Update(newOwners []cont.Owner) error
 }
 
 // EquipCatDecoder decodes an ID to an equipment category.

@@ -29,7 +29,7 @@ Following information is available:
 		Example: `# Add new owners and preserve all existing owners
 icm update
 # Delete all owners and add most current owners
-echo '{}' > $HOME/.icm/data/owner.json && icm update`,
+echo '' > $HOME/.icm/data/owner.csv && icm update`,
 		Args: cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return update(ownerUpdater, timestampUpdater, ownerURL)
@@ -63,13 +63,13 @@ func update(ownerUpdater data.OwnerUpdater, timestampUpdater data.TimestampUpdat
 	return ownerUpdater.Update(owners)
 }
 
-func parseOwners(body io.Reader) (map[string]cont.Owner, error) {
+func parseOwners(body io.Reader) ([]cont.Owner, error) {
 	doc, err := html.Parse(body)
 	if err != nil {
 		return nil, err
 	}
 
-	owners := map[string]cont.Owner{}
+	owners := make([]cont.Owner, 0)
 
 	var getOwnerNode func(*html.Node) error
 	getOwnerNode = func(n *html.Node) error {
@@ -95,10 +95,14 @@ func parseOwners(body io.Reader) (map[string]cont.Owner, error) {
 					if err != nil {
 						return err
 					}
-					owners[code] = cont.Owner{Code: code,
-						Company: firstChildData(companyNode),
-						City:    firstChildData(cityNode),
-						Country: firstChildData(countryNode)}
+					owners = append(owners,
+						cont.Owner{
+							Code:    code,
+							Company: firstChildData(companyNode),
+							City:    firstChildData(cityNode),
+							Country: firstChildData(countryNode),
+						},
+					)
 				}
 			}
 		}

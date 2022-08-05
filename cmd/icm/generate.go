@@ -70,7 +70,7 @@ func newGenerateCmd(writer, writerErr io.Writer, config *configs.Config, ownerDe
 		Short: "Generate unique container numbers",
 		Long: `Generated container numbers are unique. Owners specified in
 
-  ` + filepath.Join("$HOME", appDir, "data", "owner.json") + `
+  ` + filepath.Join("$HOME", appDir, "data", "owner.csv") + `
 
 are used. Owners can be updated by 'icm update --help' command.
 

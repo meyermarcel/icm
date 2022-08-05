@@ -29,7 +29,7 @@ func (dummyOwnerUpdater) GetAllOwnerCodes() []string {
 	return []string{"RAN"}
 }
 
-func (dummyOwnerUpdater) Update(map[string]cont.Owner) error {
+func (dummyOwnerUpdater) Update([]cont.Owner) error {
 	panic("implement me")
 }
 

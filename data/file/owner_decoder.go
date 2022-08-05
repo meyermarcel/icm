@@ -1,10 +1,12 @@
 package file
 
 import (
-	"bytes"
-	"encoding/json"
+	"encoding/csv"
+	"fmt"
+	"io"
 	"os"
 	"path/filepath"
+	"sort"
 
 	// needed for package embed
 	_ "embed"
@@ -13,39 +15,61 @@ import (
 	"github.com/meyermarcel/icm/data"
 )
 
-const ownerFileName = "owner.json"
+const ownerFileName = "owner.csv"
+const csvSep = ';'
 
-//go:embed owner.json
-var ownerJSON []byte
+//go:embed owner.csv
+var ownerCSV []byte
 
 type owner struct {
-	Code    string `json:"code"`
-	Company string `json:"company"`
-	City    string `json:"city"`
-	Country string `json:"country"`
+	Company string
+	City    string
+	Country string
 }
 
 // NewOwnerDecoderUpdater writes owner file to path if it not exists and
 // returns a struct that uses this file as a data source.
 func NewOwnerDecoderUpdater(path string) (data.OwnerDecodeUpdater, error) {
 
-	ownersFile := &ownerDecoderUpdater{path: path}
-	filePath := filepath.Join(ownersFile.path, ownerFileName)
-	if err := initFile(filePath, ownerJSON); err != nil {
+	ownersFile := &ownerDecoderUpdater{path: filepath.Join(path, ownerFileName)}
+	if err := initFile(ownersFile.path, ownerCSV); err != nil {
 		return nil, err
 	}
-	b, err := os.ReadFile(filePath)
+	f, err := os.Open(ownersFile.path)
 	if err != nil {
+		fmt.Println(err)
 		return nil, err
 	}
-	if err := json.Unmarshal(b, &ownersFile.owners); err != nil {
-		return nil, err
-	}
-	for ownerCode := range ownersFile.owners {
+	csvReader := csv.NewReader(f)
+
+	csvReader.Comma = csvSep
+
+	ownersMap := make(map[string]owner)
+
+	for {
+		rec, err := csvReader.Read()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			return nil, err
+		}
+
+		ownerCode := rec[0]
+
 		if err := cont.IsOwnerCode(ownerCode); err != nil {
 			return nil, err
 		}
+
+		ownersMap[ownerCode] = owner{
+			Company: rec[1],
+			City:    rec[2],
+			Country: rec[3],
+		}
 	}
+
+	ownersFile.owners = ownersMap
+
 	return ownersFile, nil
 }
 
@@ -70,46 +94,52 @@ func (of *ownerDecoderUpdater) Decode(code string) (bool, cont.Owner) {
 // GetAllOwnerCodes returns a count of owner codes.
 func (of *ownerDecoderUpdater) GetAllOwnerCodes() []string {
 	var codes []string
-	for _, owner := range of.owners {
-		codes = append(codes, owner.Code)
+	for ownerCode := range of.owners {
+		codes = append(codes, ownerCode)
 	}
 	return codes
 }
 
 // Update accepts a map of owner code to owner and replaces/adds entries in the local owner file.
 // Cancelled owners still exist to prevent removal of custom owners created by the user.
-func (of *ownerDecoderUpdater) Update(newOwners map[string]cont.Owner) error {
-	for k, v := range newOwners {
-		of.owners[k] = toSerializableOwner(v)
+func (of *ownerDecoderUpdater) Update(newOwners []cont.Owner) error {
+
+	for _, o := range newOwners {
+		of.owners[o.Code] = owner{
+			Company: o.Company,
+			City:    o.City,
+			Country: o.Country,
+		}
 	}
-	b, err := marshalNoHTMLEsc(of.owners)
+
+	file, err := os.OpenFile(of.path, os.O_TRUNC|os.O_WRONLY, 0644)
 	if err != nil {
 		return err
 	}
-	return os.WriteFile(filepath.Join(of.path, ownerFileName), b, 0644)
-}
 
-func marshalNoHTMLEsc(t interface{}) ([]byte, error) {
-	buffer := &bytes.Buffer{}
-	encoder := json.NewEncoder(buffer)
-	encoder.SetEscapeHTML(false)
-	err := encoder.Encode(t)
-	if err != nil {
-		return nil, err
-	}
-	var fmtJSON bytes.Buffer
-	err = json.Indent(&fmtJSON, buffer.Bytes(), "", "  ")
-	if err != nil {
-		return nil, err
-	}
-	return fmtJSON.Bytes(), nil
-}
+	csvWriter := csv.NewWriter(file)
+	csvWriter.Comma = csvSep
 
-func toSerializableOwner(ownerToConvert cont.Owner) owner {
-	return owner{ownerToConvert.Code,
-		ownerToConvert.Company,
-		ownerToConvert.City,
-		ownerToConvert.Country}
+	codes := make([]string, 0, len(of.owners))
+	for k := range of.owners {
+		codes = append(codes, k)
+	}
+	sort.Strings(codes)
+
+	for _, code := range codes {
+		o := of.owners[code]
+		csvErr := csvWriter.Write([]string{code, o.Company, o.City, o.Country})
+		if csvErr != nil {
+			return csvErr
+		}
+	}
+
+	csvWriter.Flush()
+	if csvWriter.Error() != nil {
+		return err
+	}
+
+	return nil
 }
 
 func initFile(path string, content []byte) error {

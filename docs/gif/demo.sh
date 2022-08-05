@@ -6,10 +6,10 @@ DEMO_PROMPT=" "
 PROMPT_TIMEOUT=4
 
 rm -f ~/.icm/config.yml
-rm -f ~/.icm/data/owner.json
+rm -f ~/.icm/data/owner.csv
 rm -f ~/.icm/data/equipment-category-id.json
 
-cp new_owner.json ~/.icm/data/owner.json
+cp new_owner.csv ~/.icm/data/owner.csv
 
 clear
 echo -n "$"
@@ -47,16 +47,18 @@ echo -n "$"
 wait
 clear
 echo -n "$"
-pe "# Add new custom equipment category ID in data"
+pe "# Equipment category ID 'X' is missing"
 echo -n "$"
 pe "icm validate btc x 123123 2"
 echo -n "$"
 wait
 clear
 echo -n "$"
-pe "# Add equipment category ID 'X'"
+pe "# Show current equipment categories"
 echo -n "$"
 pe "cat  ~/.icm/data/equipment-category-id.json"
+echo -n "$"
+pe "# Add 'X'"
 echo -n "$"
 pe "diff  ~/.icm/data/equipment-category-id.json  new_equipment-category-id.json"
 echo -n "$"
@@ -65,12 +67,13 @@ echo -n "$"
 wait
 clear
 echo -n "$"
-pe "# New custom equipment category ID 'X' is shown"
+pe "# 'X' is shown"
 echo -n "$"
 pe "icm validate btc x 123123 2"
 echo -n "$"
 wait
+echo -n "$"
 
 rm -f ~/.icm/config.yml
-rm -f ~/.icm/data/owner.json
+rm -f ~/.icm/data/owner.csv
 rm -f ~/.icm/data/equipment-category-id.json

@@ -13,32 +13,32 @@ func Test_parseOwners(t *testing.T) {
 	tests := []struct {
 		name    string
 		body    io.Reader
-		want    map[string]cont.Owner
+		want    []cont.Owner
 		wantErr bool
 	}{
 		{
 			"Parsing valid HTML body returns owners map",
 			validBody(),
-			map[string]cont.Owner{
-				"AAA": {
+			[]cont.Owner{
+				{
 					Code:    "AAA",
 					Company: "A Company",
 					City:    "A City",
 					Country: "A Country",
 				},
-				"BBB": {
+				{
 					Code:    "BBB",
 					Company: "",
 					City:    "B City",
 					Country: "B Country",
 				},
-				"CCC": {
+				{
 					Code:    "CCC",
 					Company: "C Company",
 					City:    "",
 					Country: "C Country",
 				},
-				"DDD": {
+				{
 					Code:    "DDD",
 					Company: "D Company",
 					City:    "D City",

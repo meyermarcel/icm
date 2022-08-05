@@ -43,4 +43,4 @@ fmt:
 
 .PHONY: update-owners
 update-owners: build
-	echo '{}' > $(HOME)/.icm/data/owner.json && ./$(BUILD_DIR)/$(BINARY) update && cp $(HOME)/.icm/data/owner.json data/file/owner.json
+	echo '' > $(HOME)/.icm/data/owner.csv && ./$(BUILD_DIR)/$(BINARY) update && cp $(HOME)/.icm/data/owner.csv data/file/owner.csv
