@@ -2,6 +2,7 @@ package file
 
 import (
 	"encoding/csv"
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -17,6 +18,7 @@ import (
 
 const ownerFileName = "owner.csv"
 const csvSep = ';'
+const csvFieldsPerRecord = 4
 
 //go:embed owner.csv
 var ownerCSV []byte
@@ -43,6 +45,7 @@ func NewOwnerDecoderUpdater(path string) (data.OwnerDecodeUpdater, error) {
 	csvReader := csv.NewReader(f)
 
 	csvReader.Comma = csvSep
+	csvReader.FieldsPerRecord = csvFieldsPerRecord
 
 	ownersMap := make(map[string]owner)
 
@@ -51,6 +54,11 @@ func NewOwnerDecoderUpdater(path string) (data.OwnerDecodeUpdater, error) {
 		if err == io.EOF {
 			break
 		}
+
+		if errors.Is(err, csv.ErrFieldCount) {
+			return nil, fmt.Errorf("%v: %w", ownersFile.path, err)
+		}
+
 		if err != nil {
 			return nil, err
 		}
