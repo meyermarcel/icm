@@ -73,7 +73,7 @@ See the [`doc` command](docs/icm_doc.md) for **manual pages** and **markdown**.
 ## Development
 
 1. Requirements
-    * [Golang 1.18.x](https://golang.org/doc/install)
+    * [Golang 1.19.x](https://golang.org/doc/install)
     * [golangci-lint latest version](https://github.com/golangci/golangci-lint#install)
     * [GNU Make 4.3.x](https://www.gnu.org/software/make/)
     * goimports -> `go install golang.org/x/tools/cmd/goimports@latest`
