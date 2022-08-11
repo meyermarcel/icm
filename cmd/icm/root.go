@@ -5,14 +5,13 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"path/filepath"
 
 	"github.com/meyermarcel/icm/data/file"
 
 	"github.com/meyermarcel/icm/data"
 
 	"github.com/meyermarcel/icm/configs"
-
-	"path/filepath"
 
 	"github.com/spf13/cobra"
 )
@@ -53,7 +52,7 @@ func Execute(version string) {
 
 	pathToCfg := filepath.Join(appDirPath, configs.ConfigNameWithYmlExt)
 	if _, err := os.Stat(pathToCfg); os.IsNotExist(err) {
-		errWrite := os.WriteFile(pathToCfg, configs.DefaultConfig(), 0644)
+		errWrite := os.WriteFile(pathToCfg, configs.DefaultConfig(), 0o644)
 		checkErr(stderr, errWrite)
 	}
 
@@ -91,7 +90,8 @@ func Execute(version string) {
 			sizeTypeDecoders{
 				lengthDecoder,
 				heightWidthDecoder,
-				typeDecoder},
+				typeDecoder,
+			},
 		},
 		timestampUpdater,
 		ownerURL)
@@ -111,7 +111,8 @@ func newRootCmd(
 	config *configs.Config,
 	decoders decoders,
 	timestampUpdater data.TimestampUpdater,
-	ownerURL string) *cobra.Command {
+	ownerURL string,
+) *cobra.Command {
 	rootCmd := &cobra.Command{
 		Version:           version,
 		Use:               appName,
@@ -138,7 +139,7 @@ Visit github.com/meyermarcel/icm for more docs, issues, pull requests and feedba
 
 func initDir(path string) string {
 	if _, err := os.Stat(path); os.IsNotExist(err) {
-		_ = os.Mkdir(path, os.ModeDir|0700)
+		_ = os.Mkdir(path, os.ModeDir|0o700)
 	}
 	return path
 }

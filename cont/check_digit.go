@@ -6,7 +6,6 @@ import (
 
 // CalcCheckDigit calculates check digit for owner, equipment category ID and serial number.
 func CalcCheckDigit(ownerCode string, equipCatID string, serialNum string) int {
-
 	concat := ownerCode + equipCatID + serialNum
 
 	n := 0.0

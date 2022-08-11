@@ -64,7 +64,6 @@ func NewTypeDecoder(path string) (data.TypeDecoder, error) {
 
 // Decode returns type and group information for the type code.
 func (tg *typeAndGroupDecoder) Decode(code string) (bool, cont.TypeInfo, cont.GroupInfo) {
-
 	typeInfoStr, typeFound := tg.types[code]
 	typeInfo := cont.TypeInfo(typeInfoStr)
 

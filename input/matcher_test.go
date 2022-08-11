@@ -5,7 +5,6 @@ import (
 )
 
 func TestMatcher_Match(t *testing.T) {
-
 	match1 := func() Input {
 		return Input{
 			runeCount: 1,

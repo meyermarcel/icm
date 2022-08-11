@@ -29,8 +29,8 @@ func (cn Number) String() string {
 func newNum(ownerCode string,
 	equipCatID string,
 	serialNumber string,
-	checkDigit int) Number {
-
+	checkDigit int,
+) Number {
 	return Number{
 		ownerCode:    ownerCode,
 		equipCatID:   equipCatID,

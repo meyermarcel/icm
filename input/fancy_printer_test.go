@@ -172,7 +172,8 @@ a * bc  ✘
 └─ 
 
 `,
-		}, {
+		},
+		{
 			"Print multiple elements with no separators",
 			fields{},
 			[]Input{

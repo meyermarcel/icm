@@ -57,11 +57,10 @@ func (*serialNumValue) Type() string {
 }
 
 func newGenerateCmd(writer, writerErr io.Writer, config *configs.Config, ownerDecoder data.OwnerDecoder) *cobra.Command {
-
 	var count int
-	var startValue = serialNumValue{}
-	var endValue = serialNumValue{}
-	var ownerValue = ownerValue{}
+	startValue := serialNumValue{}
+	endValue := serialNumValue{}
+	ownerValue := ownerValue{}
 	var excludeCheckDigit10 bool
 	var excludeTranspositionErr bool
 
@@ -96,7 +95,6 @@ icm generate --start 100500 --end 100600 --owner ABC
 icm generate --count 1000000 | icm validate`,
 		Args: cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
-
 			config.Overwrite(cmd.Flags())
 
 			builder := cont.NewUniqueGeneratorBuilder().

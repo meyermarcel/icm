@@ -27,7 +27,6 @@ func isOneUpperAlphanumericChar(code string) error {
 			fmt.Sprintf("%s is not 1 upper case alphanumeric character", code))
 	}
 	return nil
-
 }
 
 func isUpperAlphanumeric(s string) bool {

@@ -15,7 +15,8 @@ import (
 func newUpdateOwnerCmd(
 	ownerUpdater data.OwnerUpdater,
 	timestampUpdater data.TimestampUpdater,
-	ownerURL string) *cobra.Command {
+	ownerURL string,
+) *cobra.Command {
 	updateCmd := &cobra.Command{
 		Use:   "update",
 		Short: "Update information of owners",
@@ -39,7 +40,6 @@ echo '' > $HOME/.icm/data/owner.csv && icm update`,
 }
 
 func update(ownerUpdater data.OwnerUpdater, timestampUpdater data.TimestampUpdater, ownerURL string) error {
-
 	if err := timestampUpdater.Update(); err != nil {
 		return err
 	}
@@ -74,7 +74,6 @@ func parseOwners(body io.Reader) ([]cont.Owner, error) {
 	var getOwnerNode func(*html.Node) error
 	getOwnerNode = func(n *html.Node) error {
 		if n.Type == html.ElementNode && n.Data == "td" {
-
 			for _, a := range n.Attr {
 				if a.Key == "data-label" && a.Val == "Code" {
 

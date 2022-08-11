@@ -69,7 +69,6 @@ func (gb *GeneratorBuilder) ExcludeTranspositionErr(exclude bool) *GeneratorBuil
 // Build returns a new UniqueGenerator if all requirements met.
 // Valid combinations a
 func (gb *GeneratorBuilder) Build() (*UniqueGenerator, error) {
-
 	lenCodes := len(gb.codes)
 
 	if lenCodes < 1 {

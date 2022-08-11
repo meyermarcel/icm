@@ -52,7 +52,6 @@ func (fp *FancyPrinter) SetSeparatorsFunc(separatorsFunc func(inputs []Input)) {
 
 // Print writes formatted inputs to writer.
 func (fp *FancyPrinter) Print(inputs []Input) error {
-
 	if fp.separatorsFunc != nil {
 		fp.separatorsFunc(inputs)
 	}
@@ -139,7 +138,6 @@ func fmtTextsWithArrows(texts ...posTxt) string {
 }
 
 func fmtTexts(texts []posTxt) string {
-
 	b := strings.Builder{}
 
 	if len(texts) == 0 {
@@ -200,7 +198,6 @@ func fmtTexts(texts []posTxt) string {
 }
 
 func calculateSpaces(positions []int) []string {
-
 	var spaces []string
 	lastPos := 0
 	for idx, pos := range positions {
@@ -215,7 +212,6 @@ func calculateSpaces(positions []int) []string {
 }
 
 func fmtCheckMark(valid bool) string {
-
 	b := strings.Builder{}
 	b.WriteString("  ")
 

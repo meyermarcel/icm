@@ -13,7 +13,6 @@ type Config struct {
 }
 
 func (c *Config) Overwrite(flagSet *pflag.FlagSet) {
-
 	for k := range map[string]bool{
 		FlagNames.Pattern:  true,
 		FlagNames.NoHeader: true,

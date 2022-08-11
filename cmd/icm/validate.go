@@ -177,7 +177,6 @@ icm generate --count 10 | icm validate --output fancy
 icm generate --count 1000000 | icm validate`,
 		Args: cobra.MaximumNArgs(6),
 		RunE: func(cmd *cobra.Command, args []string) error {
-
 			config.Overwrite(cmd.Flags())
 
 			var reader io.Reader
@@ -251,7 +250,6 @@ func newAutoPrinter(writer io.Writer, config *configs.Config, isSingleLine bool)
 		return newFancyPrinter(writer, config, isSingleLine)
 	}
 	return newCSVPrinter(writer, config, isSingleLine)
-
 }
 
 func newFancyPrinter(writer io.Writer, config *configs.Config, _ bool) input.Printer {
@@ -357,10 +355,10 @@ func newOwnerInput(ownerDecodeUpdater data.OwnerDecodeUpdater) func() input.Inpu
 						au.Underline(ownerDecodeUpdater.GetAllOwnerCodes()[0]))),
 					nil,
 					[]input.Datum{ownerCodeDatum, ownerCompanyDatum, ownerCityDatum, ownerCountryDatum}
-
 			}
 			return nil,
-				[]input.Info{{Text: owner.Company},
+				[]input.Info{
+					{Text: owner.Company},
 					{Text: owner.City},
 					{Text: owner.Country},
 				},
@@ -407,7 +405,6 @@ func newEquipCatInput(equipCatDecoder data.EquipCatDecoder) func() input.Input {
 }
 
 func equipCatIDsAsList(equipCatDecoder data.EquipCatDecoder) string {
-
 	b := strings.Builder{}
 
 	iDs := equipCatDecoder.AllCatIDs()
@@ -538,15 +535,16 @@ func appendCheckDigit10Info(checkDigit int, infos []input.Info) []input.Info {
 			infos = make([]input.Info, 0)
 		}
 		infos = append(infos, input.Info{
-			Text: fmt.Sprintf("It is not recommended to use a %s", au.Underline("serial number"))})
+			Text: fmt.Sprintf("It is not recommended to use a %s", au.Underline("serial number")),
+		})
 		infos = append(infos, input.Info{
-			Text: fmt.Sprintf("that generates %s %s (0).", au.Underline("check digit"), au.Yellow("10"))})
+			Text: fmt.Sprintf("that generates %s %s (0).", au.Underline("check digit"), au.Yellow("10")),
+		})
 	}
 	return infos
 }
 
 func newLengthInput(lengthDecoder data.LengthDecoder) func() input.Input {
-
 	length := input.NewInput(
 		1,
 		regexp.MustCompile(`[A-Za-z\d]`).FindStringIndex,
@@ -579,7 +577,6 @@ func newLengthInput(lengthDecoder data.LengthDecoder) func() input.Input {
 }
 
 func newHeightWidthInput(heightWidthDecoder data.HeightWidthDecoder) func() input.Input {
-
 	heightWidth := input.NewInput(
 		1,
 		regexp.MustCompile(`[A-Za-z\d]`).FindStringIndex,
@@ -620,7 +617,6 @@ func newHeightWidthInput(heightWidthDecoder data.HeightWidthDecoder) func() inpu
 }
 
 func newTypeAndGroupInput(typeDecoder data.TypeDecoder) func() input.Input {
-
 	typeAndGroup := input.NewInput(
 		2,
 		regexp.MustCompile(`[A-Za-z\d]{2}`).FindStringIndex,

@@ -48,7 +48,7 @@ func (lu *timestampUpdater) Update() error {
 	now := time.Now()
 	afterTimeout := now.After(loaded.Add(timeout))
 	if afterTimeout {
-		err := os.WriteFile(filepath.Join(lu.path, lastUpdateFileName), []byte(now.Format(dateFormat)+"\n"), 0644)
+		err := os.WriteFile(filepath.Join(lu.path, lastUpdateFileName), []byte(now.Format(dateFormat)+"\n"), 0o644)
 		if err != nil {
 			return err
 		}

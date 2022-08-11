@@ -6,7 +6,6 @@ import (
 )
 
 func TestInputHasCorrectValue(t *testing.T) {
-
 	match1 := func() Input {
 		return Input{
 			runeCount: 1,

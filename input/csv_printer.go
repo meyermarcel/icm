@@ -42,7 +42,6 @@ func NewCSVPrinter(csvWriter *csv.Writer, noHeader bool) *CSVPrinter {
 // No header is printed if noHeader is set to false.
 // Print returns an error if writing to writer fails.
 func (cp *CSVPrinter) Print(inputs []Input) error {
-
 	cp.headers = nil
 	cp.record = nil
 	for _, input := range inputs {

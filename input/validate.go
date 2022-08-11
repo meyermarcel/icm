@@ -7,7 +7,6 @@ import (
 
 // Validate validates inputs. Each input is validated and values are assigned.
 func Validate(in string, newInputs []func() Input) ([]Input, error) {
-
 	previousValues := make([]string, 0)
 	inputs := make([]Input, 0)
 	var err error
@@ -58,7 +57,8 @@ func (i *Input) SetToUpper() {
 // NewInput returns a new Input.
 func NewInput(runeCount int,
 	matchIndex func(in string) []int,
-	validate func(value string, previousValues []string) (error, []Info, []Datum)) Input {
+	validate func(value string, previousValues []string) (error, []Info, []Datum),
+) Input {
 	return Input{runeCount: runeCount, matchIndex: matchIndex, validate: validate}
 }
 

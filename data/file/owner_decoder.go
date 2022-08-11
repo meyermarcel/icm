@@ -16,9 +16,11 @@ import (
 	"github.com/meyermarcel/icm/data"
 )
 
-const ownerFileName = "owner.csv"
-const csvSep = ';'
-const csvFieldsPerRecord = 4
+const (
+	ownerFileName      = "owner.csv"
+	csvSep             = ';'
+	csvFieldsPerRecord = 4
+)
 
 //go:embed owner.csv
 var ownerCSV []byte
@@ -32,7 +34,6 @@ type owner struct {
 // NewOwnerDecoderUpdater writes owner file to path if it not exists and
 // returns a struct that uses this file as a data source.
 func NewOwnerDecoderUpdater(path string) (data.OwnerDecodeUpdater, error) {
-
 	ownersFile := &ownerDecoderUpdater{path: filepath.Join(path, ownerFileName)}
 	if err := initFile(ownersFile.path, ownerCSV); err != nil {
 		return nil, err
@@ -110,7 +111,6 @@ func (of *ownerDecoderUpdater) GetAllOwnerCodes() []string {
 // Update accepts a map of owner code to owner and replaces/adds entries in the local owner file.
 // Cancelled owners still exist to prevent removal of custom owners created by the user.
 func (of *ownerDecoderUpdater) Update(newOwners []cont.Owner) error {
-
 	for _, o := range newOwners {
 		of.owners[o.Code] = owner{
 			Company: o.Company,
@@ -119,7 +119,7 @@ func (of *ownerDecoderUpdater) Update(newOwners []cont.Owner) error {
 		}
 	}
 
-	file, err := os.OpenFile(of.path, os.O_TRUNC|os.O_WRONLY, 0644)
+	file, err := os.OpenFile(of.path, os.O_TRUNC|os.O_WRONLY, 0o644)
 	if err != nil {
 		return err
 	}
@@ -151,7 +151,7 @@ func (of *ownerDecoderUpdater) Update(newOwners []cont.Owner) error {
 
 func initFile(path string, content []byte) error {
 	if _, err := os.Stat(path); os.IsNotExist(err) {
-		if err := os.WriteFile(path, content, 0644); err != nil {
+		if err := os.WriteFile(path, content, 0o644); err != nil {
 			return err
 		}
 	}

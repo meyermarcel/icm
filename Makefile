@@ -14,7 +14,7 @@ test:
 
 .PHONY: lint
 lint:
-	golangci-lint run --enable revive --enable goimports
+	golangci-lint run --enable revive --enable gofumpt
 
 .PHONY: build
 build:
@@ -39,7 +39,7 @@ clean:
 
 .PHONY: fmt
 fmt:
-	goimports -w $(shell find . -type f -name '*.go')
+	gofumpt -l -w .
 
 .PHONY: update-owners
 update-owners: build
