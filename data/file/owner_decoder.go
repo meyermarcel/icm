@@ -39,7 +39,6 @@ func NewOwnerDecoderUpdater(path string) (data.OwnerDecodeUpdater, error) {
 	}
 	f, err := os.Open(ownersFile.path)
 	if err != nil {
-		fmt.Println(err)
 		return nil, err
 	}
 	csvReader := csv.NewReader(f)
