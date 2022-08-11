@@ -37,8 +37,8 @@ clean:
 	go clean -x -testcache
 	rm -rf $(BUILD_DIR)
 
-.PHONY: fmt
-fmt:
+.PHONY: format
+format:
 	gofumpt -l -w .
 
 .PHONY: update-owners
