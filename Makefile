@@ -14,7 +14,7 @@ test:
 
 .PHONY: lint
 lint:
-	golangci-lint run --enable revive --enable gofumpt --enable errorlint --enable godot
+	golangci-lint run --enable revive --enable gofumpt --enable errorlint --enable godot --enable errname
 
 .PHONY: build
 build:

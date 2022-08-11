@@ -28,15 +28,15 @@ func init() {
 	au = aurora.NewAurora(isatty.IsTerminal(os.Stdout.Fd()))
 }
 
-type errValidate struct {
+type validateError struct {
 	message string
 }
 
-func newErrValidate(message string) error {
-	return &errValidate{message: message}
+func newValidateError(message string) error {
+	return &validateError{message: message}
 }
 
-func (e *errValidate) Error() string {
+func (e *validateError) Error() string {
 	return e.message
 }
 
@@ -340,7 +340,7 @@ func newOwnerInput(ownerDecodeUpdater data.OwnerDecodeUpdater) func() input.Inpu
 			ownerCountryDatum := input.NewDatum("country")
 
 			if value == "" {
-				return newErrValidate(fmt.Sprintf("%s is not %s long (e.g. %s)",
+				return newValidateError(fmt.Sprintf("%s is not %s long (e.g. %s)",
 						au.Underline("owner code"),
 						au.Bold("3 letters"),
 						au.Underline(ownerDecodeUpdater.GetAllOwnerCodes()[0]))),
@@ -349,7 +349,7 @@ func newOwnerInput(ownerDecodeUpdater data.OwnerDecodeUpdater) func() input.Inpu
 			}
 			found, owner := ownerDecodeUpdater.Decode(value)
 			if !found {
-				return newErrValidate(fmt.Sprintf("%s is not %s (e.g. %s)",
+				return newValidateError(fmt.Sprintf("%s is not %s (e.g. %s)",
 						au.Underline(value),
 						au.Bold("registered"),
 						au.Underline(ownerDecodeUpdater.GetAllOwnerCodes()[0]))),
@@ -381,7 +381,7 @@ func newEquipCatInput(equipCatDecoder data.EquipCatDecoder) func() input.Input {
 			equipCatIDDatum := input.NewDatum("equipment-category-id").WithValue(value)
 			equipCatDatum := input.NewDatum("equipment-category")
 			if value == "" {
-				return newErrValidate(fmt.Sprintf("%s is not %s",
+				return newValidateError(fmt.Sprintf("%s is not %s",
 						au.Underline("equipment category id"),
 						equipCatIDsAsList(equipCatDecoder))),
 					nil,
@@ -390,7 +390,7 @@ func newEquipCatInput(equipCatDecoder data.EquipCatDecoder) func() input.Input {
 
 			found, cat := equipCatDecoder.Decode(value)
 			if !found {
-				return newErrValidate(fmt.Sprintf("%s is not %s",
+				return newValidateError(fmt.Sprintf("%s is not %s",
 						au.Underline("equipment category id"),
 						equipCatIDsAsList(equipCatDecoder))),
 					nil,
@@ -429,7 +429,7 @@ func newSerialNumInput() func() input.Input {
 			func(value string, previousValues []string) (error, []input.Info, []input.Datum) {
 				serialNumData := input.NewDatum("serial-number")
 				if value == "" {
-					return newErrValidate(fmt.Sprintf("%s is not %s long",
+					return newValidateError(fmt.Sprintf("%s is not %s long",
 							au.Underline("serial number"),
 							au.Bold("6 numbers"))),
 						nil,
@@ -451,7 +451,7 @@ func newCheckDigitInput() func() input.Input {
 				validCheckDigit := input.NewDatum("valid-check-digit")
 				possibleTranspositionError := input.NewDatum("possible-transposition-error")
 				if len(strings.Join(previousValues[0:3], "")) != 10 {
-					return newErrValidate(fmt.Sprintf("%s is not calculable",
+					return newValidateError(fmt.Sprintf("%s is not calculable",
 							au.Underline("check digit"))),
 						nil,
 						[]input.Datum{
@@ -468,7 +468,7 @@ func newCheckDigitInput() func() input.Input {
 
 				number, err := strconv.Atoi(value)
 				if err != nil {
-					return newErrValidate(fmt.Sprintf("%s must be a %s (calculated: %s)",
+					return newValidateError(fmt.Sprintf("%s must be a %s (calculated: %s)",
 							au.Underline("check digit"),
 							au.Bold("number"),
 							au.Green(strconv.Itoa(checkDigit)))),
@@ -482,7 +482,7 @@ func newCheckDigitInput() func() input.Input {
 				}
 
 				if number != checkDigit%10 {
-					return newErrValidate(fmt.Sprintf(
+					return newValidateError(fmt.Sprintf(
 							"calculated %s is %s",
 							au.Underline("check digit"),
 							au.Green(strconv.Itoa(checkDigit%10)))),
@@ -552,7 +552,7 @@ func newLengthInput(lengthDecoder data.LengthDecoder) func() input.Input {
 			lengthDatum := input.NewDatum("length-code").WithValue(value)
 			lengthDescDatum := input.NewDatum("length-description")
 			if value == "" {
-				return newErrValidate(fmt.Sprintf("%s is not a %s or a %s",
+				return newValidateError(fmt.Sprintf("%s is not a %s or a %s",
 						au.Underline("length code"),
 						au.Bold("valid number"),
 						au.Bold("valid character"))),
@@ -562,7 +562,7 @@ func newLengthInput(lengthDecoder data.LengthDecoder) func() input.Input {
 
 			found, length := lengthDecoder.Decode(value)
 			if !found {
-				return newErrValidate(fmt.Sprintf("%s is not %s",
+				return newValidateError(fmt.Sprintf("%s is not %s",
 						au.Underline("length code"),
 						au.Bold("valid"))),
 					nil,
@@ -585,7 +585,7 @@ func newHeightWidthInput(heightWidthDecoder data.HeightWidthDecoder) func() inpu
 			heightDescDatum := input.NewDatum("height-description")
 			widthDescDatum := input.NewDatum("width-description")
 			if value == "" {
-				return newErrValidate(fmt.Sprintf("%s is not a %s or a %s",
+				return newValidateError(fmt.Sprintf("%s is not a %s or a %s",
 						au.Underline("height and width code"),
 						au.Bold("valid number"),
 						au.Bold("valid character"))),
@@ -595,7 +595,7 @@ func newHeightWidthInput(heightWidthDecoder data.HeightWidthDecoder) func() inpu
 
 			found, height, width := heightWidthDecoder.Decode(value)
 			if !found {
-				return newErrValidate(fmt.Sprintf("%s is not %s",
+				return newValidateError(fmt.Sprintf("%s is not %s",
 						au.Underline("height and width code"),
 						au.Bold("valid"))),
 					nil,
@@ -625,7 +625,7 @@ func newTypeAndGroupInput(typeDecoder data.TypeDecoder) func() input.Input {
 			typeDescDatum := input.NewDatum("type-description")
 			groupDescDatum := input.NewDatum("group-description")
 			if value == "" {
-				return newErrValidate(fmt.Sprintf("%s is not a %s or a %s",
+				return newValidateError(fmt.Sprintf("%s is not a %s or a %s",
 						au.Underline("type code"),
 						au.Bold("valid number"),
 						au.Bold("valid character"))),
@@ -635,7 +635,7 @@ func newTypeAndGroupInput(typeDecoder data.TypeDecoder) func() input.Input {
 
 			found, typeInfo, groupInfo := typeDecoder.Decode(value)
 			if !found {
-				return newErrValidate(fmt.Sprintf("%s is not %s",
+				return newValidateError(fmt.Sprintf("%s is not %s",
 						au.Underline("type code"),
 						au.Bold("valid"))),
 					nil,

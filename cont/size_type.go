@@ -30,10 +30,10 @@ func IsHeightWidthCode(code string) error {
 // IsTypeCode returns nil if input is two upper case alphanumeric characters.
 func IsTypeCode(code string) error {
 	if len(code) != 2 {
-		return NewErrContValidate(fmt.Sprintf("%s is not 2 characters long", code))
+		return NewValidateError(fmt.Sprintf("%s is not 2 characters long", code))
 	}
 	if !isUpperAlphanumeric(code) {
-		return NewErrContValidate(
+		return NewValidateError(
 			fmt.Sprintf("%s is not 2 upper case alphanumeric characters", code))
 	}
 	return nil

@@ -2,28 +2,28 @@ package cont
 
 import "fmt"
 
-// ErrContValidate is an error for validation of a container number part.
-type ErrContValidate struct {
+// ValidateError is an error for validation of a container number part.
+type ValidateError struct {
 	message string
 }
 
-// NewErrContValidate returns a new ErrContValidate.
-func NewErrContValidate(message string) error {
-	return &ErrContValidate{
+// NewValidateError returns a new ValidateError.
+func NewValidateError(message string) error {
+	return &ValidateError{
 		message: message,
 	}
 }
 
-func (e *ErrContValidate) Error() string {
+func (e *ValidateError) Error() string {
 	return e.message
 }
 
 func isOneUpperAlphanumericChar(code string) error {
 	if len(code) != 1 {
-		return NewErrContValidate(fmt.Sprintf("%s is not 1 digit", code))
+		return NewValidateError(fmt.Sprintf("%s is not 1 digit", code))
 	}
 	if !isUpperAlphanumeric(code) {
-		return NewErrContValidate(
+		return NewValidateError(
 			fmt.Sprintf("%s is not 1 upper case alphanumeric character", code))
 	}
 	return nil

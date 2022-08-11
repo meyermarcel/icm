@@ -102,7 +102,7 @@ func Execute(version string) {
 	errBuf := bufWriter.Flush()
 	writeErr(stderr, errBuf)
 
-	var errValidate *errValidate
+	var errValidate *validateError
 	if errors.As(err, &errValidate) {
 		os.Exit(1)
 	}
