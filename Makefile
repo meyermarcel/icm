@@ -14,7 +14,7 @@ test:
 
 .PHONY: lint
 lint:
-	golangci-lint run --enable revive --enable gofumpt
+	golangci-lint run --enable revive --enable gofumpt --enable errorlint
 
 .PHONY: build
 build:

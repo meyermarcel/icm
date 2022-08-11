@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"bufio"
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -101,7 +102,11 @@ func Execute(version string) {
 	errBuf := bufWriter.Flush()
 	writeErr(stderr, errBuf)
 
-	checkErrCmd(errCmd)
+	var errValidate *errValidate
+	if errors.As(err, &errValidate) {
+		os.Exit(1)
+	}
+
 	checkErr(stderr, errCmd)
 }
 
@@ -142,13 +147,6 @@ func initDir(path string) string {
 		_ = os.Mkdir(path, os.ModeDir|0o700)
 	}
 	return path
-}
-
-func checkErrCmd(err error) {
-	switch err.(type) {
-	case *errValidate:
-		os.Exit(1)
-	}
 }
 
 func writeErr(writer io.Writer, err error) {

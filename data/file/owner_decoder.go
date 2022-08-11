@@ -51,7 +51,7 @@ func NewOwnerDecoderUpdater(path string) (data.OwnerDecodeUpdater, error) {
 
 	for {
 		rec, err := csvReader.Read()
-		if err == io.EOF {
+		if errors.Is(err, io.EOF) {
 			break
 		}
 
