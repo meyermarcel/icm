@@ -83,6 +83,13 @@ See the [`doc` command](docs/icm_doc.md) for **manual pages** and **markdown**.
     make
     ```
 
+    ---
+    See all available `make` targets
+
+    ```
+    make <TAB> <TAB>
+    ```
+
 ## Release
 
 1. Dry run with `goreleaser`
