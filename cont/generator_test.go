@@ -222,6 +222,19 @@ func TestUniqueGenerator(t *testing.T) {
 			false,
 			1,
 		},
+		{
+			"Generate 2000001 unique container numbers with random serial numbers",
+			fields{
+				codes:                   []string{"AAA", "AAB", "ABB"},
+				count:                   2000001,
+				rangeStart:              -1,
+				rangeEnd:                -1,
+				exclTranspositionErrors: false,
+				exclCheckDigit10:        false,
+			},
+			false,
+			2000001,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -255,7 +268,7 @@ func TestUniqueGenerator(t *testing.T) {
 			}
 
 			if got := len(contNumbers); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("UniqueGenerator.Generate() generated %v container numbers, want %v", got, tt.want)
+				t.Errorf("UniqueGenerator.Generate() generated %v unique container numbers, want %v", got, tt.want)
 			}
 		})
 	}

@@ -200,7 +200,7 @@ func (r *randSerialNumIt) increment() {
 }
 
 func (r *randSerialNumIt) isLast() bool {
-	return r.it+1%1000000 == 1000000
+	return (r.it+1)%1000000 == 0
 }
 
 type seqSerialNumIt struct {
