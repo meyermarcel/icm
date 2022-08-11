@@ -9,7 +9,7 @@ import (
 	"path/filepath"
 	"sort"
 
-	// needed for package embed
+	// Needed for package embed.
 	_ "embed"
 
 	"github.com/meyermarcel/icm/cont"
