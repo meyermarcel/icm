@@ -92,7 +92,7 @@ See the [`doc` command](docs/icm_doc.md) for **manual pages** and **markdown**.
 
 1. Create version tag according to [SemVer](https://semver.org)
     ```
-    git tag "x.y.z"
+    git tag 'x.y.z'
     ```
 
 1. Push tag and let GitHub Actions and Goreleaser do the work
