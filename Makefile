@@ -1,3 +1,7 @@
+# https://tech.davis-hansson.com/p/make/
+SHELL := bash
+.ONESHELL:
+
 BIN_DIR := $(GOPATH)/bin
 BUILD_DIR := build
 # man-pages is also defined in goreleaser.yml
