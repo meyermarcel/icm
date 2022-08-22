@@ -127,7 +127,7 @@ icm generate --count 1000000 | icm validate`,
 					config.SepES(),
 					config.SepSC(),
 				)
-				_, err := io.WriteString(writer, fmt.Sprintf("%s\n", contNumber))
+				_, err := io.WriteString(writer, fmt.Sprintf("%s\n", &contNumber))
 				writeErr(writerErr, err)
 			}
 			return nil

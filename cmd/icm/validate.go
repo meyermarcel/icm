@@ -501,7 +501,7 @@ func newCheckDigitInput() func() input.Input {
 					infos = append(infos, input.Info{Text: "Possible transposition errors:"})
 					builder := strings.Builder{}
 					for idx, contNum := range transposedContNums {
-						infos = append(infos, input.Info{Text: fmt.Sprintf("  %s", contNum)})
+						infos = append(infos, input.Info{Text: fmt.Sprintf("  %s", &contNum)})
 						builder.WriteString(contNum.String())
 						if idx < len(transposedContNums)-1 {
 							builder.WriteString(", ")

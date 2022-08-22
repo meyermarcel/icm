@@ -232,7 +232,8 @@ func TestUniqueGenerator(t *testing.T) {
 				}
 				diff += ((lastNum + 1) % 1000000) - (number)
 				lastNum = number
-				contNumbers[g.ContNum().String()] = true
+				contNum := g.ContNum()
+				contNumbers[contNum.String()] = true
 			}
 
 			if tt.seqSerialNum && diff != 0 {

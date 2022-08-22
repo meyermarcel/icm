@@ -18,7 +18,7 @@ func (cn *Number) SetSeparators(sepOE, sepES, sepSC string) {
 	cn.sepOE, cn.sepES, cn.sepSC = sepOE, sepES, sepSC
 }
 
-func (cn Number) String() string {
+func (cn *Number) String() string {
 	return fmt.Sprintf("%s%s%s%s%s%s%d",
 		cn.ownerCode, cn.sepOE,
 		cn.equipCatID, cn.sepES,
