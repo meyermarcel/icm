@@ -194,7 +194,9 @@ icm generate | icm validate
 icm generate --count 10 | icm validate
 icm generate --count 10 | icm validate --output fancy
 # Generate CSV data set
-icm generate --count 1000000 | icm validate`,
+icm generate --count 1000000 | icm validate
+# Validate a container number with 6 (!) possible transposition errors
+icm validate APL U 689473 0`,
 		Args: cobra.MaximumNArgs(6),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			config.Overwrite(cmd.Flags())

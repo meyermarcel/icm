@@ -53,17 +53,19 @@ func TestCheckTransposition(t *testing.T) {
 			},
 		},
 		{
-			name: "Test ABC U 028373 (1)0",
+			name: "Test APL U 689473 (1)0",
 			args: args{
-				ownerCode:  "ABC",
+				ownerCode:  "APL",
 				equipCatID: "U",
-				serialNum:  "028373",
+				serialNum:  "689473",
 			},
 			want: []Number{
-				newNum("ABC", "U", "208373", 0),
-				newNum("ABC", "U", "023873", 0),
-				newNum("ABC", "U", "028337", 0),
-				newNum("ABC", "U", "028370", 3),
+				newNum("APL", "U", "869473", 0),
+				newNum("APL", "U", "698473", 0),
+				newNum("APL", "U", "684973", 0),
+				newNum("APL", "U", "689743", 0),
+				newNum("APL", "U", "689437", 0),
+				newNum("APL", "U", "689470", 3),
 			},
 		},
 	}

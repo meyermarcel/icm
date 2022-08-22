@@ -43,6 +43,8 @@ icm generate --count 10 | icm validate
 icm generate --count 10 | icm validate --output fancy
 # Generate CSV data set
 icm generate --count 1000000 | icm validate
+# Validate a container number with 6 (!) possible transposition errors
+icm validate APL U 689473 0
 ```
 
 ### Options
@@ -54,12 +56,12 @@ icm generate --count 1000000 | icm validate
                                                      owner = matches a three letter owner code
                                   owner-equipment-category = matches a three letter owner code with equipment category ID
                                                  size-type = matches length, width+height and type code
-                                   (default "auto")
+                                  
       --output string             sets output to
                                    auto = for a single line 'fancy' and for multiple lines 'csv' output 
                                     csv = machine readable CSV output
                                   fancy = human readable fancy output
-                                   (default "auto")
+                                  
       --no-header                 omits header of CSV output
       --sep-owner-equip string    ABC(x)U1234560   20G1  (x) separates owner code and equipment category id (default " ")
       --sep-equip-serial string   ABCU(x)1234560   20G1  (x) separates equipment category id and serial number (default " ")
