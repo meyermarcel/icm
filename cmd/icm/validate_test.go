@@ -217,7 +217,7 @@ func Test_validateCmd(t *testing.T) {
 		},
 		{
 			"Validate input with custom separators",
-			[]string{" abc u 123456 0 20 g1  "},
+			[]string{" abc u 681304 0 20 g1  "},
 			[]configOverride{
 				{configs.FlagNames.SepOE, "***"},
 				{configs.FlagNames.SepES, "+++"},
@@ -227,15 +227,19 @@ func Test_validateCmd(t *testing.T) {
 			},
 			false,
 			`
-  ABC***U+++123456‧‧‧0>>>20---G1  ✔
-   ↑    ↑                ↑↑    ↑
-   │    │                ││    └─ type:  some-type
-   │    │                ││       group: some-group
-   │    │                ││
-   │    │                │└─ height: some-height
-   │    │                │   width:  some-width
-   │    │                │
-   │    │                └─ length: some-length
+  ABC***U+++681304‧‧‧0>>>20---G1  ✔
+   ↑    ↑            ↑   ↑↑    ↑
+   │    │            │   ││    └─ type:  some-type
+   │    │            │   ││       group: some-group
+   │    │            │   ││
+   │    │            │   │└─ height: some-height
+   │    │            │   │   width:  some-width
+   │    │            │   │
+   │    │            │   └─ length: some-length
+   │    │            │
+   │    │            └─ Possible transposition errors:
+   │    │                 ABC***U+++681034‧‧‧0
+   │    │                 ABC***U+++681340‧‧‧0
    │    │
    │    └─ some-equip-cat-ID
    │

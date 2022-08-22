@@ -54,9 +54,19 @@ const patternsInfo string = `                    ` + auto + ` = matches automati
 ` + ownerEquipmentCategory + ` = matches a three letter owner code with equipment category ID
                ` + sizeType + ` = matches length, width+height and type code`
 
+type patterns = [][]func() input.Input
+
 type patternValue struct {
+	config   *configs.Config
+	decoders decoders
 	value    string
-	patterns map[string]func(decoders decoders) [][]func() input.Input
+}
+
+func newPatternValue(config *configs.Config, decoders decoders) *patternValue {
+	return &patternValue{
+		config:   config,
+		decoders: decoders,
+	}
 }
 
 func (p *patternValue) String() string {
@@ -64,35 +74,36 @@ func (p *patternValue) String() string {
 }
 
 func (p *patternValue) Set(value string) error {
-	if pattern := p.patterns[value]; pattern == nil {
+	switch value {
+	case auto, containerNumber, owner, ownerEquipmentCategory, sizeType:
+		p.value = value
+		return nil
+	default:
 		return fmt.Errorf("%s is not \n%s", value, patternsInfo)
 	}
-	p.value = value
-	return nil
 }
 
 func (*patternValue) Type() string {
 	return "string"
 }
 
-func newPatternValue() *patternValue {
-	return &patternValue{
-		value: configs.DefaultValues.Pattern,
-		patterns: map[string]func(decoders decoders) [][]func() input.Input{
-			auto:                   newAutoPattern,
-			containerNumber:        newContNumPattern,
-			owner:                  newOwnerPattern,
-			ownerEquipmentCategory: newOwnerEquipCatPattern,
-			sizeType:               newSizeTypePattern,
-		},
+func (p *patternValue) getPatterns(value string) patterns {
+	switch value {
+
+	case containerNumber:
+		return newContNumPattern(p.config, p.decoders)
+	case owner:
+		return newOwnerPattern(p.decoders)
+	case ownerEquipmentCategory:
+		return newOwnerEquipCatPattern(p.decoders)
+	case sizeType:
+		return newSizeTypePattern(p.decoders)
+	case auto:
+		fallthrough
+	default:
+		return newAutoPattern(p.config, p.decoders)
 	}
 }
-
-func (p *patternValue) newPatterns(value string) func(decoders decoders) [][]func() input.Input {
-	return p.patterns[value]
-}
-
-var pValue = newPatternValue()
 
 const (
 	outputAuto  = "auto"
@@ -101,33 +112,27 @@ const (
 )
 
 type outputValue struct {
-	value    string
-	printers map[string]newPrinter
+	config *configs.Config
+	value  string
 }
 
-func newOutputValue() *outputValue {
+func newOutputValue(config *configs.Config) *outputValue {
 	return &outputValue{
-		value: configs.DefaultValues.Output,
-		printers: map[string]newPrinter{
-			outputAuto:  newAutoPrinter,
-			outputFancy: newFancyPrinter,
-			outputCSV:   newCSVPrinter,
-		},
+		config: config,
 	}
 }
-
-type newPrinter func(writer io.Writer, config *configs.Config, isSingleLine bool) input.Printer
 
 func (o *outputValue) String() string {
 	return o.value
 }
 
 func (o *outputValue) Set(value string) error {
-	if printer := o.printers[value]; printer == nil {
-		return fmt.Errorf("%s is not \n%s", value, outputsInfo)
+	switch value {
+	case outputAuto, outputFancy, outputCSV:
+		o.value = value
+		return nil
 	}
-	o.value = value
-	return nil
+	return fmt.Errorf("%s is not \n%s", value, outputsInfo)
 }
 
 func (o *outputValue) Type() string {
@@ -139,14 +144,29 @@ const outputsInfo string = ` ` + outputAuto + ` = for a single line '` + outputF
   ` + outputCSV + ` = machine readable CSV output
 ` + outputFancy + ` = human readable fancy output`
 
-func (o *outputValue) newPrinter(value string) newPrinter {
-	return o.printers[value]
+func (o *outputValue) getPrinter(value string, writer io.Writer, isSingleLine bool) input.Printer {
+	switch value {
+	case outputFancy:
+		return newFancyPrinter(writer, o.config)
+	case outputCSV:
+		return newCSVPrinter(writer, o.config)
+	case outputAuto:
+		fallthrough
+	default:
+		if isSingleLine {
+			return newFancyPrinter(writer, o.config)
+		}
+		return newCSVPrinter(writer, o.config)
+	}
 }
-
-var oValue = newOutputValue()
 
 func newValidateCmd(stdin io.Reader, writer io.Writer, config *configs.Config, decoders decoders) *cobra.Command {
 	au = aurora.NewAurora(false)
+
+	pValue := newPatternValue(config, decoders)
+
+	oValue := newOutputValue(config)
+
 	validateCmd := &cobra.Command{
 		Use:   "validate",
 		Short: "Validate intermodal container markings",
@@ -188,13 +208,13 @@ icm generate --count 1000000 | icm validate`,
 
 			bufReader := bufio.NewReader(reader)
 			peek, _ := bufReader.Peek(bufReader.Size())
-			isSingleLine := isSingleLine(string(peek))
+			singleLine := isSingleLine(string(peek))
 
-			printer := oValue.newPrinter(config.Output())(writer, config, isSingleLine)
+			printer := oValue.getPrinter(config.Output(), writer, singleLine)
 
-			newPatterns := pValue.newPatterns(config.Pattern())(decoders)
+			patterns := pValue.getPatterns(config.Pattern())
 
-			newInputs := input.Match(strings.Split(string(peek), "\n")[0], newPatterns)
+			newInputs := input.Match(strings.Split(string(peek), "\n")[0], patterns)
 
 			scanner := bufio.NewScanner(bufReader)
 
@@ -245,14 +265,7 @@ func isSingleLine(s string) bool {
 	return true
 }
 
-func newAutoPrinter(writer io.Writer, config *configs.Config, isSingleLine bool) input.Printer {
-	if isSingleLine {
-		return newFancyPrinter(writer, config, isSingleLine)
-	}
-	return newCSVPrinter(writer, config, isSingleLine)
-}
-
-func newFancyPrinter(writer io.Writer, config *configs.Config, _ bool) input.Printer {
+func newFancyPrinter(writer io.Writer, config *configs.Config) input.Printer {
 	fancyPrinter := input.NewFancyPrinter(writer)
 	fancyPrinter.SetIndent("  ")
 	fancyPrinter.SetSeparatorsFunc(func(inputs []input.Input) {
@@ -276,22 +289,22 @@ func newFancyPrinter(writer io.Writer, config *configs.Config, _ bool) input.Pri
 	return fancyPrinter
 }
 
-func newCSVPrinter(writer io.Writer, config *configs.Config, _ bool) input.Printer {
+func newCSVPrinter(writer io.Writer, config *configs.Config) input.Printer {
 	csvWriter := csv.NewWriter(writer)
 	csvWriter.Comma = ';'
 	return input.NewCSVPrinter(csvWriter, config.NoHeader())
 }
 
-func newAutoPattern(decoders decoders) [][]func() input.Input {
+func newAutoPattern(config *configs.Config, decoders decoders) patterns {
 	owner := newOwnerInput(decoders.ownerDecodeUpdater)
 	equipCat := newEquipCatInput(decoders.equipCatDecoder)
 	serialNum := newSerialNumInput()
-	checkDigit := newCheckDigitInput()
+	checkDigit := newCheckDigitInput(config)
 	length := newLengthInput(decoders.lengthDecoder)
 	heightWidth := newHeightWidthInput(decoders.heightWidthDecoder)
 	typeAndGroup := newTypeAndGroupInput(decoders.typeDecoder)
 
-	return [][]func() input.Input{
+	return patterns{
 		{owner, equipCat, serialNum, checkDigit, length, heightWidth, typeAndGroup},
 		{owner, equipCat, serialNum, checkDigit},
 		{owner, equipCat},
@@ -300,33 +313,33 @@ func newAutoPattern(decoders decoders) [][]func() input.Input {
 	}
 }
 
-func newContNumPattern(decoders decoders) [][]func() input.Input {
+func newContNumPattern(config *configs.Config, decoders decoders) patterns {
 	owner := newOwnerInput(decoders.ownerDecodeUpdater)
 	equipCat := newEquipCatInput(decoders.equipCatDecoder)
 	serialNum := newSerialNumInput()
-	checkDigit := newCheckDigitInput()
+	checkDigit := newCheckDigitInput(config)
 
-	return [][]func() input.Input{{owner, equipCat, serialNum, checkDigit}}
+	return patterns{{owner, equipCat, serialNum, checkDigit}}
 }
 
-func newOwnerPattern(decoders decoders) [][]func() input.Input {
+func newOwnerPattern(decoders decoders) patterns {
 	owner := newOwnerInput(decoders.ownerDecodeUpdater)
-	return [][]func() input.Input{{owner}}
+	return patterns{{owner}}
 }
 
-func newOwnerEquipCatPattern(decoders decoders) [][]func() input.Input {
+func newOwnerEquipCatPattern(decoders decoders) patterns {
 	owner := newOwnerInput(decoders.ownerDecodeUpdater)
 	equipCat := newEquipCatInput(decoders.equipCatDecoder)
 
-	return [][]func() input.Input{{owner, equipCat}}
+	return patterns{{owner, equipCat}}
 }
 
-func newSizeTypePattern(decoders decoders) [][]func() input.Input {
+func newSizeTypePattern(decoders decoders) patterns {
 	length := newLengthInput(decoders.lengthDecoder)
 	heightWidth := newHeightWidthInput(decoders.heightWidthDecoder)
 	typeAndGroup := newTypeAndGroupInput(decoders.typeDecoder)
 
-	return [][]func() input.Input{{length, heightWidth, typeAndGroup}}
+	return patterns{{length, heightWidth, typeAndGroup}}
 }
 
 func newOwnerInput(ownerDecodeUpdater data.OwnerDecodeUpdater) func() input.Input {
@@ -440,7 +453,7 @@ func newSerialNumInput() func() input.Input {
 	}
 }
 
-func newCheckDigitInput() func() input.Input {
+func newCheckDigitInput(config *configs.Config) func() input.Input {
 	return func() input.Input {
 		return input.NewInput(
 			1,
@@ -500,7 +513,9 @@ func newCheckDigitInput() func() input.Input {
 				if len(transposedContNums) != 0 {
 					infos = append(infos, input.Info{Text: "Possible transposition errors:"})
 					builder := strings.Builder{}
+
 					for idx, contNum := range transposedContNums {
+						contNum.SetSeparators(config.SepOE(), config.SepES(), config.SepSC())
 						infos = append(infos, input.Info{Text: fmt.Sprintf("  %s", &contNum)})
 						builder.WriteString(contNum.String())
 						if idx < len(transposedContNums)-1 {
