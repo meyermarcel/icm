@@ -239,8 +239,20 @@ icm validate APL U 689473 0`,
 
 	validateCmd.Flags().VarP(pValue, configs.FlagNames.Pattern, "p",
 		fmt.Sprintf("sets pattern matching to\n%s\n", patternsInfo))
+	err := validateCmd.RegisterFlagCompletionFunc(configs.FlagNames.Pattern, func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return []string{auto, containerNumber, owner, ownerEquipmentCategory, sizeType}, cobra.ShellCompDirectiveNoFileComp
+	})
+	if err != nil {
+		return nil
+	}
 	validateCmd.Flags().Var(oValue, configs.FlagNames.Output,
 		fmt.Sprintf("sets output to\n%s\n", outputsInfo))
+	err = validateCmd.RegisterFlagCompletionFunc(configs.FlagNames.Output, func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return []string{outputAuto, outputFancy, outputCSV}, cobra.ShellCompDirectiveNoFileComp
+	})
+	if err != nil {
+		return nil
+	}
 	validateCmd.Flags().Bool(configs.FlagNames.NoHeader, configs.DefaultValues.NoHeader,
 		"omits header of CSV output")
 	validateCmd.Flags().String(configs.FlagNames.SepOE, configs.DefaultValues.SepOE,
