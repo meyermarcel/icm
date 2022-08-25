@@ -31,7 +31,8 @@ Following information is available:
 icm update
 # Delete all owners and add most current owners
 echo '' > $HOME/.icm/data/owner.csv && icm update`,
-		Args: cobra.NoArgs,
+		Args:              cobra.NoArgs,
+		ValidArgsFunction: cobra.NoFileCompletions,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return update(ownerUpdater, timestampUpdater, ownerURL)
 		},

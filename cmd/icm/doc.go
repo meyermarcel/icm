@@ -20,11 +20,12 @@ func newDocCmd(rootCmd *cobra.Command) *cobra.Command {
 	// https://unix.stackexchange.com/questions/3586/what-do-the-numbers-in-a-man-page-mean
 	// https://docs.brew.sh/Formula-Cookbook -> #{prefix}/share/man
 	manCmd := &cobra.Command{
-		Use:     "man",
-		Short:   "Generate man pages",
-		Long:    "Generate man pages.",
-		Example: "icm doc man . && cat *.1",
-		Args:    cobra.ExactArgs(1),
+		Use:               "man",
+		Short:             "Generate man pages",
+		Long:              "Generate man pages.",
+		Example:           "icm doc man . && cat *.1",
+		Args:              cobra.ExactArgs(1),
+		ValidArgsFunction: cobra.NoFileCompletions,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			path := args[0]
 

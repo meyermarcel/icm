@@ -93,7 +93,8 @@ icm generate --start 100500 --end 100600
 icm generate --start 100500 --end 100600 --owner ABC
 # Generate CSV data set
 icm generate --count 1000000 | icm validate`,
-		Args: cobra.NoArgs,
+		Args:              cobra.NoArgs,
+		ValidArgsFunction: cobra.NoFileCompletions,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			config.Overwrite(cmd.Flags())
 
