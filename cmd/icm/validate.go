@@ -238,7 +238,9 @@ icm validate APL U 689473 0`,
 	validateCmd.Flags().SortFlags = false
 
 	validateCmd.Flags().VarP(pValue, configs.FlagNames.Pattern, "p",
-		fmt.Sprintf("sets pattern matching to\n%s\n", patternsInfo))
+		fmt.Sprintf("sets pattern matching to %s, %s, %s, %s or %s\n%s\n",
+			auto, containerNumber, owner, ownerEquipmentCategory, sizeType,
+			patternsInfo))
 	err := validateCmd.RegisterFlagCompletionFunc(configs.FlagNames.Pattern, func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		return []string{auto, containerNumber, owner, ownerEquipmentCategory, sizeType}, cobra.ShellCompDirectiveNoFileComp
 	})
@@ -246,7 +248,9 @@ icm validate APL U 689473 0`,
 		return nil
 	}
 	validateCmd.Flags().Var(oValue, configs.FlagNames.Output,
-		fmt.Sprintf("sets output to\n%s\n", outputsInfo))
+		fmt.Sprintf("sets output to %s, %s or %s\n%s\n",
+			outputAuto, outputFancy, outputCSV,
+			outputsInfo))
 	err = validateCmd.RegisterFlagCompletionFunc(configs.FlagNames.Output, func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		return []string{outputAuto, outputFancy, outputCSV}, cobra.ShellCompDirectiveNoFileComp
 	})
