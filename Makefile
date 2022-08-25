@@ -10,7 +10,7 @@ DOCS_DIR := docs
 BINARY := icm
 
 .PHONY: all
-all: test lint build
+all: test lint build markdown
 
 .PHONY: test
 test:
@@ -24,13 +24,23 @@ lint:
 build:
 	export CGO_ENABLED=0; go build -o $(BUILD_DIR)/$(BINARY)
 
+.PHONY: markdown
+markdown: build
+	./$(BUILD_DIR)/$(BINARY) doc markdown $(DOCS_DIR)
 
 # Individual commands
 
-.PHONY: build-docs
-build-docs: build
-	$(shell $(BUILD_DIR)/$(BINARY) doc man $(DOCS_DIR)/$(MAN_DIR)/man1)
-	$(shell $(BUILD_DIR)/$(BINARY) doc markdown $(DOCS_DIR))
+.PHONY: format
+format:
+	gofumpt -l -w .
+
+.PHONY: update-owners
+update-owners: build
+	echo '' > $(HOME)/.icm/data/owner.csv && ./$(BUILD_DIR)/$(BINARY) update && cp $(HOME)/.icm/data/owner.csv data/file/owner.csv
+
+.PHONY: man-page
+man-page: build
+	./$(BUILD_DIR)/$(BINARY) doc man $(DOCS_DIR)/$(MAN_DIR)/man1
 
 .PHONY: install
 install: build
@@ -40,11 +50,3 @@ install: build
 clean:
 	go clean -x -testcache
 	rm -rf $(BUILD_DIR)
-
-.PHONY: format
-format:
-	gofumpt -l -w .
-
-.PHONY: update-owners
-update-owners: build
-	echo '' > $(HOME)/.icm/data/owner.csv && ./$(BUILD_DIR)/$(BINARY) update && cp $(HOME)/.icm/data/owner.csv data/file/owner.csv

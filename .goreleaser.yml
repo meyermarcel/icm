@@ -1,6 +1,6 @@
 before:
   hooks:
-  - make build-docs
+  - make man-page
 
 builds:
   -
