@@ -50,14 +50,14 @@ icm validate APL U 689473 0
 ### Options
 
 ```
-  -p, --pattern string            sets pattern matching to
+  -p, --pattern string            sets pattern matching to auto, container-number, owner, owner-equipment-category or size-type
                                                       auto = matches automatically a pattern
                                           container-number = matches a container number
                                                      owner = matches a three letter owner code
                                   owner-equipment-category = matches a three letter owner code with equipment category ID
                                                  size-type = matches length, width+height and type code
                                   
-      --output string             sets output to
+      --output string             sets output to auto, fancy or csv
                                    auto = for a single line 'fancy' and for multiple lines 'csv' output 
                                     csv = machine readable CSV output
                                   fancy = human readable fancy output
