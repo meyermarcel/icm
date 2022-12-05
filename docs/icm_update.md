@@ -19,10 +19,12 @@ icm update [flags]
 ### Examples
 
 ```
-# Add new owners and preserve all existing owners
+# Overwrite owner.csv file with newest owners
 icm update
-# Delete all owners and add most current owners
-echo '' > $HOME/.icm/data/owner.csv && icm update
+# Create custom-owner.csv to have additional custom mapping of owner codes
+# Use semicolon as a separator. For using double quotes please see existing
+# owner.csv file.
+echo 'AAA;my company;my city;my country' >> $HOME/.icm/data/custom-owner.csv
 ```
 
 ### Options

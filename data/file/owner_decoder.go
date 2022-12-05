@@ -7,8 +7,6 @@ import (
 	"io"
 	"os"
 	"path/filepath"
-	"sort"
-
 	// Needed for package embed.
 	_ "embed"
 
@@ -17,9 +15,10 @@ import (
 )
 
 const (
-	ownerFileName      = "owner.csv"
-	csvSep             = ';'
-	csvFieldsPerRecord = 4
+	remoteOwnersFileName = "owner.csv"
+	customOwnersFileName = "custom-owner.csv"
+	csvSep               = ';'
+	csvFieldsPerRecord   = 4
 )
 
 //go:embed owner.csv
@@ -31,18 +30,57 @@ type owner struct {
 	Country string
 }
 
+type ownerDecoderUpdater struct {
+	owners           map[string]owner
+	remoteOwnersPath string
+}
+
 // NewOwnerDecoderUpdater writes owner file to path if it not exists and
 // returns a struct that uses this file as a data source.
 func NewOwnerDecoderUpdater(path string) (data.OwnerDecodeUpdater, error) {
-	ownersFile := &ownerDecoderUpdater{path: filepath.Join(path, ownerFileName)}
-	if err := initFile(ownersFile.path, ownerCSV); err != nil {
+	decoderUpdater := &ownerDecoderUpdater{
+		remoteOwnersPath: filepath.Join(path, remoteOwnersFileName),
+	}
+
+	if err := initFile(decoderUpdater.remoteOwnersPath, ownerCSV); err != nil {
 		return nil, err
 	}
-	f, err := os.Open(ownersFile.path)
+	ownersFile, err := os.Open(decoderUpdater.remoteOwnersPath)
 	if err != nil {
 		return nil, err
 	}
-	csvReader := csv.NewReader(f)
+
+	ownersMap, err := readCSV(ownersFile)
+	if err != nil {
+		return nil, fmt.Errorf("%v: %w", decoderUpdater.remoteOwnersPath, err)
+	}
+
+	customOwnersPath := filepath.Join(path, customOwnersFileName)
+
+	if _, err := os.Stat(customOwnersPath); err == nil {
+
+		customOwnersFile, err := os.Open(customOwnersPath)
+		if err != nil {
+			return nil, err
+		}
+
+		customOwnersMap, err := readCSV(customOwnersFile)
+		if err != nil {
+			return nil, fmt.Errorf("%v: %w", customOwnersPath, err)
+		}
+
+		for k, v := range customOwnersMap {
+			ownersMap[k] = v
+		}
+	}
+
+	decoderUpdater.owners = ownersMap
+
+	return decoderUpdater, nil
+}
+
+func readCSV(r io.Reader) (map[string]owner, error) {
+	csvReader := csv.NewReader(r)
 
 	csvReader.Comma = csvSep
 	csvReader.FieldsPerRecord = csvFieldsPerRecord
@@ -53,10 +91,6 @@ func NewOwnerDecoderUpdater(path string) (data.OwnerDecodeUpdater, error) {
 		rec, err := csvReader.Read()
 		if errors.Is(err, io.EOF) {
 			break
-		}
-
-		if errors.Is(err, csv.ErrFieldCount) {
-			return nil, fmt.Errorf("%v: %w", ownersFile.path, err)
 		}
 
 		if err != nil {
@@ -76,14 +110,7 @@ func NewOwnerDecoderUpdater(path string) (data.OwnerDecodeUpdater, error) {
 		}
 	}
 
-	ownersFile.owners = ownersMap
-
-	return ownersFile, nil
-}
-
-type ownerDecoderUpdater struct {
-	owners map[string]owner
-	path   string
+	return ownersMap, nil
 }
 
 // Decode returns an owner for an owner code.
@@ -108,18 +135,9 @@ func (of *ownerDecoderUpdater) GetAllOwnerCodes() []string {
 	return codes
 }
 
-// Update accepts a map of owner code to owner and replaces/adds entries in the local owner file.
-// Cancelled owners still exist to prevent removal of custom owners created by the user.
+// Update accepts a slice of owners and overwrites local owner.csv file.
 func (of *ownerDecoderUpdater) Update(newOwners []cont.Owner) error {
-	for _, o := range newOwners {
-		of.owners[o.Code] = owner{
-			Company: o.Company,
-			City:    o.City,
-			Country: o.Country,
-		}
-	}
-
-	file, err := os.OpenFile(of.path, os.O_TRUNC|os.O_WRONLY, 0o644)
+	file, err := os.OpenFile(of.remoteOwnersPath, os.O_TRUNC|os.O_WRONLY, 0o644)
 	if err != nil {
 		return err
 	}
@@ -127,15 +145,8 @@ func (of *ownerDecoderUpdater) Update(newOwners []cont.Owner) error {
 	csvWriter := csv.NewWriter(file)
 	csvWriter.Comma = csvSep
 
-	codes := make([]string, 0, len(of.owners))
-	for k := range of.owners {
-		codes = append(codes, k)
-	}
-	sort.Strings(codes)
-
-	for _, code := range codes {
-		o := of.owners[code]
-		csvErr := csvWriter.Write([]string{code, o.Company, o.City, o.Country})
+	for _, o := range newOwners {
+		csvErr := csvWriter.Write([]string{o.Code, o.Company, o.City, o.Country})
 		if csvErr != nil {
 			return csvErr
 		}
