@@ -6,9 +6,5 @@ dist/
 # Test binary, build with `go test -c`
 *.test
 
-# ttyrec files
-docs/gif/demo
-docs/gif/tty.gif
-docs/gif/.!*
 # Generated manual pages
 docs/man-pages/
