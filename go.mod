@@ -5,15 +5,15 @@ go 1.19
 require (
 	github.com/logrusorgru/aurora/v3 v3.0.0
 	github.com/mattn/go-isatty v0.0.16
-	github.com/spf13/cobra v1.6.0
+	github.com/spf13/cobra v1.6.1
 	github.com/spf13/pflag v1.0.5
-	golang.org/x/net v0.0.0-20221014081412-f15817d10f9b
+	golang.org/x/net v0.4.0
 	gopkg.in/yaml.v3 v3.0.1
 )
 
 require (
 	github.com/cpuguy83/go-md2man/v2 v2.0.2 // indirect
-	github.com/inconshreveable/mousetrap v1.0.1 // indirect
+	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/kr/pretty v0.2.0 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	golang.org/x/sys v0.3.0 // indirect
