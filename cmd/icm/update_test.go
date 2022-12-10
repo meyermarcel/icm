@@ -85,12 +85,27 @@ func codeInvalidLength() io.Reader {
 <body>
 	<table>
 		<tr>
-			<td data-label="Code">AA</td>
-			<td data-label="Company">A Company</td>
-			<td data-label="City" class="hidden-xs">A City</td>
-			<td data-label="Country" class="hidden-xs">A Country</td>
-			<td data-label="Details"><a href="https://link">View</a></td>
-		</tr>
+			<td class="flexMobile align-items-center">
+                <span class="hideOnDesktop tdHeading">Code:</span>
+                <span>AAA</span>
+            </td>
+			<td class="flexMobile align-items-center">
+                <span class="hideOnDesktop tdHeading">Company:</span>
+                <span>A Company</span>
+            </td>
+			<td class="flexMobile align-items-center">
+                <span class="hideOnDesktop tdHeading">City:</span>
+                <span>A City</span>
+            </td>
+			<td class="flexMobile align-items-center">
+                <span class="hideOnDesktop tdHeading">Country:</span>
+                <span>A Country</span>
+            </td>
+			<td class="flexMobile align-items-center">
+                <span class="hideOnDesktop tdHeading">Details:</span>
+                <a class="upperCase withArrow" href="/bic-codes/aaau">View</a>
+            </td>
+        </tr>
 	</table>
 </body>
 </html>
@@ -102,10 +117,17 @@ func missingTdTags() io.Reader {
 <body>
 	<table>
 		<tr>
-			<td data-label="Code">AAAU</td>
-			<td data-label="Company">A Company</td>
-			<td data-label="City" class="hidden-xs">A City</td>
-		</tr>
+            <span class="hideOnDesktop tdHeading">Code:</span>
+            <span>AAAU</span>
+            <span class="hideOnDesktop tdHeading">Company:</span>
+            <span>A Company</span>
+            <span class="hideOnDesktop tdHeading">City:</span>
+            <span>A City</span>
+            <span class="hideOnDesktop tdHeading">Country:</span>
+            <span>A Country</span>
+            <span class="hideOnDesktop tdHeading">Details:</span>
+            <a class="upperCase withArrow" href="/bic-codes/aaau">View</a>
+        </tr>
 	</table>
 </body>
 </html>
@@ -129,33 +151,93 @@ func validBody() io.Reader {
 <body>
 	<table>
 		<tr>
-			<td data-label="Code">AAAU</td>
-			<td data-label="Company">A Company</td>
-			<td data-label="City" class="hidden-xs">A City</td>
-			<td data-label="Country" class="hidden-xs">A Country</td>
-			<td data-label="Details"><a href="https://link">View</a></td>
-		</tr>
+			<td class="flexMobile align-items-center">
+                <span class="hideOnDesktop tdHeading">Code:</span>
+                <span>AAAU</span>
+            </td>
+			<td class="flexMobile align-items-center">
+                <span class="hideOnDesktop tdHeading">Company:</span>
+                <span>A Company</span>
+            </td>
+			<td class="flexMobile align-items-center">
+                <span class="hideOnDesktop tdHeading">City:</span>
+                <span>A City</span>
+            </td>
+			<td class="flexMobile align-items-center">
+                <span class="hideOnDesktop tdHeading">Country:</span>
+                <span>A Country</span>
+            </td>
+			<td class="flexMobile align-items-center">
+                <span class="hideOnDesktop tdHeading">Details:</span>
+                <a class="upperCase withArrow" href="/bic-codes/aaau">View</a>
+            </td>
+        </tr>
 		<tr>
-			<td data-label="Code">BBBU</td>
-			<td data-label="Company"></td>
-			<td data-label="City" class="hidden-xs">B City</td>
-			<td data-label="Country" class="hidden-xs">B Country</td>
-			<td data-label="Details"><a href="https://link">View</a></td>
-		</tr>
+			<td class="flexMobile align-items-center">
+                <span class="hideOnDesktop tdHeading">Code:</span>
+                <span>BBBU</span>
+            </td>
+			<td class="flexMobile align-items-center">
+                <span class="hideOnDesktop tdHeading">Company:</span>
+                <span></span>
+            </td>
+			<td class="flexMobile align-items-center">
+                <span class="hideOnDesktop tdHeading">City:</span>
+                <span>B City</span>
+            </td>
+			<td class="flexMobile align-items-center">
+                <span class="hideOnDesktop tdHeading">Country:</span>
+                <span>B Country</span>
+            </td>
+			<td class="flexMobile align-items-center">
+                <span class="hideOnDesktop tdHeading">Details:</span>
+                <a class="upperCase withArrow" href="/bic-codes/aaau">View</a>
+            </td>
+        </tr>
 		<tr>
-			<td data-label="Code">CCCU</td>
-			<td data-label="Company">C Company</td>
-			<td data-label="City" class="hidden-xs"></td>
-			<td data-label="Country" class="hidden-xs">C Country</td>
-			<td data-label="Details"><a href="https://link">View</a></td>
-		</tr>
-		<tr>
-			<td data-label="Code">DDDU</td>
-			<td data-label="Company">D Company</td>
-			<td data-label="City" class="hidden-xs">D City</td>
-			<td data-label="Country" class="hidden-xs"></td>
-			<td data-label="Details"><a href="https://link">View</a></td>
-		</tr>
+			<td class="flexMobile align-items-center">
+                <span class="hideOnDesktop tdHeading">Code:</span>
+                <span>CCCU</span>
+            </td>
+			<td class="flexMobile align-items-center">
+                <span class="hideOnDesktop tdHeading">Company:</span>
+                <span>C Company</span>
+            </td>
+			<td class="flexMobile align-items-center">
+                <span class="hideOnDesktop tdHeading">City:</span>
+                <span></span>
+            </td>
+			<td class="flexMobile align-items-center">
+                <span class="hideOnDesktop tdHeading">Country:</span>
+                <span>C Country</span>
+            </td>
+			<td class="flexMobile align-items-center">
+                <span class="hideOnDesktop tdHeading">Details:</span>
+                <a class="upperCase withArrow" href="/bic-codes/aaau">View</a>
+            </td>
+        </tr>
+<tr>
+			<td class="flexMobile align-items-center">
+                <span class="hideOnDesktop tdHeading">Code:</span>
+                <span>DDDU</span>
+            </td>
+			<td class="flexMobile align-items-center">
+                <span class="hideOnDesktop tdHeading">Company:</span>
+                <span>D Company</span>
+            </td>
+			<td class="flexMobile align-items-center">
+                <span class="hideOnDesktop tdHeading">City:</span>
+                <span>D City</span>
+            </td>
+			<td class="flexMobile align-items-center">
+                <span class="hideOnDesktop tdHeading">Country:</span>
+                <span></span>
+            </td>
+			<td class="flexMobile align-items-center">
+                <span class="hideOnDesktop tdHeading">Details:</span>
+                <a class="upperCase withArrow" href="/bic-codes/aaau">View</a>
+            </td>
+        </tr>
 	</table>
 </body>
 </html>

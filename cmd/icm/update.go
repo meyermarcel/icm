@@ -76,36 +76,35 @@ func parseOwners(body io.Reader) ([]cont.Owner, error) {
 
 	var getOwnerNode func(*html.Node) error
 	getOwnerNode = func(n *html.Node) error {
-		if n.Type == html.ElementNode && n.Data == "td" {
-			for _, a := range n.Attr {
-				if a.Key == "data-label" && a.Val == "Code" {
+		codeWithU := parseHTMLtdData(n, "Code:")
+		if codeWithU != "" {
 
-					codeWithU := firstChildData(n)
-					if len(codeWithU) < 3 {
-						return fmt.Errorf("parsing HTML failed of owner code failed because '%s' is too short", codeWithU)
-					}
-					code := codeWithU[0:3]
-					companyNode, err := afterNextSibling(n)
-					if err != nil {
-						return err
-					}
-					cityNode, err := afterNextSibling(companyNode)
-					if err != nil {
-						return err
-					}
-					countryNode, err := afterNextSibling(cityNode)
-					if err != nil {
-						return err
-					}
-					owners = append(owners,
-						cont.Owner{
-							Code:    code,
-							Company: firstChildData(companyNode),
-							City:    firstChildData(cityNode),
-							Country: firstChildData(countryNode),
-						},
-					)
-				}
+			if len(codeWithU) < 4 {
+				return fmt.Errorf("parsing HTML failed of owner code failed because '%s' is too short", codeWithU)
+			}
+			code := codeWithU[0:3]
+
+			companyTdNode := nextTdSibling(n)
+			company := parseHTMLtdData(companyTdNode, "Company:")
+			cityNode := nextTdSibling(companyTdNode)
+			city := parseHTMLtdData(cityNode, "City:")
+			countryNode := nextTdSibling(cityNode)
+			country := parseHTMLtdData(countryNode, "Country:")
+
+			owners = append(owners,
+				cont.Owner{
+					Code:    code,
+					Company: company,
+					City:    city,
+					Country: country,
+				},
+			)
+
+			// If valid td tag found continue with sibling
+			// instead of parsing every child.
+			err := getOwnerNode(n.NextSibling)
+			if err != nil {
+				return err
 			}
 		}
 
@@ -127,21 +126,32 @@ func parseOwners(body io.Reader) ([]cont.Owner, error) {
 	return owners, nil
 }
 
-func afterNextSibling(n *html.Node) (*html.Node, error) {
-	var next *html.Node
-	if next = n.NextSibling; next != nil {
-		var afterNext *html.Node
-		if afterNext = next.NextSibling; afterNext != nil {
-			return afterNext, nil
+func parseHTMLtdData(td *html.Node, spanDescription string) string {
+	if td.Type == html.ElementNode && td.Data == "td" {
+		// Iterate through nodes because simple inner text (e.g. '\n') is also a node.
+		for c := td.FirstChild; c != nil; c = c.NextSibling {
+			if c.Type == html.ElementNode && c.Data == "span" && c.FirstChild != nil && c.FirstChild.Data == spanDescription {
+				for ns := c.NextSibling; ns != nil; ns = ns.NextSibling {
+					if ns.Type == html.ElementNode && ns.Data == "span" {
+						// Empty span:
+						// <span></span>
+						if ns.FirstChild == nil {
+							return ""
+						}
+						return ns.FirstChild.Data
+					}
+				}
+			}
 		}
 	}
-	return nil, fmt.Errorf("parsing HTML failed because nothing after next sibling of '%s'", n.Data)
+	return ""
 }
 
-func firstChildData(n *html.Node) string {
-	var fc *html.Node
-	if fc = n.FirstChild; fc != nil {
-		return fc.Data
+func nextTdSibling(td *html.Node) *html.Node {
+	for ns := td.NextSibling; ns != nil; ns = ns.NextSibling {
+		if ns.Type == html.ElementNode && ns.Data == "td" {
+			return ns
+		}
 	}
-	return ""
+	return nil
 }

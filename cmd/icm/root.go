@@ -32,7 +32,7 @@ type sizeTypeDecoders struct {
 const (
 	appName  = "icm"
 	appDir   = "." + appName
-	ownerURL = "https://www.bic-code.org/bic-letter-search/?resultsperpage=17576&searchterm="
+	ownerURL = "https://www.bic-code.org/search/bic-codes/country/all/results/17576"
 )
 
 var sepHelp = `Configuration for separators is generated first time you
