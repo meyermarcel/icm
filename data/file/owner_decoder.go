@@ -55,6 +55,10 @@ func NewOwnerDecoderUpdater(path string) (data.OwnerDecodeUpdater, error) {
 		return nil, fmt.Errorf("%v: %w", decoderUpdater.remoteOwnersPath, err)
 	}
 
+	if len(ownersMap) == 0 {
+		return nil, fmt.Errorf("%v: no owners found", decoderUpdater.remoteOwnersPath)
+	}
+
 	customOwnersPath := filepath.Join(path, customOwnersFileName)
 
 	if _, err := os.Stat(customOwnersPath); err == nil {
