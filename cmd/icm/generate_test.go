@@ -168,11 +168,10 @@ RAN U 000002 0
 				config.Map[override.name] = override.value
 			}
 
-			cmd := newGenerateCmd(writer, writerErr, config, &dummyOwnerDecodeUpdater{})
+			cmd := newGenerateCmd(writer, writerErr, config, &dummyOwnerDecodeUpdater{}, rand.New(rand.NewSource(1)))
 			for _, flag := range tt.flags {
 				_ = cmd.Flags().Set(flag.name, flag.value)
 			}
-			rand.Seed(1)
 			if got := cmd.RunE(cmd, nil); (got == nil) == tt.wantErr {
 				t.Errorf("got = %v, wantErr is %v", got, tt.wantErr)
 			}

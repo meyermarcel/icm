@@ -5,8 +5,10 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"math/rand"
 	"os"
 	"path/filepath"
+	"time"
 
 	"github.com/meyermarcel/icm/data/file"
 
@@ -134,7 +136,9 @@ func newRootCmd(
 Visit github.com/meyermarcel/icm for more docs, issues, pull requests and feedback.
 `)
 
-	rootCmd.AddCommand(newGenerateCmd(writer, writerErr, config, decoders.ownerDecodeUpdater))
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+
+	rootCmd.AddCommand(newGenerateCmd(writer, writerErr, config, decoders.ownerDecodeUpdater, r))
 	rootCmd.AddCommand(newValidateCmd(os.Stdin, writer, config, decoders))
 	rootCmd.AddCommand(newUpdateOwnerCmd(decoders.ownerDecodeUpdater, timestampUpdater, ownerURL))
 	rootCmd.AddCommand(newDocCmd(rootCmd))

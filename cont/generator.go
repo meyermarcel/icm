@@ -5,12 +5,12 @@ import (
 	"fmt"
 	"math/rand"
 	"strings"
-	"time"
 )
 
 // GeneratorBuilder is the struct for the builder.
 // Use NewUniqueGeneratorBuilder to create a new one.
 type GeneratorBuilder struct {
+	rand                 *rand.Rand
 	codes                []string
 	count                int
 	start                int
@@ -51,6 +51,12 @@ func (gb *GeneratorBuilder) Start(start int) *GeneratorBuilder {
 // End sets the end of serial number range.
 func (gb *GeneratorBuilder) End(end int) *GeneratorBuilder {
 	gb.end = end
+	return gb
+}
+
+// Rand sets random number generator. This is needed if Start and End are not set.
+func (gb *GeneratorBuilder) Rand(rand *rand.Rand) *GeneratorBuilder {
+	gb.rand = rand
 	return gb
 }
 
@@ -108,14 +114,17 @@ func (gb *GeneratorBuilder) Build() (*UniqueGenerator, error) {
 	}
 
 	if gb.start == -1 && gb.end == -1 {
+		if gb.rand == nil {
+			return nil, errors.New("random number generator not set")
+		}
 		if gb.count < 1 {
 			return nil, fmt.Errorf("count %d is lower than minimum count 1", gb.count)
 		}
-		serialNumIt = newRandSerialNumIt()
+		serialNumIt = newRandSerialNumIt(gb.rand.Int())
 		count = gb.count
 	}
 
-	rand.Shuffle(lenCodes, func(i, j int) {
+	gb.rand.Shuffle(lenCodes, func(i, j int) {
 		gb.codes[i], gb.codes[j] = strings.ToUpper(gb.codes[j]), strings.ToUpper(gb.codes[i])
 	})
 
@@ -185,9 +194,9 @@ type randSerialNumIt struct {
 	it         int
 }
 
-func newRandSerialNumIt() serialNumIt {
+func newRandSerialNumIt(randomOffset int) serialNumIt {
 	return &randSerialNumIt{
-		randOffset: rand.Int(),
+		randOffset: randomOffset,
 	}
 }
 
@@ -242,8 +251,4 @@ func permSerialNum(x int) int {
 		return residue
 	}
 	return prime - residue
-}
-
-func init() {
-	rand.Seed(time.Now().UnixNano())
 }

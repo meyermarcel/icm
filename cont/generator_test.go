@@ -9,6 +9,7 @@ import (
 
 func TestGeneratorBuilder(t *testing.T) {
 	type fields struct {
+		rand             *rand.Rand
 		codes            []string
 		count            int
 		rangeStart       int
@@ -24,6 +25,7 @@ func TestGeneratorBuilder(t *testing.T) {
 		{
 			"Build unique container number generator with random serial iterator",
 			fields{
+				rand.New(rand.NewSource(1)),
 				[]string{"ABC"},
 				2,
 				-1,
@@ -90,6 +92,17 @@ func TestGeneratorBuilder(t *testing.T) {
 			false,
 		},
 		{
+			"Build returns error for no random number generator",
+			fields{
+				codes:      []string{"ABC"},
+				count:      1,
+				rangeStart: -1,
+				rangeEnd:   -1,
+			},
+			nil,
+			true,
+		},
+		{
 			"Build returns error for no owner codes",
 			fields{
 				count:      1,
@@ -112,8 +125,8 @@ func TestGeneratorBuilder(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			rand.Seed(1)
 			gb := NewUniqueGeneratorBuilder().
+				Rand(tt.fields.rand).
 				OwnerCodes(tt.fields.codes).
 				Count(tt.fields.count).
 				Start(tt.fields.rangeStart).
@@ -132,6 +145,8 @@ func TestGeneratorBuilder(t *testing.T) {
 }
 
 func TestUniqueGenerator(t *testing.T) {
+	r := rand.New(rand.NewSource(1))
+
 	tests := []struct {
 		name             string
 		generatorBuilder *GeneratorBuilder
@@ -141,6 +156,7 @@ func TestUniqueGenerator(t *testing.T) {
 		{
 			"Generate 3 unique container numbers with random serial numbers",
 			NewUniqueGeneratorBuilder().
+				Rand(r).
 				OwnerCodes([]string{"ABC"}).
 				Count(3),
 			false,
@@ -205,6 +221,7 @@ func TestUniqueGenerator(t *testing.T) {
 		{
 			"Generate 2000001 unique container numbers with random serial numbers",
 			NewUniqueGeneratorBuilder().
+				Rand(r).
 				OwnerCodes([]string{"AAA", "AAB", "ABB"}).
 				Count(2000001),
 
@@ -214,7 +231,6 @@ func TestUniqueGenerator(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			rand.Seed(1)
 			g, err := tt.generatorBuilder.Build()
 			if err != nil {
 				t.Errorf("GeneratorBuilder.Build() returned error, %v", err)

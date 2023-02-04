@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"io"
+	"math/rand"
 	"path/filepath"
 	"strconv"
 
@@ -56,7 +57,7 @@ func (*serialNumValue) Type() string {
 	return "int"
 }
 
-func newGenerateCmd(writer, writerErr io.Writer, config *configs.Config, ownerDecoder data.OwnerDecoder) *cobra.Command {
+func newGenerateCmd(writer, writerErr io.Writer, config *configs.Config, ownerDecoder data.OwnerDecoder, r *rand.Rand) *cobra.Command {
 	var count int
 	startValue := serialNumValue{}
 	endValue := serialNumValue{}
@@ -109,12 +110,16 @@ icm generate --count 1000000 | icm validate`,
 				builder.OwnerCodes(ownerDecoder.GetAllOwnerCodes())
 			}
 
-			if cmd.Flags().Changed("start") {
-				builder.Start(startValue.value)
-			}
+			if cmd.Flags().Changed("start") || cmd.Flags().Changed("end") {
+				if cmd.Flags().Changed("start") {
+					builder.Start(startValue.value)
+				}
 
-			if cmd.Flags().Changed("end") {
-				builder.End(endValue.value)
+				if cmd.Flags().Changed("end") {
+					builder.End(endValue.value)
+				}
+			} else {
+				builder.Rand(r)
 			}
 
 			generator, err := builder.Build()
