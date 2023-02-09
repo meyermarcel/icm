@@ -156,6 +156,10 @@ type UniqueGenerator struct {
 // which will then be available through the ContNum method. It returns false
 // when the generation stops by reaching the count of generated container numbers.
 func (g *UniqueGenerator) Generate() bool {
+	if g.generatedCount == g.count {
+		return false
+	}
+
 	code := g.codes[(g.serialNumIt.num()+g.ownerOffset)%g.lenCodes]
 	serialNum := fmt.Sprintf("%06d", g.serialNumIt.num())
 	checkDigit := CalcCheckDigit(code, "U", serialNum)
@@ -173,7 +177,8 @@ func (g *UniqueGenerator) Generate() bool {
 	}
 	g.contNum = newNum(code, "U", serialNum, checkDigit%10)
 	g.generatedCount++
-	return g.generatedCount <= g.count
+
+	return true
 }
 
 // ContNum returns generated container number.
