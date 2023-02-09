@@ -527,7 +527,7 @@ func newCheckDigitInput(config *configs.Config) func() input.Input {
 						}
 				}
 
-				transposedContNums := cont.CheckTransposition(previousValues[2], previousValues[1], previousValues[0])
+				transposedContNums := cont.CheckTransposition(previousValues[2], previousValues[1], previousValues[0], checkDigit)
 
 				if len(transposedContNums) != 0 {
 					infos = append(infos, input.Info{Text: "Possible transposition errors:"})

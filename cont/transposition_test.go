@@ -10,6 +10,7 @@ func TestCheckTransposition(t *testing.T) {
 		ownerCode  string
 		equipCatID string
 		serialNum  string
+		checkDigit int
 	}
 	tests := []struct {
 		name string
@@ -22,6 +23,7 @@ func TestCheckTransposition(t *testing.T) {
 				ownerCode:  "CMA",
 				equipCatID: "U",
 				serialNum:  "163912",
+				checkDigit: 10,
 			},
 			want: []Number{
 				newNum("CMA", "U", "169312", 0),
@@ -34,6 +36,7 @@ func TestCheckTransposition(t *testing.T) {
 				ownerCode:  "RCB",
 				equipCatID: "U",
 				serialNum:  "001130",
+				checkDigit: 0,
 			},
 			want: []Number{
 				newNum("RCB", "U", "010130", 0),
@@ -45,6 +48,7 @@ func TestCheckTransposition(t *testing.T) {
 				ownerCode:  "WSL",
 				equipCatID: "U",
 				serialNum:  "801743",
+				checkDigit: 10,
 			},
 			want: []Number{
 				newNum("WSL", "U", "810743", 0),
@@ -58,6 +62,7 @@ func TestCheckTransposition(t *testing.T) {
 				ownerCode:  "APL",
 				equipCatID: "U",
 				serialNum:  "689473",
+				checkDigit: 10,
 			},
 			want: []Number{
 				newNum("APL", "U", "869473", 0),
@@ -71,7 +76,7 @@ func TestCheckTransposition(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := CheckTransposition(tt.args.ownerCode, tt.args.equipCatID, tt.args.serialNum); !reflect.DeepEqual(got, tt.want) {
+			if got := CheckTransposition(tt.args.ownerCode, tt.args.equipCatID, tt.args.serialNum, tt.args.checkDigit); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("CheckTransposition() = %v, want %v", got, tt.want)
 			}
 		})

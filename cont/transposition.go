@@ -7,10 +7,11 @@ import (
 
 // CheckTransposition checks for possible transposition errors.
 // Not equal adjacent digits including check digit are transposed and checked.
-func CheckTransposition(ownerCode string, equipCatID string, serialNum string) []Number {
+func CheckTransposition(ownerCode string, equipCatID string, serialNum string, checkDigit int) []Number {
+	checkDigit = checkDigit % 10
+
 	contNums := make([]Number, 0)
 
-	checkDigit := CalcCheckDigit(ownerCode, equipCatID, serialNum) % 10
 	// Only container numbers with check digit 0, 10 or 3 are affected
 	if checkDigit != 3 && checkDigit != 0 {
 		return contNums
@@ -30,7 +31,6 @@ func CheckTransposition(ownerCode string, equipCatID string, serialNum string) [
 			if lastSerialDigit == transposedCheckDigit {
 				contNums = append(contNums, newNum(ownerCode, equipCatID, transposedSerialNum, lastSerialDigit))
 			}
-
 		}
 	}
 	return contNums

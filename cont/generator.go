@@ -168,7 +168,7 @@ func (g *UniqueGenerator) Generate() bool {
 	if g.exclCheckDigit10 && checkDigit == 10 {
 		return g.Generate()
 	}
-	if g.exclTranspositionErr && len(CheckTransposition(code, "U", serialNum)) > 0 {
+	if g.exclTranspositionErr && len(CheckTransposition(code, "U", serialNum, checkDigit)) > 0 {
 		return g.Generate()
 	}
 	g.contNum = newNum(code, "U", serialNum, checkDigit%10)
