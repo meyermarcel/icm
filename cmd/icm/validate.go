@@ -25,7 +25,7 @@ import (
 var au aurora.Aurora
 
 func init() {
-	au = aurora.NewAurora(isatty.IsTerminal(os.Stdout.Fd()))
+	au = aurora.NewAurora(os.Getenv("NO_COLOR") == "" && isatty.IsTerminal(os.Stdout.Fd()))
 }
 
 type validateError struct {
@@ -161,8 +161,6 @@ func (o *outputValue) getPrinter(value string, writer io.Writer, isSingleLine bo
 }
 
 func newValidateCmd(stdin io.Reader, writer io.Writer, config *configs.Config, decoders decoders) *cobra.Command {
-	au = aurora.NewAurora(false)
-
 	pValue := newPatternValue(config, decoders)
 
 	oValue := newOutputValue(config)

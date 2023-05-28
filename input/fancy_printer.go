@@ -16,7 +16,7 @@ import (
 var au aurora.Aurora
 
 func init() {
-	au = aurora.NewAurora(isatty.IsTerminal(os.Stdout.Fd()))
+	au = aurora.NewAurora(os.Getenv("NO_COLOR") == "" && isatty.IsTerminal(os.Stdout.Fd()))
 }
 
 // FancyPrinter prints inputs in a fancy manner. Use NewFancyPrinterFactory to instantiate one.
