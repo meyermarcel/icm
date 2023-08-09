@@ -51,7 +51,8 @@ func Execute(version string) {
 	homeDir, err := os.UserHomeDir()
 	checkErr(stderr, err)
 
-	appDirPath := initDir(filepath.Join(homeDir, appDir))
+	appDirPath, err := initDir(filepath.Join(homeDir, appDir))
+	checkErr(stderr, err)
 
 	pathToCfg := filepath.Join(appDirPath, configs.ConfigNameWithYmlExt)
 	if _, err := os.Stat(pathToCfg); os.IsNotExist(err) {
@@ -64,7 +65,8 @@ func Execute(version string) {
 	config, err := configs.ReadConfig(cfgFile)
 	checkErr(stderr, err)
 
-	appDirDataPath := initDir(filepath.Join(appDirPath, "data"))
+	appDirDataPath, err := initDir(filepath.Join(appDirPath, "data"))
+	checkErr(stderr, err)
 
 	ownerDecodeUpdater, err := file.NewOwnerDecoderUpdater(appDirDataPath)
 	checkErr(stderr, err)
@@ -146,11 +148,14 @@ Visit github.com/meyermarcel/icm for more docs, issues, pull requests and feedba
 	return rootCmd
 }
 
-func initDir(path string) string {
+func initDir(path string) (string, error) {
 	if _, err := os.Stat(path); os.IsNotExist(err) {
-		_ = os.Mkdir(path, os.ModeDir|0o700)
+		err = os.Mkdir(path, os.ModeDir|0o700)
+		if err != nil {
+			return "", err
+		}
 	}
-	return path
+	return path, nil
 }
 
 func writeErr(writer io.Writer, err error) {
