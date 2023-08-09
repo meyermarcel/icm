@@ -29,13 +29,16 @@ checksum:
 
 archives:
   -
-    name_template: '{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}'
-    replacements:
-      darwin: Darwin
-      linux: Linux
-      windows: Windows
-      386: i386
-      amd64: x86_64
+    name_template: >-
+      {{- .ProjectName }}_
+      {{- if eq .Os "darwin" }}Darwin
+      {{- else if eq .Os "linux" }}Linux
+      {{- else if eq .Os "windows" }}Windows
+      {{- else }}{{ .Os }}{{ end }}_
+      {{- if eq .Arch "amd64" }}x86_64
+      {{- else if eq .Arch "386" }}i386
+      {{- else }}{{ .Arch }}{{ end }}
+      {{- if .Arm }}v{{ .Arm }}{{ end -}}
     format_overrides:
     - goos: windows
       format: zip
@@ -48,7 +51,7 @@ archives:
 
 brews:
   -
-    tap:
+    repository:
       owner: meyermarcel
       name: homebrew-tap
     folder: Formula
@@ -75,10 +78,11 @@ brews:
     test: |
       system "#{bin}/icm --version"
 
-scoop:
-  bucket:
-    owner: meyermarcel
-    name: scoop-bucket
-  homepage: "https://github.com/meyermarcel/icm"
-  description: "Generate or validate intermodal container markings."
-  license: MIT
+scoops:
+  -
+    repository:
+      owner: meyermarcel
+      name: scoop-bucket
+    homepage: "https://github.com/meyermarcel/icm"
+    description: "Generate or validate intermodal container markings."
+    license: MIT
