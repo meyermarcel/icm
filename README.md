@@ -75,7 +75,7 @@ See the [`doc` command](docs/icm_doc.md) for **manual pages** and **markdown**.
 1. Requirements
     * [Golang 1.20.x](https://golang.org/doc/install)
     * [golangci-lint latest version](https://github.com/golangci/golangci-lint#install)
-    * [GNU Make 4.3.x](https://www.gnu.org/software/make/)
+    * [GNU Make 4.x.x](https://www.gnu.org/software/make/)
     * gufumpt -> `go install mvdan.cc/gofumpt@latest`
 
 1. To build project execute
