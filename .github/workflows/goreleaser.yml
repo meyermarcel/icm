@@ -21,6 +21,9 @@ jobs:
         with:
           go-version-file: 'go.mod'
 
+      - name: Download owners CSV
+        run: make download-owners
+
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v3
         with:

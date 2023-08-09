@@ -12,16 +12,20 @@ BINARY := icm
 .PHONY: all
 all: test lint build markdown
 
+.PHONY: init-csv
+init-csv:
+	[ -f data/file/owner.csv ] || echo 'AAA;my company;my city;my country' > data/file/owner.csv
+
 .PHONY: test
-test:
+test: init-csv
 	go test ./...
 
 .PHONY: lint
-lint:
+lint: init-csv
 	golangci-lint run --enable revive --enable gofumpt --enable errorlint --enable godot --enable errname
 
 .PHONY: build
-build:
+build: init-csv
 	export CGO_ENABLED=0; go build -o $(BUILD_DIR)/$(BINARY)
 
 .PHONY: markdown
@@ -34,9 +38,9 @@ markdown: build
 format:
 	gofumpt -l -w .
 
-.PHONY: update-owners
-update-owners: build
-	./$(BUILD_DIR)/$(BINARY) download-owners && cp $(HOME)/.icm/data/owner.csv data/file/owner.csv
+.PHONY: download-owners
+download-owners: build
+	./$(BUILD_DIR)/$(BINARY) download-owners -o data/file/owner.csv
 
 .PHONY: man-page
 man-page: build
