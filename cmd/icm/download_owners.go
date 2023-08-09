@@ -74,7 +74,7 @@ func overwriteOwnersFile(writeOwnersCSV data.WriteOwnersCSVFunc, timestampUpdate
 		return err
 	}
 
-	owners, err := ownersDownloader.Download(ownerURL)
+	owners, err := ownersDownloader.Download()
 	if err != nil {
 		return err
 	}

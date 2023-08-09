@@ -18,11 +18,11 @@ func NewOwnersDownloader(ownerURL string) OwnersDownloader {
 }
 
 type OwnersDownloader interface {
-	Download(ownerURL string) ([]cont.Owner, error)
+	Download() ([]cont.Owner, error)
 }
 
-func (od *ownersDownloader) Download(ownerURL string) ([]cont.Owner, error) {
-	resp, err := http.Get(ownerURL)
+func (od *ownersDownloader) Download() ([]cont.Owner, error) {
+	resp, err := http.Get(od.ownerURL)
 	if err != nil {
 		return nil, err
 	}
