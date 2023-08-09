@@ -72,7 +72,7 @@ func newGenerateCmd(writer, writerErr io.Writer, config *configs.Config, ownerDe
 
   ` + filepath.Join("$HOME", appDir, "data", "owner.csv") + `
 
-are used. Owners can be updated by 'icm update --help' command.
+are used. Owners can be updated by 'icm download-owners --help' command.
 
 Equipment category ID 'U' is used for every generated container number.
 

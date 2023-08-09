@@ -1,69 +1,44 @@
-package cmd
+package http
 
 import (
 	"fmt"
 	"io"
 	"net/http"
 
-	"golang.org/x/net/html"
-
 	"github.com/meyermarcel/icm/cont"
-	"github.com/meyermarcel/icm/data"
-	"github.com/spf13/cobra"
+	"golang.org/x/net/html"
 )
 
-func newUpdateOwnerCmd(
-	ownerUpdater data.OwnerUpdater,
-	timestampUpdater data.TimestampUpdater,
-	ownerURL string,
-) *cobra.Command {
-	updateCmd := &cobra.Command{
-		Use:   "update",
-		Short: "Update information of owners",
-		Long: `Update information of owners from remote.
-Following information is available:
-
-  Owner code
-  Company
-  City
-  Country`,
-		Example: `# Overwrite owner.csv file with newest owners
-icm update
-# Create custom-owner.csv to have additional custom mapping of owner codes
-# Use semicolon as a separator. For using double quotes please see existing
-# owner.csv file.
-echo 'AAA;my company;my city;my country' >> $HOME/.icm/data/custom-owner.csv`,
-		Args:              cobra.NoArgs,
-		ValidArgsFunction: cobra.NoFileCompletions,
-		RunE: func(cmd *cobra.Command, args []string) error {
-			return update(ownerUpdater, timestampUpdater, ownerURL)
-		},
-	}
-	return updateCmd
+type ownersDownloader struct {
+	ownerURL string
 }
 
-func update(ownerUpdater data.OwnerUpdater, timestampUpdater data.TimestampUpdater, ownerURL string) error {
-	if err := timestampUpdater.Update(); err != nil {
-		return err
-	}
+func NewOwnersDownloader(ownerURL string) OwnersDownloader {
+	return &ownersDownloader{ownerURL: ownerURL}
+}
 
+type OwnersDownloader interface {
+	Download(ownerURL string) ([]cont.Owner, error)
+}
+
+func (od *ownersDownloader) Download(ownerURL string) ([]cont.Owner, error) {
 	resp, err := http.Get(ownerURL)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	if resp.StatusCode != 200 {
-		return fmt.Errorf("status code error: %d %s", resp.StatusCode, resp.Status)
+		return nil, fmt.Errorf("status code error: %d %s", resp.StatusCode, resp.Status)
 	}
 	owners, err := parseOwners(resp.Body)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	if err := resp.Body.Close(); err != nil {
-		return err
+		return nil, err
 	}
 
-	return ownerUpdater.Update(owners)
+	return owners, nil
 }
 
 func parseOwners(body io.Reader) ([]cont.Owner, error) {

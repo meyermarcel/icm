@@ -11,10 +11,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/mattn/go-isatty"
-
 	"github.com/logrusorgru/aurora/v3"
-
+	"github.com/mattn/go-isatty"
 	"github.com/meyermarcel/icm/configs"
 	"github.com/meyermarcel/icm/cont"
 	"github.com/meyermarcel/icm/data"
@@ -359,7 +357,7 @@ func newSizeTypePattern(decoders decoders) patterns {
 	return patterns{{length, heightWidth, typeAndGroup}}
 }
 
-func newOwnerInput(ownerDecodeUpdater data.OwnerDecodeUpdater) func() input.Input {
+func newOwnerInput(ownerDecoder data.OwnerDecoder) func() input.Input {
 	owner := input.NewInput(
 		3,
 		regexp.MustCompile(`[A-Za-z]{3}`).FindStringIndex,
@@ -373,16 +371,16 @@ func newOwnerInput(ownerDecodeUpdater data.OwnerDecodeUpdater) func() input.Inpu
 				return newValidateError(fmt.Sprintf("%s is not %s long (e.g. %s)",
 						au.Underline("owner code"),
 						au.Bold("3 letters"),
-						au.Underline(ownerDecodeUpdater.GetAllOwnerCodes()[0]))),
+						au.Underline(ownerDecoder.GetAllOwnerCodes()[0]))),
 					nil,
 					[]input.Datum{ownerCodeDatum, ownerCompanyDatum, ownerCityDatum, ownerCountryDatum}
 			}
-			found, owner := ownerDecodeUpdater.Decode(value)
+			found, owner := ownerDecoder.Decode(value)
 			if !found {
 				return newValidateError(fmt.Sprintf("%s is not %s (e.g. %s)",
 						au.Underline(value),
 						au.Bold("registered"),
-						au.Underline(ownerDecodeUpdater.GetAllOwnerCodes()[0]))),
+						au.Underline(ownerDecoder.GetAllOwnerCodes()[0]))),
 					nil,
 					[]input.Datum{ownerCodeDatum, ownerCompanyDatum, ownerCityDatum, ownerCountryDatum}
 			}

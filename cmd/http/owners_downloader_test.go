@@ -1,4 +1,4 @@
-package cmd
+package http
 
 import (
 	"io"

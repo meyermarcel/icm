@@ -36,7 +36,7 @@ format:
 
 .PHONY: update-owners
 update-owners: build
-	./$(BUILD_DIR)/$(BINARY) update && cp $(HOME)/.icm/data/owner.csv data/file/owner.csv
+	./$(BUILD_DIR)/$(BINARY) download-owners && cp $(HOME)/.icm/data/owner.csv data/file/owner.csv
 
 .PHONY: man-page
 man-page: build

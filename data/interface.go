@@ -1,14 +1,10 @@
 package data
 
 import (
+	"io"
+
 	"github.com/meyermarcel/icm/cont"
 )
-
-// OwnerDecodeUpdater is the interface that groups the Decode and Update methods.
-type OwnerDecodeUpdater interface {
-	OwnerDecoder
-	OwnerUpdater
-}
 
 // OwnerDecoder decodes a code to an owner or generates a random owner.
 type OwnerDecoder interface {
@@ -17,10 +13,7 @@ type OwnerDecoder interface {
 	GetAllOwnerCodes() []string
 }
 
-// OwnerUpdater updates owners of an implemented source.
-type OwnerUpdater interface {
-	Update(newOwners []cont.Owner) error
-}
+type WriteOwnersCSVFunc func(newOwners []cont.Owner, out io.Writer) error
 
 // EquipCatDecoder decodes an ID to an equipment category.
 type EquipCatDecoder interface {

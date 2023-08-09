@@ -8,7 +8,7 @@ Generated container numbers are unique. Owners specified in
 
   $HOME/.icm/data/owner.csv
 
-are used. Owners can be updated by 'icm update --help' command.
+are used. Owners can be updated by 'icm download-owners --help' command.
 
 Equipment category ID 'U' is used for every generated container number.
 

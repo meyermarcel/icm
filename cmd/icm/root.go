@@ -10,17 +10,16 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/meyermarcel/icm/data/file"
-
-	"github.com/meyermarcel/icm/data"
-
+	"github.com/meyermarcel/icm/cmd/http"
 	"github.com/meyermarcel/icm/configs"
+	"github.com/meyermarcel/icm/data"
+	"github.com/meyermarcel/icm/data/file"
 
 	"github.com/spf13/cobra"
 )
 
 type decoders struct {
-	ownerDecodeUpdater data.OwnerDecodeUpdater
+	ownerDecodeUpdater data.OwnerDecoder
 	equipCatDecoder    data.EquipCatDecoder
 	sizeTypeDecoders
 }
@@ -68,7 +67,8 @@ func Execute(version string) {
 	appDirDataPath, err := initDir(filepath.Join(appDirPath, "data"))
 	checkErr(stderr, err)
 
-	ownerDecodeUpdater, err := file.NewOwnerDecoderUpdater(appDirDataPath)
+	ownerCSVPath := filepath.Join(appDirDataPath, "owner.csv")
+	ownerDecoder, err := file.NewOwnerDecoder(ownerCSVPath, filepath.Join(appDirDataPath, "custom-owner.csv"))
 	checkErr(stderr, err)
 
 	equipCatDecoder, err := file.NewEquipCatDecoder(appDirDataPath)
@@ -78,6 +78,9 @@ func Execute(version string) {
 	checkErr(stderr, err)
 
 	typeDecoder, err := file.NewTypeDecoder(appDirDataPath)
+	checkErr(stderr, err)
+
+	downloader := http.NewOwnersDownloader(ownerURL)
 	checkErr(stderr, err)
 
 	timestampUpdater, err := file.NewTimestampUpdater(appDirDataPath)
@@ -90,7 +93,7 @@ func Execute(version string) {
 		stderr,
 		config,
 		decoders{
-			ownerDecodeUpdater,
+			ownerDecoder,
 			equipCatDecoder,
 			sizeTypeDecoders{
 				lengthDecoder,
@@ -98,8 +101,10 @@ func Execute(version string) {
 				typeDecoder,
 			},
 		},
+		file.WriteOwnersCSV,
+		downloader,
 		timestampUpdater,
-		ownerURL)
+		ownerCSVPath)
 
 	errCmd := rootCmd.Execute()
 
@@ -119,8 +124,10 @@ func newRootCmd(
 	writer, writerErr io.Writer,
 	config *configs.Config,
 	decoders decoders,
+	ownerCreator data.WriteOwnersCSVFunc,
+	ownersDownloader http.OwnersDownloader,
 	timestampUpdater data.TimestampUpdater,
-	ownerURL string,
+	ownerCSVPath string,
 ) *cobra.Command {
 	rootCmd := &cobra.Command{
 		Version:           version,
@@ -142,7 +149,7 @@ Visit github.com/meyermarcel/icm for more docs, issues, pull requests and feedba
 
 	rootCmd.AddCommand(newGenerateCmd(writer, writerErr, config, decoders.ownerDecodeUpdater, r))
 	rootCmd.AddCommand(newValidateCmd(os.Stdin, writer, config, decoders))
-	rootCmd.AddCommand(newUpdateOwnerCmd(decoders.ownerDecodeUpdater, timestampUpdater, ownerURL))
+	rootCmd.AddCommand(newDownloadOwnersCmd(ownerCreator, timestampUpdater, ownersDownloader, ownerCSVPath))
 	rootCmd.AddCommand(newDocCmd(rootCmd))
 
 	return rootCmd
