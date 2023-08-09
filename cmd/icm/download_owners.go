@@ -4,7 +4,8 @@ import (
 	"os"
 	"path"
 
-	"github.com/meyermarcel/icm/cmd/http"
+	"github.com/meyermarcel/icm/http"
+
 	"github.com/meyermarcel/icm/data"
 	"github.com/spf13/cobra"
 )

@@ -10,10 +10,10 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/meyermarcel/icm/cmd/http"
 	"github.com/meyermarcel/icm/configs"
 	"github.com/meyermarcel/icm/data"
 	"github.com/meyermarcel/icm/data/file"
+	"github.com/meyermarcel/icm/http"
 
 	"github.com/spf13/cobra"
 )
