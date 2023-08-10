@@ -158,7 +158,7 @@ func (o *outputValue) getPrinter(value string, writer io.Writer, isSingleLine bo
 	}
 }
 
-func newValidateCmd(stdin io.Reader, writer io.Writer, config *configs.Config, decoders decoders) *cobra.Command {
+func newValidateCmd(stdin io.Reader, writer io.Writer, config *configs.Config, decoders decoders) (*cobra.Command, error) {
 	pValue := newPatternValue(config, decoders)
 
 	oValue := newOutputValue(config)
@@ -241,7 +241,7 @@ icm validate APL U 689473 0`,
 		return []string{auto, containerNumber, owner, ownerEquipmentCategory, sizeType}, cobra.ShellCompDirectiveNoFileComp
 	})
 	if err != nil {
-		return nil
+		return nil, err
 	}
 	validateCmd.Flags().Var(oValue, configs.FlagNames.Output,
 		fmt.Sprintf("sets output to %s, %s or %s\n%s\n",
@@ -251,7 +251,7 @@ icm validate APL U 689473 0`,
 		return []string{outputAuto, outputFancy, outputCSV}, cobra.ShellCompDirectiveNoFileComp
 	})
 	if err != nil {
-		return nil
+		return nil, err
 	}
 	validateCmd.Flags().Bool(configs.FlagNames.NoHeader, configs.DefaultValues.NoHeader,
 		"omits header of CSV output")
@@ -265,7 +265,7 @@ icm validate APL U 689473 0`,
 		"ABCU1234560 (x)  20G1  (x) separates check digit and size")
 	validateCmd.Flags().String(configs.FlagNames.SepST, configs.DefaultValues.SepST,
 		"ABCU1234560   20(x)G1  (x) separates size and type")
-	return validateCmd
+	return validateCmd, nil
 }
 
 func isSingleLine(s string) bool {

@@ -5,9 +5,8 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/spf13/cobra/doc"
-
 	"github.com/spf13/cobra"
+	"github.com/spf13/cobra/doc"
 )
 
 func newDocCmd(rootCmd *cobra.Command) *cobra.Command {

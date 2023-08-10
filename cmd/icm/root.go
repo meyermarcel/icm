@@ -87,7 +87,7 @@ func Execute(version string) {
 	checkErr(stderr, err)
 
 	bufWriter := bufio.NewWriter(os.Stdout)
-	rootCmd := newRootCmd(
+	rootCmd, err := newRootCmd(
 		version,
 		bufWriter,
 		stderr,
@@ -105,6 +105,7 @@ func Execute(version string) {
 		downloader,
 		timestampUpdater,
 		ownerCSVPath)
+	checkErr(stderr, err)
 
 	errCmd := rootCmd.Execute()
 
@@ -128,7 +129,7 @@ func newRootCmd(
 	ownersDownloader http.OwnersDownloader,
 	timestampUpdater data.TimestampUpdater,
 	ownerCSVPath string,
-) *cobra.Command {
+) (*cobra.Command, error) {
 	rootCmd := &cobra.Command{
 		Version:           version,
 		Use:               appName,
@@ -148,11 +149,15 @@ Visit github.com/meyermarcel/icm for more docs, issues, pull requests and feedba
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 
 	rootCmd.AddCommand(newGenerateCmd(writer, writerErr, config, decoders.ownerDecodeUpdater, r))
-	rootCmd.AddCommand(newValidateCmd(os.Stdin, writer, config, decoders))
+	cmd, err := newValidateCmd(os.Stdin, writer, config, decoders)
+	if err != nil {
+		return nil, err
+	}
+	rootCmd.AddCommand(cmd)
 	rootCmd.AddCommand(newDownloadOwnersCmd(ownerCreator, timestampUpdater, ownersDownloader, ownerCSVPath))
 	rootCmd.AddCommand(newDocCmd(rootCmd))
 
-	return rootCmd
+	return rootCmd, nil
 }
 
 func initDir(path string) (string, error) {

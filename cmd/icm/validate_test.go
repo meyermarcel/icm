@@ -324,7 +324,10 @@ func Test_validateCmd(t *testing.T) {
 				config.Map[override.name] = override.value
 			}
 
-			cmd := newValidateCmd(nil, writer, config, d)
+			cmd, err := newValidateCmd(nil, writer, config, d)
+			if err != nil {
+				t.Errorf("newValidateCmd: %v", err)
+			}
 
 			if got := cmd.RunE(cmd, tt.args); (got == nil) == tt.wantErr {
 				t.Errorf("got = %v, wantErr is %v", got, tt.wantErr)
