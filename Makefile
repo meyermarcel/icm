@@ -7,6 +7,7 @@ BUILD_DIR := build
 # man-pages is also defined in goreleaser.yml
 MAN_DIR := man-pages
 DOCS_DIR := docs
+MARKDOWN_FILES := $(DOCS_DIR)/*.md
 BINARY := icm
 
 .PHONY: all
@@ -30,6 +31,7 @@ build: init-csv
 
 .PHONY: markdown
 markdown: build
+	rm $(MARKDOWN_FILES)
 	./$(BUILD_DIR)/$(BINARY) doc markdown $(DOCS_DIR)
 
 # Individual commands
