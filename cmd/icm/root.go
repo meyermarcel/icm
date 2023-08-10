@@ -154,7 +154,11 @@ Visit github.com/meyermarcel/icm for more docs, issues, pull requests and feedba
 		return nil, err
 	}
 	rootCmd.AddCommand(cmd)
-	rootCmd.AddCommand(newDownloadOwnersCmd(ownerCreator, timestampUpdater, ownersDownloader, ownerCSVPath))
+	downloadOwnersCmd, err := newDownloadOwnersCmd(ownerCreator, timestampUpdater, ownersDownloader, ownerCSVPath)
+	if err != nil {
+		return nil, err
+	}
+	rootCmd.AddCommand(downloadOwnersCmd)
 	rootCmd.AddCommand(newDocCmd(rootCmd))
 
 	return rootCmd, nil

@@ -38,7 +38,7 @@ func newDownloadOwnersCmd(
 	timestampUpdater data.TimestampUpdater,
 	ownersDownloader http.OwnersDownloader,
 	ownerCSVPath string,
-) *cobra.Command {
+) (*cobra.Command, error) {
 	filePath := filePathValue{value: ownerCSVPath}
 
 	downloadOwnersCmd := &cobra.Command{
@@ -58,14 +58,20 @@ icm download-owners
 # Use semicolon as a separator. For using double quotes please see existing
 # owner.csv file.
 echo 'AAA;my company;my city;my country' >> $HOME/.icm/data/custom-owner.csv`,
-		Args: cobra.NoArgs,
+		Args:              cobra.NoArgs,
+		ValidArgsFunction: cobra.NoFileCompletions,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return overwriteOwnersFile(writeOwnersCSVFunc, timestampUpdater, ownersDownloader, filePath.value)
 		},
 	}
 	downloadOwnersCmd.Flags().VarP(&filePath, "output", "o", "output file")
 
-	return downloadOwnersCmd
+	err := downloadOwnersCmd.MarkFlagFilename("output")
+	if err != nil {
+		return nil, err
+	}
+
+	return downloadOwnersCmd, nil
 }
 
 func overwriteOwnersFile(writeOwnersCSV data.WriteOwnersCSVFunc, timestampUpdater data.TimestampUpdater, ownersDownloader http.OwnersDownloader, filePath string) error {
