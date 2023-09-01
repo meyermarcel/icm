@@ -9,7 +9,6 @@ import (
 
 func TestGeneratorBuilder(t *testing.T) {
 	type fields struct {
-		rand             *rand.Rand
 		codes            []string
 		count            int
 		rangeStart       int
@@ -25,7 +24,6 @@ func TestGeneratorBuilder(t *testing.T) {
 		{
 			"Build unique container number generator with random serial iterator",
 			fields{
-				rand.New(rand.NewSource(1)),
 				[]string{"ABC"},
 				2,
 				-1,
@@ -92,17 +90,6 @@ func TestGeneratorBuilder(t *testing.T) {
 			false,
 		},
 		{
-			"Build returns error for no random number generator",
-			fields{
-				codes:      []string{"ABC"},
-				count:      1,
-				rangeStart: -1,
-				rangeEnd:   -1,
-			},
-			nil,
-			true,
-		},
-		{
 			"Build returns error for no owner codes",
 			fields{
 				count:      1,
@@ -125,8 +112,8 @@ func TestGeneratorBuilder(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			gb := NewUniqueGeneratorBuilder().
-				Rand(tt.fields.rand).
+			r := rand.New(rand.NewSource(1))
+			gb := NewUniqueGeneratorBuilder(r).
 				OwnerCodes(tt.fields.codes).
 				Count(tt.fields.count).
 				Start(tt.fields.rangeStart).
@@ -155,8 +142,7 @@ func TestUniqueGenerator(t *testing.T) {
 	}{
 		{
 			"Generate 3 unique container numbers with random serial numbers",
-			NewUniqueGeneratorBuilder().
-				Rand(r).
+			NewUniqueGeneratorBuilder(r).
 				OwnerCodes([]string{"ABC"}).
 				Count(3),
 			false,
@@ -164,7 +150,7 @@ func TestUniqueGenerator(t *testing.T) {
 		},
 		{
 			"Generate 1 container number",
-			NewUniqueGeneratorBuilder().
+			NewUniqueGeneratorBuilder(r).
 				OwnerCodes([]string{"ABC"}).
 				Count(3).
 				Start(1).
@@ -174,7 +160,7 @@ func TestUniqueGenerator(t *testing.T) {
 		},
 		{
 			"Generate 3 unique container numbers with sequential serial numbers and start 1",
-			NewUniqueGeneratorBuilder().
+			NewUniqueGeneratorBuilder(r).
 				OwnerCodes([]string{"ABC"}).
 				Count(3).
 				Start(1),
@@ -183,7 +169,7 @@ func TestUniqueGenerator(t *testing.T) {
 		},
 		{
 			"Generate 4 unique container numbers with sequential serial numbers and end 2",
-			NewUniqueGeneratorBuilder().
+			NewUniqueGeneratorBuilder(r).
 				OwnerCodes([]string{"ABC"}).
 				Count(4).
 				End(2),
@@ -192,7 +178,7 @@ func TestUniqueGenerator(t *testing.T) {
 		},
 		{
 			"Generate 5 unique container numbers with sequential serial numbers and start 1 and end 5",
-			NewUniqueGeneratorBuilder().
+			NewUniqueGeneratorBuilder(r).
 				OwnerCodes([]string{"ABC"}).
 				Start(1).
 				End(5),
@@ -201,7 +187,7 @@ func TestUniqueGenerator(t *testing.T) {
 		},
 		{
 			"Generate 6 unique container numbers with sequential serial numbers and start 999997 and end 2",
-			NewUniqueGeneratorBuilder().
+			NewUniqueGeneratorBuilder(r).
 				OwnerCodes([]string{"ABC"}).
 				Start(999997).
 				End(2),
@@ -210,7 +196,7 @@ func TestUniqueGenerator(t *testing.T) {
 		},
 		{
 			"Generate 1 unique container numbers with sequential serial numbers and exclude possible transposition errors",
-			NewUniqueGeneratorBuilder().
+			NewUniqueGeneratorBuilder(r).
 				OwnerCodes([]string{"ABC"}).
 				Start(801743).
 				Count(1).
@@ -220,8 +206,7 @@ func TestUniqueGenerator(t *testing.T) {
 		},
 		{
 			"Generate 2000001 unique container numbers with random serial numbers",
-			NewUniqueGeneratorBuilder().
-				Rand(r).
+			NewUniqueGeneratorBuilder(r).
 				OwnerCodes([]string{"AAA", "AAB", "ABB"}).
 				Count(2000001),
 

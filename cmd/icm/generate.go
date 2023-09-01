@@ -100,7 +100,7 @@ icm generate --count 1000000 | icm validate`,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			config.Overwrite(cmd.Flags())
 
-			builder := cont.NewUniqueGeneratorBuilder().
+			builder := cont.NewUniqueGeneratorBuilder(r).
 				Count(count).
 				ExcludeCheckDigit10(excludeCheckDigit10).
 				ExcludeTranspositionErr(excludeTranspositionErr)
@@ -111,16 +111,12 @@ icm generate --count 1000000 | icm validate`,
 				builder.OwnerCodes(ownerDecoder.GetAllOwnerCodes())
 			}
 
-			if cmd.Flags().Changed("start") || cmd.Flags().Changed("end") {
-				if cmd.Flags().Changed("start") {
-					builder.Start(startValue.value)
-				}
+			if cmd.Flags().Changed("start") {
+				builder.Start(startValue.value)
+			}
 
-				if cmd.Flags().Changed("end") {
-					builder.End(endValue.value)
-				}
-			} else {
-				builder.Rand(r)
+			if cmd.Flags().Changed("end") {
+				builder.End(endValue.value)
 			}
 
 			generator, err := builder.Build()

@@ -22,8 +22,9 @@ type GeneratorBuilder struct {
 // NewUniqueGeneratorBuilder returns a new random unique container number generator.
 // If possible maximum unique container numbers are exceeded, count is less than 1 or
 // no owner codes are passed then nil and error is returned.
-func NewUniqueGeneratorBuilder() *GeneratorBuilder {
+func NewUniqueGeneratorBuilder(rand *rand.Rand) *GeneratorBuilder {
 	return &GeneratorBuilder{
+		rand:  rand,
 		count: 1,
 		start: -1,
 		end:   -1,
@@ -51,12 +52,6 @@ func (gb *GeneratorBuilder) Start(start int) *GeneratorBuilder {
 // End sets the end of serial number range.
 func (gb *GeneratorBuilder) End(end int) *GeneratorBuilder {
 	gb.end = end
-	return gb
-}
-
-// Rand sets random number generator. This is needed if Start and End are not set.
-func (gb *GeneratorBuilder) Rand(rand *rand.Rand) *GeneratorBuilder {
-	gb.rand = rand
 	return gb
 }
 
@@ -94,7 +89,10 @@ func (gb *GeneratorBuilder) Build() (*UniqueGenerator, error) {
 	var serialNumIt serialNumIt
 	var count int
 
-	if gb.start > -1 && gb.end > -1 {
+	startIsSet := gb.start > -1
+	endIsSet := gb.end > -1
+
+	if startIsSet && endIsSet {
 		serialNumIt = newSeqSerialNumIt(gb.start)
 		if gb.start <= gb.end {
 			count = gb.end + 1 - gb.start
@@ -103,20 +101,17 @@ func (gb *GeneratorBuilder) Build() (*UniqueGenerator, error) {
 		}
 	}
 
-	if gb.start > -1 && gb.end == -1 {
+	if startIsSet && !endIsSet {
 		serialNumIt = newSeqSerialNumIt(gb.start)
 		count = gb.count
 	}
 
-	if gb.end > -1 && gb.start == -1 {
+	if !startIsSet && endIsSet {
 		serialNumIt = newSeqSerialNumIt(gb.end + 1 - gb.count)
 		count = gb.count
 	}
 
-	if gb.start == -1 && gb.end == -1 {
-		if gb.rand == nil {
-			return nil, errors.New("random number generator not set")
-		}
+	if !startIsSet && !endIsSet {
 		if gb.count < 1 {
 			return nil, fmt.Errorf("count %d is lower than minimum count 1", gb.count)
 		}

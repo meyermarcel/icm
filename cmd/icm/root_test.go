@@ -24,7 +24,7 @@ func (dummyOwnerDecoder) Decode(code string) (bool, cont.Owner) {
 type dummyOwnerUpdater struct{}
 
 func (dummyOwnerUpdater) GetAllOwnerCodes() []string {
-	return []string{"RAN"}
+	return []string{"NAR", "RAN"}
 }
 
 func (dummyOwnerUpdater) Update([]cont.Owner) error {
