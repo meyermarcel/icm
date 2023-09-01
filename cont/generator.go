@@ -99,19 +99,13 @@ func (gb *GeneratorBuilder) Build() (*UniqueGenerator, error) {
 		} else {
 			count = gb.end + 1000000 + 1 - gb.start
 		}
-	}
-
-	if startIsSet && !endIsSet {
+	} else if startIsSet && !endIsSet {
 		serialNumIt = newSeqSerialNumIt(gb.start)
 		count = gb.count
-	}
-
-	if !startIsSet && endIsSet {
+	} else if !startIsSet && endIsSet {
 		serialNumIt = newSeqSerialNumIt(gb.end + 1 - gb.count)
 		count = gb.count
-	}
-
-	if !startIsSet && !endIsSet {
+	} else if !startIsSet && !endIsSet {
 		if gb.count < 1 {
 			return nil, fmt.Errorf("count %d is lower than minimum count 1", gb.count)
 		}
