@@ -10,13 +10,13 @@ import (
 
 	"github.com/mattn/go-isatty"
 
-	"github.com/logrusorgru/aurora/v3"
+	"github.com/logrusorgru/aurora/v4"
 )
 
-var au aurora.Aurora
+var au *aurora.Aurora
 
 func init() {
-	au = aurora.NewAurora(os.Getenv("NO_COLOR") == "" && isatty.IsTerminal(os.Stdout.Fd()))
+	au = aurora.New(aurora.WithColors(os.Getenv("NO_COLOR") == "" && isatty.IsTerminal(os.Stdout.Fd())))
 }
 
 // FancyPrinter prints inputs in a fancy manner. Use NewFancyPrinterFactory to instantiate one.

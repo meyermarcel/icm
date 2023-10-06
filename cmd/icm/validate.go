@@ -11,7 +11,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/logrusorgru/aurora/v3"
+	"github.com/logrusorgru/aurora/v4"
 	"github.com/mattn/go-isatty"
 	"github.com/meyermarcel/icm/configs"
 	"github.com/meyermarcel/icm/cont"
@@ -20,10 +20,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var au aurora.Aurora
+var au *aurora.Aurora
 
 func init() {
-	au = aurora.NewAurora(os.Getenv("NO_COLOR") == "" && isatty.IsTerminal(os.Stdout.Fd()))
+	au = aurora.New(aurora.WithColors(os.Getenv("NO_COLOR") == "" && isatty.IsTerminal(os.Stdout.Fd())))
 }
 
 type validateError struct {
