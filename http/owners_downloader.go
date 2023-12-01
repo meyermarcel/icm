@@ -135,7 +135,7 @@ func nextTdSibling(td *html.Node) *html.Node {
 	return nil
 }
 
-// Copied from Wikipedia "ISO 3166-1 alpha-2" and manually adjusted
+// Copied from Wikipedia "ISO 3166-1 alpha-2" and manually adjusted.
 var countryCodeMap = map[string]string{
 	"AD": "Andorra",
 	"AE": "United Arab Emirates",

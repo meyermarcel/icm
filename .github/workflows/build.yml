@@ -28,7 +28,7 @@ jobs:
       - name: Lint
         uses: golangci/golangci-lint-action@v3
         with:
-          # Optional: version of golangci-lint to use in form of v1.2 or v1.2.3 or `latest` to use the latest version
+          # Require: The version of golangci-lint to use.
           version: latest
 
       - name: Test and build

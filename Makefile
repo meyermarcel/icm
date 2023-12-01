@@ -23,7 +23,8 @@ test: init-csv
 
 .PHONY: lint
 lint: init-csv
-	golangci-lint run --enable revive --enable gofumpt --enable errorlint --enable godot --enable errname
+# See .golangci.yml
+	golangci-lint run
 
 .PHONY: build
 build: init-csv
