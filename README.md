@@ -94,7 +94,7 @@ See the [`doc` command](docs/icm_doc.md) for **manual pages** and **markdown**.
 
 1. Dry run with `goreleaser`
     ```
-    goreleaser release --clean --skip-validate --skip-publish
+    goreleaser release --clean --skip=validate --skip=publish
     ```
 
 1. Create version tag according to [SemVer](https://semver.org)
