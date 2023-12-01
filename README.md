@@ -43,32 +43,32 @@ See the [`doc` command](docs/icm_doc.md) for **manual pages** and **markdown**.
 
 1. Fork it
 
-1. Download your fork
+2. Download your fork
     ```
     git clone https://github.com/github_username/icm && cd icm
     ```
 
-1. Create your feature branch
+3. Create your feature branch
     ```
     git checkout -b my-new-feature
     ```
 
-1. Make changes and add them
+4. Make changes and add them
     ```
     git add .
     ```
 
-1. Commit your changes
+5. Commit your changes
     ```
     git commit -m 'Add some feature'
     ```
 
-1. Push to the branch
+6. Push to the branch
     ```
     git push origin my-new-feature
     ```
 
-1. Create new pull request
+7. Create new pull request
 
 ## Development
 
@@ -76,9 +76,9 @@ See the [`doc` command](docs/icm_doc.md) for **manual pages** and **markdown**.
     * [Golang 1.21.x](https://golang.org/doc/install)
     * [golangci-lint latest version](https://github.com/golangci/golangci-lint#install)
     * [GNU Make 4.x.x](https://www.gnu.org/software/make/)
-    * gufumpt -> `go install mvdan.cc/gofumpt@latest`
+    * gofumpt -> `go install mvdan.cc/gofumpt@latest`
 
-1. To build project execute
+2. To build project execute
     ```
     make
     ```
@@ -97,12 +97,12 @@ See the [`doc` command](docs/icm_doc.md) for **manual pages** and **markdown**.
     goreleaser release --clean --skip=validate --skip=publish
     ```
 
-1. Create version tag according to [SemVer](https://semver.org)
+2. Create version tag according to [SemVer](https://semver.org)
     ```
     git tag 'x.y.z'
     ```
 
-1. Push tag and let GitHub Actions and Goreleaser do the work
+3. Push tag and let GitHub Actions and Goreleaser do the work
     ```
     git push --tags
     ```
