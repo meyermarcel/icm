@@ -93,9 +93,17 @@ func codeInvalidLength() io.Reader {
                 <span class="hideOnDesktop tdHeading">Company:</span>
                 <span>A Company</span>
             </td>
+            <td class="flexMobile align-items-center">
+                <span class="hideOnDesktop tdHeading">Address:</span>
+                <span>6 KAUFMAN STREET 16TH FLOOR</span>
+            </td>
 			<td class="flexMobile align-items-center">
                 <span class="hideOnDesktop tdHeading">City:</span>
                 <span>A City</span>
+            </td>
+            <td class="flexMobile align-items-center">
+                <span class="hideOnDesktop tdHeading">Zip:</span>
+                <span>68012</span>
             </td>
 			<td class="flexMobile align-items-center">
                 <span class="hideOnDesktop tdHeading">Country:</span>
@@ -121,8 +129,12 @@ func missingTdTags() io.Reader {
             <span>AAAU</span>
             <span class="hideOnDesktop tdHeading">Company:</span>
             <span>A Company</span>
+            <span class="hideOnDesktop tdHeading">Address:</span>
+            <span>An address</span>
             <span class="hideOnDesktop tdHeading">City:</span>
-            <span>A City</span>
+            <span>A zip code</span>
+            <span class="hideOnDesktop tdHeading">Zip:</span>
+            <span>An address</span>
             <span class="hideOnDesktop tdHeading">Country:</span>
             <span>A Country</span>
             <span class="hideOnDesktop tdHeading">Details:</span>
@@ -159,9 +171,17 @@ func validBody() io.Reader {
                 <span class="hideOnDesktop tdHeading">Company:</span>
                 <span>A Company</span>
             </td>
+            <td class="flexMobile align-items-center">
+                <span class="hideOnDesktop tdHeading">Address:</span>
+                <span>6 KAUFMAN STREET 16TH FLOOR</span>
+            </td>
 			<td class="flexMobile align-items-center">
                 <span class="hideOnDesktop tdHeading">City:</span>
                 <span>A City</span>
+            </td>
+            <td class="flexMobile align-items-center">
+                <span class="hideOnDesktop tdHeading">Zip:</span>
+                <span>68012</span>
             </td>
 			<td class="flexMobile align-items-center">
                 <span class="hideOnDesktop tdHeading">Country:</span>
@@ -181,9 +201,17 @@ func validBody() io.Reader {
                 <span class="hideOnDesktop tdHeading">Company:</span>
                 <span></span>
             </td>
+            <td class="flexMobile align-items-center">
+                <span class="hideOnDesktop tdHeading">Address:</span>
+                <span>6 KAUFMAN STREET 16TH FLOOR</span>
+            </td>
 			<td class="flexMobile align-items-center">
                 <span class="hideOnDesktop tdHeading">City:</span>
                 <span>B City</span>
+            </td>
+            <td class="flexMobile align-items-center">
+                <span class="hideOnDesktop tdHeading">Zip:</span>
+                <span>68012</span>
             </td>
 			<td class="flexMobile align-items-center">
                 <span class="hideOnDesktop tdHeading">Country:</span>
@@ -203,9 +231,17 @@ func validBody() io.Reader {
                 <span class="hideOnDesktop tdHeading">Company:</span>
                 <span>C Company</span>
             </td>
+            <td class="flexMobile align-items-center">
+                <span class="hideOnDesktop tdHeading">Address:</span>
+                <span>6 KAUFMAN STREET 16TH FLOOR</span>
+            </td>
 			<td class="flexMobile align-items-center">
                 <span class="hideOnDesktop tdHeading">City:</span>
                 <span></span>
+            </td>
+            <td class="flexMobile align-items-center">
+                <span class="hideOnDesktop tdHeading">Zip:</span>
+                <span>68012</span>
             </td>
 			<td class="flexMobile align-items-center">
                 <span class="hideOnDesktop tdHeading">Country:</span>
@@ -225,9 +261,17 @@ func validBody() io.Reader {
                 <span class="hideOnDesktop tdHeading">Company:</span>
                 <span>D Company</span>
             </td>
+            <td class="flexMobile align-items-center">
+                <span class="hideOnDesktop tdHeading">Address:</span>
+                <span>6 KAUFMAN STREET 16TH FLOOR</span>
+            </td>
 			<td class="flexMobile align-items-center">
                 <span class="hideOnDesktop tdHeading">City:</span>
                 <span>D City</span>
+            </td>
+            <td class="flexMobile align-items-center">
+                <span class="hideOnDesktop tdHeading">Zip:</span>
+                <span>68012</span>
             </td>
 			<td class="flexMobile align-items-center">
                 <span class="hideOnDesktop tdHeading">Country:</span>
