@@ -26,8 +26,8 @@ func TestCheckTransposition(t *testing.T) {
 				checkDigit: 10,
 			},
 			want: []Number{
-				newNum("CMA", "U", "169312", 0),
-				newNum("CMA", "U", "163192", 0),
+				{"CMA", "U", "169312", 0},
+				{"CMA", "U", "163192", 0},
 			},
 		},
 		{
@@ -39,7 +39,7 @@ func TestCheckTransposition(t *testing.T) {
 				checkDigit: 0,
 			},
 			want: []Number{
-				newNum("RCB", "U", "010130", 0),
+				{"RCB", "U", "010130", 0},
 			},
 		},
 		{
@@ -51,9 +51,9 @@ func TestCheckTransposition(t *testing.T) {
 				checkDigit: 10,
 			},
 			want: []Number{
-				newNum("WSL", "U", "810743", 0),
-				newNum("WSL", "U", "807143", 0),
-				newNum("WSL", "U", "801740", 3),
+				{"WSL", "U", "810743", 0},
+				{"WSL", "U", "807143", 0},
+				{"WSL", "U", "801740", 3},
 			},
 		},
 		{
@@ -65,12 +65,12 @@ func TestCheckTransposition(t *testing.T) {
 				checkDigit: 10,
 			},
 			want: []Number{
-				newNum("APL", "U", "869473", 0),
-				newNum("APL", "U", "698473", 0),
-				newNum("APL", "U", "684973", 0),
-				newNum("APL", "U", "689743", 0),
-				newNum("APL", "U", "689437", 0),
-				newNum("APL", "U", "689470", 3),
+				{"APL", "U", "869473", 0},
+				{"APL", "U", "698473", 0},
+				{"APL", "U", "684973", 0},
+				{"APL", "U", "689743", 0},
+				{"APL", "U", "689437", 0},
+				{"APL", "U", "689470", 3},
 			},
 		},
 	}

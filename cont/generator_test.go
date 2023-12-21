@@ -226,15 +226,15 @@ func TestUniqueGenerator(t *testing.T) {
 			diff := 0
 			contNumbers := map[string]bool{}
 			for g.Generate() {
-				number, _ := strconv.Atoi(g.ContNum().serialNumber)
+				number, _ := strconv.Atoi(g.ContNumFmt().serialNumber)
 				if number < 0 || number > 999999 {
 					t.Errorf("UniqueGenerator.Generate() generated a serial number out of range, %v", number)
 					return
 				}
 				diff += ((lastNum + 1) % 1000000) - (number)
 				lastNum = number
-				contNum := g.ContNum()
-				contNumbers[contNum.String()] = true
+				contNumFmt := g.ContNumFmt()
+				contNumbers[contNumFmt.String()] = true
 			}
 
 			if tt.seqSerialNum && diff != 0 {

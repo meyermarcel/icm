@@ -530,9 +530,11 @@ func newCheckDigitInput(config *configs.Config) func() input.Input {
 					builder := strings.Builder{}
 
 					for idx, contNum := range transposedContNums {
-						contNum.SetSeparators(config.SepOE(), config.SepES(), config.SepSC())
-						infos = append(infos, input.Info{Text: fmt.Sprintf("  %s", &contNum)})
-						builder.WriteString(contNum.String())
+						contNumFmt := cont.NumberFmt{
+							Number: contNum, SepOE: config.SepOE(), SepES: config.SepES(), SepSC: config.SepSC(),
+						}
+						infos = append(infos, input.Info{Text: fmt.Sprintf("  %s", &contNumFmt)})
+						builder.WriteString(contNumFmt.String())
 						if idx < len(transposedContNums)-1 {
 							builder.WriteString(", ")
 						}

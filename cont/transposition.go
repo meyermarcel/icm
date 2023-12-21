@@ -22,14 +22,14 @@ func CheckTransposition(ownerCode string, equipCatID string, serialNum string, c
 				"%s%c%c%s", serialNum[:pos], serialNum[pos+1], serialNum[pos], serialNum[pos+2:])
 			calcCheckDigit := CalcCheckDigit(ownerCode, equipCatID, transposedSerialNum) % 10
 			if checkDigit == calcCheckDigit {
-				contNums = append(contNums, newNum(ownerCode, equipCatID, transposedSerialNum, calcCheckDigit))
+				contNums = append(contNums, Number{ownerCode, equipCatID, transposedSerialNum, calcCheckDigit})
 			}
 		} else if pos == 5 && int(serialNum[pos]-'0') != checkDigit {
 			transposedSerialNum := serialNum[:5] + strconv.Itoa(checkDigit)
 			transposedCheckDigit := CalcCheckDigit(ownerCode, equipCatID, transposedSerialNum) % 10
 			lastSerialDigit := int(serialNum[5] - '0')
 			if lastSerialDigit == transposedCheckDigit {
-				contNums = append(contNums, newNum(ownerCode, equipCatID, transposedSerialNum, lastSerialDigit))
+				contNums = append(contNums, Number{ownerCode, equipCatID, transposedSerialNum, lastSerialDigit})
 			}
 		}
 	}
