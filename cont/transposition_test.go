@@ -8,8 +8,8 @@ import (
 func TestCheckTransposition(t *testing.T) {
 	type args struct {
 		ownerCode  string
-		equipCatID string
-		serialNum  string
+		equipCatID rune
+		serialNum  int
 		checkDigit int
 	}
 	tests := []struct {
@@ -21,56 +21,56 @@ func TestCheckTransposition(t *testing.T) {
 			name: "Test CMA U 163912 (1)0",
 			args: args{
 				ownerCode:  "CMA",
-				equipCatID: "U",
-				serialNum:  "163912",
+				equipCatID: 'U',
+				serialNum:  163912,
 				checkDigit: 10,
 			},
 			want: []Number{
-				{"CMA", "U", "169312", 0},
-				{"CMA", "U", "163192", 0},
+				{"CMA", 'U', 169312, 0},
+				{"CMA", 'U', 163192, 0},
 			},
 		},
 		{
 			name: "Test RCB U 001130 0",
 			args: args{
 				ownerCode:  "RCB",
-				equipCatID: "U",
-				serialNum:  "001130",
+				equipCatID: 'U',
+				serialNum:  1130,
 				checkDigit: 0,
 			},
 			want: []Number{
-				{"RCB", "U", "010130", 0},
+				{"RCB", 'U', 10130, 0},
 			},
 		},
 		{
 			name: "Test WSL U 801743 (1)0",
 			args: args{
 				ownerCode:  "WSL",
-				equipCatID: "U",
-				serialNum:  "801743",
+				equipCatID: 'U',
+				serialNum:  801743,
 				checkDigit: 10,
 			},
 			want: []Number{
-				{"WSL", "U", "810743", 0},
-				{"WSL", "U", "807143", 0},
-				{"WSL", "U", "801740", 3},
+				{"WSL", 'U', 810743, 0},
+				{"WSL", 'U', 807143, 0},
+				{"WSL", 'U', 801740, 3},
 			},
 		},
 		{
 			name: "Test APL U 689473 (1)0",
 			args: args{
 				ownerCode:  "APL",
-				equipCatID: "U",
-				serialNum:  "689473",
+				equipCatID: 'U',
+				serialNum:  689473,
 				checkDigit: 10,
 			},
 			want: []Number{
-				{"APL", "U", "869473", 0},
-				{"APL", "U", "698473", 0},
-				{"APL", "U", "684973", 0},
-				{"APL", "U", "689743", 0},
-				{"APL", "U", "689437", 0},
-				{"APL", "U", "689470", 3},
+				{"APL", 'U', 869473, 0},
+				{"APL", 'U', 698473, 0},
+				{"APL", 'U', 684973, 0},
+				{"APL", 'U', 689743, 0},
+				{"APL", 'U', 689437, 0},
+				{"APL", 'U', 689470, 3},
 			},
 		},
 	}
@@ -80,5 +80,11 @@ func TestCheckTransposition(t *testing.T) {
 				t.Errorf("CheckTransposition() = %v, want %v", got, tt.want)
 			}
 		})
+	}
+}
+
+func BenchmarkCalcCheckTransposition(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		CheckTransposition("APL", 'U', 689473, 10)
 	}
 }

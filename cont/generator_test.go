@@ -3,7 +3,6 @@ package cont
 import (
 	"math/rand"
 	"reflect"
-	"strconv"
 	"testing"
 )
 
@@ -226,7 +225,7 @@ func TestUniqueGenerator(t *testing.T) {
 			diff := 0
 			contNumbers := map[string]bool{}
 			for g.Generate() {
-				number, _ := strconv.Atoi(g.ContNumFmt().serialNumber)
+				number := g.ContNumFmt().serialNumber
 				if number < 0 || number > 999999 {
 					t.Errorf("UniqueGenerator.Generate() generated a serial number out of range, %v", number)
 					return

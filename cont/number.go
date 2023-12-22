@@ -7,8 +7,8 @@ import (
 // Number is a container number with needed properties to conform to the specified standard.
 type Number struct {
 	ownerCode    string
-	equipCatID   string
-	serialNumber string
+	equipCatID   rune
+	serialNumber int
 	checkDigit   int
 }
 
@@ -18,9 +18,9 @@ type NumberFmt struct {
 }
 
 func (cn *NumberFmt) String() string {
-	return fmt.Sprintf("%s%s%s%s%s%s%d",
+	return fmt.Sprintf("%s%s%s%s%06d%s%d",
 		cn.ownerCode, cn.SepOE,
-		cn.equipCatID, cn.SepES,
+		string(cn.equipCatID), cn.SepES,
 		cn.serialNumber, cn.SepSC,
 		cn.checkDigit)
 }

@@ -10,6 +10,7 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+	"unicode/utf8"
 
 	"github.com/logrusorgru/aurora/v4"
 	"github.com/mattn/go-isatty"
@@ -490,7 +491,9 @@ func newCheckDigitInput(config *configs.Config) func() input.Input {
 						}
 				}
 
-				checkDigit := cont.CalcCheckDigit(previousValues[2], previousValues[1], previousValues[0])
+				serialNum, _ := strconv.Atoi(previousValues[0])
+				equipCatID, _ := utf8.DecodeRuneInString(previousValues[1])
+				checkDigit := cont.CalcCheckDigit(previousValues[2], equipCatID, serialNum)
 
 				infos := appendCheckDigit10Info(checkDigit, nil)
 
@@ -523,7 +526,7 @@ func newCheckDigitInput(config *configs.Config) func() input.Input {
 						}
 				}
 
-				transposedContNums := cont.CheckTransposition(previousValues[2], previousValues[1], previousValues[0], checkDigit)
+				transposedContNums := cont.CheckTransposition(previousValues[2], equipCatID, serialNum, checkDigit)
 
 				if len(transposedContNums) != 0 {
 					infos = append(infos, input.Info{Text: "Possible transposition errors:"})

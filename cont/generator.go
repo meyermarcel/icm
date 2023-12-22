@@ -160,9 +160,9 @@ func (g *UniqueGenerator) Generate() bool {
 		return false
 	}
 
-	code := g.codes[(g.serialNumIt.num()+g.ownerOffset)%g.lenCodes]
-	serialNum := fmt.Sprintf("%06d", g.serialNumIt.num())
-	checkDigit := CalcCheckDigit(code, "U", serialNum)
+	serialNum := g.serialNumIt.num()
+	code := g.codes[(serialNum+g.ownerOffset)%g.lenCodes]
+	checkDigit := CalcCheckDigit(code, 'U', serialNum)
 
 	if g.serialNumIt.isLast() {
 		g.ownerOffset++
@@ -172,10 +172,10 @@ func (g *UniqueGenerator) Generate() bool {
 	if g.exclCheckDigit10 && checkDigit == 10 {
 		return g.Generate()
 	}
-	if g.exclTranspositionErr && len(CheckTransposition(code, "U", serialNum, checkDigit)) > 0 {
+	if g.exclTranspositionErr && len(CheckTransposition(code, 'U', serialNum, checkDigit)) > 0 {
 		return g.Generate()
 	}
-	g.contNum = Number{code, "U", serialNum, checkDigit % 10}
+	g.contNum = Number{code, 'U', serialNum, checkDigit % 10}
 	g.generatedCount++
 
 	return true
