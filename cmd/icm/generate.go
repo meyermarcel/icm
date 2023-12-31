@@ -14,6 +14,30 @@ import (
 	"github.com/spf13/cobra"
 )
 
+type countValue struct {
+	value int
+}
+
+func (r *countValue) String() string {
+	return strconv.Itoa(r.value)
+}
+
+func (r *countValue) Set(value string) error {
+	count, err := strconv.Atoi(value)
+	if err != nil {
+		return err
+	}
+	if count < 1 {
+		return fmt.Errorf("%d is not greater than 0", count)
+	}
+	r.value = count
+	return nil
+}
+
+func (*countValue) Type() string {
+	return "int"
+}
+
 type ownerValue struct {
 	value string
 }
@@ -59,7 +83,7 @@ func (*serialNumValue) Type() string {
 }
 
 func newGenerateCmd(writer, writerErr io.Writer, config *configs.Config, ownerDecoder data.OwnerDecoder, r *rand.Rand) *cobra.Command {
-	var count int
+	count := countValue{value: 1}
 	startValue := serialNumValue{}
 	endValue := serialNumValue{}
 	ownerValue := ownerValue{}
@@ -101,7 +125,7 @@ icm generate --count 1000000 | icm validate`,
 			config.Overwrite(cmd.Flags())
 
 			builder := cont.NewUniqueGeneratorBuilder(r).
-				Count(count).
+				Count(count.value).
 				ExcludeCheckDigit10(excludeCheckDigit10).
 				ExcludeTranspositionErr(excludeTranspositionErr).
 				Separators(config.SepOE(), config.SepES(), config.SepSC())
@@ -135,7 +159,7 @@ icm generate --count 1000000 | icm validate`,
 
 	generateCmd.Flags().SortFlags = false
 
-	generateCmd.Flags().IntVarP(&count, "count", "c", 1, "count of container numbers")
+	generateCmd.Flags().VarP(&count, "count", "c", "count of container numbers")
 	generateCmd.Flags().VarP(&startValue, "start", "s", "start of serial number range")
 	generateCmd.Flags().VarP(&endValue, "end", "e", "end of serial number range")
 	generateCmd.Flags().Var(&ownerValue, "owner", "custom owner code")

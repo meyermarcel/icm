@@ -76,6 +76,10 @@ func (gb *GeneratorBuilder) ExcludeTranspositionErr(exclude bool) *GeneratorBuil
 
 // Build returns a new UniqueGenerator if all requirements are met.
 func (gb *GeneratorBuilder) Build() (*UniqueGenerator, error) {
+	if gb.count < 1 {
+		return nil, fmt.Errorf("count %d is lower than minimum count 1", gb.count)
+	}
+
 	lenCodes := len(gb.codes)
 
 	if lenCodes < 1 {
@@ -113,9 +117,6 @@ func (gb *GeneratorBuilder) Build() (*UniqueGenerator, error) {
 		serialNumIt = newSeqSerialNumIt(gb.end + 1 - gb.count)
 		count = gb.count
 	} else if !startIsSet && !endIsSet {
-		if gb.count < 1 {
-			return nil, fmt.Errorf("count %d is lower than minimum count 1", gb.count)
-		}
 		serialNumIt = newRandSerialNumIt(gb.rand.Int())
 		count = gb.count
 	}

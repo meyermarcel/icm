@@ -99,10 +99,20 @@ func TestGeneratorBuilder(t *testing.T) {
 			true,
 		},
 		{
-			"Build returns error for count less than zero",
+			"Build returns error for count less than 1",
 			fields{
 				codes:      []string{"ABC"},
 				rangeStart: -1,
+				rangeEnd:   -1,
+			},
+			nil,
+			true,
+		},
+		{
+			"Build returns error for count less than 1 and positive start",
+			fields{
+				codes:      []string{"ABC"},
+				rangeStart: 1,
 				rangeEnd:   -1,
 			},
 			nil,
