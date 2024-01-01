@@ -15,7 +15,7 @@ func TestCheckTransposition(t *testing.T) {
 	tests := []struct {
 		name string
 		args args
-		want []Number
+		want []TpNumber
 	}{
 		{
 			name: "Test CMA U 163912 (1)0",
@@ -25,9 +25,9 @@ func TestCheckTransposition(t *testing.T) {
 				serialNum:  163912,
 				checkDigit: 10,
 			},
-			want: []Number{
-				{"CMA", 'U', 169312, 0},
-				{"CMA", 'U', 163192, 0},
+			want: []TpNumber{
+				{Number{"CMA", 'U', 169312, 0}, 2},
+				{Number{"CMA", 'U', 163192, 0}, 3},
 			},
 		},
 		{
@@ -38,8 +38,8 @@ func TestCheckTransposition(t *testing.T) {
 				serialNum:  1130,
 				checkDigit: 0,
 			},
-			want: []Number{
-				{"RCB", 'U', 10130, 0},
+			want: []TpNumber{
+				{Number{"RCB", 'U', 10130, 0}, 1},
 			},
 		},
 		{
@@ -50,10 +50,10 @@ func TestCheckTransposition(t *testing.T) {
 				serialNum:  801743,
 				checkDigit: 10,
 			},
-			want: []Number{
-				{"WSL", 'U', 810743, 0},
-				{"WSL", 'U', 807143, 0},
-				{"WSL", 'U', 801740, 3},
+			want: []TpNumber{
+				{Number{"WSL", 'U', 810743, 0}, 1},
+				{Number{"WSL", 'U', 807143, 0}, 2},
+				{Number{"WSL", 'U', 801740, 3}, 5},
 			},
 		},
 		{
@@ -64,13 +64,13 @@ func TestCheckTransposition(t *testing.T) {
 				serialNum:  689473,
 				checkDigit: 10,
 			},
-			want: []Number{
-				{"APL", 'U', 869473, 0},
-				{"APL", 'U', 698473, 0},
-				{"APL", 'U', 684973, 0},
-				{"APL", 'U', 689743, 0},
-				{"APL", 'U', 689437, 0},
-				{"APL", 'U', 689470, 3},
+			want: []TpNumber{
+				{Number{"APL", 'U', 869473, 0}, 0},
+				{Number{"APL", 'U', 698473, 0}, 1},
+				{Number{"APL", 'U', 684973, 0}, 2},
+				{Number{"APL", 'U', 689743, 0}, 3},
+				{Number{"APL", 'U', 689437, 0}, 4},
+				{Number{"APL", 'U', 689470, 3}, 5},
 			},
 		},
 	}

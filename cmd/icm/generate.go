@@ -127,8 +127,7 @@ icm generate --count 1000000 | icm validate`,
 			builder := cont.NewUniqueGeneratorBuilder(r).
 				Count(count.value).
 				ExcludeCheckDigit10(excludeCheckDigit10).
-				ExcludeTranspositionErr(excludeTranspositionErr).
-				Separators(config.SepOE(), config.SepES(), config.SepSC())
+				ExcludeTranspositionErr(excludeTranspositionErr)
 
 			if cmd.Flags().Changed("owner") {
 				builder.OwnerCodes([]string{ownerValue.value})
@@ -149,8 +148,12 @@ icm generate --count 1000000 | icm validate`,
 				return err
 			}
 			for generator.Generate() {
-				contNumber := generator.ContNumFmt()
-				_, err := io.WriteString(writer, fmt.Sprintf("%s\n", &contNumber))
+				cn := generator.ContNum()
+				_, err := io.WriteString(writer, fmt.Sprintf("%s%s%s%s%06d%s%d\n",
+					cn.OwnerCode, config.SepOE(),
+					string(cn.EquipCatID), config.SepES(),
+					cn.SerialNumber, config.SepSC(),
+					cn.CheckDigit))
 				writeErr(writerErr, err)
 			}
 			return nil

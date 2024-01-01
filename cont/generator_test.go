@@ -1,6 +1,7 @@
 package cont
 
 import (
+	"fmt"
 	"math/rand"
 	"reflect"
 	"testing"
@@ -235,15 +236,19 @@ func TestUniqueGenerator(t *testing.T) {
 			diff := 0
 			contNumbers := map[string]bool{}
 			for g.Generate() {
-				number := g.ContNumFmt().serialNumber
+				number := g.ContNum().SerialNumber
 				if number < 0 || number > 999999 {
 					t.Errorf("UniqueGenerator.Generate() generated a serial number out of range, %v", number)
 					return
 				}
 				diff += ((lastNum + 1) % 1000000) - (number)
 				lastNum = number
-				contNumFmt := g.ContNumFmt()
-				contNumbers[contNumFmt.String()] = true
+				cn := g.ContNum()
+				contNumbers[fmt.Sprintf("%s%s%06d%d\n",
+					cn.OwnerCode,
+					string(cn.EquipCatID),
+					cn.SerialNumber,
+					cn.CheckDigit)] = true
 			}
 
 			if tt.seqSerialNum && diff != 0 {

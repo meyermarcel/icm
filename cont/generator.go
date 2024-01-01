@@ -11,7 +11,6 @@ import (
 type GeneratorBuilder struct {
 	rand                 *rand.Rand
 	codes                []string
-	sepOE, sepES, sepSC  string
 	count                int
 	start                int
 	end                  int
@@ -34,12 +33,6 @@ func NewUniqueGeneratorBuilder(rand *rand.Rand) *GeneratorBuilder {
 // OwnerCodes sets the owner codes for generation.
 func (gb *GeneratorBuilder) OwnerCodes(codes []string) *GeneratorBuilder {
 	gb.codes = codes
-	return gb
-}
-
-// Separators sets the strings between owner code, equipment category ID, serial number and check digit.
-func (gb *GeneratorBuilder) Separators(sepOE, sepES, sepSC string) *GeneratorBuilder {
-	gb.sepOE, gb.sepES, gb.sepSC = sepOE, sepES, sepSC
 	return gb
 }
 
@@ -125,9 +118,6 @@ func (gb *GeneratorBuilder) Build() (*UniqueGenerator, error) {
 
 	return &UniqueGenerator{
 		codes:                gb.codes,
-		sepOE:                gb.sepOE,
-		sepES:                gb.sepES,
-		sepSC:                gb.sepSC,
 		lenCodes:             lenCodes,
 		serialNumIt:          sni,
 		count:                count,
@@ -140,7 +130,6 @@ func (gb *GeneratorBuilder) Build() (*UniqueGenerator, error) {
 // Use NewUniqueGeneratorBuilder for initialization.
 type UniqueGenerator struct {
 	codes                []string
-	sepOE, sepES, sepSC  string
 	lenCodes             int
 	ownerOffset          int
 	serialNumIt          serialNumIt
@@ -152,7 +141,7 @@ type UniqueGenerator struct {
 }
 
 // Generate advances the serial number iterator to the next serial number,
-// which will then be available through the ContNumFmt method. It returns false
+// which will then be available through the ContNum method. It returns false
 // when the generation stops by reaching the count of generated container numbers.
 func (g *UniqueGenerator) Generate() bool {
 	if g.generatedCount == g.count {
@@ -180,11 +169,9 @@ func (g *UniqueGenerator) Generate() bool {
 	return true
 }
 
-// ContNumFmt returns a generated container number with formatting.
-func (g *UniqueGenerator) ContNumFmt() NumberFmt {
-	return NumberFmt{
-		g.contNum, g.sepOE, g.sepES, g.sepSC,
-	}
+// ContNum returns a generated container number with formatting.
+func (g *UniqueGenerator) ContNum() Number {
+	return g.contNum
 }
 
 type serialNumIt interface {
