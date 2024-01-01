@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"math/rand"
-	"strings"
 )
 
 // GeneratorBuilder is the struct for the builder.
@@ -97,32 +96,31 @@ func (gb *GeneratorBuilder) Build() (*UniqueGenerator, error) {
 			gb.count, lenCodes*serialNums, lenCodes, serialNums)
 	}
 
-	var serialNumIt serialNumIt
+	var sni serialNumIt
 	var count int
 
 	startIsSet := gb.start > -1
 	endIsSet := gb.end > -1
 
 	if startIsSet && endIsSet {
-		serialNumIt = newSeqSerialNumIt(gb.start)
-		if gb.start <= gb.end {
-			count = gb.end + 1 - gb.start
-		} else {
-			count = gb.end + 1000000 + 1 - gb.start
+		sni = newSeqSerialNumIt(gb.start)
+		count = gb.end + 1 - gb.start
+		if gb.start > gb.end {
+			count += 1000000
 		}
 	} else if startIsSet && !endIsSet {
-		serialNumIt = newSeqSerialNumIt(gb.start)
+		sni = newSeqSerialNumIt(gb.start)
 		count = gb.count
 	} else if !startIsSet && endIsSet {
-		serialNumIt = newSeqSerialNumIt(gb.end + 1 - gb.count)
+		sni = newSeqSerialNumIt(gb.end + 1 - gb.count)
 		count = gb.count
 	} else if !startIsSet && !endIsSet {
-		serialNumIt = newRandSerialNumIt(gb.rand.Int())
+		sni = newRandSerialNumIt(gb.rand.Int())
 		count = gb.count
 	}
 
 	gb.rand.Shuffle(lenCodes, func(i, j int) {
-		gb.codes[i], gb.codes[j] = strings.ToUpper(gb.codes[j]), strings.ToUpper(gb.codes[i])
+		gb.codes[i], gb.codes[j] = gb.codes[j], gb.codes[i]
 	})
 
 	return &UniqueGenerator{
@@ -131,7 +129,7 @@ func (gb *GeneratorBuilder) Build() (*UniqueGenerator, error) {
 		sepES:                gb.sepES,
 		sepSC:                gb.sepSC,
 		lenCodes:             lenCodes,
-		serialNumIt:          serialNumIt,
+		serialNumIt:          sni,
 		count:                count,
 		exclCheckDigit10:     gb.exclCheckDigit10,
 		exclTranspositionErr: gb.exclTranspositionErr,
