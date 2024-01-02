@@ -95,19 +95,20 @@ func (gb *GeneratorBuilder) Build() (*UniqueGenerator, error) {
 	startIsSet := gb.start > -1
 	endIsSet := gb.end > -1
 
-	if startIsSet && endIsSet {
+	switch {
+	case startIsSet && endIsSet:
 		sni = newSeqSerialNumIt(gb.start)
 		count = gb.end + 1 - gb.start
 		if gb.start > gb.end {
 			count += 1000000
 		}
-	} else if startIsSet && !endIsSet {
+	case startIsSet && !endIsSet:
 		sni = newSeqSerialNumIt(gb.start)
 		count = gb.count
-	} else if !startIsSet && endIsSet {
+	case !startIsSet && endIsSet:
 		sni = newSeqSerialNumIt(gb.end + 1 - gb.count)
 		count = gb.count
-	} else if !startIsSet && !endIsSet {
+	case !startIsSet && !endIsSet:
 		sni = newRandSerialNumIt(gb.rand.Int())
 		count = gb.count
 	}
