@@ -557,12 +557,12 @@ func newCheckDigitInput(config *configs.Config) func() input.Input {
 							digitFmt = fmt.Sprintf("%d", tcn.CheckDigit)
 						}
 
-						contNumFmt := fmt.Sprintf("  %s%s%s%s%s%s%s",
+						contNumFmt := fmt.Sprintf("%s%s%s%s%s%s%s",
 							tcn.OwnerCode, config.SepOE(),
 							string(tcn.EquipCatID), config.SepES(),
 							serialNumberFmt, config.SepSC(),
 							digitFmt)
-						infos = append(infos, input.Info{Text: contNumFmt})
+						infos = append(infos, input.Info{Text: fmt.Sprintf("  %s", contNumFmt)})
 						builder.WriteString(contNumFmt)
 						if idx < len(transposedContNums)-1 {
 							builder.WriteString(", ")

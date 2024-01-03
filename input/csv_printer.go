@@ -58,5 +58,10 @@ func (cp *CSVPrinter) Print(inputs []Input) error {
 		}
 		cp.headerPrinted = true
 	}
-	return cp.csvWriter.Write(cp.record)
+	err := cp.csvWriter.Write(cp.record)
+	if err != nil {
+		return err
+	}
+	cp.csvWriter.Flush()
+	return nil
 }

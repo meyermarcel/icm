@@ -305,6 +305,35 @@ func Test_validateCmd(t *testing.T) {
 
 `,
 		},
+		{
+			"Validate ABC U 681304 0 with fancy output",
+			[]string{"ABC U 681304 0"},
+			[]configOverride{{configs.FlagNames.Pattern, containerNumber}},
+			false,
+			`
+  ABC U 681304 0  ✔
+   ↑  ↑        ↑
+   │  │        └─ Possible transposition errors:
+   │  │             ABC U 681034 0
+   │  │             ABC U 681340 0
+   │  │
+   │  └─ some-equip-cat-ID
+   │
+   └─ some-company
+      some-city
+      some-country
+
+`,
+		},
+		{
+			"Validate ABC U 681304 0 with csv output",
+			[]string{"ABC U 681304 0"},
+			[]configOverride{{configs.FlagNames.Output, "csv"}},
+			false,
+			`owner-code;company;city;country;equipment-category-id;equipment-category;serial-number;check-digit;calculated-check-digit;valid-check-digit;possible-transposition-error
+ABC;some-company;some-city;some-country;U;some-equip-cat-ID;681304;0;0;true;ABC U 681034 0, ABC U 681340 0
+`,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
