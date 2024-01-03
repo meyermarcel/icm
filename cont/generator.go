@@ -170,7 +170,7 @@ func (g *UniqueGenerator) Generate() bool {
 	return true
 }
 
-// ContNum returns a generated container number with formatting.
+// ContNum returns a generated container number.
 func (g *UniqueGenerator) ContNum() Number {
 	return g.contNum
 }
