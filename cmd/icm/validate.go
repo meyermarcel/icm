@@ -172,7 +172,7 @@ func newValidateCmd(stdin io.Reader, writer io.Writer, config *configs.Config, d
 For single line input a human-readable output is used.
 
 For multi line input CSV output is used. For example this is useful to scan
-data sets for possible transposition errors. It is also possible to generate
+data sets for error-prone serial numbers. It is also possible to generate
 CSV data sets of random container numbers.
 
 ` + sepHelp,
@@ -192,7 +192,7 @@ icm generate --count 10 | icm validate
 icm generate --count 10 | icm validate --output fancy
 # Generate CSV data set
 icm generate --count 1000000 | icm validate
-# Validate a container number with 6 (!) possible transposition errors
+# Validate a container number with 6 (!) error-prone serial numbers combinations
 icm validate APL U 689473 0`,
 		Args:              cobra.MaximumNArgs(6),
 		ValidArgsFunction: cobra.NoFileCompletions,
@@ -478,7 +478,7 @@ func newCheckDigitInput(config *configs.Config) func() input.Input {
 				checkDigitDatum := input.NewDatum("check-digit").WithValue(value)
 				calcCheckDigitDatum := input.NewDatum("calculated-check-digit")
 				validCheckDigit := input.NewDatum("valid-check-digit")
-				possibleTranspositionError := input.NewDatum("possible-transposition-error")
+				errorProneSerialNumbers := input.NewDatum("possible-transposition-error")
 				if len(strings.Join(previousValues[0:3], "")) != 10 {
 					return newValidateError(fmt.Sprintf("%s is not calculable",
 							au.Underline("check digit"))),
@@ -487,7 +487,7 @@ func newCheckDigitInput(config *configs.Config) func() input.Input {
 							checkDigitDatum,
 							calcCheckDigitDatum,
 							validCheckDigit.WithValue(fmt.Sprintf("%t", false)),
-							possibleTranspositionError,
+							errorProneSerialNumbers,
 						}
 				}
 
@@ -508,7 +508,7 @@ func newCheckDigitInput(config *configs.Config) func() input.Input {
 							checkDigitDatum,
 							calcCheckDigitDatum.WithValue(strconv.Itoa(checkDigit)),
 							validCheckDigit.WithValue(fmt.Sprintf("%t", false)),
-							possibleTranspositionError,
+							errorProneSerialNumbers,
 						}
 				}
 
@@ -522,14 +522,14 @@ func newCheckDigitInput(config *configs.Config) func() input.Input {
 							checkDigitDatum,
 							calcCheckDigitDatum.WithValue(strconv.Itoa(checkDigit)),
 							validCheckDigit.WithValue(fmt.Sprintf("%t", number == checkDigit%10)),
-							possibleTranspositionError,
+							errorProneSerialNumbers,
 						}
 				}
 
 				transposedContNums := cont.CheckTransposition(previousValues[2], equipCatID, serialNum, checkDigit)
 
 				if len(transposedContNums) != 0 {
-					infos = append(infos, input.Info{Text: "Possible transposition errors:"})
+					infos = append(infos, input.Info{Text: "Error-prone serial numbers:"})
 					builder := strings.Builder{}
 
 					for idx, tcn := range transposedContNums {
@@ -538,12 +538,12 @@ func newCheckDigitInput(config *configs.Config) func() input.Input {
 						serialNumberFmt := ""
 						for i := 0; i < len(serialNumber); i++ {
 							if i == tcn.Pos {
-								serialNumberFmt += fmt.Sprintf("%c", au.Red(serialNumber[i]))
+								serialNumberFmt += fmt.Sprintf("%c", au.Magenta(serialNumber[i]))
 								// last serial number digit
 								if i == len(serialNumber)-1 {
 									continue
 								}
-								serialNumberFmt += fmt.Sprintf("%c", au.Red(serialNumber[i+1]))
+								serialNumberFmt += fmt.Sprintf("%c", au.Magenta(serialNumber[i+1]))
 								i++
 							} else {
 								serialNumberFmt += fmt.Sprintf("%c", serialNumber[i])
@@ -552,7 +552,7 @@ func newCheckDigitInput(config *configs.Config) func() input.Input {
 
 						var digitFmt string
 						if tcn.Pos == 5 {
-							digitFmt = fmt.Sprintf("%d", au.Red(tcn.CheckDigit))
+							digitFmt = fmt.Sprintf("%d", au.Magenta(tcn.CheckDigit))
 						} else {
 							digitFmt = fmt.Sprintf("%d", tcn.CheckDigit)
 						}
@@ -574,7 +574,7 @@ func newCheckDigitInput(config *configs.Config) func() input.Input {
 							checkDigitDatum,
 							calcCheckDigitDatum.WithValue(strconv.Itoa(checkDigit)),
 							validCheckDigit.WithValue(fmt.Sprintf("%t", number == checkDigit%10)),
-							possibleTranspositionError.WithValue(builder.String()),
+							errorProneSerialNumbers.WithValue(builder.String()),
 						}
 				}
 
@@ -584,7 +584,7 @@ func newCheckDigitInput(config *configs.Config) func() input.Input {
 						checkDigitDatum,
 						calcCheckDigitDatum.WithValue(strconv.Itoa(checkDigit)),
 						validCheckDigit.WithValue(fmt.Sprintf("%t", number == checkDigit%10)),
-						possibleTranspositionError,
+						errorProneSerialNumbers,
 					}
 			})
 	}

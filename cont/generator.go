@@ -9,13 +9,13 @@ import (
 // GeneratorBuilder is the struct for the builder.
 // Use NewUniqueGeneratorBuilder to create a new one.
 type GeneratorBuilder struct {
-	rand                 *rand.Rand
-	codes                []string
-	count                int
-	start                int
-	end                  int
-	exclCheckDigit10     bool
-	exclTranspositionErr bool
+	rand                        *rand.Rand
+	codes                       []string
+	count                       int
+	start                       int
+	end                         int
+	exclCheckDigit10            bool
+	exclErrorProneSerialNumbers bool
 }
 
 // NewUniqueGeneratorBuilder returns a new random unique container number generator.
@@ -60,9 +60,9 @@ func (gb *GeneratorBuilder) ExcludeCheckDigit10(exclude bool) *GeneratorBuilder 
 	return gb
 }
 
-// ExcludeTranspositionErr sets the exclusion of container numbers with possible transposition errors.
-func (gb *GeneratorBuilder) ExcludeTranspositionErr(exclude bool) *GeneratorBuilder {
-	gb.exclTranspositionErr = exclude
+// ExcludeErrorProneSerialNumbers sets the exclusion of container numbers with error-prone serial numbers.
+func (gb *GeneratorBuilder) ExcludeErrorProneSerialNumbers(exclude bool) *GeneratorBuilder {
+	gb.exclErrorProneSerialNumbers = exclude
 	return gb
 }
 
@@ -118,27 +118,27 @@ func (gb *GeneratorBuilder) Build() (*UniqueGenerator, error) {
 	})
 
 	return &UniqueGenerator{
-		codes:                gb.codes,
-		lenCodes:             lenCodes,
-		serialNumIt:          sni,
-		count:                count,
-		exclCheckDigit10:     gb.exclCheckDigit10,
-		exclTranspositionErr: gb.exclTranspositionErr,
+		codes:                       gb.codes,
+		lenCodes:                    lenCodes,
+		serialNumIt:                 sni,
+		count:                       count,
+		exclCheckDigit10:            gb.exclCheckDigit10,
+		exclErrorProneSerialNumbers: gb.exclErrorProneSerialNumbers,
 	}, nil
 }
 
 // UniqueGenerator holds state for generating random unique container numbers.
 // Use NewUniqueGeneratorBuilder for initialization.
 type UniqueGenerator struct {
-	codes                []string
-	lenCodes             int
-	ownerOffset          int
-	serialNumIt          serialNumIt
-	count                int
-	contNum              Number
-	generatedCount       int
-	exclCheckDigit10     bool
-	exclTranspositionErr bool
+	codes                       []string
+	lenCodes                    int
+	ownerOffset                 int
+	serialNumIt                 serialNumIt
+	count                       int
+	contNum                     Number
+	generatedCount              int
+	exclCheckDigit10            bool
+	exclErrorProneSerialNumbers bool
 }
 
 // Generate advances the serial number iterator to the next serial number,
@@ -161,7 +161,7 @@ func (g *UniqueGenerator) Generate() bool {
 	if g.exclCheckDigit10 && checkDigit == 10 {
 		return g.Generate()
 	}
-	if g.exclTranspositionErr && len(CheckTransposition(code, 'U', serialNum, checkDigit)) > 0 {
+	if g.exclErrorProneSerialNumbers && len(CheckTransposition(code, 'U', serialNum, checkDigit)) > 0 {
 		return g.Generate()
 	}
 	g.contNum = Number{code, 'U', serialNum, checkDigit % 10}

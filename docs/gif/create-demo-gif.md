@@ -13,8 +13,14 @@
    (cd ../.. && make install)
    ```
 
-4. Run vhs command
+4. Comment out temporarily `export PS1='\[\033[01;...`
 
    ```bash
-   vhs < demo.tape
+   #export PS1='...
+   ```
+
+5. Run vhs command
+
+   ```bash
+   vhs demo.tape
    ```

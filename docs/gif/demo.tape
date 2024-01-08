@@ -2,6 +2,8 @@ Output demo.gif
 Require icm
 Set Width 1200
 Set Height 600
+Set Shell bash
+Set TypingSpeed 0.08
 
 Hide
 Type "rm -f ~/.icm/config.yml"
@@ -16,15 +18,15 @@ Type "icm generate"
 Sleep 100ms
 Enter
 
-Sleep 4s
+Sleep 3s
 
 Type "icm generate --count 2"
 Sleep 100ms
 Enter
 
-Sleep 4s
+Sleep 3s
 
-Type "icm generate --count 2 --exclude-transposition-errors"
+Type "icm generate --count 2 --exclude-error-prone-serial-numbers"
 Sleep 100ms
 Enter
 
@@ -46,7 +48,7 @@ Type "icm validate btc_u123451-0"
 Sleep 100ms
 Enter
 
-Sleep 4s
+Sleep 8s
 
 Type "icm validate 20R0"
 Sleep 100ms

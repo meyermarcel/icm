@@ -88,7 +88,7 @@ func newGenerateCmd(writer, writerErr io.Writer, config *configs.Config, ownerDe
 	endValue := serialNumValue{}
 	ownerValue := ownerValue{}
 	var excludeCheckDigit10 bool
-	var excludeTranspositionErr bool
+	var excludeErrorProneSerialNumbers bool
 
 	generateCmd := &cobra.Command{
 		Use:   "generate",
@@ -112,7 +112,7 @@ icm generate --count 10
 # Generate container numbers with custom format
 icm generate --count 10 --sep-owner-equip '' --sep-serial-check '-'
 # Generate container numbers without error-prone serial numbers
-icm generate --count 10 --exclude-check-digit-10 --exclude-transposition-errors
+icm generate --count 10 --exclude-check-digit-10 --exclude-error-prone-serial-numbers
 # Generate container numbers within serial number range
 icm generate --start 100500 --count 10
 icm generate --start 100500 --end 100600
@@ -127,7 +127,7 @@ icm generate --count 1000000 | icm validate`,
 			builder := cont.NewUniqueGeneratorBuilder(r).
 				Count(count.value).
 				ExcludeCheckDigit10(excludeCheckDigit10).
-				ExcludeTranspositionErr(excludeTranspositionErr)
+				ExcludeErrorProneSerialNumbers(excludeErrorProneSerialNumbers)
 
 			if cmd.Flags().Changed("owner") {
 				builder.OwnerCodes([]string{ownerValue.value})
@@ -167,8 +167,14 @@ icm generate --count 1000000 | icm validate`,
 	generateCmd.Flags().VarP(&endValue, "end", "e", "end of serial number range")
 	generateCmd.Flags().Var(&ownerValue, "owner", "custom owner code")
 	generateCmd.Flags().BoolVar(&excludeCheckDigit10, "exclude-check-digit-10", false, "exclude check digit 10")
-	generateCmd.Flags().BoolVar(&excludeTranspositionErr, "exclude-transposition-errors", false,
+	generateCmd.Flags().BoolVar(&excludeErrorProneSerialNumbers, "exclude-transposition-errors", false,
 		"exclude possible transposition errors")
+	err := generateCmd.Flags().MarkDeprecated("exclude-transposition-errors", "use instead --exclude-error-prone-serial-numbers")
+	if err != nil {
+		return nil
+	}
+	generateCmd.Flags().BoolVar(&excludeErrorProneSerialNumbers, "exclude-error-prone-serial-numbers", false,
+		"exclude error-prone serial numbers. For example swapping the second 0 and first 1 of RCB U 001130 0 results in container number RCB U 010130 0 with a valid check digit 0")
 
 	generateCmd.Flags().String(configs.FlagNames.SepOE, configs.DefaultValues.SepOE,
 		"ABC(x)U1234560  (x) separates owner code and equipment category id")

@@ -237,7 +237,7 @@ func Test_validateCmd(t *testing.T) {
    │    │            │   │
    │    │            │   └─ length: some-length
    │    │            │
-   │    │            └─ Possible transposition errors:
+   │    │            └─ Error-prone serial numbers:
    │    │                 ABC***U+++681034‧‧‧0
    │    │                 ABC***U+++681340‧‧‧0
    │    │
@@ -313,7 +313,7 @@ func Test_validateCmd(t *testing.T) {
 			`
   ABC U 681304 0  ✔
    ↑  ↑        ↑
-   │  │        └─ Possible transposition errors:
+   │  │        └─ Error-prone serial numbers:
    │  │             ABC U 681034 0
    │  │             ABC U 681340 0
    │  │

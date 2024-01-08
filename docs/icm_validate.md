@@ -9,7 +9,7 @@ Validate intermodal container markings with single or multi line input.
 For single line input a human-readable output is used.
 
 For multi line input CSV output is used. For example this is useful to scan
-data sets for possible transposition errors. It is also possible to generate
+data sets for error-prone serial numbers. It is also possible to generate
 CSV data sets of random container numbers.
 
 Configuration for separators is generated first time you
@@ -43,7 +43,7 @@ icm generate --count 10 | icm validate
 icm generate --count 10 | icm validate --output fancy
 # Generate CSV data set
 icm generate --count 1000000 | icm validate
-# Validate a container number with 6 (!) possible transposition errors
+# Validate a container number with 6 (!) possible error-prone serial number
 icm validate APL U 689473 0
 ```
 

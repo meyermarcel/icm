@@ -210,7 +210,7 @@ func TestUniqueGenerator(t *testing.T) {
 				OwnerCodes([]string{"ABC"}).
 				Start(801743).
 				Count(1).
-				ExcludeTranspositionErr(true),
+				ExcludeErrorProneSerialNumbers(true),
 			false,
 			1,
 		},
