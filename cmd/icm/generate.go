@@ -121,7 +121,7 @@ icm generate --start 100500 --end 100600 --owner ABC
 icm generate --count 1000000 | icm validate`,
 		Args:              cobra.NoArgs,
 		ValidArgsFunction: cobra.NoFileCompletions,
-		RunE: func(cmd *cobra.Command, args []string) error {
+		RunE: func(cmd *cobra.Command, _ []string) error {
 			config.Overwrite(cmd.Flags())
 
 			builder := cont.NewUniqueGeneratorBuilder(r).

@@ -8,7 +8,7 @@ func TestMatcher_Match(t *testing.T) {
 	match1 := func() Input {
 		return Input{
 			runeCount: 1,
-			matchIndex: func(in string) []int {
+			matchIndex: func(_ string) []int {
 				return []int{0, 1}
 			},
 		}
@@ -16,14 +16,14 @@ func TestMatcher_Match(t *testing.T) {
 	match2 := func() Input {
 		return Input{
 			runeCount: 2,
-			matchIndex: func(in string) []int {
+			matchIndex: func(_ string) []int {
 				return []int{0, 2}
 			},
 		}
 	}
 	noMatch := func() Input {
 		return Input{
-			matchIndex: func(in string) []int {
+			matchIndex: func(_ string) []int {
 				return nil
 			},
 		}

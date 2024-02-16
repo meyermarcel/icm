@@ -9,10 +9,10 @@ func TestInputHasCorrectValue(t *testing.T) {
 	match1 := func() Input {
 		return Input{
 			runeCount: 1,
-			matchIndex: func(in string) []int {
+			matchIndex: func(_ string) []int {
 				return []int{0, 1}
 			},
-			validate: func(value string, previousValues []string) (error, []Info, []Datum) {
+			validate: func(_ string, _ []string) (error, []Info, []Datum) {
 				return nil, []Info{{Text: "match 1"}}, nil
 			},
 		}
@@ -21,10 +21,10 @@ func TestInputHasCorrectValue(t *testing.T) {
 		return Input{
 			runeCount: 2,
 			toUpper:   true,
-			matchIndex: func(in string) []int {
+			matchIndex: func(_ string) []int {
 				return []int{0, 2}
 			},
-			validate: func(value string, previousValues []string) (error, []Info, []Datum) {
+			validate: func(_ string, _ []string) (error, []Info, []Datum) {
 				return nil, []Info{{Text: "match 2"}}, nil
 			},
 		}
@@ -32,10 +32,10 @@ func TestInputHasCorrectValue(t *testing.T) {
 	validFmtButInvalidMatch := func() Input {
 		return Input{
 			runeCount: 1,
-			matchIndex: func(in string) []int {
+			matchIndex: func(_ string) []int {
 				return []int{0, 1}
 			},
-			validate: func(value string, previousValues []string) (error, []Info, []Datum) {
+			validate: func(_ string, _ []string) (error, []Info, []Datum) {
 				return errors.New(""), nil, nil
 			},
 		}

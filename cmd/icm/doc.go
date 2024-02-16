@@ -25,7 +25,7 @@ func newDocCmd(rootCmd *cobra.Command) *cobra.Command {
 		Example:           "icm doc man . && cat *.1",
 		Args:              cobra.ExactArgs(1),
 		ValidArgsFunction: cobra.NoFileCompletions,
-		RunE: func(cmd *cobra.Command, args []string) error {
+		RunE: func(_ *cobra.Command, args []string) error {
 			path := args[0]
 
 			if _, err := os.Stat(path); os.IsNotExist(err) {
@@ -60,7 +60,7 @@ func newDocCmd(rootCmd *cobra.Command) *cobra.Command {
 		Long:    "Generate markdown.",
 		Example: "icm doc markdown docs/",
 		Args:    cobra.ExactArgs(1),
-		RunE: func(cmd *cobra.Command, args []string) error {
+		RunE: func(_ *cobra.Command, args []string) error {
 			return doc.GenMarkdownTree(rootCmd, args[0])
 		},
 	}

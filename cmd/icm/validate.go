@@ -238,7 +238,7 @@ icm validate APL U 689473 0`,
 		fmt.Sprintf("sets pattern matching to %s, %s, %s, %s or %s\n%s\n",
 			auto, containerNumber, owner, ownerEquipmentCategory, sizeType,
 			patternsInfo))
-	err := validateCmd.RegisterFlagCompletionFunc(configs.FlagNames.Pattern, func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	err := validateCmd.RegisterFlagCompletionFunc(configs.FlagNames.Pattern, func(_ *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
 		return []string{auto, containerNumber, owner, ownerEquipmentCategory, sizeType}, cobra.ShellCompDirectiveNoFileComp
 	})
 	if err != nil {
@@ -248,7 +248,7 @@ icm validate APL U 689473 0`,
 		fmt.Sprintf("sets output to %s, %s or %s\n%s\n",
 			outputAuto, outputFancy, outputCSV,
 			outputsInfo))
-	err = validateCmd.RegisterFlagCompletionFunc(configs.FlagNames.Output, func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	err = validateCmd.RegisterFlagCompletionFunc(configs.FlagNames.Output, func(_ *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
 		return []string{outputAuto, outputFancy, outputCSV}, cobra.ShellCompDirectiveNoFileComp
 	})
 	if err != nil {
@@ -362,7 +362,7 @@ func newOwnerInput(ownerDecoder data.OwnerDecoder) func() input.Input {
 	owner := input.NewInput(
 		3,
 		regexp.MustCompile(`[A-Za-z]{3}`).FindStringIndex,
-		func(value string, previousValues []string) (error, []input.Info, []input.Datum) {
+		func(value string, _ []string) (error, []input.Info, []input.Datum) {
 			ownerCodeDatum := input.NewDatum("owner-code")
 			ownerCompanyDatum := input.NewDatum("company")
 			ownerCityDatum := input.NewDatum("city")
@@ -406,7 +406,7 @@ func newEquipCatInput(equipCatDecoder data.EquipCatDecoder) func() input.Input {
 	equipCat := input.NewInput(
 		1,
 		regexp.MustCompile(`[A-Za-z]`).FindStringIndex,
-		func(value string, previousValues []string) (error, []input.Info, []input.Datum) {
+		func(value string, _ []string) (error, []input.Info, []input.Datum) {
 			equipCatIDDatum := input.NewDatum("equipment-category-id").WithValue(value)
 			equipCatDatum := input.NewDatum("equipment-category")
 			if value == "" {
@@ -455,7 +455,7 @@ func newSerialNumInput() func() input.Input {
 		return input.NewInput(
 			6,
 			regexp.MustCompile(`\d{6}`).FindStringIndex,
-			func(value string, previousValues []string) (error, []input.Info, []input.Datum) {
+			func(value string, _ []string) (error, []input.Info, []input.Datum) {
 				serialNumData := input.NewDatum("serial-number")
 				if value == "" {
 					return newValidateError(fmt.Sprintf("%s is not %s long",
@@ -609,7 +609,7 @@ func newLengthInput(lengthDecoder data.LengthDecoder) func() input.Input {
 	length := input.NewInput(
 		1,
 		regexp.MustCompile(`[A-Za-z\d]`).FindStringIndex,
-		func(value string, previousValues []string) (error, []input.Info, []input.Datum) {
+		func(value string, _ []string) (error, []input.Info, []input.Datum) {
 			lengthDatum := input.NewDatum("length-code").WithValue(value)
 			lengthDescDatum := input.NewDatum("length-description")
 			if value == "" {
@@ -641,7 +641,7 @@ func newHeightWidthInput(heightWidthDecoder data.HeightWidthDecoder) func() inpu
 	heightWidth := input.NewInput(
 		1,
 		regexp.MustCompile(`[A-Za-z\d]`).FindStringIndex,
-		func(value string, previousValues []string) (error, []input.Info, []input.Datum) {
+		func(value string, _ []string) (error, []input.Info, []input.Datum) {
 			heightWidthDatum := input.NewDatum("height-width-code").WithValue(value)
 			heightDescDatum := input.NewDatum("height-description")
 			widthDescDatum := input.NewDatum("width-description")
@@ -681,7 +681,7 @@ func newTypeAndGroupInput(typeDecoder data.TypeDecoder) func() input.Input {
 	typeAndGroup := input.NewInput(
 		2,
 		regexp.MustCompile(`[A-Za-z\d]{2}`).FindStringIndex,
-		func(value string, previousValues []string) (error, []input.Info, []input.Datum) {
+		func(value string, _ []string) (error, []input.Info, []input.Datum) {
 			typeDatum := input.NewDatum("type-code").WithValue(value)
 			typeDescDatum := input.NewDatum("type-description")
 			groupDescDatum := input.NewDatum("group-description")

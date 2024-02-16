@@ -60,7 +60,7 @@ icm download-owners
 echo 'AAA;my company;my city;my country' >> $HOME/.icm/data/custom-owner.csv`,
 		Args:              cobra.NoArgs,
 		ValidArgsFunction: cobra.NoFileCompletions,
-		RunE: func(cmd *cobra.Command, args []string) error {
+		RunE: func(_ *cobra.Command, _ []string) error {
 			return overwriteOwnersFile(writeOwnersCSVFunc, timestampUpdater, ownersDownloader, filePath.value)
 		},
 	}
