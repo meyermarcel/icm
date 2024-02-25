@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"sort"
+	"slices"
 	"strings"
 	"unicode/utf8"
 
@@ -125,8 +125,8 @@ func (pt *posTxt) addLines(lines ...string) {
 }
 
 func fmtTextsWithArrows(texts ...posTxt) string {
-	sort.Slice(texts, func(i, j int) bool {
-		return texts[i].pos < texts[j].pos
+	slices.SortFunc(texts, func(a posTxt, b posTxt) int {
+		return a.pos - b.pos
 	})
 	for idx, element := range texts {
 		if idx > 0 && texts[idx-1].pos == element.pos {

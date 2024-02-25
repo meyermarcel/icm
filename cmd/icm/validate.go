@@ -7,7 +7,7 @@ import (
 	"io"
 	"os"
 	"regexp"
-	"sort"
+	"slices"
 	"strconv"
 	"strings"
 	"unicode/utf8"
@@ -437,7 +437,7 @@ func equipCatIDsAsList(equipCatDecoder data.EquipCatDecoder) string {
 	b := strings.Builder{}
 
 	iDs := equipCatDecoder.AllCatIDs()
-	sort.Strings(iDs)
+	slices.Sort(iDs)
 	for i, element := range iDs {
 		b.WriteString(fmt.Sprint(au.Green(element)))
 		if i < len(iDs)-2 {
