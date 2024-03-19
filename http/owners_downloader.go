@@ -47,7 +47,7 @@ func parseOwners(body io.Reader) ([]cont.Owner, error) {
 		return nil, err
 	}
 
-	owners := make([]cont.Owner, 0)
+	var owners []cont.Owner
 
 	var getOwnerNode func(*html.Node) error
 	getOwnerNode = func(n *html.Node) error {

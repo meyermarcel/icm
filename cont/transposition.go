@@ -9,12 +9,13 @@ type TpNumber struct {
 	Pos int
 }
 
-// CheckTransposition checks for possible transposition errors.
+// CheckTransposition returns an array of TpNumber's for error-prone serial numbers.
+// CheckTransposition returns nil if no error-prone serial number is found.
 // Not equal adjacent digits including check digit are transposed and checked.
 func CheckTransposition(ownerCode string, equipCatID rune, serialNum int, checkDigit int) []TpNumber {
 	checkDigit = checkDigit % 10
 
-	contNums := make([]TpNumber, 0)
+	var contNums []TpNumber
 
 	// Only container numbers with check digit 0, 10 or 3 are affected
 	if checkDigit != 3 && checkDigit != 0 {

@@ -18,6 +18,16 @@ func TestCheckTransposition(t *testing.T) {
 		want []TpNumber
 	}{
 		{
+			name: "Test ABC U 123123 7",
+			args: args{
+				ownerCode:  "ABC",
+				equipCatID: 'U',
+				serialNum:  123123,
+				checkDigit: 7,
+			},
+			want: nil,
+		},
+		{
 			name: "Test CMA U 163912 (1)0",
 			args: args{
 				ownerCode:  "CMA",

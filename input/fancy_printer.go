@@ -62,7 +62,7 @@ func (fp *FancyPrinter) Print(inputs []Input) error {
 	b.WriteString(fp.indent)
 	pos := len(fp.indent)
 
-	texts := make([]posTxt, 0)
+	var texts []posTxt
 
 	valid := true
 	for idx, input := range inputs {

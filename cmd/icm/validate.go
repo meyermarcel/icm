@@ -495,7 +495,7 @@ func newCheckDigitInput(config *configs.Config) func() input.Input {
 				equipCatID, _ := utf8.DecodeRuneInString(previousValues[1])
 				checkDigit := cont.CalcCheckDigit(previousValues[2], equipCatID, serialNum)
 
-				infos := appendCheckDigit10Info(checkDigit, nil)
+				infos := appendCheckDigit10Info(checkDigit)
 
 				number, err := strconv.Atoi(value)
 				if err != nil {
@@ -590,11 +590,9 @@ func newCheckDigitInput(config *configs.Config) func() input.Input {
 	}
 }
 
-func appendCheckDigit10Info(checkDigit int, infos []input.Info) []input.Info {
+func appendCheckDigit10Info(checkDigit int) []input.Info {
+	var infos []input.Info
 	if checkDigit == 10 {
-		if infos == nil {
-			infos = make([]input.Info, 0)
-		}
 		infos = append(infos, input.Info{
 			Text: fmt.Sprintf("It is not recommended to use a %s", au.Underline("serial number")),
 		})

@@ -7,8 +7,8 @@ import (
 
 // Validate validates inputs. Each input is validated and values are assigned.
 func Validate(in string, newInputs []func() Input) ([]Input, error) {
-	previousValues := make([]string, 0)
-	inputs := make([]Input, 0)
+	var previousValues []string
+	var inputs []Input
 	var err error
 	for _, newInput := range newInputs {
 		input := newInput()
