@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"bytes"
-	"math/rand"
+	"math/rand/v2"
 	"testing"
 
 	"github.com/meyermarcel/icm/configs"
@@ -29,7 +29,7 @@ func Test_generateCmd(t *testing.T) {
 			nil,
 			nil,
 			false,
-			`RAN U 724553 3
+			`NAR U 601921 3
 `,
 		},
 		{
@@ -40,7 +40,7 @@ func Test_generateCmd(t *testing.T) {
 				value: "ABC",
 			}},
 			false,
-			`ABC U 724553 6
+			`ABC U 601921 5
 `,
 		},
 		{
@@ -51,9 +51,9 @@ func Test_generateCmd(t *testing.T) {
 				value: "3",
 			}},
 			false,
-			`RAN U 724553 3
-RAN U 165715 3
-RAN U 489155 0
+			`NAR U 601921 3
+RAN U 784968 3
+RAN U 334138 0
 `,
 		},
 		{
@@ -154,7 +154,7 @@ NAR U 000002 0
 			},
 			nil,
 			false,
-			`RAN***U+++724553‧‧‧3
+			`NAR***U+++601921‧‧‧3
 `,
 		},
 	}
@@ -168,7 +168,7 @@ NAR U 000002 0
 				config.Map[override.name] = override.value
 			}
 
-			cmd := newGenerateCmd(writer, writerErr, config, &dummyOwnerDecodeUpdater{}, rand.New(rand.NewSource(1)))
+			cmd := newGenerateCmd(writer, writerErr, config, &dummyOwnerDecodeUpdater{}, rand.New(rand.NewPCG(1, 0)))
 			for _, flag := range tt.flags {
 				_ = cmd.Flags().Set(flag.name, flag.value)
 			}

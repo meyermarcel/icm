@@ -2,7 +2,7 @@ package cont
 
 import (
 	"fmt"
-	"math/rand"
+	"math/rand/v2"
 	"reflect"
 	"testing"
 )
@@ -34,7 +34,7 @@ func TestGeneratorBuilder(t *testing.T) {
 				codes:    []string{"ABC"},
 				lenCodes: 1,
 				serialNumIt: &randSerialNumIt{
-					randOffset: 5577006791947779410,
+					randOffset: 1812594575390091523,
 				},
 				count:            2,
 				exclCheckDigit10: true,
@@ -122,7 +122,7 @@ func TestGeneratorBuilder(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			r := rand.New(rand.NewSource(1))
+			r := rand.New(rand.NewPCG(1, 0))
 			gb := NewUniqueGeneratorBuilder(r).
 				OwnerCodes(tt.fields.codes).
 				Count(tt.fields.count).
@@ -142,7 +142,7 @@ func TestGeneratorBuilder(t *testing.T) {
 }
 
 func TestUniqueGenerator(t *testing.T) {
-	r := rand.New(rand.NewSource(1))
+	r := rand.New(rand.NewPCG(1, 0))
 
 	tests := []struct {
 		name             string

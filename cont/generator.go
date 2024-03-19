@@ -3,7 +3,7 @@ package cont
 import (
 	"errors"
 	"fmt"
-	"math/rand"
+	"math/rand/v2"
 )
 
 // GeneratorBuilder is the struct for the builder.

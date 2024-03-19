@@ -3,7 +3,7 @@ package cmd
 import (
 	"fmt"
 	"io"
-	"math/rand"
+	"math/rand/v2"
 	"path/filepath"
 	"strconv"
 
