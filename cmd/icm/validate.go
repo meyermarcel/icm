@@ -535,7 +535,7 @@ func newCheckDigitInput(config *configs.Config) func() input.Input {
 
 				transposedContNums := cont.CheckTransposition(previousValues[2], equipCatID, serialNum, checkDigit)
 
-				if len(transposedContNums) != 0 {
+				if transposedContNums != nil {
 					infos = append(infos, input.Info{Text: "Error-prone serial numbers:"})
 					builder := strings.Builder{}
 

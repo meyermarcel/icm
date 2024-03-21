@@ -161,7 +161,7 @@ func (g *UniqueGenerator) Generate() bool {
 	if g.exclCheckDigit10 && checkDigit == 10 {
 		return g.Generate()
 	}
-	if g.exclErrorProneSerialNumbers && len(CheckTransposition(code, 'U', serialNum, checkDigit)) > 0 {
+	if g.exclErrorProneSerialNumbers && CheckTransposition(code, 'U', serialNum, checkDigit) != nil {
 		return g.Generate()
 	}
 	g.contNum = Number{code, 'U', serialNum, checkDigit % 10}
