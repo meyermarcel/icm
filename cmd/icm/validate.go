@@ -491,11 +491,18 @@ func newCheckDigitInput(config *configs.Config) func() input.Input {
 						}
 				}
 
-				serialNum, _ := strconv.Atoi(previousValues[0])
 				equipCatID, _ := utf8.DecodeRuneInString(previousValues[1])
+				serialNum, _ := strconv.Atoi(previousValues[0])
 				checkDigit := cont.CalcCheckDigit(previousValues[2], equipCatID, serialNum)
 
-				infos := appendCheckDigit10Info(checkDigit)
+				var infos []input.Info
+				if checkDigit == 10 {
+					infos = append(
+						infos,
+						input.Info{Text: fmt.Sprintf("It is not recommended to use a %s", au.Underline("serial number"))},
+						input.Info{Text: fmt.Sprintf("that generates %s %s (0).", au.Underline("check digit"), au.Yellow("10"))},
+					)
+				}
 
 				number, err := strconv.Atoi(value)
 				if err != nil {
@@ -588,19 +595,6 @@ func newCheckDigitInput(config *configs.Config) func() input.Input {
 					}
 			})
 	}
-}
-
-func appendCheckDigit10Info(checkDigit int) []input.Info {
-	var infos []input.Info
-	if checkDigit == 10 {
-		infos = append(infos, input.Info{
-			Text: fmt.Sprintf("It is not recommended to use a %s", au.Underline("serial number")),
-		})
-		infos = append(infos, input.Info{
-			Text: fmt.Sprintf("that generates %s %s (0).", au.Underline("check digit"), au.Yellow("10")),
-		})
-	}
-	return infos
 }
 
 func newLengthInput(lengthDecoder data.LengthDecoder) func() input.Input {
