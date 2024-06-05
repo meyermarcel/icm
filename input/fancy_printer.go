@@ -4,13 +4,12 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"slices"
 	"strings"
 	"unicode/utf8"
 
-	"github.com/mattn/go-isatty"
-
 	"github.com/logrusorgru/aurora/v4"
+	"github.com/mattn/go-isatty"
+	"github.com/meyermarcel/annot"
 )
 
 var au *aurora.Aurora
@@ -56,13 +55,13 @@ func (fp *FancyPrinter) Print(inputs []Input) error {
 		fp.separatorsFunc(inputs)
 	}
 
-	b := strings.Builder{}
+	b := &strings.Builder{}
 	b.WriteString(fmt.Sprintln())
 
 	b.WriteString(fp.indent)
 	pos := len(fp.indent)
 
-	var texts []posTxt
+	var annots []*annot.Annot
 
 	valid := true
 	for idx, input := range inputs {
@@ -80,17 +79,15 @@ func (fp *FancyPrinter) Print(inputs []Input) error {
 		}
 		b.WriteString(sep)
 
-		if input.err != nil || input.infos != nil {
-			posTxt := posTxt{
-				pos: pos + input.runeCount/2,
+		if input.err != nil || input.lines != nil {
+			a := &annot.Annot{
+				Col: pos + input.runeCount/2,
 			}
-			if input.err != nil {
-				posTxt.addLines(input.err.Error())
+			if input.err != nil && input.err.Error() != "" {
+				a.AppendLines(input.err.Error())
 			}
-			for _, info := range input.infos {
-				posTxt.addLines(info.Text)
-			}
-			texts = append(texts, posTxt)
+			a.AppendLines(input.lines...)
+			annots = append(annots, a)
 		}
 		pos += input.runeCount + utf8.RuneCountInString(sep)
 
@@ -98,7 +95,10 @@ func (fp *FancyPrinter) Print(inputs []Input) error {
 	}
 	b.WriteString(fmtCheckMark(valid))
 	b.WriteString(fmt.Sprintln())
-	b.WriteString(fmtTextsWithArrows(texts...))
+	err := annot.Write(b, annots...)
+	if err != nil {
+		return err
+	}
 	b.WriteString(fmt.Sprintln())
 
 	_, _ = io.WriteString(fp.writer, b.String())
@@ -113,102 +113,6 @@ func fmtValue(input Input) string {
 		return fmt.Sprint(au.Red(input.value))
 	}
 	return fmt.Sprint(au.Red(strings.Repeat("_", input.runeCount)))
-}
-
-type posTxt struct {
-	pos   int
-	lines []string
-}
-
-func (pt *posTxt) addLines(lines ...string) {
-	pt.lines = append(pt.lines, lines...)
-}
-
-func fmtTextsWithArrows(texts ...posTxt) string {
-	slices.SortFunc(texts, func(a posTxt, b posTxt) int {
-		return a.pos - b.pos
-	})
-	for idx, element := range texts {
-		if idx > 0 && texts[idx-1].pos == element.pos {
-			texts[idx-1].addLines(element.lines...)
-			texts = append(texts[:idx], texts[idx+1:]...)
-		}
-	}
-	return fmtTexts(texts)
-}
-
-func fmtTexts(texts []posTxt) string {
-	b := strings.Builder{}
-
-	if len(texts) == 0 {
-		return b.String()
-	}
-
-	var positions []int
-	for _, element := range texts {
-		positions = append(positions, element.pos)
-	}
-	spaces := calculateSpaces(positions)
-
-	for idx := range texts {
-		b.WriteString(spaces[idx])
-		b.WriteString("↑")
-	}
-
-	for len(texts) != 0 {
-
-		b.WriteString(fmt.Sprintln())
-		for idx, txt := range texts {
-			b.WriteString(spaces[idx])
-			if idx == len(texts)-1 {
-				for lineIdx, line := range txt.lines {
-					if lineIdx == 0 {
-						b.WriteString("└─ ")
-						b.WriteString(line)
-					}
-					if lineIdx > 0 {
-						b.WriteString(fmt.Sprintln())
-						for i := 0; i < idx; i++ {
-							b.WriteString(spaces[i])
-							b.WriteString("│")
-						}
-						b.WriteString(spaces[idx])
-						b.WriteString("   ")
-						b.WriteString(line)
-					}
-				}
-			} else {
-				b.WriteString("│")
-			}
-		}
-
-		texts = texts[:len(texts)-1]
-
-		if len(texts) != 0 {
-			b.WriteString(fmt.Sprintln())
-			for idx := range texts {
-				b.WriteString(spaces[idx])
-				b.WriteString("│")
-			}
-		}
-
-	}
-	b.WriteString(fmt.Sprintln())
-	return b.String()
-}
-
-func calculateSpaces(positions []int) []string {
-	var spaces []string
-	lastPos := 0
-	for idx, pos := range positions {
-		spacesCount := pos - lastPos - 1
-		spaces = append(spaces, "")
-		for i := 0; i <= spacesCount; i++ {
-			spaces[idx] += " "
-		}
-		lastPos = pos + 1
-	}
-	return spaces
 }
 
 func fmtCheckMark(valid bool) string {

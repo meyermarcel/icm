@@ -49,7 +49,7 @@ func TestFancyPrinter_Print(t *testing.T) {
 			[]Input{
 				{
 					value: "a",
-					infos: []Info{{Text: ""}},
+					lines: []string{""},
 				},
 			},
 			false,
@@ -86,11 +86,13 @@ a  ✘
 					runeCount: 1,
 					err:       errors.New(""),
 					value:     "a",
+					lines:     []string{"a text"},
 				},
 				{
 					runeCount: 2,
 					err:       errors.New(""),
 					value:     "bc",
+					lines:     []string{"bc text"},
 				},
 				{
 					runeCount: 3,
@@ -102,9 +104,9 @@ a  ✘
 			`
 a bc def  ✘
 ↑  ↑
-│  └─ 
+│  └─ bc text
 │
-└─ 
+└─ a text
 
 `,
 		},
@@ -117,7 +119,7 @@ a bc def  ✘
 				{
 					runeCount: 0,
 					value:     "a",
-					infos:     []Info{{Text: ""}},
+					lines:     []string{""},
 				},
 			},
 			false,
@@ -135,7 +137,7 @@ a bc def  ✘
 				{
 					runeCount: 4,
 					value:     "abcd",
-					infos:     []Info{{Text: ""}},
+					lines:     []string{""},
 				},
 			},
 			false,
@@ -156,20 +158,22 @@ abcd  ✔
 					runeCount: 1,
 					err:       errors.New(""),
 					value:     "a",
+					lines:     []string{"a text"},
 				},
 				{
 					runeCount: 2,
 					err:       errors.New(""),
 					value:     "bc",
+					lines:     []string{"bc text"},
 				},
 			},
 			false,
 			`
 a * bc  ✘
 ↑    ↑
-│    └─ 
+│    └─ bc text
 │
-└─ 
+└─ a text
 
 `,
 		},
@@ -181,20 +185,22 @@ a * bc  ✘
 					runeCount: 1,
 					err:       errors.New(""),
 					value:     "a",
+					lines:     []string{"a text"},
 				},
 				{
 					runeCount: 2,
 					err:       errors.New(""),
 					value:     "bc",
+					lines:     []string{"bc text"},
 				},
 			},
 			false,
 			`
 a bc  ✘
 ↑  ↑
-│  └─ 
+│  └─ bc text
 │
-└─ 
+└─ a text
 
 `,
 		},
@@ -223,14 +229,14 @@ _  ✘
 				{
 					runeCount: 1,
 					value:     "a",
-					infos:     []Info{{Text: "info text"}},
+					lines:     []string{"text"},
 				},
 			},
 			false,
 			`
 a  ✔
 ↑
-└─ info text
+└─ text
 
 `,
 		},
@@ -260,7 +266,7 @@ a  ✘
 					runeCount: 1,
 					err:       errors.New("error line"),
 					value:     "",
-					infos:     []Info{{Text: "info line"}},
+					lines:     []string{"text line"},
 				},
 			},
 			false,
@@ -268,23 +274,23 @@ a  ✘
 _  ✘
 ↑
 └─ error line
-   info line
+   text line
 
 `,
 		},
 		{
-			"Print multiple infos with multiples lines",
+			"Print multiple lines with multiples lines",
 			fields{},
 			[]Input{
 				{
 					runeCount: 1,
 					value:     "a",
-					infos:     []Info{{Text: "line 1"}, {Text: "line 2"}},
+					lines:     []string{"line 1", "line 2"},
 				},
 				{
 					runeCount: 1,
 					value:     "b",
-					infos:     []Info{{Text: "line 3"}, {Text: "line 4"}},
+					lines:     []string{"line 3", "line 4"},
 				},
 			},
 			false,

@@ -362,7 +362,7 @@ func newOwnerInput(ownerDecoder data.OwnerDecoder) func() input.Input {
 	owner := input.NewInput(
 		3,
 		regexp.MustCompile(`[A-Za-z]{3}`).FindStringIndex,
-		func(value string, _ []string) (error, []input.Info, []input.Datum) {
+		func(value string, _ []string) (error, []string, []input.Datum) {
 			ownerCodeDatum := input.NewDatum("owner-code")
 			ownerCompanyDatum := input.NewDatum("company")
 			ownerCityDatum := input.NewDatum("city")
@@ -386,10 +386,10 @@ func newOwnerInput(ownerDecoder data.OwnerDecoder) func() input.Input {
 					[]input.Datum{ownerCodeDatum, ownerCompanyDatum, ownerCityDatum, ownerCountryDatum}
 			}
 			return nil,
-				[]input.Info{
-					{Text: owner.Company},
-					{Text: owner.City},
-					{Text: owner.Country},
+				[]string{
+					owner.Company,
+					owner.City,
+					owner.Country,
 				},
 				[]input.Datum{
 					ownerCodeDatum.WithValue(owner.Code),
@@ -406,7 +406,7 @@ func newEquipCatInput(equipCatDecoder data.EquipCatDecoder) func() input.Input {
 	equipCat := input.NewInput(
 		1,
 		regexp.MustCompile(`[A-Za-z]`).FindStringIndex,
-		func(value string, _ []string) (error, []input.Info, []input.Datum) {
+		func(value string, _ []string) (error, []string, []input.Datum) {
 			equipCatIDDatum := input.NewDatum("equipment-category-id").WithValue(value)
 			equipCatDatum := input.NewDatum("equipment-category")
 			if value == "" {
@@ -426,7 +426,7 @@ func newEquipCatInput(equipCatDecoder data.EquipCatDecoder) func() input.Input {
 					[]input.Datum{equipCatIDDatum, equipCatDatum}
 			}
 			return nil,
-				[]input.Info{{Text: cat.Info}},
+				[]string{cat.Info},
 				[]input.Datum{equipCatIDDatum, equipCatDatum.WithValue(cat.Info)}
 		})
 	equipCat.SetToUpper()
@@ -455,7 +455,7 @@ func newSerialNumInput() func() input.Input {
 		return input.NewInput(
 			6,
 			regexp.MustCompile(`\d{6}`).FindStringIndex,
-			func(value string, _ []string) (error, []input.Info, []input.Datum) {
+			func(value string, _ []string) (error, []string, []input.Datum) {
 				serialNumData := input.NewDatum("serial-number")
 				if value == "" {
 					return newValidateError(fmt.Sprintf("%s is not %s long",
@@ -474,7 +474,7 @@ func newCheckDigitInput(config *configs.Config) func() input.Input {
 		return input.NewInput(
 			1,
 			regexp.MustCompile(`\d`).FindStringIndex,
-			func(value string, previousValues []string) (error, []input.Info, []input.Datum) {
+			func(value string, previousValues []string) (error, []string, []input.Datum) {
 				checkDigitDatum := input.NewDatum("check-digit").WithValue(value)
 				calcCheckDigitDatum := input.NewDatum("calculated-check-digit")
 				validCheckDigit := input.NewDatum("valid-check-digit")
@@ -495,12 +495,12 @@ func newCheckDigitInput(config *configs.Config) func() input.Input {
 				serialNum, _ := strconv.Atoi(previousValues[0])
 				checkDigit := cont.CalcCheckDigit(previousValues[2], equipCatID, serialNum)
 
-				var infos []input.Info
+				var lines []string
 				if checkDigit == 10 {
-					infos = append(
-						infos,
-						input.Info{Text: fmt.Sprintf("It is not recommended to use a %s", au.Underline("serial number"))},
-						input.Info{Text: fmt.Sprintf("that generates %s %s (0).", au.Underline("check digit"), au.Yellow("10"))},
+					lines = append(
+						lines,
+						fmt.Sprintf("It is not recommended to use a %s", au.Underline("serial number")),
+						fmt.Sprintf("that generates %s %s (0).", au.Underline("check digit"), au.Yellow("10")),
 					)
 				}
 
@@ -510,7 +510,7 @@ func newCheckDigitInput(config *configs.Config) func() input.Input {
 							au.Underline("check digit"),
 							au.Bold("number"),
 							au.Green(strconv.Itoa(checkDigit)))),
-						infos,
+						lines,
 						[]input.Datum{
 							checkDigitDatum,
 							calcCheckDigitDatum.WithValue(strconv.Itoa(checkDigit)),
@@ -524,7 +524,7 @@ func newCheckDigitInput(config *configs.Config) func() input.Input {
 							"calculated %s is %s",
 							au.Underline("check digit"),
 							au.Green(strconv.Itoa(checkDigit%10)))),
-						infos,
+						lines,
 						[]input.Datum{
 							checkDigitDatum,
 							calcCheckDigitDatum.WithValue(strconv.Itoa(checkDigit)),
@@ -536,7 +536,7 @@ func newCheckDigitInput(config *configs.Config) func() input.Input {
 				transposedContNums := cont.CheckTransposition(previousValues[2], equipCatID, serialNum, checkDigit)
 
 				if transposedContNums != nil {
-					infos = append(infos, input.Info{Text: "Error-prone serial numbers:"})
+					lines = append(lines, "Error-prone serial numbers:")
 					builder := strings.Builder{}
 
 					for idx, tcn := range transposedContNums {
@@ -569,14 +569,14 @@ func newCheckDigitInput(config *configs.Config) func() input.Input {
 							string(tcn.EquipCatID), config.SepES(),
 							serialNumberFmt, config.SepSC(),
 							digitFmt)
-						infos = append(infos, input.Info{Text: fmt.Sprintf("  %s", contNumFmt)})
+						lines = append(lines, fmt.Sprintf("  %s", contNumFmt))
 						builder.WriteString(contNumFmt)
 						if idx < len(transposedContNums)-1 {
 							builder.WriteString(", ")
 						}
 					}
 					return nil,
-						infos,
+						lines,
 						[]input.Datum{
 							checkDigitDatum,
 							calcCheckDigitDatum.WithValue(strconv.Itoa(checkDigit)),
@@ -586,7 +586,7 @@ func newCheckDigitInput(config *configs.Config) func() input.Input {
 				}
 
 				return nil,
-					infos,
+					lines,
 					[]input.Datum{
 						checkDigitDatum,
 						calcCheckDigitDatum.WithValue(strconv.Itoa(checkDigit)),
@@ -601,7 +601,7 @@ func newLengthInput(lengthDecoder data.LengthDecoder) func() input.Input {
 	length := input.NewInput(
 		1,
 		regexp.MustCompile(`[A-Za-z\d]`).FindStringIndex,
-		func(value string, _ []string) (error, []input.Info, []input.Datum) {
+		func(value string, _ []string) (error, []string, []input.Datum) {
 			lengthDatum := input.NewDatum("length-code").WithValue(value)
 			lengthDescDatum := input.NewDatum("length-description")
 			if value == "" {
@@ -622,7 +622,7 @@ func newLengthInput(lengthDecoder data.LengthDecoder) func() input.Input {
 					[]input.Datum{lengthDatum, lengthDescDatum}
 			}
 			return nil,
-				[]input.Info{{Text: fmt.Sprintf("length: %s", length)}},
+				[]string{fmt.Sprintf("length: %s", length)},
 				[]input.Datum{lengthDatum, lengthDescDatum.WithValue(string(length))}
 		})
 	length.SetToUpper()
@@ -633,7 +633,7 @@ func newHeightWidthInput(heightWidthDecoder data.HeightWidthDecoder) func() inpu
 	heightWidth := input.NewInput(
 		1,
 		regexp.MustCompile(`[A-Za-z\d]`).FindStringIndex,
-		func(value string, _ []string) (error, []input.Info, []input.Datum) {
+		func(value string, _ []string) (error, []string, []input.Datum) {
 			heightWidthDatum := input.NewDatum("height-width-code").WithValue(value)
 			heightDescDatum := input.NewDatum("height-description")
 			widthDescDatum := input.NewDatum("width-description")
@@ -655,9 +655,9 @@ func newHeightWidthInput(heightWidthDecoder data.HeightWidthDecoder) func() inpu
 					[]input.Datum{heightWidthDatum, heightDescDatum, widthDescDatum}
 			}
 			return nil,
-				[]input.Info{
-					{Text: fmt.Sprintf("height: %s", height)},
-					{Text: fmt.Sprintf("width:  %s", width)},
+				[]string{
+					fmt.Sprintf("height: %s", height),
+					fmt.Sprintf("width:  %s", width),
 				},
 				[]input.Datum{
 					heightWidthDatum,
@@ -673,7 +673,7 @@ func newTypeAndGroupInput(typeDecoder data.TypeDecoder) func() input.Input {
 	typeAndGroup := input.NewInput(
 		2,
 		regexp.MustCompile(`[A-Za-z\d]{2}`).FindStringIndex,
-		func(value string, _ []string) (error, []input.Info, []input.Datum) {
+		func(value string, _ []string) (error, []string, []input.Datum) {
 			typeDatum := input.NewDatum("type-code").WithValue(value)
 			typeDescDatum := input.NewDatum("type-description")
 			groupDescDatum := input.NewDatum("group-description")
@@ -695,9 +695,9 @@ func newTypeAndGroupInput(typeDecoder data.TypeDecoder) func() input.Input {
 					[]input.Datum{typeDatum, typeDescDatum, groupDescDatum}
 			}
 			return nil,
-				[]input.Info{
-					{Text: fmt.Sprintf("type:  %s", typeInfo)},
-					{Text: fmt.Sprintf("group: %s", groupInfo)},
+				[]string{
+					fmt.Sprintf("type:  %s", typeInfo),
+					fmt.Sprintf("group: %s", groupInfo),
 				},
 				[]input.Datum{
 					typeDatum,

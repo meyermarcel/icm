@@ -40,12 +40,12 @@ func Validate(in string, newInputs []func() Input) ([]Input, error) {
 type Input struct {
 	runeCount      int
 	matchIndex     func(in string) []int
-	validate       func(value string, previousValues []string) (error, []Info, []Datum)
+	validate       func(value string, previousValues []string) (error, []string, []Datum)
 	toUpper        bool
 	value          string
 	previousValues []string
 	err            error
-	infos          []Info
+	lines          []string
 	data           []Datum
 }
 
@@ -57,13 +57,13 @@ func (i *Input) SetToUpper() {
 // NewInput returns a new Input.
 func NewInput(runeCount int,
 	matchIndex func(in string) []int,
-	validate func(value string, previousValues []string) (error, []Info, []Datum),
+	validate func(value string, previousValues []string) (error, []string, []Datum),
 ) Input {
 	return Input{runeCount: runeCount, matchIndex: matchIndex, validate: validate}
 }
 
 func (i *Input) validateValue() {
-	i.err, i.infos, i.data = i.validate(i.value, i.previousValues)
+	i.err, i.lines, i.data = i.validate(i.value, i.previousValues)
 }
 
 func (i *Input) isValidFmt() bool {
@@ -71,10 +71,4 @@ func (i *Input) isValidFmt() bool {
 		return false
 	}
 	return utf8.RuneCountInString(i.value) == i.runeCount
-}
-
-// Info is structured information with formatted text.
-type Info struct {
-	Title string
-	Text  string
 }

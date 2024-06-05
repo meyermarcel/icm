@@ -12,8 +12,8 @@ func TestInputHasCorrectValue(t *testing.T) {
 			matchIndex: func(_ string) []int {
 				return []int{0, 1}
 			},
-			validate: func(_ string, _ []string) (error, []Info, []Datum) {
-				return nil, []Info{{Text: "match 1"}}, nil
+			validate: func(_ string, _ []string) (error, []string, []Datum) {
+				return nil, []string{"match 1"}, nil
 			},
 		}
 	}
@@ -24,8 +24,8 @@ func TestInputHasCorrectValue(t *testing.T) {
 			matchIndex: func(_ string) []int {
 				return []int{0, 2}
 			},
-			validate: func(_ string, _ []string) (error, []Info, []Datum) {
-				return nil, []Info{{Text: "match 2"}}, nil
+			validate: func(_ string, _ []string) (error, []string, []Datum) {
+				return nil, []string{"match 2"}, nil
 			},
 		}
 	}
@@ -35,7 +35,7 @@ func TestInputHasCorrectValue(t *testing.T) {
 			matchIndex: func(_ string) []int {
 				return []int{0, 1}
 			},
-			validate: func(_ string, _ []string) (error, []Info, []Datum) {
+			validate: func(_ string, _ []string) (error, []string, []Datum) {
 				return errors.New(""), nil, nil
 			},
 		}
@@ -45,7 +45,7 @@ func TestInputHasCorrectValue(t *testing.T) {
 		value          string
 		previousValues []string
 		err            bool
-		infoTexts      []string
+		lines          []string
 	}
 
 	tests := []struct {
@@ -130,13 +130,13 @@ func TestInputHasCorrectValue(t *testing.T) {
 				if (input.err != nil) != tt.wantedInputs[i].err {
 					t.Errorf("err is %v, want %v", input.err != nil, tt.wantedInputs[i].err)
 				}
-				if len(input.infos) != len(tt.wantedInputs[i].infoTexts) {
-					t.Errorf("input infos len %v, want %v", len(input.infos), len(tt.wantedInputs[i].infoTexts))
+				if len(input.lines) != len(tt.wantedInputs[i].lines) {
+					t.Errorf("input lines len %v, want %v", len(input.lines), len(tt.wantedInputs[i].lines))
 				}
-				if input.infos != nil {
-					for j, info := range input.infos {
-						if info.Text != tt.wantedInputs[i].infoTexts[j] {
-							t.Errorf("info text is %v, want %v", info.Text, tt.wantedInputs[i].infoTexts[j])
+				if input.lines != nil {
+					for j, line := range input.lines {
+						if line != tt.wantedInputs[i].lines[j] {
+							t.Errorf("line text is %v, want %v", line, tt.wantedInputs[i].lines[j])
 						}
 					}
 				}
