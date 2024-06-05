@@ -26,7 +26,7 @@ jobs:
         run: make init-csv
 
       - name: Lint
-        uses: golangci/golangci-lint-action@v4
+        uses: golangci/golangci-lint-action@v6
         with:
           # Require: The version of golangci-lint to use.
           version: latest
