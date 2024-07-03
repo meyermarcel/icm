@@ -1,6 +1,7 @@
 package http
 
 import (
+	"cmp"
 	"fmt"
 	"io"
 	"net/http"
@@ -34,7 +35,7 @@ func (od *ownersDownloader) Download() ([]cont.Owner, error) {
 		return nil, err
 	}
 
-	if err := resp.Body.Close(); err != nil {
+	if err = resp.Body.Close(); err != nil {
 		return nil, err
 	}
 
@@ -49,53 +50,55 @@ func parseOwners(body io.Reader) ([]cont.Owner, error) {
 
 	var owners []cont.Owner
 
-	var getOwnerNode func(*html.Node) error
-	getOwnerNode = func(n *html.Node) error {
-		codeWithU := parseHTMLtdData(n, "Code:")
-		if codeWithU != "" {
+	var appendOwners func(*html.Node) error
 
-			if len(codeWithU) < 4 {
-				return fmt.Errorf("parsing HTML failed of owner code failed because '%s' is too short", codeWithU)
-			}
-			code := codeWithU[0:3]
+	appendOwners = func(n *html.Node) error {
+		tbody := tableBody(n)
 
-			companyTdNode := nextTdSibling(n)
-			company := parseHTMLtdData(companyTdNode, "Company:")
-			cityNode := nextTdSibling(nextTdSibling(companyTdNode))
-			city := parseHTMLtdData(cityNode, "City:")
-			countryNode := nextTdSibling(nextTdSibling(cityNode))
-			countryCode := parseHTMLtdData(countryNode, "Country:")
-			country, ok := countryCodeMap[countryCode]
-			if !ok {
-				country = countryCode
-			}
+		if tbody != nil {
+			for child1 := tbody.FirstChild; child1 != nil; child1 = child1.NextSibling {
+				tr := tableRow(child1)
+				if tr != nil {
+					tdIdx := 0
+					var owner cont.Owner
 
-			owners = append(owners,
-				cont.Owner{
-					Code:    code,
-					Company: company,
-					City:    city,
-					Country: country,
-				},
-			)
-
-			// If valid td tag found continue with sibling
-			// instead of parsing every child.
-			err := getOwnerNode(n.NextSibling)
-			if err != nil {
-				return err
+					for child2 := tr.FirstChild; child2 != nil; child2 = child2.NextSibling {
+						td := tableData(child2)
+						if td != nil {
+							if td.FirstChild != nil {
+								d := td.FirstChild.Data
+								switch tdIdx {
+								case 0:
+									if len(d) < 4 {
+										return fmt.Errorf("parsing HTML failed of owner code failed because '%s' is too short", d)
+									}
+									owner.Code = d[0:3]
+								case 1:
+									owner.Company = d
+								case 3:
+									owner.City = d
+								case 5:
+									owner.Country = cmp.Or(countryCodeMap[d], d)
+								}
+							}
+							tdIdx++
+						}
+					}
+					owners = append(owners, owner)
+				}
 			}
 		}
 
 		for c := n.FirstChild; c != nil; c = c.NextSibling {
-			err := getOwnerNode(c)
+			err = appendOwners(c)
 			if err != nil {
 				return err
 			}
 		}
 		return nil
 	}
-	err = getOwnerNode(doc)
+
+	err = appendOwners(doc)
 	if err != nil {
 		return nil, err
 	}
@@ -105,32 +108,21 @@ func parseOwners(body io.Reader) ([]cont.Owner, error) {
 	return owners, nil
 }
 
-func parseHTMLtdData(td *html.Node, spanDescription string) string {
-	if td.Type == html.ElementNode && td.Data == "td" {
-		// Iterate through nodes because simple inner text (e.g. '\n') is also a node.
-		for c := td.FirstChild; c != nil; c = c.NextSibling {
-			if c.Type == html.ElementNode && c.Data == "span" && c.FirstChild != nil && c.FirstChild.Data == spanDescription {
-				for ns := c.NextSibling; ns != nil; ns = ns.NextSibling {
-					if ns.Type == html.ElementNode && ns.Data == "span" {
-						// Empty span:
-						// <span></span>
-						if ns.FirstChild == nil {
-							return ""
-						}
-						return ns.FirstChild.Data
-					}
-				}
-			}
-		}
-	}
-	return ""
+func tableData(node *html.Node) *html.Node {
+	return htmlTag(node, "td")
 }
 
-func nextTdSibling(td *html.Node) *html.Node {
-	for ns := td.NextSibling; ns != nil; ns = ns.NextSibling {
-		if ns.Type == html.ElementNode && ns.Data == "td" {
-			return ns
-		}
+func tableRow(node *html.Node) *html.Node {
+	return htmlTag(node, "tr")
+}
+
+func tableBody(node *html.Node) *html.Node {
+	return htmlTag(node, "tbody")
+}
+
+func htmlTag(node *html.Node, tagName string) *html.Node {
+	if node.Type == html.ElementNode && node.Data == tagName {
+		return node
 	}
 	return nil
 }

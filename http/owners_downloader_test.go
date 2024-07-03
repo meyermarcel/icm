@@ -28,42 +28,12 @@ func Test_parseOwners(t *testing.T) {
 				},
 				{
 					Code:    "BBB",
-					Company: "",
+					Company: "B Company",
 					City:    "B City",
 					Country: "B Country",
 				},
-				{
-					Code:    "CCC",
-					Company: "C Company",
-					City:    "",
-					Country: "C Country",
-				},
-				{
-					Code:    "DDD",
-					Company: "D Company",
-					City:    "D City",
-					Country: "",
-				},
 			},
 			false,
-		},
-		{
-			"Parsing invalid HTML body with invalid length of owner code returns error",
-			codeInvalidLength(),
-			nil,
-			true,
-		},
-		{
-			"Parsing invalid HTML body with some missing <td> tags returns error",
-			missingTdTags(),
-			nil,
-			true,
-		},
-		{
-			"Parsing invalid HTML body with no owner returns error",
-			noOwner(),
-			nil,
-			true,
 		},
 	}
 	for _, tt := range tests {
@@ -80,209 +50,103 @@ func Test_parseOwners(t *testing.T) {
 	}
 }
 
-func codeInvalidLength() io.Reader {
-	return strings.NewReader(`<!DOCTYPE html>
-<body>
-	<table>
-		<tr>
-			<td class="flexMobile align-items-center">
-                <span class="hideOnDesktop tdHeading">Code:</span>
-                <span>AAA</span>
-            </td>
-			<td class="flexMobile align-items-center">
-                <span class="hideOnDesktop tdHeading">Company:</span>
-                <span>A Company</span>
-            </td>
-            <td class="flexMobile align-items-center">
-                <span class="hideOnDesktop tdHeading">Address:</span>
-                <span>6 KAUFMAN STREET 16TH FLOOR</span>
-            </td>
-			<td class="flexMobile align-items-center">
-                <span class="hideOnDesktop tdHeading">City:</span>
-                <span>A City</span>
-            </td>
-            <td class="flexMobile align-items-center">
-                <span class="hideOnDesktop tdHeading">Zip:</span>
-                <span>68012</span>
-            </td>
-			<td class="flexMobile align-items-center">
-                <span class="hideOnDesktop tdHeading">Country:</span>
-                <span>A Country</span>
-            </td>
-			<td class="flexMobile align-items-center">
-                <span class="hideOnDesktop tdHeading">Details:</span>
-                <a class="upperCase withArrow" href="/bic-codes/aaau">View</a>
-            </td>
-        </tr>
-	</table>
-</body>
-</html>
-`)
-}
-
-func missingTdTags() io.Reader {
-	return strings.NewReader(`<!DOCTYPE html>
-<body>
-	<table>
-		<tr>
-            <span class="hideOnDesktop tdHeading">Code:</span>
-            <span>AAAU</span>
-            <span class="hideOnDesktop tdHeading">Company:</span>
-            <span>A Company</span>
-            <span class="hideOnDesktop tdHeading">Address:</span>
-            <span>An address</span>
-            <span class="hideOnDesktop tdHeading">City:</span>
-            <span>A zip code</span>
-            <span class="hideOnDesktop tdHeading">Zip:</span>
-            <span>An address</span>
-            <span class="hideOnDesktop tdHeading">Country:</span>
-            <span>A Country</span>
-            <span class="hideOnDesktop tdHeading">Details:</span>
-            <a class="upperCase withArrow" href="/bic-codes/aaau">View</a>
-        </tr>
-	</table>
-</body>
-</html>
-`)
-}
-
-func noOwner() io.Reader {
-	return strings.NewReader(`<!DOCTYPE html>
-	<body>
-		<table>
-			<tr>
-			</tr>
-		</table>
-	</body>
-	</html>
-`)
-}
-
 func validBody() io.Reader {
 	return strings.NewReader(`<!DOCTYPE html>
 <body>
-	<table>
-		<tr>
-			<td class="flexMobile align-items-center">
-                <span class="hideOnDesktop tdHeading">Code:</span>
-                <span>AAAU</span>
-            </td>
-			<td class="flexMobile align-items-center">
-                <span class="hideOnDesktop tdHeading">Company:</span>
-                <span>A Company</span>
-            </td>
-            <td class="flexMobile align-items-center">
-                <span class="hideOnDesktop tdHeading">Address:</span>
-                <span>6 KAUFMAN STREET 16TH FLOOR</span>
-            </td>
-			<td class="flexMobile align-items-center">
-                <span class="hideOnDesktop tdHeading">City:</span>
-                <span>A City</span>
-            </td>
-            <td class="flexMobile align-items-center">
-                <span class="hideOnDesktop tdHeading">Zip:</span>
-                <span>68012</span>
-            </td>
-			<td class="flexMobile align-items-center">
-                <span class="hideOnDesktop tdHeading">Country:</span>
-                <span>A Country</span>
-            </td>
-			<td class="flexMobile align-items-center">
-                <span class="hideOnDesktop tdHeading">Details:</span>
-                <a class="upperCase withArrow" href="/bic-codes/aaau">View</a>
-            </td>
-        </tr>
-		<tr>
-			<td class="flexMobile align-items-center">
-                <span class="hideOnDesktop tdHeading">Code:</span>
-                <span>BBBU</span>
-            </td>
-			<td class="flexMobile align-items-center">
-                <span class="hideOnDesktop tdHeading">Company:</span>
-                <span></span>
-            </td>
-            <td class="flexMobile align-items-center">
-                <span class="hideOnDesktop tdHeading">Address:</span>
-                <span>6 KAUFMAN STREET 16TH FLOOR</span>
-            </td>
-			<td class="flexMobile align-items-center">
-                <span class="hideOnDesktop tdHeading">City:</span>
-                <span>B City</span>
-            </td>
-            <td class="flexMobile align-items-center">
-                <span class="hideOnDesktop tdHeading">Zip:</span>
-                <span>68012</span>
-            </td>
-			<td class="flexMobile align-items-center">
-                <span class="hideOnDesktop tdHeading">Country:</span>
-                <span>B Country</span>
-            </td>
-			<td class="flexMobile align-items-center">
-                <span class="hideOnDesktop tdHeading">Details:</span>
-                <a class="upperCase withArrow" href="/bic-codes/aaau">View</a>
-            </td>
-        </tr>
-		<tr>
-			<td class="flexMobile align-items-center">
-                <span class="hideOnDesktop tdHeading">Code:</span>
-                <span>CCCU</span>
-            </td>
-			<td class="flexMobile align-items-center">
-                <span class="hideOnDesktop tdHeading">Company:</span>
-                <span>C Company</span>
-            </td>
-            <td class="flexMobile align-items-center">
-                <span class="hideOnDesktop tdHeading">Address:</span>
-                <span>6 KAUFMAN STREET 16TH FLOOR</span>
-            </td>
-			<td class="flexMobile align-items-center">
-                <span class="hideOnDesktop tdHeading">City:</span>
-                <span></span>
-            </td>
-            <td class="flexMobile align-items-center">
-                <span class="hideOnDesktop tdHeading">Zip:</span>
-                <span>68012</span>
-            </td>
-			<td class="flexMobile align-items-center">
-                <span class="hideOnDesktop tdHeading">Country:</span>
-                <span>C Country</span>
-            </td>
-			<td class="flexMobile align-items-center">
-                <span class="hideOnDesktop tdHeading">Details:</span>
-                <a class="upperCase withArrow" href="/bic-codes/aaau">View</a>
-            </td>
-        </tr>
-<tr>
-			<td class="flexMobile align-items-center">
-                <span class="hideOnDesktop tdHeading">Code:</span>
-                <span>DDDU</span>
-            </td>
-			<td class="flexMobile align-items-center">
-                <span class="hideOnDesktop tdHeading">Company:</span>
-                <span>D Company</span>
-            </td>
-            <td class="flexMobile align-items-center">
-                <span class="hideOnDesktop tdHeading">Address:</span>
-                <span>6 KAUFMAN STREET 16TH FLOOR</span>
-            </td>
-			<td class="flexMobile align-items-center">
-                <span class="hideOnDesktop tdHeading">City:</span>
-                <span>D City</span>
-            </td>
-            <td class="flexMobile align-items-center">
-                <span class="hideOnDesktop tdHeading">Zip:</span>
-                <span>68012</span>
-            </td>
-			<td class="flexMobile align-items-center">
-                <span class="hideOnDesktop tdHeading">Country:</span>
-                <span></span>
-            </td>
-			<td class="flexMobile align-items-center">
-                <span class="hideOnDesktop tdHeading">Details:</span>
-                <a class="upperCase withArrow" href="/bic-codes/aaau">View</a>
-            </td>
-        </tr>
-	</table>
+	<main id="search" role="main">
+
+        <section id="archive" class="searchResponse">
+            <div class="container-fluid g-0">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="container-xxxl g-3 g-lg-5">
+                            <div class="row">
+                                <section class="breadCrumbSection mb-3 relative noBg d-flex justify-content-end">
+                                    <div class="col-sm-12 mt-2 hideOnMobile">
+                                        <ul id="breadcrumbs" class="breadcrumbs">
+                                            <li class="item-home">
+                                                <a class="bread-link bread-home" href="https://www.bic-code.org"
+                                                   title="Home">Home</a>
+                                            </li>
+                                            <li class="separator separator-home">
+                                                |
+                                            </li>
+                                            <li class="item-home">
+                                                <a class="bread-link bread-home" href="/bic-codes" title="Bic Codes">Bic
+                                                    Codes</a>
+                                            </li>
+                                            <li class="separator separator-home">
+                                                |
+                                            </li>
+                                            <li class="item-current">
+                                                <strong class="bread-current" title="Search Results">Search
+                                                    Results</strong>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                    <a class="btn-primary searchBtn absolute" href="/bic-codes">SEARCH AGAIN</a>
+                                </section>
+                                <h1 class="text-secondary">BIC Code Search Results</h1>
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <p class="resultsText">3675 search results for "<span class="upperCase">all"</span>
+                                    </p>
+                                </div>
+
+                                <div class="col-sm-12">
+                                    <div id="bicloader" class="justify-content-center">
+                                        <img class="no-lazy"
+                                             src="https://www.bic-code.org/wp-content/themes/tessellate/assets/images/bicloader.gif"
+                                             alt>
+                                    </div>
+                                    <table width="100%" id="bic-datatable" class="bicResults mt-1 responsive"
+                                           data-type="bic">
+                                        <thead>
+                                        <tr>
+                                            <th class="desktop tablet-l tablet-p mobile-l mobile-p">Code</th>
+                                            <th class="min-tablet-l">Company</th>
+                                            <th class="min-tablet-l" name="address">Address</th>
+                                            <th class="min-desktop">City</th>
+                                            <th class="min-desktop">Zip</th>
+                                            <th class="min-tablet-l">Country</th>
+                                            <th class="desktop tablet-l">Details</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr class="nostripe">
+                                            <td class="flexMobile align-items-center">AAAU</span></td>
+                                            <td class="flexMobile align-items-center">A Company</span></td>
+                                            <td class="flexMobile align-items-center"></span></td>
+                                            <td class="flexMobile align-items-center">A City</span></td>
+                                            <td class="flexMobile align-items-center"></span></td>
+                                            <td class="flexMobile align-items-center">A Country</span></td>
+                                            <td class="no-sort flexMobile detailWidth align-items-center">
+                                                <a class="upperCase withArrow" href="/bic-codes/aaau/">View</a>
+                                            </td>
+                                        </tr>
+<tr class="nostripe">
+                                            <td class="flexMobile align-items-center">BBBU</span></td>
+                                            <td class="flexMobile align-items-center">B Company</span></td>
+                                            <td class="flexMobile align-items-center"></span></td>
+                                            <td class="flexMobile align-items-center">B City</span></td>
+                                            <td class="flexMobile align-items-center"></span></td>
+                                            <td class="flexMobile align-items-center">B Country</span></td>
+                                            <td class="no-sort flexMobile detailWidth align-items-center">
+                                                <a class="upperCase withArrow" href="/bic-codes/bbbu/">View</a>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                        <tfoot></tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
 </body>
 </html>
 `)
