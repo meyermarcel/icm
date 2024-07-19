@@ -24,15 +24,15 @@ func CheckTransposition(ownerCode string, equipCatID rune, serialNum int, checkD
 
 	// 5, 4, 3, 2, 1
 	for idxRight := 5; idxRight > 0; idxRight-- {
-		// 0, 1, 2, 3, 4
-		idxLeft := (idxRight * (-1)) + 5
 		swapped, transposedSerialNum := swapDigits(serialNum, idxRight-1, idxRight)
 		if !swapped {
 			continue
 		}
 		calcCheckDigit := CalcCheckDigit(ownerCode, equipCatID, transposedSerialNum) % 10
 		if checkDigit == calcCheckDigit {
-			contNums = append(contNums, TpNumber{Number{ownerCode, equipCatID, transposedSerialNum, calcCheckDigit}, idxLeft})
+			// 0, 1, 2, 3, 4
+			pos := idxRight*-1 + 5
+			contNums = append(contNums, TpNumber{Number{ownerCode, equipCatID, transposedSerialNum, calcCheckDigit}, pos})
 		}
 	}
 
