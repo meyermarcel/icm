@@ -110,8 +110,8 @@ func readCSV(r io.Reader) (map[string]owner, error) {
 }
 
 // Decode returns an owner for an owner code.
-func (of *ownerDecoder) Decode(code string) (bool, cont.Owner) {
-	if val, ok := of.owners[code]; ok {
+func (od *ownerDecoder) Decode(code string) (bool, cont.Owner) {
+	if val, ok := od.owners[code]; ok {
 		return true, cont.Owner{
 			Code:    code,
 			Company: val.Company,
@@ -123,9 +123,9 @@ func (of *ownerDecoder) Decode(code string) (bool, cont.Owner) {
 }
 
 // GetAllOwnerCodes returns a count of owner codes.
-func (of *ownerDecoder) GetAllOwnerCodes() []string {
+func (od *ownerDecoder) GetAllOwnerCodes() []string {
 	var codes []string
-	for ownerCode := range of.owners {
+	for ownerCode := range od.owners {
 		codes = append(codes, ownerCode)
 	}
 	return codes
