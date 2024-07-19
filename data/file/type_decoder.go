@@ -9,7 +9,6 @@ import (
 	_ "embed"
 
 	"github.com/meyermarcel/icm/cont"
-	"github.com/meyermarcel/icm/data"
 )
 
 const typeFileName = "type.json"
@@ -22,15 +21,14 @@ const groupFileName = "group.json"
 //go:embed group.json
 var groupJSON []byte
 
-type typeAndGroupDecoder struct {
+type TypeAndGroupDecoder struct {
 	types  map[string]string
 	groups map[string]string
 }
 
 // NewTypeDecoder writes type and group file to path if it not exists and
 // returns a struct that uses this file as a data source.
-func NewTypeDecoder(path string) (data.TypeDecoder, error) {
-	typeAndGroup := &typeAndGroupDecoder{}
+func NewTypeDecoder(path string) (*TypeAndGroupDecoder, error) {
 	pathToType := filepath.Join(path, typeFileName)
 	if err := initFile(pathToType, typeJSON); err != nil {
 		return nil, err
@@ -39,6 +37,8 @@ func NewTypeDecoder(path string) (data.TypeDecoder, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	typeAndGroup := &TypeAndGroupDecoder{}
 	if err := json.Unmarshal(b, &typeAndGroup.types); err != nil {
 		return nil, err
 	}
@@ -63,15 +63,15 @@ func NewTypeDecoder(path string) (data.TypeDecoder, error) {
 }
 
 // Decode returns type and group information for the type code.
-func (tg *typeAndGroupDecoder) Decode(code string) (bool, cont.TypeInfo, cont.GroupInfo) {
-	typeInfoStr, typeFound := tg.types[code]
+func (tgd *TypeAndGroupDecoder) Decode(code string) (bool, cont.TypeInfo, cont.GroupInfo) {
+	typeInfoStr, typeFound := tgd.types[code]
 	typeInfo := cont.TypeInfo(typeInfoStr)
 
 	if !typeFound {
 		return false, "", ""
 	}
 
-	groupInfoStr, groupFound := tg.groups[string(code[0])]
+	groupInfoStr, groupFound := tgd.groups[string(code[0])]
 	groupInfo := cont.GroupInfo(groupInfoStr)
 
 	if !groupFound {

@@ -9,7 +9,6 @@ import (
 	_ "embed"
 
 	"github.com/meyermarcel/icm/cont"
-	"github.com/meyermarcel/icm/data"
 )
 
 const sizeFileName = "size.json"
@@ -29,7 +28,7 @@ type heightWidth struct {
 
 // NewSizeDecoder writes last update lengths, height and width file to path if it not exists and
 // returns a struct that uses this file as a data source.
-func NewSizeDecoder(path string) (data.LengthDecoder, data.HeightWidthDecoder, error) {
+func NewSizeDecoder(path string) (*LengthDecoder, *HeightWidthDecoder, error) {
 	pathToSizes := filepath.Join(path, sizeFileName)
 	if err := initFile(pathToSizes, lengthHeightWidthJSON); err != nil {
 		return nil, nil, err
@@ -39,42 +38,42 @@ func NewSizeDecoder(path string) (data.LengthDecoder, data.HeightWidthDecoder, e
 		return nil, nil, err
 	}
 
-	var size size
-	if err := json.Unmarshal(b, &size); err != nil {
+	var s size
+	if err := json.Unmarshal(b, &s); err != nil {
 		return nil, nil, err
 	}
-	for lengthCode := range size.Length {
+	for lengthCode := range s.Length {
 		if err := cont.IsLengthCode(lengthCode); err != nil {
 			return nil, nil, err
 		}
 	}
-	for heightWidthCode := range size.HeightWidth {
+	for heightWidthCode := range s.HeightWidth {
 		if err := cont.IsHeightWidthCode(heightWidthCode); err != nil {
 			return nil, nil, err
 		}
 	}
-	return &lengthDecoder{size.Length}, &heightWidthDecoder{size.HeightWidth}, nil
+	return &LengthDecoder{s.Length}, &HeightWidthDecoder{s.HeightWidth}, nil
 }
 
-type lengthDecoder struct {
+type LengthDecoder struct {
 	lengths map[string]string
 }
 
 // Decode returns length for a given length code.
-func (l *lengthDecoder) Decode(code string) (bool, cont.Length) {
-	if val, ok := l.lengths[code]; ok {
+func (ld *LengthDecoder) Decode(code string) (bool, cont.Length) {
+	if val, ok := ld.lengths[code]; ok {
 		return true, cont.Length(val)
 	}
 	return false, ""
 }
 
-type heightWidthDecoder struct {
+type HeightWidthDecoder struct {
 	heightWidths map[string]heightWidth
 }
 
 // Decode returns height and width for given height and width code.
-func (hw *heightWidthDecoder) Decode(code string) (bool, cont.Height, cont.Width) {
-	if val, ok := hw.heightWidths[code]; ok {
+func (hwd *HeightWidthDecoder) Decode(code string) (bool, cont.Height, cont.Width) {
+	if val, ok := hwd.heightWidths[code]; ok {
 		return true, cont.Height(val.Height), cont.Width(val.Width)
 	}
 	return false, "", ""
