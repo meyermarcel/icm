@@ -23,7 +23,7 @@ jobs:
           go-version-file: 'go.mod'
 
       - name: Init dummy owners CSV
-        run: make init-csv
+        run: make dummy-csv
 
       - name: Lint
         uses: golangci/golangci-lint-action@v6

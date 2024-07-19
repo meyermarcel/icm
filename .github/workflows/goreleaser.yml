@@ -21,8 +21,9 @@ jobs:
         with:
           go-version-file: 'go.mod'
 
-      - name: Download owners CSV
-        run: make download-owners
+      - name: Generate manpage and download owners CSV
+        # download-owners must be the last executed target if not dummy CSV will be embedded instead.
+        run: make man-page download-owners
 
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v6

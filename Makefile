@@ -13,21 +13,21 @@ BINARY := icm
 .PHONY: all
 all: test lint build markdown
 
-.PHONY: init-csv
-init-csv:
-	[ -f data/file/owner.csv ] || echo 'AAA;my company;my city;my country' > data/file/owner.csv
+.PHONY: dummy-csv
+dummy-csv:
+	@echo 'AAA;my company;my city;my country' > data/file/owner.csv
 
 .PHONY: test
-test: init-csv
+test: dummy-csv
 	go test ./...
 
 .PHONY: lint
-lint: init-csv
+lint: dummy-csv
 # See .golangci.yml
 	golangci-lint run
 
 .PHONY: build
-build: init-csv
+build: dummy-csv
 	export CGO_ENABLED=0; go build -o $(BUILD_DIR)/$(BINARY)
 
 .PHONY: markdown

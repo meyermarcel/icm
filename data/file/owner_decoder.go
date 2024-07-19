@@ -10,7 +10,6 @@ import (
 	_ "embed"
 
 	"github.com/meyermarcel/icm/cont"
-	"github.com/meyermarcel/icm/data"
 )
 
 const (
@@ -27,26 +26,22 @@ type owner struct {
 	Country string
 }
 
-type ownerDecoder struct {
+type OwnerDecoder struct {
 	owners map[string]owner
 }
 
 // NewOwnerDecoder writes owner file to path if it not exists and
 // returns a struct that uses this file as a data source.
-func NewOwnerDecoder(remoteOwnersPath, customOwnersPath string) (data.OwnerDecoder, error) {
-	decoder := &ownerDecoder{}
+func NewOwnerDecoder(remoteOwnersPath, customOwnersPath string) (*OwnerDecoder, error) {
+	decoder := &OwnerDecoder{}
 
 	if err := initFile(remoteOwnersPath, ownerCSV); err != nil {
 		return nil, err
 	}
-	ownersFile, err := os.Open(remoteOwnersPath)
+
+	ownersMap, err := readFile(remoteOwnersPath)
 	if err != nil {
 		return nil, err
-	}
-
-	ownersMap, err := readCSV(ownersFile)
-	if err != nil {
-		return nil, fmt.Errorf("%v: %w", remoteOwnersPath, err)
 	}
 
 	if len(ownersMap) == 0 {
@@ -55,14 +50,9 @@ func NewOwnerDecoder(remoteOwnersPath, customOwnersPath string) (data.OwnerDecod
 
 	if _, err := os.Stat(customOwnersPath); err == nil {
 
-		customOwnersFile, err := os.Open(customOwnersPath)
+		customOwnersMap, err := readFile(customOwnersPath)
 		if err != nil {
 			return nil, err
-		}
-
-		customOwnersMap, err := readCSV(customOwnersFile)
-		if err != nil {
-			return nil, fmt.Errorf("%v: %w", customOwnersPath, err)
 		}
 
 		for k, v := range customOwnersMap {
@@ -73,6 +63,19 @@ func NewOwnerDecoder(remoteOwnersPath, customOwnersPath string) (data.OwnerDecod
 	decoder.owners = ownersMap
 
 	return decoder, nil
+}
+
+func readFile(path string) (map[string]owner, error) {
+	f, err := os.Open(path)
+	if err != nil {
+		return nil, err
+	}
+
+	ownersMap, err := readCSV(f)
+	if err != nil {
+		return nil, fmt.Errorf("%v: %w", path, err)
+	}
+	return ownersMap, nil
 }
 
 func readCSV(r io.Reader) (map[string]owner, error) {
@@ -110,7 +113,7 @@ func readCSV(r io.Reader) (map[string]owner, error) {
 }
 
 // Decode returns an owner for an owner code.
-func (od *ownerDecoder) Decode(code string) (bool, cont.Owner) {
+func (od *OwnerDecoder) Decode(code string) (bool, cont.Owner) {
 	if val, ok := od.owners[code]; ok {
 		return true, cont.Owner{
 			Code:    code,
@@ -123,7 +126,7 @@ func (od *ownerDecoder) Decode(code string) (bool, cont.Owner) {
 }
 
 // GetAllOwnerCodes returns a count of owner codes.
-func (od *ownerDecoder) GetAllOwnerCodes() []string {
+func (od *OwnerDecoder) GetAllOwnerCodes() []string {
 	var codes []string
 	for ownerCode := range od.owners {
 		codes = append(codes, ownerCode)
