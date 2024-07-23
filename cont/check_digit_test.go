@@ -45,6 +45,11 @@ func TestCalcCheckDigit(t *testing.T) {
 			args{"CSQ", 'U', 305438},
 			3,
 		},
+		{
+			"Test CSQ U 999998 3",
+			args{"CSQ", 'U', 999998},
+			3,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
