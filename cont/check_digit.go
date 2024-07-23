@@ -16,7 +16,7 @@ func CalcCheckDigit(ownerCode string, equipCatID rune, serialNum int) int {
 		d *= 2
 		divider /= 10
 	}
-	return n - (n/11)*11
+	return n % 11
 }
 
 // charValue returns the index of character plus 10.
