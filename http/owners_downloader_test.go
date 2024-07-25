@@ -2,7 +2,7 @@ package http
 
 import (
 	"io"
-	"reflect"
+	"slices"
 	"strings"
 	"testing"
 
@@ -43,7 +43,7 @@ func Test_parseOwners(t *testing.T) {
 				t.Errorf("parseOwners() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
-			if !reflect.DeepEqual(got, tt.want) {
+			if !slices.Equal(got, tt.want) {
 				t.Errorf("parseOwners() = %v, want %v", got, tt.want)
 			}
 		})

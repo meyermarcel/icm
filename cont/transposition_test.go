@@ -1,7 +1,7 @@
 package cont
 
 import (
-	"reflect"
+	"slices"
 	"testing"
 )
 
@@ -86,7 +86,7 @@ func TestCheckTransposition(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := CheckTransposition(tt.args.ownerCode, tt.args.equipCatID, tt.args.serialNum, tt.args.checkDigit); !reflect.DeepEqual(got, tt.want) {
+			if got := CheckTransposition(tt.args.ownerCode, tt.args.equipCatID, tt.args.serialNum, tt.args.checkDigit); !slices.Equal(got, tt.want) {
 				t.Errorf("CheckTransposition() = %v, want %v", got, tt.want)
 			}
 		})
