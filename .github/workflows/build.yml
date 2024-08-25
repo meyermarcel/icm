@@ -25,6 +25,12 @@ jobs:
       - name: Init dummy owners CSV
         run: make dummy-csv
 
+      - name: Audit dependencies
+        run: make audit
+
+      - name: Go mod tidy
+        run: go mod tidy -diff
+
       - name: Lint
         uses: golangci/golangci-lint-action@v6
         with:

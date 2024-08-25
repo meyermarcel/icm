@@ -24,6 +24,7 @@ test: dummy-csv
 .PHONY: lint
 lint: dummy-csv
 # See .golangci.yml
+	go mod tidy -diff
 	golangci-lint run
 
 .PHONY: build
@@ -36,6 +37,11 @@ markdown: build
 	./$(BUILD_DIR)/$(BINARY) doc markdown $(DOCS_DIR)
 
 # Individual commands
+
+.PHONY: audit
+audit:
+	go mod verify
+	go run golang.org/x/vuln/cmd/govulncheck@latest ./...
 
 .PHONY: format
 format:
