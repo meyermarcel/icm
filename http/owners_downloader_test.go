@@ -114,6 +114,19 @@ func validBody() io.Reader {
                                         </thead>
                                         <tbody>
                                         <tr class="nostripe">
+                                            <td class="flexMobile align-items-center dtr-control sorting_1" tabindex="0"></span></td>
+                                            <td class="flexMobile align-items-center">VANTAGE FORWARDING &amp; SHIPPING HK LIMITED</td>
+                                            <td class="flexMobile align-items-center">33B United Centre, 95 Queensway, Admiralty</td>
+                                            <td class="flexMobile align-items-center"></td>
+                                            <td class="flexMobile align-items-center">200072</td>
+                                            <td class="flexMobile align-items-center">HK</td>
+                                            <td data-geofence="0" class="no-sort flexMobile detailWidth">
+                                              <div class="d-flex my-1 my-md-0 position-relative d-flex justify-content-start justify-content-md-end align-items-center">
+                                                <a class="upperCase withArrow" href="/bic-codes//">View</a>
+                                              </div>
+                                            </td>
+                                        </tr>
+                                        <tr class="nostripe">
                                             <td class="flexMobile align-items-center">AAAU</span></td>
                                             <td class="flexMobile align-items-center">A Company</span></td>
                                             <td class="flexMobile align-items-center"></span></td>

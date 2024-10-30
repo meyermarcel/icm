@@ -56,6 +56,7 @@ func parseOwners(body io.Reader) ([]cont.Owner, error) {
 		tbody := tableBody(n)
 
 		if tbody != nil {
+		Rows:
 			for child1 := tbody.FirstChild; child1 != nil; child1 = child1.NextSibling {
 				tr := tableRow(child1)
 				if tr != nil {
@@ -65,21 +66,31 @@ func parseOwners(body io.Reader) ([]cont.Owner, error) {
 					for child2 := tr.FirstChild; child2 != nil; child2 = child2.NextSibling {
 						td := tableData(child2)
 						if td != nil {
-							if td.FirstChild != nil {
-								d := td.FirstChild.Data
-								switch tdIdx {
-								case 0:
-									if len(d) < 4 {
-										return fmt.Errorf("parsing HTML failed of owner code failed because '%s' is too short", d)
-									}
-									owner.Code = d[0:3]
-								case 1:
-									owner.Company = d
-								case 3:
-									owner.City = d
-								case 5:
-									owner.Country = cmp.Or(countryCodeMap[d], d)
+
+							if td.FirstChild == nil {
+								// First td is an empty string. Skip this row.
+								if tdIdx == 0 {
+									continue Rows
 								}
+								// Next td
+								tdIdx++
+								continue
+							}
+
+							d := td.FirstChild.Data
+
+							switch tdIdx {
+							case 0:
+								if len(d) != 4 {
+									continue Rows
+								}
+								owner.Code = d[0:3]
+							case 1:
+								owner.Company = d
+							case 3:
+								owner.City = d
+							case 5:
+								owner.Country = cmp.Or(countryCodeMap[d], d)
 							}
 							tdIdx++
 						}
